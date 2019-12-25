@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的医药网 - 支付结果</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <style>
+    	.order_succeed_info {
+    color: #333;
+    margin-bottom: 10px;
+    padding: 35px 0 50px;
+    text-align: center;
+}
+
+.order_succeed_info .tips {
+    background: rgba(0, 0, 0, 0) url("../image/icon_succeed.jpg") no-repeat scroll 0 0;
+    height: 43px;
+    line-height: 43px;
+    margin: 0 auto;
+    width: 350px;
+}
+.order_succeed_info .ico_fail {  background:url(../image/icon_fail.jpg) no-repeat 0px 0px; width:326px; }
+.order_succeed_info {
+    color: #333;
+    text-align: center;
+}
+
+.order_succeed_info .tips span {
+    font-size: 24px;
+}
+
+.order_succeed_info .tips i {
+    color: #ff0000;
+    font-style: normal;
+}
+.order_succeed_info .tips {
+    line-height: 43px;
+}
+
+.order_succeed_info div.tips-txt {
+    font-size: 16px;
+    margin: 10px auto 0;
+    text-align: left;
+    width: 235px;
+}
+
+.order_succeed_info div.w220{ width:220px;}
+.order_succeed_info div.tips-txt span { color:#2fb3c2; }
+
+.order_succeed_info .info-p {
+    margin: 30px auto;
+}
+
+.order_succeed_info p {
+    font-size: 16px;
+    line-height: 36px;
+    text-align: center;
+}
+
+.order_succeed_info p a {
+    color: #2fb3c2;
+}
+    </style>
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+      <div class="content">
+		#if($!serviceResult.success)<div class="order_succeed_info wrap mt15">
+            <div class="tips"><span>您的订单已<i>支付成功</i></span></div>
+            <div class="tips-txt">
+                您已经处理完此笔请求
+            </div>
+            <div style="overflow: hidden;" class="wrap">
+                <div class="info-p">
+                    <p>我们会尽快为您处理订单，如需协助请与在线客服联系（或拨打400-060-3351）</p>
+                    <p>您还可以做如下操作：<a href="/purchase/order/wddd.html?status=0">查看订单记录</a> 或 <a href="http://$!{wwwHostAndPort}/goods/quickPurchase.html">继续选购</a></p>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+		#else<div class="order_succeed_info wrap mt15">
+            <div class="tips ico_fail"><span>您的订单<i>支付失败</i></span></div>
+            <div class="wrap" style="overflow: hidden;">
+                <div class="info-p">
+                    <p>您还未处理完成该笔订单，请<a href="/purchase/order/wddd.html?status=1">立即支付</a>， 如需要协助请与在线客服联系（或拨打400-060-3351）</p>
+                </div>
+            </div>
+            <div style="clear: both;"></div>
+        </div>#end
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  </body>
+</html>

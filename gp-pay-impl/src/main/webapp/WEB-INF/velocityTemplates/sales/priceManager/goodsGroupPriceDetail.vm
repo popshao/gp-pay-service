@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 多商品客户分组定价</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+    <style>
+        .edit-bp:hover{
+            text-decoration: underline
+        }
+    </style>
+</head>
+<body>
+
+    <!--页面主体 -->
+    <div class="c-box">
+
+        <div class="user-prompt">提示：可以对同一个客户分组同一个商品，多次设置定价，系统会覆盖之前的设置，只执行最近的一次定价设置。</div>
+
+        <div class="user-btn mt20 cc">
+            <div class="b-text fl">
+                选择商品
+            </div>
+            <a href="javascript:void(0)" class="btn btns fl mr10" id="addGoods">+添加商品</a>
+            <a href="javascript:void(0)" class="btn btn-auto fl  " id="batchUploadGoods">批量导入商品</a>
+            <a href="/sales/goods_price/download_goods" class="btn btn-link fl ">下载商品模板</a>
+            <div class="b-text">
+                <i class="b-t-ps">*</i>提示：如果您想“批量导入商品”，请先“下载商品模板”，再通过模板批量导入，最多能导入10000个商品。
+            </div>
+        </div>
+
+        <div class="user-form user-sheet-box mt10" style="margin-bottom:15px;">
+            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>商品信息</th>
+                    <th>规格</th>
+                    <th>商品分类</th>
+                    <th>商品内码</th>
+                    <th>商品编码</th>
+                    <th>商品基价</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="goodsBox">
+                <tr>
+                    <td colspan="8">
+                        <div class="t-none">暂未添加商品，请添加您要定价的商品  <a href="javascript:void(0)" onclick="$('#addGoods').trigger('click')" class="t-link">马上添加>></a></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="page rocky-page" style="text-align: center; margin-top:0;"></div>
+
+        <div class="user-btn mt20 cc">
+            <div class="b-text fl">
+                <i class="b-t-ps">*</i> 您一共有<i class="b-t-ps" id="ctsCount">...</i>个客户分组，点击可以“<a href="javascript:void(0)" class="b-t-link t-disable" id="batchCtsBtn" onclick="batchAddPrice();">批量填写定价</a>”
+            </div>
+            <div class="fr txsm-text" style="font-size:12px; color: #333; display: none;">
+                <p>定价填写说明：</p>
+                <p style='color: #666;'>1、浮动框可输入：+, －正负整数 或 0；0为按照基价销售，正数为上浮，负数为下浮；</p>
+                <p style='color: #666;'>2、多个商品时，不可直接输入销售价格；价格框请输入大于0的数字，可保留两位小数；</p>
+            </div>
+        </div>
+
+        <div class="user-form user-sheet-box mt10">
+            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>客户业务分组</th>
+                    <th>客户数量</th>
+                    <th>定价</th>
+                </tr>
+                </thead>
+                <tbody id="ctsBox">
+                <tr>
+                    <td colspan="4">
+                        <div class="t-none">暂无客户分组，请维护您的客户分组后再进行定价  <a href="javascript:void(0)" class="t-link" onclick="top.utils.openWithTab('fzgl','分组管理','/sales/channel/channel_main.html',{fstBread:'客户管理'})">马上去维护>></a></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="user-btn tac mt20">
+            <a href="javascript:void(0)" class="btn btn-conserve btn-bind-sw t-disable-bg" id="saveBtn"  onclick="saveGGP();" >保存</a>
+            <a href="javascript:void(0)" class="btn btn-138" onclick="top.utils.closeTopTab();">取消</a>
+        </div>
+
+    </div>
+
+        #parse("common/header_js_new.vm")
+    <script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+    <script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+
+
+    <script type="text/html" id="goodsListTpl">
+        {{# if(d && !d.error && d.datas.length){ }}
+        {{# $.each(d.datas,function(index,item){ var good = item.goods;  var $index = (index + 1) + (d.pi-1)*d.ps }}
+        <tr data-gid="{{good.gid}}">
+            <td>{{$index}}</td>
+            <td>
+                <div class="t-img">
+                    {{# if(item.defaultPic){ }}
+                        <img src="{{item.defaultPic}}">
+                    {{# }else if(good.defaultPic){ }}
+                        <img src="{{good.defaultPic}}">
+                    {{# }else if(good.gdefaultPic){ }}
+                        <img src="{{good.gdefaultPic}}">
+                    {{# }else{ }}
+                        <img src="/image/default.jpg">
+                    {{# } }}
+                </div>
+                <div class="t-info">
+                    <div class="t-name">{{good.gname}}</div>
+                    <div class="t-size">{{top.utils.notNull(good.glicenseNo)}}</div>
+                    <div class="t-company">{{top.utils.notNull(good.gmanufacture)}}</div>
+                </div>
+            </td>
+            <td>{{top.utils.notNull(good.gspecifications)}}</td>
+            <td>
+                {{# if(item.goodsCate){ }}
+                    {{item.goodsCate}}
+                {{# }else{ }}
+                    {{top.utils.notNull(item.sgcId1Name)}}-{{top.utils.notNull(item.sgcId2Name)}}
+                {{# } }}
+            </td>
+            <td>{{top.utils.notNull(good.gInSn)}}</td>
+            <td>{{top.utils.notNull(good.gSn)}}</td>
+            <td  class='state_td'><span id="basePrice-{{good.gid}}">{{top.utils.notNullPrice(good.gbasePrice,'--')}}</span><br><a class="i-link t-blue edit-bp ml5" style="color: #0E92CE; display: none" href="javascript:void(0)"  onclick='reviseBasePrice({{good.gid}},$("#basePrice-{{good.gid}}"))'>修改</a></td>
+            <td>
+                <a href="javascript:void(0)" class="t-link del-good">删除</a>
+            </td>
+        </tr>
+        {{# }); }}
+
+        {{# }else{ }}
+        <tr>
+            <td colspan="8">
+                <div class="t-none">暂未添加商品，请添加您要定价的商品  <a href="javascript:void(0)" class="t-link"  onclick="$('#addGoods').trigger('click')" >马上添加>></a></div>
+            </td>
+        </tr>
+        {{# } }}
+    </script>
+
+    <script type="text/html" id="ctsListTpl">
+        {{# if(d && !d.error && d.datas.length){ }}
+        {{# $.each(d.datas,function(index,item){ var good = item.goods; }}
+        <tr data-cid="{{item.shopCustomerType.sctId}}">
+            <td>{{index + 1}}</td>
+            <td>{{item.shopCustomerType.sctName}}</td>
+            <td>{{item.bizCount}}</td>
+            <td>
+                <div class="user-custom-form user-choose-form">
+                    <fieldset class="radios">
+                        <label for="radio-{{index}}-1" class="label_radio">
+                            <input type="radio"  {{# if(!item.selected && item.shopCustomerType.sctPriceField!=""){ }} checked {{# } }} value="1" id="radio-{{index}}-1" name="radio-{{index}}" />在“基价”基础上：<span class="percent-t-box">
+                        {{# if(!item.selected && item.shopCustomerType.sctPriceField!=""){ }}
+                            {{# if(item.shopCustomerType.sctPriceField>0){ }}上浮{{# }else if(item.shopCustomerType.sctPriceField==0){ }}浮动{{# }else if(item.shopCustomerType.sctPriceField<0){ }}下浮{{# }else{  }}浮动{{# } }}
+                        {{# }else{ }} 浮动 {{# } }}</span>
+                        </label>
+                        <div class="user-choose-amount fl">
+                            <input class="amount percent" type="text" {{# if(!item.selected && item.shopCustomerType.sctPriceField!=""){ }} value='{{item.shopCustomerType.sctPriceField}}' {{# }else{ }}readonly{{# } }}>
+                            <a href="javascript:void(0)" class="down count-up"></a>
+                            <a href="javascript:void(0)" class="up count-down"></a>
+                        </div>
+                        <span class='r-text fl'>%；</span>
+                        <span class="r-text fl drt-text" {{# if(GoodLists.length == 1 && !item.selected && item.shopCustomerType.sctPriceField != ""){ }}{{# }else{ }} style='display: none;'{{# } }}>售价：&yen;<b class="float-price">
+                            {{# if(GoodLists.length == 1){ }}
+                            {{(GoodLists[0].gBasePrice+GoodLists[0].gBasePrice*item.shopCustomerType.sctPriceField/100).toFixed(2)}}
+                            {{# } }}
+                        </b></span>
+                    </fieldset>
+                </div>
+                <div class="user-custom-form user-choose-form set-single-price">
+                    <fieldset class="radios">
+                        <label for="radio-{{index}}-2" class="label_radio">
+                            <input type="radio"  {{# if(item.selected){ }} checked {{# } }}  value="2" id="radio-{{index}}-2" name="radio-{{index}}" />直接输入销售价格
+                        </label>
+                        <span class="r-text fl ml13">¥</span>
+                        <input maxlength="11" class="c-input dirctPrice" {{# if(item.selected){ }} value="{{item.shopCustomerType.sctPriceField}}" {{# }else{ }} readonly {{# } }} type="text" >#*c-input-error  错误样式*#
+                        <span class="r-text fl">元</span>
+                    </fieldset>
+                </div>
+            </td>
+        </tr>
+        {{# }); }}
+
+        {{# }else{ }}
+        <tr>
+            <td colspan="4">
+                <div class="t-none">暂无客户分组，请维护您的客户分组后在进行定价  <a href="javascript:void(0)" class="t-link" onclick="top.utils.openWithTab('fzgl','分组管理','/sales/channel/channel_main.html',{fstBread:'客户管理'})">马上去维护>></a></div>
+            </td>
+        </tr>
+        {{# } }}
+
+    </script>
+
+    <script type="text/html" id="batchAddPriceTpl">
+        <div class="xjgl-dialog-ctn">
+            <div class="xdc-text">您正在对<i class="d-red">{{d.cCount}}</i>个客户业务分组批量设置定价</div>
+            <div class="user-custom-form user-choose-form"  style="margin-top:10px;">
+                <fieldset class="radios">
+                    <label for="radio-s-1" class="label_radio">
+                        <input type="radio"  value="1" id="radio-s-1" name="radio-s" />在“基价”基础上：<i class="fl-t">浮动</i>
+                    </label>
+                    <div class="user-choose-amount fl">
+                        <input class="amount percent" type="text" >
+                        <a href="javascript:void(0)" class="down count-up"></a>
+                        <a href="javascript:void(0)" class="up count-down"></a>
+                    </div>
+                    <span class='line-h26 fl'>%；</span>
+                    <span class="r-text fl drt-text" style='display:none;'>{{# if(GoodLists.length == 1){ }}售价：&yen;<b class="float-price"></b>{{# } }}</span>
+                </fieldset>
+            </div>
+            <div class="user-custom-form user-choose-form set-single-price" style="margin-top:10px;">
+                <fieldset class="radios">
+                    <label for="rradio-s-1" class="label_radio">
+                        <input type="radio" value="2" id="radio-s-1" name="radio-s" />直接输入销售价格
+                    </label>
+                    <span class="line-h26 fl ml13">¥</span>
+                    <input maxlength="11"  class="c-input dirctPrice" readonly type="text" >#*c-input-error  错误样式*#
+                    <span class="line-h26 fl">元</span>
+                </fieldset>
+            </div>
+            <div class="xdc-btn tac" style="text-align: center; margin:15px;">
+                <a href="javascript:void(0)" class="btn">保存定价</a>
+            </div>
+            <div class="xdc-info">
+                重要提示：<br>
+                1、浮动框可输入：+, －正负的整数  或  0；<br>
+                2、0为按照基价销售，正数为上浮，负数为下浮；<br>
+                3、直接定价时请输入大于0的数字，可保留两位小数；<br>
+                4、多个商品时，不可直接输入销售价格；
+            </div>
+        </div>
+    </script>
+
+    <script>
+        var layer,laypage,laytpl,GoodLists = [], CtsLists = [], nowPage = 1;
+        layui.config({
+            base:'/js/layui/extend/'
+        }).use(['layApp','layer','laypage','laytpl'],function () {
+            layer = layui.layer,laypage = layui.laypage , laytpl = layui.laytpl;
+            $(function(){
+                $('body').addClass('user-has-js');
+
+                $(".btn-reset").on("click",function () {
+                    $("#searchForm").get(0).reset();
+                    $(".usb-select2,.usb-select2-s").each(function () {
+                        $(this).select2("destroy");
+                        initSelect();
+                    })
+                })
+
+                $("#addGoods").on("click",function () {
+                    var _sels = [];
+                    $.each(GoodLists,function (i,e) {
+                        _sels.push(e.goods.gid);
+                    })
+                    top.ue.getGoodsModal({
+                        hasSels:_sels,
+                        newUI:true,
+                        yes: function (idx, lay, selDatas) {
+                            selDatas.push.apply(selDatas,GoodLists);
+                            GoodLists = selDatas;
+                            setDisableOrOpen();
+                            getGoodsFromSession();
+                            bindEvt();
+                            return true;
+                        }
+                    });
+                })
+                var uper=new AjaxUpload($("#batchUploadGoods"), {
+                    action : "/sales/goods_price/add_goods_upload", //动作
+                    name : 'file_path',//固定参数
+                    responseType:'json',
+                    onSubmit : function(file, ext) {
+                        if (ext && /^(xls|xlsx)$/.test(ext)) {//过滤上传文件格式
+                            ext_str = ext;
+                        } else {
+                            layer.msg("非Excel文件格式,请重传");
+                            return false;
+                        }
+                        top.utils.iframeLoad();
+                    },
+                    onComplete : function(file, response) {
+                        if (response == "outofsize") {
+                            layer.msg("文件过大，无法上传");
+                        }
+                        if (response == "error") {
+                            layer.msg("文件上传失败，请重新上传");
+                        } else {
+                            if(response.code == 0){
+                                var d = response.data;
+                                var _t = response.message.split("_");
+                                if(_t[0] && _t[1]){
+                                    var _total = parseInt(_t[0]) , _suc = parseInt(_t[1]) , _exist = [] , _newArr = [];
+                                    $.each(response.data,function (i,e) {
+                                        if(top.utils.checkExistByKey(e.goods.gid,'goods.gid',GoodLists)){
+                                            _exist.push(e);
+                                        }else{
+                                            _newArr.push(e);
+                                        }
+                                    })
+                                    var t= "从表格中检索到数据"+_total+"条，核对正确"+_suc+"条，核对失败"+(_total - _suc)+"条；导入成功"+_newArr.length+"条，重复"+_exist.length+"条；";
+                                    _newArr.push.apply(_newArr,GoodLists);
+                                    GoodLists = _newArr;
+                                    setDisableOrOpen();
+                                    getGoodsFromSession();
+                                    top.ue.small({
+                                        content:t
+                                    });
+                                }
+                            }
+                        }
+                        top.ue.closeLoad();
+                    }
+                });
+
+            });
+
+            setTimeout(function () {
+                var q = getUrlParam("forms");
+                if(q){
+                    getGoodsFromSearch(JSON.parse(q));
+                }else{
+                    if(top.app.GoodsPriceSSData){
+                        GoodLists = top.app.GoodsPriceSSData;
+                        setDisableOrOpen();
+                        getGoodsFromSession();
+                    }
+                }
+
+                getData();
+
+            },300)
+
+
+        })
+
+        var nowPage = 1;
+        function getData(d) {
+            d = d || {};
+            top.utils.pageList({
+                first:true,
+                url:'/api/priceManage/sales/goods_price/findCustomerTypeList',
+                dom:$('#ctsBox'),
+                tpl:$("#ctsListTpl"),
+                isAdd:true,
+                data:d,
+                doc:document.body,
+                win: window,
+                laypage:laypage,
+                noRender:true,
+                complete:function (res) {
+                    if(res && res.code == 0 && res.data && res.data.length){
+                        $(".txsm-text").show();
+                        CtsLists = res.data;
+                        $("#ctsCount").text(res.data.length);
+                        $("#ctsBox").html(laytpl($("#ctsListTpl").html()).render({datas:res.data}));
+                        $("#batchCtsBtn").removeClass(".b-disabled");
+                        $("#saveBtn").removeClass(".btn-disabled");
+                        //setDisableOrOpen();
+                        setTextDisable(false);
+                    }else{
+                        $(".txsm-text").hide();
+                        $("#batchCtsBtn").addClass(".b-disabled");
+                        $("#saveBtn").addClass(".btn-disabled");
+                        $("#ctsCount").text(0);
+                        $("#ctsBox").html(laytpl($("#ctsListTpl").html()).render({error:true}));
+                        setTextDisable(true);
+                    }
+                    setDisableOrOpen();
+                },rendered:function (res,set) {
+                    bindEvt();
+                    nowPage = set.data.pi;
+                }
+            })
+        }
+
+        /*根据url所带参数查询商品列表*/
+        function getGoodsFromSearch(q) {
+            q.ps = 1000000000;
+            top.utils.pageList({
+                first:true,
+                url:q.ajaxUrl?q.ajaxUrl:'/api/priceManage/list',
+                dom:$('#goodsBox'),
+                tpl:$("#goodsListTpl"),
+                isAdd:true,
+                data:q,
+                doc:document.body,
+                win: window,
+                laypage:laypage,
+                noRender:true,
+                complete:function (res) {
+                    if(res && res.code == 0 && res.data){
+                        GoodLists = res.data.list;
+                        getGoodsFromSession();
+                    }else{
+                        GoodLists = [];
+                        getGoodsFromSession([]);
+                    }
+                    setDisableOrOpen();
+                }
+            })
+        }
+
+        /*根据上级页面缓存数据实现商品列表*/
+        function getGoodsFromSession(cpi) {
+            if(!GoodLists.length) {
+                $("#goodsBox").html(laytpl($("#goodsListTpl").html()).render({error:true}));
+                bindEvt()
+                return false;
+            }
+
+            $.each(GoodLists,function (i,g) {
+                if(!g.goods.gInSn) g.goods.gInSn = g.goods.ginSn;
+                if(!g.goods.gSn) g.goods.gSn = g.goods.gsn;
+            })
+
+            cpi = cpi || 1;
+            var _ps = 5 ,_pages = parseInt((GoodLists.length + _ps - 1)/_ps);
+            if(cpi > _pages) cpi = _pages;
+            laypage({
+                cont: $(".rocky-page",document.body), //容器。值支持id名、原生dom对象，jquery对象,
+                pages: _pages, //总页数
+                skin: "#0f93ce",
+                skip:true,
+                curr:cpi,
+                groups: 5 //连续显示分页数 总页数少于此数时不显示第一页和最后一页
+                ,jump:function (obj,first) {
+                    var _page = obj.curr , _lPage = $(obj.cont,document.body);
+                    nowPage = _page;
+                    if(_page > 9 && _page < 100){
+                        _lPage.addClass("two");
+                    }else if(_page > 99){
+                        _lPage.addClass("three");
+                    }else{
+                        _lPage.addClass("one");
+                    }
+                    _lPage.find(".layui-laypage-total").css("color","#333").prepend("<b style='font-weight: 100; margin-right: 10px; color: #333;'>共"+_pages+"页/"+GoodLists.length+"条数据</b>");
+                    var _start = (obj.curr - 1) * _ps;
+                    var _data = GoodLists.slice(_start,_start + _ps);
+
+                    $("#goodsBox").html(laytpl($("#goodsListTpl").html()).render({datas:_data,pi:obj.curr,ps:_ps}));
+                    $("#goodsBox").find(".del-good").each(function () {
+                        $(this).unbind("click").on("click",function () {
+                            $(this).closest("tr").remove();
+                            remGoodData($(this).closest("tr").data("gid"));
+                            getGoodsFromSession(nowPage);
+                        })
+                    })
+                    bindEvt();
+
+                }
+            });
+            bindEvt();
+        }
+
+        /*删除指定商品行的数据*/
+        function remGoodData(gid) {
+            $.each(GoodLists,function (i,e) {
+                if(e && e.goods.gid == gid){
+                    GoodLists.splice($.inArray(e,GoodLists),1);
+                    setDisableOrOpen();
+                }
+            })
+        }
+
+        function setDisableOrOpen(doc) {
+            doc = doc || document.body;
+            if(GoodLists.length == 1){
+                $(".set-single-price",doc).find(".radios").removeClass("disable").find("input:text").prop("disabled",false);
+                $(".set-single-price",doc).find(".label_radio").removeClass("disable");
+                $(".set-single-price",doc).find(".radios").css('color', '');
+                $(".set-single-price",doc).find("input").css('background-color', '');
+                $(".drt-text").each(function (i,e) {
+                    if($(this).closest('.radios').find(":radio").prop("checked") && $(this).closest('.radios').find(".percent").val()!=""){
+                       // var _pc = parseFloat(GoodLists[0].goods.gbasePrice + (1 + parseFloat($(this).closest('.radios').find(".percent").val())/100)).toFixed(2);
+                        $(this).show()
+                        $(this).closest('.radios').find(".percent").trigger("change")
+                    }
+                })
+                
+            }else{
+                $(".set-single-price",doc).find(".radios").addClass("disable").find("input:text").prop("disabled",true).val("");
+                $(".set-single-price",doc).find(".label_radio").addClass("disable");
+                $(".drt-text").hide();
+                //$(".set-single-price",doc).prev(".user-choose-form").find("label").click();
+                $(".set-single-price",doc).find(".radios").css('color', '#ccc');
+                $(".set-single-price",doc).find("input").css('background-color', '#f5f5f5');
+            }
+        }
+
+        /**
+         * 批量设置分组价格
+         */
+        function batchAddPrice() {
+            if($("#batchCtsBtn").hasClass("b-disabled")){
+                return false;
+            }
+            if(!GoodLists.length) {
+                layer.msg("请先选择商品！");
+                return;
+            }
+            if(!CtsLists.length){
+                top.ue.msg("请先添加客户");
+                return false;
+            }
+            _d = {
+                gCount: GoodLists.length,
+                cCount: CtsLists.length
+            }
+            top.rui.dynamic({
+                title:"批量设置分组价格",
+                skin:"new_dialog_ui",
+                content:laytpl($("#batchAddPriceTpl").html()).render(_d),
+                area:['600px'],
+                btn:false,
+                success:function (lay,idx) {
+                    bindEvt(lay);
+                    setDisableOrOpen(lay);
+                    lay.find(".btn").on("click",function () {
+                        var _per = $(lay).find(".percent").val() , _dp = $(lay).find(".dirctPrice").val();
+                        if(_per == "" && _dp == ""){
+                            top.ue.msg("请设置客户分组价格");
+                            return false;
+                        }
+                        $(".percent").val(_per);
+                        $(".dirctPrice").val(_dp);
+
+                        var v = lay.find(":radio:checked").val();
+                        $(".label_radio :radio[value="+v+"]").click();
+
+                        var _base = GoodLists[0].goods.gbasePrice || 0;
+                        _floatPrice = _base + _base*_per/100;
+                        if(v == 1) $(".float-price").show().text(parseFloat(_floatPrice).toFixed(2));
+                        else $(".float-price").hide();
+                        top.ue.close(idx);
+                    })
+                }
+            })
+        }
+
+        /*修改基价*/
+        function reviseBasePrice(gid,bPriceDom) {
+
+            var bPrice = $(bPriceDom).text().replace(/¥/g,'');
+
+            var modelText = '<div class="dialog" id="modelText"><div class="xdc-form cc" style="margin:0 auto;"><span class="text">输入基价：</span><input class="input" type="text" maxlength="11"  name="basePrice"><span class="text">元</span></div></div>';
+            top.rui.dynamic({
+                title: '设置基价',
+                content: modelText,
+                skin: "dialog-old dialog-old-no-title xjgl-dialog-ctn",
+                area: ['400px', '200px'],
+                btn: ['保存'],
+                success: function (lay, idx) {
+                    bindEvt(lay);
+                    lay.find('input[name="basePrice"]').val(bPrice);
+                },
+                yes: function (idx, lay) {
+                    var basePrice = parseFloat($('input[name="basePrice"]', lay).val()).toFixed(2);
+                    if(basePrice <= 0 || !basePrice || basePrice=='NaN') {
+                        top.layer.msg('基价须大于0');
+                        return false;
+                    }
+                    $.ajax({
+                        url: "/api/priceManage/updateGoodsGBasePrice",
+                        data: {gid: gid, gBasePrice: basePrice},
+                        type: 'get',
+                        success: function (res) {
+                            if (res.code != 0) {
+                                top.layer.msg(res.message);
+                            } else {
+                                $("#basePrice-"+gid).html("&yen;"+basePrice);
+                                if(GoodLists.length == 1){
+                                    updateBaseIns(basePrice);
+                                }
+                                top.ue.close(idx);
+                                top.ue.msg("修改基价成功");
+                                //getData({pi:nowPage,gId:gid})
+                                return;
+                            }
+                        }
+                    })
+                }
+            })
+        }
+
+
+        /**
+         * 保存
+         * @returns {boolean}
+         */
+        function saveGGP() {
+            if($("#saveBtn").hasClass("btn-disabled")){
+                return false;
+            }
+
+            var _data = {
+                gids:[]
+            };
+
+            $.each(GoodLists,function (i,good) {
+                _data.gids.push(good.goods.gid);
+            })
+            if(!_data.gids.length){
+                top.ue.msg("请先添加商品");
+                return false;
+            }
+            var _empArr = [];
+            var _groupPriceArray = [];
+            $("#ctsBox").find("tr[data-cid]").each(function () {
+                var _cid = $(this).data("cid") , _type = $(this).find("input:radio").val() , _per = $(this).find(".percent").val() , _dp = $(this).find(".dirctPrice").val();
+                var _cts = {
+                    groupId:"",
+                    priceFloat:"",
+                    groupPrice:""
+                };
+                _cts.groupId = _cid;
+                if(_per=="" && _dp == ""){
+                    _empArr.push($(this).index()+1);
+                }else{
+                     _cts.priceFloat = _per;
+                     _cts.groupPrice = _dp;
+                }
+                _groupPriceArray.push(_cts);
+            })
+            if(!_groupPriceArray.length){
+                top.ue.msg('暂无客户分组，请维护您的客户分组后在进行定价');
+                return false;
+            }
+            if(_empArr.length){
+                //top.ue.msg("序号为："+_empArr.join(",")+" 的客户分组定价未设置");
+                var content;
+                if(CtsLists.length == _empArr.length) content = "<p style='margin: 40px auto 0;text-align: center;'>全部客户业务分组均未设置定价策略</p>";
+                else content = "<p style='margin: 40px auto 0;text-align: center;'>部分客户业务分组未设置定价策略</p>";
+                top.rui.dynamic({
+                    title:"",
+                    skin: "dialog-old dialog-old-no-title",
+                    content:content,
+                    area:['420px','220px'],
+                    btn:['马上添加','下次再说'],
+                    yes:function (idx,lay) {
+                        top.ue.close(idx);
+                        if($($("#ctsBox tr").get(_empArr[0]-1)).find("input:text").not("[readonly]").length){
+                            $($("#ctsBox tr").get(_empArr[0]-1)).find("input:text").not("[readonly]").addClass('c-input-error').focus();
+                            $($("#ctsBox tr").get(_empArr[0]-1)).find("input:text").not("[readonly]").closest('.user-choose-amount').addClass('c-input-error');
+                        }else{
+                            $($($("#ctsBox tr").get(_empArr[0]-1)).find("input:text").get(0)).closest('.radios').find(":radio").click();
+                            $($($("#ctsBox tr").get(_empArr[0]-1)).find("input:text").get(0)).addClass('c-input-error').focus();
+                            $('html, body').animate({
+                                scrollTop:  $($($("#ctsBox tr").get(_empArr[0]-1)).find("input:text").get(0)).offset().top - 20
+                            }, 10);
+                            setTimeout(function () {
+                                $($($("#ctsBox tr").get(_empArr[0]-1)).find("input:text").get(0)).addClass('c-input-error').focus();
+                            },20)
+                            $($($("#ctsBox tr").get(_empArr[0]-1)).find("input:text").get(0)).closest('.user-choose-amount').addClass('c-input-error');
+                        }
+                    },
+                    btn2:function () {
+
+                        if(_empArr.length == CtsLists.length){
+                            /*var pathName= getUrlParam("pathName") || location.href;
+                            var titleBack= getUrlParam("titleBack") || '';
+
+                            top.utils.iframeLoad();
+                            top.utils.closeTopTab(null,true,function(){
+                                top.utils.openWithTab('', titleBack,pathName, {refresh: true,fstBread:'销价管理'});
+                            })*/
+            
+                            top.utils.closeExitsTab(top.utils.getActTab().dom);
+                            return;
+                        }
+
+                        _data.gids = _data.gids.join(",");
+
+                        var groupPriceVo = {};
+                        groupPriceVo.groupPrices = _groupPriceArray;
+                        var groupPriceJson = $.toJSON(groupPriceVo);
+                        top.utils.ajax({
+                            url:"/api/priceManage/sales/goods_price/saveOrUpdateGroupPrice",
+                            data:{
+                                "gids" : _data.gids,
+                                "groupPriceVo" : groupPriceJson
+                            },
+                            success:function (data,res) {
+                                top.ue.alert({
+                                    content:"恭喜您，客户分组定价设置成功。",
+                                    ok:function (idx) {
+                                        /*var pathName= getUrlParam("pathName") || location.href;
+                                        var titleBack= getUrlParam("titleBack") || '';
+
+                                        top.utils.iframeLoad();
+                                        top.utils.closeTopTab(null,true,function(){
+                                            top.utils.openWithTab('', titleBack,pathName, {refresh: true,fstBread:'销价管理'});
+                                        })*/
+                                        top.ue.close(idx);
+                                        top.utils.closeExitsTab(top.utils.getActTab().dom);
+                                        
+                                    }
+                                })
+                            },error:function () {
+                                top.ue.alert({
+                                    content:"抱歉，客户分组定价设置失败"
+                                })
+                            }
+                        })
+                    }
+                })
+                return false;
+            }
+
+            _data.gids = _data.gids.join(",");
+
+            var groupPriceVo = {};
+            groupPriceVo.groupPrices = _groupPriceArray;
+            var groupPriceJson = $.toJSON(groupPriceVo);
+            top.utils.ajax({
+                url:"/api/priceManage/sales/goods_price/saveOrUpdateGroupPrice",
+                data:{
+                    "gids" : _data.gids,
+                    "groupPriceVo" : groupPriceJson
+                },
+                success:function (data,res) {
+                    top.ue.alert({
+                        content:"恭喜您，客户分组定价设置成功。",
+                        ok:function (idx) {
+                            /*var pathName= getUrlParam("pathName") || location.href;
+                            var titleBack= getUrlParam("titleBack") || '';
+
+                            top.utils.iframeLoad();
+                            top.utils.closeTopTab(null,true,function(){
+                                top.utils.openWithTab('', titleBack,pathName, {refresh: true,fstBread:'销价管理'});
+                            })*/
+                            top.ue.close(idx);
+                            top.utils.closeExitsTab(top.utils.getActTab().dom);
+                        }
+                    })
+                },error:function () {
+                    top.ue.alert({
+                        content:"抱歉，客户分组定价设置失败"
+                    })
+                }
+            })
+
+        }
+    </script>
+
+</body>
+</html>

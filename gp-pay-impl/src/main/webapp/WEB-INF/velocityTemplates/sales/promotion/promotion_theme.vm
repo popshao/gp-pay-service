@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>我的医药网 - 销售中心 - 促销管理</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="../scripts/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+      #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+          
+              <!-- 用户中心_主体内容_S -->
+              <div class="indmain c-box">
+
+                  <div class="user-path">销售中心 &gt; 销价管理 &gt; 促销管理 &gt; 
+                  	<i class="up-h">#if($!isEdit == 0) 创建活动  #else 修改活动  #end</i>
+                  </div>
+				  <input type="hidden" id="pactStartTime" value="$!utils.formatDate($!promotionActivity.pactStartTime,"yyyy-MM-dd HH:mm:ss")">
+                  <div class="user-cxgl-title user-cxgl-cjhd">1.促销信息</div>
+
+                  <div class="user-form">
+                      <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                          <thead>
+                          <tr>
+                              <th>促销名称</th>
+                              <th>促销类型</th>
+                              <th>开始时间</th>
+                              <th>当前状态</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr>
+                              <td>$!promotionActivity.pactTitle</td>
+                              <td>$!utils.getPactType($!promotionActivity.pactType)</td>
+                              <td>$!utils.formatDate($!promotionActivity.createTime,"yyyy-MM-dd")
+                                  <br />
+                                  $!utils.formatDate($!promotionActivity.pactStartTime,"HH:mm:ss")
+                              </td>
+                              <td>
+                              	#if($!promotionActivity.pactStatus == 1)
+                              	  #if($!utils.isAfterNow($!utils.formatDate($!promotionActivity.pactStartTime,"yyyy-MM-dd HH:mm:ss")))<!-- 启用且促销未开始 -->
+                              	            启用中，$!utils.getCurrentTimeSpan($!promotionActivity.pactStartTime,"ddHH")后生效
+                              	  #elseif($!utils.isAfterNow($!utils.formatDate($!promotionActivity.pactEndTime,"yyyy-MM-dd HH:mm:ss")))<!-- 启用且促销进行中 -->
+                              	    $!utils.getCurrentTimeSpan($!promotionActivity.pactEndTime,"ddHH")后到期
+                              	  #else
+                              	           已结束
+                              	  #end
+                              	#else
+                              	      已停用
+                              	#end
+                              	<!-- 
+                              	<img class="img-tips" src="/image/icon_user_14.png" data-tips="true" data-tips-title="生效中，将于22天1小时后结束">
+                              	 -->
+                              </td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+
+                  <div class="user-cxgl-title user-cxgl-cjhd mt20">2.选活动页风格</div>
+
+                  <div class="user-cxgl-hdfg cc">
+
+                      <div class="main">
+                          <a class="sPrev" href="javascript:void(0)"></a>
+                          #if($!templateList && $!templateList.size()>0)
+                          <ul>
+                              #foreach($template in $templateList)
+                              	#if($!promotionActivity.pactType == 5 && ($!template.id!=1 && $!template.id!=2 && $!template.id!=3 && $!template.id!=5))<!-- 针对秒杀的促销类型单独处理 -->
+                              	<li class="#if($!template.id == $!promotionActivityTheme.themeTemplateId) li-selected #end">
+                                  <div class="img">
+                                     <img src="#if($!template.tplPreviewImg != '') $!utils.getNewImgDomain($!template.tplPreviewImg) #else $!utils.getNewImgDomain($!template.tplFullImg) #end"
+                                     width="208" height="278">
+                                     <input type="hidden" id="id" value="$!template.id"/>
+                                     <input type="hidden" id="tplSmallImg" value="$!template.tplSmallImg"/>
+                                     <input type="hidden" id="tplBannerImg" value="$!template.tplBannerImg"/>
+                                  </div>
+                                  <div class="text"><i class="t-img"></i>$!template.tplTitle</div>
+                              	</li>
+                              	#elseif($!promotionActivity.pactType != 5 && $!template.id!=4)
+                              	<li class="#if($!template.id == $!promotionActivityTheme.themeTemplateId) li-selected #end">
+                                  <div class="img">
+                                     <img src="#if($!template.tplPreviewImg != '') $!utils.getNewImgDomain($!template.tplPreviewImg) #else $!utils.getNewImgDomain($!template.tplFullImg) #end"
+                                     width="208" height="278">
+                                     <input type="hidden" id="id" value="$!template.id"/>
+                                     <input type="hidden" id="tplSmallImg" value="$!template.tplSmallImg"/>
+                                     <input type="hidden" id="tplBannerImg" value="$!template.tplBannerImg"/>
+                                  </div>
+                                  <div class="text"><i class="t-img"></i>$!template.tplTitle</div>
+                              	</li>
+                              	#end
+                              #end
+                          </ul>
+                          #end
+                          <a class="sNext" href="javascript:void(0)"></a>
+                      </div>
+                      
+                  </div>
+
+                  <form id="saveForm" action="/sales/promotion/saveTheme.html" method="post">
+                  <div class="user-cxgl-title user-cxgl-line mt20">3.确定活动基本信息</div>
+                  <input type="hidden" name="pactId" value="$!promotionActivity.pactId"/>
+                  <input type="hidden" name="isEdit" value="$!isEdit"/>
+                  <input type="hidden" id="themeTemplateId" name="themeTemplateId"/>
+                  <input type="hidden" id="selectedTplSmallImg" name="selectedTplSmallImg"/>  <!-- 底部小广告位的publishImg -->
+                  <input type="hidden" id="selectedTplBannerImg" name="selectedTplBannerImg"/><!-- 轮播图广告位的publishImg -->
+				  
+				  <input type="hidden" name="isNewPromotion" value="$!isNewPromotion"/>
+				  <input type="hidden" name="pi" value="$!pi"/>
+                  <input type="hidden" name="ps" value="$!ps"/>
+                  <input type="hidden" name="status" value="$!status"/>
+                  <input type="hidden" name="pactTitle" value="$!{pactTitle}"/>
+                  <input type="hidden" name="pactStartTime" value="$!{pactStartTime}"/>  
+                  <input type="hidden" name="pactEndTime" value="$!{pactEndTime}"/>
+                  <input type="hidden" name="pactType" value="$!{pactType}"/>
+                  <div class="user-cxgl-table">
+
+                      <table class="order_table mt10" border="0" cellpadding="0" cellspacing="0">
+                          <tr>
+                              <td class="tar" width="80" valign="top">活动标题：</td>
+                              <td width="430">
+                                 $!promotionActivity.pactTitle
+                                 <input type="hidden" name="themeTitle" value="$!promotionActivity.pactTitle"/>
+                              </td>
+                              <td class="tac" width="auto" rowspan="4">
+                                  <img src="/image/img_user_05.jpg">
+                              </td>
+                          </tr>
+                          <tr>
+                          <td class="tar" valign="top">活动描述：</td>
+                          <td width="430">
+                              $!promotionActivity.pactContent
+                              <input type="hidden" name="themeContent" value="$!promotionActivity.pactContent"/>
+                          </td>
+                      </tr>
+                          <tr>
+                              <td class="tar" valign="top">活动时间：</td>
+                              <td>
+                                  <div class="cc">
+                                      <span class="fl">$!utils.formatDate($!promotionActivity.pactStartTime,"yyyy-MM-dd HH:mm:ss")</span>
+                                      <i class="to">至</i>
+                                      <span class="fl">$!utils.formatDate($!promotionActivity.pactEndTime,"yyyy-MM-dd HH:mm:ss")</span>
+                                  </div>
+                                  <div>活动时长：$!utils.getTimeSpan($!promotionActivity.pactStartTime,$!promotionActivity.pactEndTime,"ddHHmm")</div>
+                                  <input type="hidden" name="themeStartTime" value="$!utils.formatDate($!promotionActivity.pactStartTime,'yyyy-MM-dd HH:mm:ss')"/>
+                                  <input type="hidden" name="themeEndTime" value="$!utils.formatDate($!promotionActivity.pactEndTime,'yyyy-MM-dd HH:mm:ss')"/>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="tar" valign="top">活动logo：</td>
+                              <td>
+                                <div class="img-file fl" id="themeUploadPic">
+                                   <img id="showThemeLogo" width="109px" height="58px"
+                                   #if($!promotionActivityTheme.themeLogo && $!promotionActivityTheme.themeLogo!='')
+                                     src="$!{downloadUrl}$!promotionActivityTheme.themeLogo"
+                                   #end
+                                   />
+                                </div>
+                                <span class="prompt fl">*建议上传图片尺寸为：109*58</span>
+                                <input type="hidden" id="themeLogo" name="themeLogo"/>
+                                <input type="hidden" id="bucketKey" name="bucketKey"/>
+                              </td>
+                          </tr>
+                      </table>
+
+                  </div>
+
+                  <div class="user-cxgl-title user-cxgl-line mt20">4.广告位入口
+                  <!-- <span class="prompt">非必填项，勾选后会在旗舰商城“找优惠”栏目出现专题页入口，客户可以从促销商品的详情页进入专题页</span> -->
+                  </div>
+
+                  <div class="user-cxgl-table">
+
+                      <table class="order_table mt10" border="0" cellpadding="0" cellspacing="0">
+                          <tr>
+                          <tr>
+                              <td width="460" align="center">
+                              
+                                  <input class="fl check check-tit" type="checkbox" name="bottomPublishStatus" value="1" id="bottomPublishStatus"
+                                  #if($!bottomPublish.publishStatus==1) checked="checked" #end>
+                                  <label class="fl tit" for="bottomPublishStatus">启用“找优惠”频道-小广告位</label>
+                              </td>
+                              <td width="120"></td>
+                              <td width="auto" align="center">
+                                  <input class="fl check check-tit" type="checkbox" name="topPublishStatus" value="1" id="topPublishStatus"
+                                  #if($!topPublish.publishStatus==1) checked="checked" #end>
+                                  <label class="fl tit" for="topPublishStatus">启用“找优惠”频道-轮播图广告位</label>
+                              </td>
+                          </tr>
+                              <td>
+                                  <span class="fl">排&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;序：</span>
+                                  <input class="input input-80" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="5"
+                                  name="bottomPublishOrderby" value="$!bottomPublish.publishOrderby"> 越大越靠前
+                                  <a href="javascript:;" class="fr btn-cx" id="bottomUploadPic" title="*建议上传图片尺寸为：232*150">上传自定义图片</a>
+                                  <input type="hidden" id="bottomPublishCustomImg" name="bottomPublishCustomImg" value="$!bottomPublish.publishCustomImg"/>
+                                  <input type="hidden" id="bottomBucketKey" name="bottomBucketKey" value="$!bottomPublish.bucketKey"/>
+                                  <div class="user-ps tar">
+                                  #if($!utils.notEmpty($!bottomPublish.publishCustomImg))
+                                  <a id="bottomShowLogo" href="javascrpt:void(0);" data-tips="true" data-tips-style="{width:'232px',height:'150px',color:'#906b24'}" 
+                                  data-tips-title="<img width='232' height='150' alt='图片加载中...' src='$!{downloadUrl}$!bottomPublish.publishCustomImg' >">已上传图片</a>
+                                  #else
+                                  <a id="bottomShowLogo" href="javascrpt:void(0);" data-tips="true" data-tips-style="{width:'232px',height:'150px',color:'#906b24'}" 
+                                  data-tips-title="">*建议图片上传尺寸为：232*150</a>
+                                  #end
+                                  </div>
+                              </td>
+                              <td></td>
+                              <td>
+                                  <span class="fl">排&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;序：</span>
+                                  <input class="input input-80" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="5"
+                                  name="topPublishOrderby" value="$!topPublish.publishOrderby"> 越大越靠前
+                              </td>
+                          </tr>
+                          </tr>
+                              <td valign="top">
+                                  <span class="fl">广告标题：</span>
+                                     <input class="input input-390" type="text" placeholder="最多8个汉字" maxlength="8" 
+                                     name="bottomPublishTitle" id="bottomPublishTitle" value="$!bottomPublish.publishTitle">
+                                  <div class="user-error" style="display:none" id="titleError">请填写广告标题</div>
+                              </td>
+                              <td></td>
+                              <td valign="top">
+                                  <span class="fl">广告标题：</span>
+                                     $!promotionActivity.pactTitle
+                                     <input type="hidden" name="topPublishTitle" value="$!promotionActivity.pactTitle">
+                              </td>
+                          </tr>
+                          </tr>
+                              <td valign="top">
+                                  <span class="fl">广告描述：</span>
+                                     <input class="input input-390" type="text" placeholder="最多14个汉字" maxlength="14" 
+                                     name="bottomPublishSubTitle" id="bottomPublishSubTitle" value="$!bottomPublish.publishSubTitle">
+                                  <div class="user-error" style="display:none" id="subTitleError">请填写广告描述</div>
+                              </td>
+                              <td></td>
+                              <td valign="top">
+                                  <span class="fl">广告描述：</span>
+                                     $!promotionActivity.pactContent
+                                     <input type="hidden" name="topPublishSubTitle" value="$!promotionActivity.pactContent">
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                  <img src="/image/img_user_06.jpg">
+                                  <input type="hidden" name="bottomPublishId" value="$!bottomPublish.id"/>
+                              </td>
+                              <td></td>
+                              <td>
+                                  <img src="/image/img_user_07.jpg">
+                                  <input type="hidden" name="topPublishId" value="$!topPublish.id"/>
+                              </td>
+                          </tr>
+                      </table>
+
+                  </div>
+                  </form>
+
+                  <div class="user-cxgl-btn mt20">
+                      <a href="javascript:addSave();" class="btn_text">
+                      	#if($!isEdit == 0) 创建  #else 保存  #end
+                      </a>
+                  </div>
+
+              </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog_show.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.SuperSlide.js?v=$!{jscss_version}"></script>
+    <script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+    <script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+    <script>
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+            render:true,
+            handler:function (btn) {
+                location.href = document.referrer;
+            }
+        })
+		$(function(){
+
+			<!-- uf-table表格最后一行无下边框 -->
+            $(".uf-table").find("tr:last td").css("border-bottom","none");
+
+            <!-- 活动页风格轮播特效 -->
+            $(".user-cxgl-hdfg .main").slide({
+                mainCell:"ul",
+                vis:4,
+                prevCell:".sPrev",
+                nextCell:".sNext",
+                effect:"leftLoop",
+            });
+
+            $(".c-box .user-cxgl-hdfg .main li").hover(function(){
+                $(this).addClass("li-hover");
+            },function(){
+                $(this).removeClass("li-hover");
+            });
+
+            $(".c-box .user-cxgl-hdfg .main li").click(function(){
+                if($(this).hasClass("li-selected")){
+                    $(this).removeClass("li-selected");
+                }else{
+                    $(this).addClass("li-selected");
+                }
+                $(".c-box .user-cxgl-hdfg .main li").not(this).removeClass("li-selected");
+            })
+            
+            //活动logo上传控件
+            uploadPic($("#themeUploadPic"),function(data){
+            	$("#themeLogo").val(data.id);
+            	$('#showThemeLogo').attr("src",data.picUrl);
+            	$("#bucketKey").val(data.id);
+            });
+
+            //广告logo上传控件
+            uploadPic($("#bottomUploadPic"),function(data){
+            	$("#bottomPublishCustomImg").val(data.id);
+            	$("#bottomBucketKey").val(data.id);
+            	$("#bottomShowLogo").attr("data-tips-title","<img width='232' height='150' alt='图片加载中...' src='"+data.picUrl+"' >");
+            	$("#bottomShowLogo").text("已上传图片");
+            });
+        })
+
+        //图片上传方法
+        function uploadPic(options, callback){
+			new AjaxUpload(options,{
+	            action: "/cdn/imageInfo_upload.html",
+	            name: 'file_path',
+	            responseType:"json",
+	            onSubmit : function(file, ext){
+	            	if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+	                    ext_str = ext;
+	                } else {
+	                	top.layer.msg("非图片文件格式,请重传！");
+	                    return false;
+	                }
+	                $.showLoad();
+	            },
+	            onComplete: function(file, result){
+	            	if (result.success == false) {
+	            		if(result.message == "outofsize"){
+	            			top.layer.msg("文件过大，无法上传！");
+	            		}else if(result.message == "error"){
+	            			top.layer.msg("文件过大，无法上传！");
+	            		}
+	            		return false;
+	            		
+	            	}else{
+	            		callback(result.data);
+	            	}
+	            	
+	                $.hideLoad();
+	            }
+	        });
+		}
+		
+		function addSave(){
+			if(checkForm()){
+				/*
+				var pactStartTime = $("#pactStartTime").val();
+    			var t = new Date().getTime();
+			  	var b=new Date(pactStartTime.replace(/-/g,"/")).getTime();
+    			
+			    if(b>t){//未开始
+			    	$("#status").val("2");
+			    }else{
+			    	$("#status").val("1");
+			    }*/
+				top.ue.load();
+                top.utils.frameBackDel();
+				$('#saveForm').submit();
+				
+			}
+	    }
+
+		function checkForm() {
+			var isError = 0;
+			var errorInfo;
+			//如果选中了小广告位，需要验证广告标题和广告描述
+			if($("#bottomPublishStatus").is(":checked")) {
+				if($.trim($("#bottomPublishSubTitle").val()) == ''){
+					isError = 1;
+					errorInfo = "请填写广告描述！";
+					$("#subTitleError").show();
+				} else {
+					$("#subTitleError").hide();
+				}
+				if($.trim($("#bottomPublishTitle").val()) == ''){
+					isError = 1;
+					errorInfo = "请填写广告标题！";
+					$("#titleError").show();
+				} else {
+					$("#titleError").hide();
+				}
+			}
+			//检查是否选择模板，如果选择，给模板对应input赋值
+			var selectedTemplate = $(".c-box .user-cxgl-hdfg .main li").filter(".li-selected");
+			if(selectedTemplate.length > 0) {
+				var themeTemplateId = selectedTemplate.find("#id").val();
+				var selectedTplSmallImg = selectedTemplate.find("#tplSmallImg").val();
+				var selectedTplBannerImg = selectedTemplate.find("#tplBannerImg").val();
+				$("#themeTemplateId").val(themeTemplateId);
+				$("#selectedTplSmallImg").val(selectedTplSmallImg);
+				$("#selectedTplBannerImg").val(selectedTplBannerImg);
+			} else {
+				//没有选中模板，提示
+				isError = 1;
+				errorInfo = "请选择模板！";
+			}
+			if(isError == 1){
+				top.layer.msg(errorInfo);
+				return false;
+			}
+			return true;
+		}
+    </script>
+  </body>

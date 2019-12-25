@@ -1,0 +1,118 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<!--[if gte mso 9]><xml><x:ExcelWorkbook>
+<x:ExcelWorksheets><x:ExcelWorksheet><x:Name>
+</x:Name><x:WorksheetOptions><x:Selected/></x:WorksheetOptions>
+</x:ExcelWorksheet>
+</x:ExcelWorksheets></x:ExcelWorkbook></xml>
+<![endif]-->
+<style>
+.table-dotted {
+    border-collapse: collapse;
+}
+.table-dotted tbody .th {
+    border: 1px #99bbe8;
+    background-color:#8DB4E3;
+    border-spacing: 1px;
+    text-align: right;
+    font-weight: normal;
+    white-space: nowrap;
+    padding: 2px;
+    line-height:22px;
+}
+
+.table-dotted tbody .td {
+    border: 1px #99bbe8;
+    border-spacing: 1px;
+    text-align: left;
+    padding: 2px;
+    line-height:22px;
+}
+.format{
+mso-number-format:'\@';
+}
+</style>
+
+</head>
+<body leftmargin=0 topmargin=0 marginwidth=0 marginheight=0>
+<table class="table-dotted" width="100%">
+<tbody>
+	<tr>
+		<td class="th" style="text-align: center;">结算单号</td>
+		<td class="th" style="text-align: center;">生成时间</td>
+		<td class="th" style="text-align: center;">审核时间</td>
+		<td class="th" style="text-align: center;">结算状态</td>
+		<td class="th" style="text-align: center;">结算渠道</td>
+		<td class="th" style="text-align: center;">供应商</td>
+		<td class="th" style="text-align: center;">公司名称 </td>
+		<td class="th" style="text-align: center;">订单总额</td>
+		<td class="th" style="text-align: center;">结算单总额</td>
+		<td class="th" style="text-align: center;">退款单总额</td>
+        <td class="th" style="text-align: center;">佣金总额</td>
+		<td class="th" style="text-align: center;">开户行</td>
+		<td class="th" style="text-align: center;">支行</td>
+		<td class="th" style="text-align: center;">银行账户</td>
+	</tr>
+	#if($settelmentList && $!settelmentList.size()!=0)
+    #foreach($item in $settelmentList)
+	<tr>
+		<td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.stSn}</td>
+	    <td class="td" style="text-align:center;" nowrap="nowrap">$utils.formatDate($!item.stAddTime,"yyyy-MM-dd")</td>
+	    	    <td class="td" style="text-align:center;" nowrap="nowrap">$utils.formatDate($!item.stAuditTime,"yyyy-MM-dd")</td>
+	    
+	    <td class="td" style="text-align:center;" nowrap="nowrap">
+         #if($!item.stState == -1)  
+                            结算失败
+         #elseif($!item.stState == 0)  
+                            待结算
+         #elseif($!item.stState == 1)  
+                            已结算
+         #elseif($!item.stState == 2)  
+                            银行处理中
+         #else  
+           $!item.stState  
+         #end  
+        </td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">								            
+        #if($!item.payType == 1)  
+								                            中金
+								            #elseif($!item.payType == 2)  
+								                            民生
+								            #elseif($!item.payType == 3)  
+								                            支付宝
+								            #elseif($!item.payType == 4)  
+								                            易宝
+											#elseif($!item.payType == 5)  
+												            微信
+								            #elseif($!item.payType == 6)  
+								            				浦发
+								            #elseif($!item.payType == 7)  
+								            				闪贷
+								            #elseif($!item.payType == 8)  
+								            				余额
+								            #else  
+								              $!item.payType  
+								            #end  </td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.suName</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.accountName</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.stAmount</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">		                                    
+        #set($balance=$item.stAmount - $item.refundAmount - $item.commission)
+		                                    $!utils.priceFormart($!{balance})</td>
+		<td class="td" style="text-align: center;" nowrap="nowrap">$!item.refundAmount</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.commission</td>
+	    <td class="td" style="text-align: center;" nowrap="nowrap">$!item.bankName</td>
+	    <td class="td" style="text-align: center;" nowrap="nowrap">$!item.bankDetailName</td>
+	    <td class="td" style="text-align: center;" nowrap="nowrap"> $!item.cardNo<span>&nbsp;</span></span> </td>
+     </tr>
+     #end
+     #end
+</tbody>
+</table>
+
+</body>
+</html>

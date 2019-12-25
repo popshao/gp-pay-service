@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>查看促销-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 市场管理 &gt; <a class="color" href="/sales/market/promotion/main.html">邀请商业参与促销</a> &gt; 查看促销</p>
+                </div>
+                
+                <div class="order_query order cc">
+                    <!-- 促销政策信息 -->
+                    #set($industryPromotion = $!{industryPromotionWrapper.industryPromotion})
+                    <!-- 促销模板信息 -->
+                    #set($ipt = $!{industryPromotionWrapper.industryPromotionTemplate})
+                    <!-- 促销企业信息 -->
+                    #set($ipsList = $!{industryPromotionWrapper.industryPromotionSupplierList})
+                    <!-- 促销商品信息 -->
+                    #set($goodsList = $!{industryPromotionWrapper.goodsList})
+                    <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td class="tar" width="150"><span class="red">*</span>促销标题：</td>
+                        <td class="text-blue" width="auto">$!{industryPromotion.ipTitle}</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">关联商品：</td>
+                        <td>
+                           #if($!goodsList && $!goodsList.size() > 0)
+                        	<div class="cx_scrollbar cx_scrollbar_h_170">
+                                <div class="order_detail">
+                                    <div class="table table-top table-cx">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            #foreach($!goods in $!goodsList)
+                                                <tr>
+                                                <td title="$!utils.getGoodsName($!{goods.gName},$!{goods.gCommonName})">$!utils.substring($!utils.getGoodsName($!{goods.gName},$!{goods.gCommonName}),30)</td>
+                                                <td>$!{goods.gSpecifications}</td>
+                                                <td>$!{goods.gManufacture}</td>
+                                                <td>$!{goods.gLicenseNo}</td>
+                                                </tr>
+                                            #end
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            #end
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">促销政策模板：</td>
+                        <td>
+                        	<div class="cx_scrollbar">
+                            	
+                                <ul class="cx_template cc">
+                                    #if($!ipt)
+                                	<li>
+                                    	<div class="img"><img class="img" src="$!{downloadUrl}$!{ipt.tplViewImg}"></div>
+                                        <div class="operation">
+                                        	<a href="javascript:void(0);" onclick="ipObj.enlargeImg(this);" class="fl a_enlarge"></a>
+                                        </div>
+                                    </li>
+                                    #end
+                                </ul>
+                                
+                            </div>
+                            <div class="fl user_cx_tips mt5">提示：选择模板，当供应商执行加入促销政策的情况下，该信息自动会显示在对方旗舰商城首页广告位。</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">促销政策对商业：</td>
+                        <td class="text-blue">$!{industryPromotion.ipToBusiness}</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar"><span class="red">*</span>促销政策对终端：</td>
+                        <td class="text-blue">$!{industryPromotion.ipToTerminal}</td>
+                      </tr>
+                       <tr>
+                        <td valign="top" class="tar">拟邀请商业公司名单：</td>
+                        <td>
+                        	<div class="cx_scrollbar cx_scrollbar_h_170">
+                            	
+                                <div class="order_detail">
+            
+                                    <div class="table table-top table-cx">
+                                        <table border="0" cellpadding="0" cellspacing="0">    
+                                        	<tr>
+                                                <th class="b-l">企业名称</th>
+                                                <th>所在地区</th>
+                                                <th class="b-r">政策反馈</th>
+                                            </tr>
+                                            #if($!ipsList && $!ipsList.size() > 0)
+                                               #foreach($!ips in $!ipsList)
+	                                               <tr>
+	                                                <td>$!{ips.suName}</td>
+	                                                <td>$!{ips.siteName}</td>
+	                                                <td>$!{ips.policy}</td>
+	                                               </tr>
+                                               #end
+                                            #end  
+                                        </table>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">起止时间：</td>
+                        <td>
+                        	<span class="fl text-blue">$utils.formatDate($!{industryPromotion.ipStartTime},"yyyy-MM-dd HH:mm:ss")</span>
+                            <span class="to">至</span>
+                            <span class="fl text-blue">
+                            #if($!{industryPromotion.ipEndTime} && $!{industryPromotion.ipEndTime} != '')
+                               $utils.formatDate($!{industryPromotion.ipEndTime},"yyyy-MM-dd HH:mm:ss")
+                            #else
+                                                                                              长期有效
+                            #end
+                            </span>
+                        </td>
+                      </tr>
+                   </table>
+                   
+                   #*<div class="btn tac">
+                        <a href="javascript:history.go(-1);" class="btn">返回</a>
+                    </div>*#
+
+                </div>
+                
+            <!-- 用户中心_主体内容_E -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/promotion/industryPromotion.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script>
+        $(function(){
+
+            $(".jsje-tips-show").mouseenter(function(){
+                $(this).find(".jsje-tips").show();
+            });
+
+            $(".jsje-tips-show").mouseleave(function(){
+                $(this).find(".jsje-tips").hide();
+            });
+
+        })
+    </script>
+  </body>
+</html>

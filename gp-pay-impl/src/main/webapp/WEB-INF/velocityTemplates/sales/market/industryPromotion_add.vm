@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>发布促销-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 市场管理 &gt; <a class="color" href="/sales/market/promotion/main.html">邀请商业参与促销</a> &gt; 发布促销</p>
+                </div>
+                
+                <div class="order_query order cc">
+                
+                    <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td class="tar" width="155"><span class="red">*</span>促销标题：</td>
+                        <td width="auto"><input class="input input_l" type="text" name="ipTitle" id="ipTitle" maxlength="20" placeholder="最多输入20个文字" /></td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">关联商品：</td>
+                        <td>
+                        	<div class="cc">
+	                        	<a href="javascript:ipObj.addGoods();" class="fl btn">添加商品</a>
+	                        	<a href="javascript:ipObj.delAddPageGoods();" class="fl btn-n">删除</a>
+	                            <div class="fl jsje-ctn">
+	                                <div class="fl jsje-tips-img jsje-tips-show">
+	                                    <div class="jsje-tips">
+	                                        <div class="jsje-tips-top"></div>
+	                                        <div class="jsje-tips-ctn">添加关联商品享受政策，可以提供给供应商查看。</div>
+	                                    </div>
+	                                </div>
+	                            </div>
+                            </div>
+                            <div class="cx_scrollbar cx_scrollbar_h_170 mt10" style="display: none;" id="scrollbarDiv">
+                            	
+                                <div class="order_detail">
+            
+                                    <div class="table table-top table-cx">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                         <tbody id="goodsList">
+                                         </tbody>      
+<!--                                             <tr> -->
+<!--                                                 <td><input type="checkbox" class="check" /></td> -->
+<!--                                                 <td>盐酸吡格列酮片（欧迪贝）</td> -->
+<!--                                                 <td>15mga14sa180盒</td> -->
+<!--                                                 <td>国药准字H20052682</td> -->
+<!--                                                 <td><a href="javascript:;" class="btn-delete">删除</a></td> -->
+<!--                                             </tr> -->
+                                        </table>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                            
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">促销政策模板：</td>
+                        <td>
+                        	<div class="cx_scrollbar">
+                                <ul class="cx_template cc">
+                                #if($!iptList && $!iptList.size() > 0)
+                                   #foreach($!ipt in $!iptList)
+                                      <li>
+                                        <input type="hidden" name="tplId" id="tplId" value="$!{ipt.tplId}"/>
+                                    	<div class="img"><img class="img" src="$!{downloadUrl}$!{ipt.tplViewImg}"></div>
+                                        <div class="operation">
+                                        	<a href="javascript:void(0);" onclick="ipObj.enlargeImg(this);" class="fl a_enlarge"></a>
+                                        	#if($!velocityCount == 1)
+                                            <a href="javascript:;" class="fr a_selected a_selected_on"></a>
+                                            #else
+                                            <a href="javascript:;" class="fr a_selected"></a>
+                                            #end
+                                        </div>
+                                      </li>
+                                   #end
+                                #end
+                                    <li class="none">
+                                    	<p class="wait">敬请期待</p>
+                                    </li>
+                                </ul>
+                                
+                            </div>
+                            <div class="fl user_cx_tips mt5">提示：选择模板，当供应商执行加入促销政策的情况下，该信息自动会显示在对方旗舰商城首页广告位。</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">促销政策对商业：</td>
+                        <td>
+                        	<textarea class="textarea" name="ipToBusiness" id="ipToBusiness" onkeyup="ipObj.textCounter('ipToBusiness','msg_to_business',120)" cols="30" rows="10" placeholder="请填写吸引商家的促销政策，该信息只有拟定的商家可见，最多输入120字。"></textarea>
+                        	<div class="text_count tar"><span id="msg_to_business" style="color:red">0</span>/120 字</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar"><span class="red">*</span>促销政策对终端：</td>
+                        <td>
+                        	<textarea class="textarea" name="ipToTerminal" id="ipToTerminal" onkeyup="ipObj.textCounter('ipToTerminal','msg_to_terminal',120)" cols="30" rows="10" placeholder="请填写吸引商家的促销政策，该信息只有拟定的商家可见，最多输入120字。"></textarea>
+                        	<div class="text_count tar"><span id="msg_to_terminal" style="color:red">0</span>/120 字</div>
+                        </td>
+                      </tr>
+                       <tr>
+                        <td class="tar"><span class="red">*</span>拟邀请商业公司名单：</td>
+                        <td>
+                        	<a href="javascript:ipObj.addSupplier();" class="fl btn">添加企业</a>
+                        	<a href="javascript:ipObj.delAddPageSupplier();" class="fl btn-n">删除</a>
+                            <div class="fl user_cx_tips mt5">提示：请选择促销政策邀请加入的对象名单，只有选择的商业才可收到促销政策信息。</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="tar"></td>
+                        <td>
+                        	<div class="cx_scrollbar cx_scrollbar_h_170">
+                            	
+                                <div class="order_detail">
+            
+                                    <div class="table table-top table-cx">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                        <thead>    
+                                        	<tr>
+                                        	    <th class="b-l"><input type="checkbox" class="check" id="selectAllEnter"/></th>
+                                                <th class="b-l">企业名称</th>
+                                                <th>所在地区</th>
+                                            </tr>  
+                                         </thead>
+                                         <tbody id="supplierList">
+<!--                                             <tr> -->
+<!--                                                 <td>石药集团远大(大连)制药有限公司</td> -->
+<!--                                                 <td>大连</td> -->
+<!--                                                 <td><a href="javascript:;" class="btn-delete">删除</a></td> -->
+<!--                                             </tr> -->
+                                         </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">起止时间：</td>
+                        <td>
+                        	<input class="fl input" type="text" name="ipStartTime" id="ipStartTime" style="width: 150px;" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd HH:mm:ss', minDate:'%y-%M-%d',maxDate:'#F{$dp.$D('+'\\'+'\'ipEndTime'+'\\'+'\')}'})"/>
+                            <span class="to">至</span>
+                            <input class="fl input" type="text" name="ipEndTime" id="ipEndTime" style="width: 150px;" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd HH:mm:ss', minDate:'#F{$dp.$D('+'\\'+'\'ipStartTime'+'\\'+'\')}'})"/>
+                            <div class="fl user_cx_tips mt5 ml5">提示：如不填写起止时间，系统默认添加之日算起，并且长期有效</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar"></td>
+                        <td>
+                            <div class="cx_tips tac">亲，由于发布成功后，有商家随时执行加入该促销政策，为了保障促销的真实性，发布成功后不可编辑，请悉知</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar"></td>
+                        <td class="tac"><a href="javascript:ipObj.save();" class="btn">确认发布</a></td>
+                      </tr>
+                   </table>
+                </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    
+    <!-- 添加页面 -->
+    <div class="mask" id="popUpMaskQ"></div>
+    <div class="dialog w460" id="popUpDIVQ" style="width:1250px;height:560px;">
+	      <div class="head"><span class="dialog-title">选择商品</span><a href="javascript:closePopUpDIV('popUpMaskQ','popUpDIVQ');" class="btn-close"></a></div>  
+	      <div class="con dialog_cx cc">
+		      <div id="content"></div>
+	          <div class="fl select-box">
+	                <div class="order_query order">
+	                    <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+	                      <tr>
+	                        <td>
+	                        	<span class="title">已选商品</span>
+	                            <a href="javascript:top.app.frameWindow.ipObj.delGoods();" class="fr btn">删除</a>
+	                        </td>
+	                      </tr>
+	                   </table>
+	                </div>
+	                
+	                <div class="cx-scrollbar">
+	                    <div class="order_detail">
+	                        <div class="table table-top table-cx">
+	                            <table border="0" cellpadding="0" cellspacing="0">
+	                            <tbody id="selectedGoodsList">
+	                            </tbody>      
+	                            </table>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="btn cc">
+                         <input class="fl check" id="selectAllGoods" type="checkbox" />
+                         <label class="check_text" for="selectAllGoods">全选</label>
+                    </div>
+	          </div>
+	          <div class="fl btn">
+	              <a href="javascript:top.app.frameWindow.ipObj.saveGoods();" class="btn-confirm">保存</a>
+	          </div>
+	      </div>
+      	
+    </div>
+    
+	<!-- 添加页面 -->
+    <div class="mask" id="popUpMaskCustomer"></div>
+    <div class="dialog w460" id="popUpDIVCustomer" style="width:1250px;height:560px;">
+      <div class="head"><span class="dialog-title">选择客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');" class="btn-close"></a></div>  
+      <div class="con dialog_cx cc" >
+      <div id="contentSupplier"></div>
+          <div class="fl select-box">
+	             <div class="order_query order">
+	                 <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+	                   <tr>
+	                     <td>
+	                     	<span class="title">已选客户</span>
+	                         <a href="javascript:top.app.frameWindow.ipObj.delSupplier();" class="fr btn">删除</a>
+	                     </td>
+	                   </tr>
+	                </table>
+	             </div>
+             
+	             <div class="cx-scrollbar">
+	                 <div class="order_detail">
+	                     <div class="table table-top table-cx">
+	                         <table border="0" cellpadding="0" cellspacing="0">
+	                         <tbody id="selectedSupplierList">
+	                         </tbody>      
+	                         </table>
+	                     </div>
+	                 </div>
+	             </div>
+	             <div class="btn cc">
+                         <input class="fl check" id="selectAllSup" type="checkbox"/>
+                         <label class="check_text" for="selectAllSup">全选</label>
+                 </div>
+         </div>
+         <div class="fl btn">
+             <a href="javascript:top.app.frameWindow.ipObj.saveSupplier();" class="btn-confirm">保存</a>
+         </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/promotion/industryPromotion.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+    <script>
+        $(function(){
+
+            $(".jsje-tips-show").mouseenter(function(){
+                $(this).find(".jsje-tips").show();
+            });
+
+            $(".jsje-tips-show").mouseleave(function(){
+                $(this).find(".jsje-tips").hide();
+            });
+            
+          //促销政策模板选中效果
+           $(".cx_template").find("a.fr").click(function(){
+                $(".cx_template").find("a.fr").not(this).removeClass("a_selected_on");
+                $(this).addClass("a_selected_on");
+            });
+          
+        });
+        
+        $("#selectAllEnter").click(function(){
+    	   	var c_type = $("#selectAllEnter")[0].checked;
+    	   	$("#supplierList").find("input[type=checkbox]").not("#selectAllEnter").each(function(){
+    	   		$(this)[0].checked = c_type;
+    	   	});
+       });
+
+       $("tbody").find("input[type=checkbox]").not("#selectAllEnter").click(function(){
+    	   	var check_type = true;
+    	   	$("#supplierList").find("input[type=checkbox]").not("#selectAllEnter").each(function(){
+    				if($(this)[0].checked == false){
+    					 check_type = false;
+    					 return false;
+    				}            		
+    	   	});
+    	   	$("#selectAllEnter")[0].checked = check_type;
+       });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>订单信息管理 - 我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+   
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="topbox">
+            <div class="wrap">
+                <p class="welcome fl">
+                    您好，<a class="name" href="">15717196054</a>欢迎来到我的医药网！
+                </p>
+                <a class="register fl" href="javascript:void(0);">注册</a>
+                <a class="login fl" href="javascript:void(0)">登录</a>
+                <div class="top_nav fr">
+                    <div class="dot">
+                        <a href="">医药网首页</a>
+                    </div>
+                    <div class="dot">
+                        <a href="">流向查询</a>
+                    </div>
+                    <div class="dot">
+                        <span class="tel">400-060-3351</span>
+                    </div>
+                    <div class="collect">
+                        <a href="">收藏本站</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header">
+            <div class="wrap">
+                <div class="logo fl">
+                    <a href=""></a>
+                </div>
+                <a class="function fl" href="">供应中心</a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="wrap cc">
+                <div class="leftmenu fl">
+                    <div class="cnt">
+                        <dl>
+                            <dt><i></i>会员管理</dt>
+                            <dd>
+                                <a href="#">会信息管理</a>
+                                <a href="#">申请审核</a>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt><i></i>账户中心</dt>
+                            <dd>
+                                <a href="#">信息注册</a>
+                                <a href="#">子账号管理</a>
+                                <a href="#">消息提醒管理</a>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt><i></i>订单管理</dt>
+                            <dd>
+                                <a href="">订单管理</a>
+                                <a href="">退货查询</a>
+                                <a href="">流向查询</a>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt><i></i>商品管理</dt>
+                            <dd>
+                                <a href="#">分类管理</a>
+                                <a href="#">商品管理</a>
+                                <a href="#">招商管理</a>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt><i></i>商城管理</dt>
+                            <dd>
+                                <a href="#">广告管理</a>
+                                <a href="#">公告管理</a>
+                                <a href="#">客服管理</a>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt><i></i>销售控制</dt>
+                            <dd>
+                                <a href="#">申请管理</a>
+                                <a href="#">药店审核</a>
+                                <a href="#">指定客户</a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="user_right fl">
+                    <!-- 用户中心_主体内容_S -->
+                    <div class="indmain">
+                        <div class="title">
+                            <p>首页 &gt; 订单管理</p>
+                        </div>
+                        <div class="order_query order">
+                            <form action="" method="get" id="order_form">
+                                <ul>
+                                    <li>
+                                        <label>订单状态：</label>
+                                        <div class="sltitem" id="cate">
+                                            <span class="">不限</span>
+                                            <ul style="display: none;">
+                                                <li data-value=""><a href="javascript:;">time</a></li>
+                                                <li data-value="1"><a href="javascript:;">start time</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <label>订单付款状态：</label>
+                                        <div class="sltitem" id="cate">
+                                            <span class="">不限</span>
+                                            <ul style="display: none;">
+                                                <li data-value=""><a href="javascript:;">time</a></li>
+                                                <li data-value="1"><a href="javascript:;">start time</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <label>订单时间：</label>
+                                        <div class="sltitem mr0" id="cate">
+                                            <span class="">下单时间</span>
+                                            <ul style="display: none;">
+                                                <li data-value=""><a href="javascript:;">time</a></li>
+                                                <li data-value="1"><a href="javascript:;">start time</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sltitem w192" id="cate">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value=""><a href="javascript:;">time</a></li>
+                                                <li data-value="1"><a href="javascript:;">start time</a></li>
+                                            </ul>
+                                        </div>
+                                        <i class="slt_t">至</i>
+                                        <div class="sltitem w192 mr0" id="cate">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value=""><a href="javascript:;">time</a></li>
+                                                <li data-value="1"><a href="javascript:;">start time</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <label>订单号：</label>
+                                        <input name="name" type="text" value="" class="w-txt w256">
+                                    </li>
+                                    <li>
+                                        <label>采购商：</label>
+                                        <input name="name" type="text" value="" class="w-txt w256">
+                                    </li>
+                                </ul>
+                                <div class="btn"><a href="javascript:;" class="btn_query mr7">查询</a><a href="javascript:;" class="btn_query">重置</a><a href="javascript:;" class="btn_query btn_export">导出</a></div>
+                            </form>
+                        </div>
+                        <div class="order_detail">
+                            <div class="table">
+                                <table cellpadding="0" cellspacing="0">
+                                    <thead class="head">
+                                        <tr class="line">
+                                            <th>订单号</th>
+                                            <th>下单时间</th>
+                                            <th>采购商</th>
+                                            <th>订单状态</th>
+                                            <th>订单付款状态</th>
+                                            <th>结算类型</th>
+                                            <th>订单金额</th>
+                                            <th>发货额</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>2015123141834-1</td>
+                                            <td>2015-12-31
+                                                <br />15:30:09</td>
+                                            <td>同济堂大药房</td>
+                                            <td>已提交</td>
+                                            <td>待付款</td>
+                                            <td>在线支付</td>
+                                            <td>¥330.00 </td>
+                                            <td>¥0.00 </td>
+                                            <td><a href="javascript:;" class="btn-txt">查看</a><a href="javascript:;" class="btn-txt">发货</a><a href="javascript:;" class="btn-txt">驳回</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2015123141834-1</td>
+                                            <td>2015-12-31
+                                                <br />15:30:09</td>
+                                            <td>同济堂大药房</td>
+                                            <td>部分发货</td>
+                                            <td>待付款</td>
+                                            <td>在线支付</td>
+                                            <td>¥330.00 </td>
+                                            <td>¥0.00 </td>
+                                            <td><a href="javascript:;" class="btn-txt">查看</a><a href="javascript:;" class="btn-txt">发货</a><a href="javascript:;" class="btn-txt">驳回</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2015123141834-1</td>
+                                            <td>2015-12-31
+                                                <br />15:30:09</td>
+                                            <td>同济堂大药房</td>
+                                            <td>部分完成</td>
+                                            <td>待付款</td>
+                                            <td>在线支付</td>
+                                            <td>¥330.00 </td>
+                                            <td>¥0.00 </td>
+                                            <td><a href="javascript:;" class="btn-txt">查看</a><a href="javascript:;" class="btn-txt">发货</a><a href="javascript:;" class="btn-txt">驳回</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2015123141834-1</td>
+                                            <td>2015-12-31
+                                                <br />15:30:09</td>
+                                            <td>同济堂大药房</td>
+                                            <td>已发货</td>
+                                            <td>待付款</td>
+                                            <td>在线支付</td>
+                                            <td>¥330.00 </td>
+                                            <td>¥0.00 </td>
+                                            <td><a href="javascript:;" class="btn-txt">查看</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2015123141834-1</td>
+                                            <td>2015-12-31
+                                                <br />15:30:09</td>
+                                            <td>同济堂大药房</td>
+                                            <td>已驳回</td>
+                                            <td>待付款</td>
+                                            <td>在线支付</td>
+                                            <td>¥330.00 </td>
+                                            <td>¥0.00 </td>
+                                            <td><a href="javascript:;" class="btn-txt">查看</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2015123141834-1</td>
+                                            <td>2015-12-31
+                                                <br />15:30:09</td>
+                                            <td>同济堂大药房</td>
+                                            <td>已完成</td>
+                                            <td>待付款</td>
+                                            <td>在线支付</td>
+                                            <td>¥330.00 </td>
+                                            <td>¥0.00 </td>
+                                            <td><a href="javascript:;" class="btn-txt">查看</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+								<!--分页开始 -->
+								#if($!{pagerInfo})
+									#if($!{pagerTotal} != 1)
+										#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/gy_ddgl_ddxxgl.html",$!{pagerQueryParam})
+									#end
+								#end
+								<!--分页结束 -->
+								
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 用户中心_主体内容_E -->
+                </div>
+            </div>
+        </div>
+    </div>
+    #parse("/common/footer.vm")
+
+    <!-- mypharma_脚本 -->
+    <script type="text/javascript" src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript" src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+#parse("common/common_script.vm")
+</body>
+
+</html>

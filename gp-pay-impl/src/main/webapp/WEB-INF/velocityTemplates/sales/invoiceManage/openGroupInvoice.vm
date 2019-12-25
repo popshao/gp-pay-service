@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 批量开票</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+
+</head>
+<body>
+
+<!--页面主体 -->
+    <div class="c-box">
+        <form>
+            <div class="user-form-table user-kp-share-box" id='orderCon'>
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tbody>
+                    <tr>
+                        <td class="tar" width="100">收款单位</td>
+                        <td width="auto">
+                            <span class="user-t-gray">尚未选择</span>
+                            <span class="user-t-black" id='orderCompany'></span>
+                            <a href="javascript:void(0)" class="user-btn-n fr" id="addBuyer">选择采购商</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tar">开票订单</td>
+                        <td class="td-oo">
+                            <span class="user-t-gray">尚未选择</span>
+                            <span class="user-t-black" id='orderInfo'></span>
+                            <a href="javascript:void(0)" class="user-btn-n user-btn-none fr" id='addOrder'>选择订单</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tar">开票金额</td>
+                        <td class="td-mm">
+                            <span class="user-t-gray">-</span>
+                            <span class="user-t-black" id='orderMoney'></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="user-btn tac mt20">
+                <a href="javascript:void(0)" class="user-btn-n user-btn-none"  id="submitInvoice">开票</a>
+                <a href="javascript:void(0)" class="user-btn-b b-reset">清空已选</a>
+            </div>
+        </form>
+
+    </div>
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>
+
+    <script>
+        var layer,laypage,laytpl, selDatas = [], CtsLists = [] , eid = "";
+        layui.config({
+            base:'/js/layui/extend/'
+        }).use(['layApp','layer','laypage','laytpl'],function () {
+            layer = layui.layer,laypage = layui.laypage , laytpl = layui.laytpl;
+            $(function(){
+                $('body').addClass('user-has-js');
+
+                var _oMoneyList = [];
+
+                $("#addBuyer").on("click",function () {
+                    top.ue.getBuysModal({
+                        area:["970px","650px"],
+                        choose: function (selDatas,lay, idx) {
+                            eid = selDatas[0].eid;
+                            CtsLists = [];
+                            $('#orderInfo').hide();
+                            $(".user-t-gray").show();
+                            $('#orderMoney').html("");
+                            $('#orderCompany').html(selDatas[0].eName).siblings('span').hide();
+                            $("#submitInvoice").addClass("user-btn-none");
+                            if($('#orderCompany').html())
+                                $('#addOrder').removeClass('user-btn-none').addClass('user-btn-n');
+                            return true;
+                        }
+                    });
+                })
+
+                
+
+
+                $("#addOrder").on("click",function () {
+                    if(!$('#orderCompany').html())
+                        return;
+                    var _sels = [];
+                     $.each(CtsLists,function (i,e) {
+                         _sels.push(e.oId);
+                     })
+                    top.ue.getOrdersModal({
+                        hasSels:_sels,
+                        selCompany:eid,
+                        yes: function (idx, lay, selDatas) {
+                            selDatas.push.apply(selDatas,CtsLists);
+                            CtsLists = selDatas;
+                            $("#orderInfo").show();
+                            $('#orderInfo').html('已选择 <span>'+CtsLists.length+'</span> 个未开票订单').siblings('span').hide();
+                            if($('#orderInfo').html())
+                                $('#submitInvoice').removeClass('user-btn-none').addClass('user-btn-n');
+                            return true;
+                        },
+                        end:function () {
+                            var subMoney=0;
+                            $.each(CtsLists,function (i,e) {
+                                if(e.kpPrice)
+                                    subMoney+=e.kpPrice;
+                            })
+                            subMoney = top.utils.toFixed(subMoney,2)
+
+                            if(subMoney>0)
+                                $('#orderMoney').html('¥'+subMoney).siblings('.user-t-gray').hide();
+                        }
+                    });
+                })
+    
+                /*清空已选*/
+                $(".b-reset").on("click",function () {
+                    location.reload()
+                          
+                })
+
+                $('#submitInvoice').unbind('click').on('click', function(event) {
+                    if($(this).hasClass("user-btn-none")){
+                        return false;
+                    }
+                    event.preventDefault();
+                    var _orderCompanyText = $("#orderCompany").text();
+                    var _orderInfoText = $("#orderInfo").text();
+                    var _orderMoneyText = $("#orderMoney").text();
+
+                    var _oIdList = [], oids;
+                    $.each(CtsLists,function (i,e) {
+                        _oIdList.push(e.oId);
+                    })
+                    if(_oIdList.length) oids = _oIdList.join(",");
+
+                    var _this = $(this);
+
+                    if(!_orderCompanyText || !_orderInfoText) {
+                        _this.addClass('user-btn-none');
+                        return false;
+                    } else {
+                        checkTex(_oIdList,function () {
+                            top.utils.iframeLoad();
+                            top.utils.closeTopTab(null,true,function(){
+                                top.utils.openWithTab(top.utils.getRandom(), '开票','/sales/invoice/openInvoice.html?oId='+oids, {fstBread:'发票'});
+                            })
+                            _this.attr('disabled', '');
+                            _this.removeClass('user-btn-none');
+                        })
+                    }
+                    /* Act on the event */
+                });
+
+            });
+
+            
+
+
+        })
+
+
+    </script>
+
+</body>
+</html>

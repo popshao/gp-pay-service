@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的医药网 - 首页热销管理</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/promotion.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+     <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; <a class="color" href="/sales/price/singlePolicy_main.html">单品量价政策</a></p>
+                </div>
+                <div class="user_kh_tips mt20 p10 cc">
+                    说明：在单笔订单中购买指定商品时，该商品的购买数量或购买金额满足设置条件时，该商品单价享受设置的折扣，可设置优惠阶梯；同时可指定部分客户专享该促销。</br>
+                    示例：促销添加活动商品A、B,促销规则为购买单个商品满100个（或元），商品单价优惠1%；</br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单笔订单中有商品A、B、C、D，当购买的活动商品A的总数量（或总金额）大于等于100个（或元）时，A商品单价优惠1%；活动商品B同样的计算方式。
+                </div>
+                
+                <div class="order_query order mt5">
+                    <form action="/sales/price/singlePolicy_main.html" method="post" id="searchForm">
+                        
+	                    <table class="promotion_table" border="0" cellpadding="0" cellspacing="0">
+	                      <tr>
+	                        <td class="tar" width="80">商品编码：</td>
+	                        <td width="130"><input class="input" name="gSn"  type="text"  value="$!gSn"/></td>
+	                        <td class="tar" width="80">生产厂家：</td>
+	                        <td width="130"><input class="input" name="gManufacture" type="text" value="$!gManufacture"/></td>
+	                        <td class="tar" width="80">商品名称：</td>
+	                        <td width="auto"><input class="input" name="gName" type="text" value="$!gName"/></td>
+	                      </tr>
+	                      #if($!suIsErp == 1)
+	                      <tr>
+	                      		<td class="tar" width="80">商品内码：</td>
+		                        <td width="auto" colspan="5"><input type="text" style="width: 500px;" name="gInSns" id="gInSns" placeholder="用逗号分隔多个内码“C102318,C102319”，每次最多200个"  onblur="checkGInSnValue('',false)" value="$!{gInSns}"/></td>
+	                      </tr>
+		                  #end
+	                   </table>
+                   		<input type="hidden" name="pi" value="$!pi" />
+					    <input type="hidden" name="ps" value="$!ps" />
+					    <input type="hidden" name="status" id="status" value="$!status" />
+				    </form>
+                   <div class="btn tac">
+                       <a href="javascript:searchPager('/sales/price/singlePolicy_main.html',false);" class="btn_query">查询</a>
+                       <a href="javascript:searchPager('/sales/price/singlePolicy_main.html',true);" class="btn_query btn-empty"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+                   </div>                  
+                </div>
+                
+                <div class="order_list">
+                    <div class="tabnav">
+                        <ul>
+                            <li data-value="0" class="on"><a href="javascript:;"><span>进行中</span></a></li>
+                            <li data-value="1" ><a href="javascript:;"><span>未开始</span></a></li>
+                            <li data-value="2"><a href="javascript:;"><span>已结束</span></a></li>
+                            <a href="/sales/price/singlePolicy_add.html" class="btn_add_event btn_add_line">+添加政策</a>
+                        </ul>
+                    </div>
+                    <input type="hidden" id="chooseGoodsType" value="goodsId">
+                <div class="tab">
+	                <div class="order_detail yh mt10"> 
+	                    <div class="table">
+	                        <table cellpadding="0" cellspacing="0">
+	                            <thead class="head">
+	                                <tr class="line">
+	                                  <th width="140">商品名称</th>
+	                                  <th width="100">商品规格</th>
+	                                  <th width="120">生产厂家</th>
+	                                  <th width="auto">优惠政策</th>
+	                                  <th width="65">条件</th>
+	                                  <th width="75">指定客户</th>
+	                                  <th width="120">生效/失效时间</th>
+	                                  <th width="160">操作</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                                   #if($!singlePolicyList && $!singlePolicyList.size()>0)
+	                                       #foreach($sp in $singlePolicyList)
+	                                       		<tr>
+				                                  <td>$!{sp.gName}</td>
+				                                  <td>$!{sp.gSpecifications}</td>
+				                                  <td class="word">$!{sp.gManufacture}</td>
+				                                  <td class="yellow">
+						                           #if($!sp.spcList && $!sp.spcList.size()>0)
+				                                       #foreach($spc in $sp.spcList)
+				                                       	满  $utils.toFolat("$!{spc.gscCodition}")
+				                                       	#if($!{sp.gspType}==1)
+				                                       		盒
+				                                       	#else
+				                                       		元
+				                                       	#end
+				                                       	优惠 $utils.toFolat("$!{spc.gscPercent}")%<br>
+				                                       #end
+			                                       #end
+				                                  </td>
+				                                  <td>
+				                                  		#if($!sp.gspType==1)
+				                                  			购买数量
+				                                  		#else
+				                                  			购买金额
+				                                  		#end
+				                                  </td>
+				                                  <td>
+					                                  #if("$!{sp.gspAppoint}" !="0")
+															<a href="javascript:void(0)" onclick="lookCustomer($!{sp.gspId},$!{sp.gspAppoint})" class="btn">查看客户</a>
+					                                  #end
+				                                  </td>
+				                                  <td>
+				                                  	$utils.formatDate($!{sp.gspBegin},"yyyy-MM-dd")</br>
+				                                  	$utils.formatDate($!{sp.gspEnd},"yyyy-MM-dd")</td>
+													<td>
+			                                  			<a href="/sales/price/singlePolicy_edit.html?gspId=$!{sp.gspId}"  class="btn-txt">修改</a>
+			                                  			<a href="javascript:void(0)" onclick="delSinglePolicy($!{sp.gspId})" class="btn-txt">删除</a>
+			                                  			#if("$!status"!="2")
+															<a style="width: 60px;" href="javascript:void(0)" onclick="addGoods($!{sp.gspId},$!{sp.gId});" class="btn-txt">复制政策</a>			                                  			
+			                                  			#end
+		                                  			</td>
+				                                </tr>
+	                                       #end
+	                                   #else
+			                           <tr>
+			                             <td colspan="10">无相关数据！</td>
+			                           </tr>
+                                       #end
+	                            </tbody>
+	                        </table>
+	                      </div>
+                                <!--分页开始 -->
+							#if($!{pagerInfo}) 
+								#if($!{pagerTotal} > 1)
+									#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/price/singlePolicy_main.html")
+								#end 
+							#end
+	                </div>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+    </div>
+    
+    #parse("common/footer.vm")
+    
+        <!-- 添加页面 -->
+    <div class="mask" id="popUpMaskQ"></div>
+    	<div class="dialog w460" id="popUpDIVQ" style="width:1200px;height:520px;">
+	      <div class="head"><span class="dialog-title">选择商品</span><a href="javascript:closePopUpDIV('popUpMaskQ','popUpDIVQ');" class="btn-close"></a></div>  
+	      <div class="con" id="content">
+      	</div>
+    </div>
+    
+        <!-- 添加页面 -->
+    <div class="mask" id="popUpMaskCustomer"></div>
+    <div class="dialog w460" id="popUpDIVCustomer" style="width:1100px;height:470px;">
+      <div class="head"><span class="dialog-title">查看客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');" class="btn-close"></a></div>  
+      <div class="con" id="contentEnterprise">
+      </div>
+    </div>
+    
+        <!-- 添加页面 -->
+    <div class="mask" id="popUpMaskCustomerGroup"></div>
+    <div class="dialog w460" id="popUpDIVCustomerGroup" style="width:600px;">
+      <div class="head"><span class="dialog-title">查看客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomerGroup','popUpDIVCustomerGroup');" class="btn-close"></a></div>  
+      <div class="con" >
+      	<div class="tab-con">
+            <div class="type-box cc" id="sct_ids">
+                <dl></dl>
+            </div>
+            <div class="type-box cc" id="regionIds">
+                <dl></dl>
+            </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/promotion/choose_goodsId.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/promotion/single_customer_enterprise.js?v=$!{jscss_version}" type="text/javascript"></script>
+       #parse("common/common_script.vm")
+    <script>
+       var wwwUrl = '$!{wwwHostAndPort}';
+       var userUrl = '$!{userHostAndPort}';
+    $(function(){
+    	var status = "$!status";
+    	if(status!=""){
+    		$('.order_list .tabnav li').removeClass("on").eq(status).addClass("on");
+    	}
+	    $('.order_list .tabnav li').click(function(){
+	        var index=$(this).index();
+			$("#status").val(index);
+			//查询活信息
+			searchPager('/sales/promotion/main.html',false);
+	    }); 
+	    $("body tbody tr").unbind("mouseover");
+	    
+    })
+    
+    function lookCustomer(gspId_temp,gspAppoint){
+    	if(gspAppoint==0){
+    		return;
+    	}else if(gspAppoint==1){
+    		singleCusteomer(gspId_temp);
+    	}else if(gspAppoint==2){
+            $.showLoad();
+    	    var mask = $("#popUpMaskCustomerGroup");
+    	    var dialog = $("#popUpDIVCustomerGroup");
+           	$.ajax({
+			   url: "/sales/policy/singleCustomerGroup.html",
+			   data: {"gspId":gspId_temp},
+			   type: 'POST',
+			   dataType: 'json',
+				complete:function () {
+					$.hideLoad();
+				},
+			   success: function(result) {
+				   if (result.success == false) {
+					top.ue.msg(result.message);
+				   }else{
+					   var listSctw = result.data.listSctw;
+					   var listSrw = result.data.listSrw;
+
+					   var sct = '<dt class="type-t">业务分组</dt>';
+					   $.each(listSctw,function(i,o){
+							sct +='<dd><div class="customer-item" id="'+o.shopCustomerType.sctId+'"><a data-gspId="'+gspId_temp+'" href="javascript:void(0)" onclick-="removeCustomerGroup('+gspId_temp+',this)" class="btn-remove"></a> <b></b>'+o.shopCustomerType.sctName+'</div></dd>';
+					   });
+					   $("#sct_ids").html(sct);
+					   var reg = '<dt class="type-t">区域分组</dt>';
+					   $.each(listSrw,function(i,o){
+						   reg +='<dd><div class="customer-item" id="'+o.supplierRegion.regionId+'"><a data-gspId="'+gspId_temp+'" href="javascript:void(0)" onclick-="removeCustomerGroup('+gspId_temp+',this)" class="btn-remove"></a><b></b>'+o.supplierRegion.regionName+'</div></dd>';
+					   });
+					   $("#regionIds").html(reg);
+                       top.rui.dynamic({
+                           title:"查看客户",
+                           skin:'dialog-old dialog-old-no-title',
+                           area:['620px'],
+						   btn:false,
+                           content:dialog.html(),
+						   success:function (lay,idx) {
+                               lay.find(".tab-con").find("a").on("click",function () {
+                                   var _div = $(this).closest("div");
+                                   var _gspId = $(this).attr("data-gspId"), _id = $(this).parent().attr("id");
+                                   var sct_ids = [];
+                                   var regionIds=[];
+                                   //已选择业务分组
+                                   $("#sct_ids div",lay).not(_div).each(function(i,o){
+                                       sct_ids.push($(this).attr("id"));
+                                   });
+                                   sct_ids = sct_ids.join(",");
+
+                                   //已选择区域类型
+                                   $("#regionIds div",lay).not(_div).each(function(i,o){
+                                       regionIds.push($(this).attr("id"));
+                                   });
+                                   regionIds = regionIds.join(",");
+
+                                   top.app.frameWindow.removeCustomerGroup(_gspId,$(this),sct_ids,regionIds,idx,lay);
+                               })
+                           }
+                       })
+				   }
+			   }
+		    });
+    	}
+    }
+    
+    function removeCustomerGroup(gspId,event,sct_ids,regionIds,pIdx,pLay){
+        top.ue.confirm({
+			title:"停用提示",
+			area:['450px'],
+			skin:"content-center",
+            content: "<p style='padding: 30px 0 20px 0;'>您确定要删除吗？</p>",
+			ok:function (idx,lay) {
+                top.layer.close(idx);
+                top.$(event).parents("dd").remove();
+                top.ue.load();
+                $.ajax({
+                    url: "/sales/policy/updateCustomerGroup.html",
+                    data: {"gspId":gspId,sct_ids:sct_ids,regionIds:regionIds},
+                    type: 'POST',
+                    dataType: 'json',
+					complete:function () {
+						top.ue.closeAll("loading");
+                    },
+                    success: function(result) {
+                        if (result.success == false) {
+                            top.layer.msg(result.message);
+                        }else{
+                            top.layer.msg("删除成功！");
+                            if(sct_ids=="" && regionIds==""){
+                                top.layer.close(pIdx);
+                                window.location.reload(true);
+                            }
+                        }
+                    }
+                });
+
+            }
+		})
+
+    	/*var d =	dialog({
+            title: "停用提示",
+            content: "您确定要删除吗？",
+            width: 300,
+            ok: function() {
+            	top.$(event).parents("dd").remove();
+            	return;
+           		*var sct_ids = "";
+           		var regionIds="";
+        		//已选择业务分组
+        		$("#sct_ids div").each(function(i,o){
+        			sct_ids += $(this).attr("id").replace("sct_","")+",";
+        		});
+        		sct_ids = sct_ids.substring(0,sct_ids.length-1);
+        		
+        		//已选择区域类型
+        		$("#regionIds div").each(function(i,o){
+        			regionIds += $(this).attr("id").replace("reg_","")+",";
+        		});
+        		regionIds = regionIds.substring(0,regionIds.length-1);
+            	
+            	$.ajax({
+        	           url: "/sales/policy/updateCustomerGroup.html",
+        	           data: {"gspId":gspId,sct_ids:sct_ids,regionIds:regionIds},
+        	           type: 'POST',
+        	           dataType: 'json',
+        	           success: function(result) {
+                        if (result.success == false) {
+                        	dialog({
+        		                       title: "提示信息",
+        		                       content: result.message,
+        		                       width: 300
+        		                   });
+                        }else{
+                        	d.close();
+                        }
+        		       }
+                });
+            	
+            	if(sct_ids=="" && regionIds==""){
+            		closePopUpDIV('popUpMaskCustomerGroup','popUpDIVCustomerGroup');
+            		window.location.reload(true);
+            	}
+            },
+            okVal:"确定",
+            cancelVal: "取消",
+            cancel: function() {
+            	d.close();
+            }
+        });*/
+    }
+    
+     function delSinglePolicy(id){
+		top.ue.confirm({
+            title: "停用提示",
+            content: "您确定要删除此政策吗？",
+            ok: function() {
+            	$.ajax({
+     	           url: "/sales/policy/DeleteSinglePolicy.html",
+     	           data: {"gspId":id},
+     	           type: 'POST',
+     	           dataType: 'json',
+     	           success: function(result) {
+                       if (result.success == false) {
+                       	top.ue.msg(result.message);
+                       }else{
+     			        window.location.reload(true);
+                       }
+     		       }
+               });
+            }
+        });
+    }
+    
+    </script>
+  </body>
+</html>

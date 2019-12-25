@@ -1,0 +1,93 @@
+<script type="text/javascript">
+   $("#selectAllQueryGoods").click(function(){
+	   	var c_type = $("#selectAllQueryGoods")[0].checked;
+	   	$("#queryTab").find("input[type=checkbox]").not("input[disabled='disabled']").not("#selectAllQueryGoods").each(function(){
+	   		$(this)[0].checked = c_type;
+	   	});
+   });
+
+   $("#queryTab").find("input[type=checkbox]").not("#selectAllQueryGoods").click(function(){
+	   	var check_type = true;
+	   	$("#queryTab").find("input[type=checkbox]").not("#selectAllQueryGoods").each(function(){
+				if($(this)[0].checked == false){
+					 check_type = false;
+					 return false;
+				}            		
+	   	});
+	   	$("#selectAllQueryGoods")[0].checked = check_type;
+   });
+   
+   $("#selectAllGoods").click(function(){
+	   	var c_type = $("#selectAllGoods")[0].checked;
+	   	$("#selectedGoodsList").find("input[type=checkbox]").not("#selectAllGoods").each(function(){
+	   		$(this)[0].checked = c_type;
+	   	});
+   });
+
+   $("#selectedGoodsList").find("input[type=checkbox]").not("#selectAllGoods").click(function(){
+	   	var check_type = true;
+	   	$("#selectedGoodsList").find("input[type=checkbox]").not("#selectAllGoods").each(function(){
+				if($(this)[0].checked == false){
+					 check_type = false;
+					 return false;
+				}            		
+	   	});
+	   	$("#selectAllGoods")[0].checked = check_type;
+   });
+</script>
+
+                            <div class="fl select-box">
+                            	
+                                <div class="order_query order">
+                                    <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                                      <tr>
+                                        <td>
+                                            <input class="input input_l" type="text" name="gName" id="gName" value="$!{gName}" placeholder="输入商品名" />
+                                            <a href="javascript:top.app.frameWindow.ipObj.queryGoods();" class="btn-jxsp">查询</a>
+                                            <a href="javascript:top.app.frameWindow.ipObj.chooseGoods();" class="fr btn">选择</a>
+                                        </td>
+                                      </tr>
+                                   </table>
+                                </div>
+                                
+                                <div class="cx-scrollbar">
+                                	
+                                    <div class="order_detail">
+                
+                                        <div class="table table-top table-cx">
+                                            <table border="0" cellpadding="0" cellspacing="0">
+                                            #if($!goodsWrapperList && $!goodsWrapperList.size() > 0)
+                                            <tbody id="queryTab">
+                                               #foreach($!goodsWrapper in $!goodsWrapperList)
+                                                  #if($!utils.isContais($!{goodsWrapper.goods.gId},$!gIds))
+                                                   <tr class="none">
+					                                	<td>
+						                                	<input type="checkbox" disabled="disabled" class="check" name="chk" id="$!{goodsWrapper.goods.gId}">
+					                                	</td>
+					                               #else
+				                                	<tr>
+				                                	<td>
+				                                		<input type="checkbox" class="check" name="chk" id="$!{goodsWrapper.goods.gId}">
+				                                	</td>
+                                                  #end
+                                                    <td title="$!utils.getGoodsName($!{goodsWrapper.goods.gName},$!{goodsWrapper.goods.gCommonName})">$!utils.substring($!utils.getGoodsName($!{goodsWrapper.goods.gName},$!{goodsWrapper.goods.gCommonName}),30)</td>
+                                                    <td>$!{goodsWrapper.goods.gSpecifications}</td>
+                                                    <td>$!{goodsWrapper.goods.gLicenseNo}</td>
+                                                  </tr>
+                                               #end
+                                               </tbody>
+                                            #end      
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                                <div class="btn cc">
+                                    <input class="fl check" id="selectAllQueryGoods" type="checkbox" />
+                                    <label class="check_text" for="selectAllQueryGoods">全选</label>
+                                </div>
+                            </div>
+                            
+                         
+                        

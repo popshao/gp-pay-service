@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>我的医药网 - 首页热销管理</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/promotion.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; <a class="color" href="/sales/promotion/main.html">促销管理</a></p>
+                </div>
+                <dl class="promotions_add mt20">
+                	<dt>
+                    	<ul class="step cc">
+                        	<li class="current">第一步 配置活动内容</li>
+                            <li>第二步 配置活动规则</li>
+                            <li>第三步 配置活动展示入口</li>
+                        </ul>
+                    </dt>
+                    <dd>
+                    <form id="submitForm">
+                    	<table class="promotion_table" border="0" cellpadding="0" cellspacing="0">
+                          <tr>
+                            <td class="tar" width="120"><span class="red">*</span>活动类型：</td>
+                            <td class="td_sort" width="auto">
+
+                              <input class="radio" type="radio" name="pactType" id="radio_01" value="2"/>
+                              <label class="text" for="radio_01">有买有赠</label>
+                              <input class="radio" type="radio" name="pactType" id="radio_02" value="5"/>
+                              <label class="text" for="radio_02">限时秒杀</label>
+                              <input class="radio" type="radio" name="pactType" id="radio_03" value="4"/>
+                              <label class="text" for="radio_03">特价专区</label>
+                              <input class="radio" type="radio" name="pactType" id="radio_04" value="1"/>
+                              <label class="text" for="radio_04">单品合计满减</label>
+                              <input class="radio" type="radio" name="pactType" id="radio_05" value="3"/>
+                              <label class="text" for="radio_05">低价换购</label>
+                              
+                            </td>
+                          </tr>
+                          
+                          <tr>
+                            <td class="tar"><span class="red">*</span>活动标题：</td>
+                            <td><input class="input input_l fl" type="text" name="pactTitle" maxlength="10" id="pactTitle"></td>
+                          </tr>
+                          <tr>
+                            <td class="tar" style="padding: 0 0 0 0; _padding: 0 0 0 0; height: 20px; line-height: 20px;"> </td>
+                            <td style="padding: 0 0 0 0; _padding: 0 0 0 0; height: 20px; line-height: 20px;"><span style="display:block;color:red">*活动标题不超过10个字</span></td>
+                          </tr>
+                          <tr>
+                            <td class="tar" valign="top"><span class="red">*</span>活动描述：</td>
+                            <td>
+                            	<textarea class="fl" name="pactContent" id="pactContent" cols="30" rows="10" maxlength="120"></textarea>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="tar" style="padding: 0 0 0 0; _padding: 0 0 0 0; height: 20px; line-height: 20px;"> </td>
+                            <td style="padding: 0 0 0 0; _padding: 0 0 0 0; height: 20px; line-height: 20px;"><span style="display:block;color:red">建议输入字数120个以下</span></td>
+                          </tr>
+                          <tr>
+                            <td class="tar"><span class="red">*</span>有效期：</td>
+                            <td class="td_date">
+                                  <input type="text" name="pactStartTime" id="pactStartTime"  class="input fl" style="width: 150px;"  readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen',onpicked:showTime(), dateFmt : 'yyyy-MM-dd HH:mm:ss', minDate:'%y-%M-%d',maxDate:'#F{$dp.$D('+'\\'+'\'pactEndTime'+'\\'+'\')}'})"/>
+							      <i class="to">至</i>
+                                  <input type="text" name="pactEndTime" id="pactEndTime"  class="input fl" style="width: 150px;"  readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', onpicked:showTime(),dateFmt : 'yyyy-MM-dd HH:mm:ss', minDate:'#F{$dp.$D('+'\\'+'\'pactStartTime'+'\\'+'\')}'})"/>
+                            	  <div style="display: none" id="timeDhm">
+                            	  	活动时长：
+                            	  	<span id="time_d"></span>天
+                            	  	<span id="time_h"></span>时
+                            	  	<span id="time_m"></span>分
+                            	   </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="tar"><span class="red">*</span>选择活动模板：</td>
+                            <td>
+                            	<div class="sltitem">
+                                    <span></span>
+                                    <ul>
+                                    #if($!templateList && $!templateList.size()>0)
+	                                    #foreach($template in $templateList)
+	                                      <li data-value="$!{template.id}"><a href="javascript:;">$!{template.tplTitle}</a></li>
+	                                    #end
+                                    #end
+                                    </ul>
+                                    <input type="hidden" id="pactTemplateId" name="pactTemplateId">
+                                </div>
+                              <a href="javascript:;" onclick="showImage();" class="view_img">查看效果图</a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td valign="top" class="tar">活动logo：</td>
+                            <td>
+                            	<div class="img-file fl" id="uploadPic">
+                                    <img id="showPic" width="109px" height="58px"/>
+                                </div>
+                                <span class="prompt img-text fl">建议图片尺寸为：109*58</span>
+                                <input type="hidden" id="pactLogo" name="pactLogo">
+                                <input type="hidden" id="bucketKey" name="bucketKey">
+                                <input type="hidden" name="imageInfo" id="imageInfo" />
+                            </td>
+                          </tr>
+                       </table>
+                       </form>
+                       <div class="btn">
+                           <a href="javascript:addSave();" class="btn_text">下一步</a>
+                       </div> 
+                    </dd>
+                </dl>
+          </div>
+
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+/*     	var isBeforeUnload = true;
+	    window.onbeforeunload = function (e) {
+	  	  e = e || window.event;
+	  	  if(isBeforeUnload){
+	  		  // 兼容IE8和Firefox 4之前的版本
+	  		  if (e) {
+	  		    e.returnValue = '关闭提示';
+	  		  }
+	  		  // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
+	  		  return '关闭提示';
+	  	  }
+	  	}; */
+	  	
+		$(function(){
+			$("body tbody tr").unbind("mouseover");
+			//验证表单
+			checkForm();
+			//图片上传
+			var uploadPic = $("#uploadPic");
+	        new AjaxUpload(uploadPic,{
+	            action: "/cdn/imageInfo_upload.html",
+	            name: 'file_path',
+	            responseType:"json",
+	            onSubmit : function(file, ext){
+	            	if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+	                    ext_str = ext;
+	                } else {
+	                	dialog({
+		                       title: "提示信息",
+		                       content: "非图片文件格式,请重传！",
+		                       width: 300
+		                   });
+	                    return false;
+	                }
+	                $.showLoad();
+	            },
+	            onComplete: function(file, result){
+	            	if (result.success == false) {
+	            		if(result.message == "outofsize"){
+	            			dialog({
+	 	                       title: "提示信息",
+	 	                       content: "文件过大，无法上传！",
+	 	                       width: 300
+	 	                    });
+	            		}else if(result.message == "error"){
+	            			dialog({
+	 	                       title: "提示信息",
+	 	                       content: "文件过大，无法上传！",
+	 	                       width: 300
+	 	                    });
+	            		}
+	            		return false;
+	            		
+	            	}else{
+	            		$("#pactLogo").val(result.data.id);
+	                	$('#showPic').attr("src",result.data.picUrl);
+	                	$("#bucketKey").val(result.data.id);
+	                	$("#imageInfo").val($.toJSON(result.data.imageInfo));
+	            	}
+	            	
+	                $.hideLoad();
+	            }
+	        });
+		})
+		
+		
+		function showTime(){
+			if($("#pactStartTime").val()=="" || $("#pactEndTime").val()==""){
+				$("#timeDhm").hide();
+				return ;
+			}else{
+				$("#timeDhm").show();
+			}
+			var nowTime = new Date($("#pactStartTime").val().replace(/-/g,"/")).getTime();
+			var endTime = new Date($("#pactEndTime").val().replace(/-/g,"/")).getTime();
+			var time_distance  = endTime - nowTime;
+			
+			if(time_distance > 0){ 
+				// 天时分秒换算 
+				var int_day = Math.floor(time_distance/86400000) 
+				time_distance -= int_day * 86400000; 
+				// 时分秒为单数时、前面加零 
+				if(int_day < 10){ 
+					int_day = "0" + int_day; 
+				} 
+				$("#time_d").html(int_day); 
+
+				var int_hour = Math.floor(time_distance/3600000) 
+				time_distance -= int_hour * 3600000; 
+				if(int_hour < 10){ 
+					int_hour = "0" + int_hour; 
+					} 
+				$("#time_h").html(int_hour); 
+
+				var int_minute = Math.floor(time_distance/60000) 
+				time_distance -= int_minute * 60000; 
+				if(int_minute < 10){ 
+					int_minute = "0" + int_minute; 
+					} 
+				$("#time_m").html(int_minute); 
+
+				var int_second = Math.floor(time_distance/1000) 
+				if(int_second < 10){ 
+				int_second = "0" + int_second; 
+				} 
+				$("#time_s").html(int_second); 
+
+				setTimeout("showTime("+nowTime+","+endTime+")",1000); 
+
+				}else{ 
+					$("#time_d").html('00'); 
+					$("#time_h").html('00'); 
+					$("#time_m").html('00'); 
+					$("#time_s").html('00'); 
+				} 
+		}
+	  	
+		//查看效果图
+		function showImage() {
+			var id = $("#pactTemplateId").val();
+			if(isEmpty(id)){
+				top.ue.msg("请选择模板！");
+				return false;
+			}
+			var chType = 0;
+			if($("input[name='pactType']:checked").val()!="" && $("input[name='pactType']:checked").val() != undefined){
+				chType = $("input[name='pactType']:checked").val();
+			}
+			$.ajax({
+		           url: "/sales/promotion/showImage.html",
+		           data: {"id":id,"type" : chType},
+		           type: 'POST',
+		           dataType: 'json',
+		           success: function(result) {
+	                    if (result.success == false) {
+	                    	top.ue.msg(result.message);
+	                    }else{
+	                    	var key = result.data.tplFullImg;
+	                    	var content = "<img src='$!utils.getNewImgDomain('"+key+"')' width='300px'/>";
+	        				top.utils.showImg('$!utils.getNewImgDomain('"+key+"')');
+	                    }
+			       }
+	            });
+		}
+		
+		function saveItem(){
+			if($("input[name=pactType]:checked").length==0){
+				dialog({
+                    title: "提示信息",
+                    content: "请选择活动类型",
+                    width: 300
+                });
+				return;
+			}
+			
+			var ptid = $("#pactTemplateId").val();
+			if(isEmpty(ptid)){
+				dialog({
+                    title: "提示信息",
+                    content: "请选择模板！",
+                    width: 300
+                });
+				
+				return false;
+			}
+			
+			var pactObj = {};
+			pactObj.pactTitle = $("#pactTitle").val();
+			pactObj.pactType = $("input[name='pactType']:checked").val();
+			pactObj.pactContent = $("#pactContent").val();
+			pactObj.pactLogo = $("#pactLogo").val();
+			pactObj.bucketKey = $("#bucketKey").val();
+			pactObj.imageInfo = $("#imageInfo").val();
+			pactObj.pactTemplateId = $("#pactTemplateId").val();
+			pactObj.pactStartTime = $("#pactStartTime").val();
+			pactObj.pactEndTime = $("#pactEndTime").val();
+		    var jsonParam = $.toJSON(pactObj);
+			
+			$.ajax({
+	           url: "/sales/promotion/add.html",
+	           data: {"jsonParam":jsonParam},
+	           type: 'POST',
+	           dataType: 'json',
+	           success: function(result) {
+                    if (result.success == false) {
+                    	dialog({
+		                       title: "提示信息",
+		                       content: result.message,
+		                       width: 300
+		                   });
+                    }else{
+                    	isBeforeUnload = false;
+                    	var pactId = result.data;
+                    	window.location.href = "/sales/promotion/step2.html?pactId="+pactId;
+                    	window.event.returnValue = false; 
+                    }
+		       }
+            });
+		}
+		
+		function addSave(){
+	    	$('#submitForm').submit();
+	    }
+	    
+	    function checkForm() {
+	        $("#submitForm").validate({
+	            submitHandler: saveItem, //如果验证通过的回调函数
+	            rules: {
+	            	pactTitle: {
+						required: true
+	                },
+	                pactContent: {
+						required: true
+	                },
+	                pactStartTime: {
+						required: true
+	                },
+	                pactEndTime: {
+						required: true
+	                },
+	                pactTemplateId: {
+						required: true
+	                }
+	                
+	            },
+	            messages: { 
+	            	pactTitle: {
+	                	required: "请输入活动标题！"
+	                },
+	                pactContent: {
+						required: "请输入活动 描述！"
+	                },
+	                pactStartTime: {
+						required: "请输入活动开始时间！"
+	                },
+	                pactEndTime: {
+						required: "请输入活动结束时间！"
+	                },
+	                pactTemplateId: {
+						required: "请选择活动模板！"
+	                }
+	            }
+	           
+	        });
+	    }
+		
+    </script>
+    
+  </body>
+</html>

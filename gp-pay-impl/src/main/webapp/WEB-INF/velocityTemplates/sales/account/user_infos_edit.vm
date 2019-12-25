@@ -1,0 +1,371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>修改子账户 - 子账户管理 - 我的医药网</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+   <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+       
+    <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/validate-methods.js?v=$!{jscss_version}" type="text/javascript"></script>	
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>	
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+    <script type="text/javascript">
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+            handler:function (btn) {
+                location.href = document.referrer;
+            }
+        })
+    $(function(){
+		$("#editForm").validate({
+            submitHandler: edit, //如果验证通过的回调函数
+            rules: {
+             	username: {
+                    required: true,
+					maxlength: 20,
+               		minlength: 4,
+               		remote: {
+                        type: "post",
+                        url: "/sales/account/user_infos_checkUserInfosToUserName.html",
+                        data: {
+                            username: function() {
+                                return $("#username").val();
+                            }
+                        },
+                        dataType: "json",
+                        dataFilter: function(dataXML) {
+                        	//判断是否修改用户账号
+                        	//修改的用户账号
+                        	var checkUserName=$("#username").val();
+                        	//初始的用户账号
+                        	var initUserName=$("#initUserName").val();
+                        	if(initUserName!=checkUserName){
+                        		var result = dataXML;
+                                if (result=="true")
+                                    return true;
+                                else
+                                    return false;
+                        	}else{
+                        		return true;
+                        	}
+                        	
+                        }
+                    }
+                },
+                mobile : {
+					required : true,
+					isMobile: true,
+					remote : {
+						type : "post",
+						url : "/sales/member/supplierMember_validateMobile.html",
+						data : {
+							mTel : function() {
+								return $("#mobile").val();
+							}
+						},
+						dataType : "json",
+						dataFilter : function(dataXML) {
+							//判断是否修改mobile
+                        	//修改的mobile
+                        	var mobile=$("#mobile").val();
+                        	//初始的mobile
+                        	var initMobile=$("#initMobile").val();
+                        	//修改了
+							if(initMobile!=mobile){
+								var result = dataXML;
+								if (result == "true")
+									return false;
+								else
+									return true;
+							}else{
+								return true;
+							}
+							
+							
+						}
+					}
+				},
+				email : {
+					required : true,
+					isEmail: true,
+					remote : {
+						type : "post",
+						url : "/sales/member/supplierMember_validateEmail.html",
+						data : {
+							mEmail : function() {
+								return $("#email").val();
+							}
+						},
+						dataType : "json",
+						dataFilter : function(dataXML) {
+							//判断是否修改email
+                        	//修改的email
+                        	var email=$("#email").val();
+                        	//初始的mobile
+                        	var initEmail=$("#initEmail").val();
+                        	//修改了
+                        	if(email!=initEmail){
+                        		var result = dataXML;
+    							if (result == "true")
+    								return false;
+    							else
+    								return true;
+                        	}else{
+                        		return true;
+                        	}
+							
+						}
+					}
+				},
+                nickname:{
+                	required: true,
+					maxlength: 100
+                },
+                password:{
+					maxlength: 20,
+               		minlength: 6
+                },
+                siteId:{
+                	required: true
+                }
+                
+            },
+            messages: {
+            	username:{
+            		remote: "该用户名已被占用"
+            	},
+            	mobile:{
+            		remote: "手机号码已被占用"
+            	},
+            	email:{
+            		remote: "email已被注册"
+            	},
+            	siteId:{
+            		required:"必须勾选"
+            	}
+            },
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent());
+            }
+        });
+	});
+	
+    function back(){
+    	location="/sales/account/user_infos_main.html?pi=$!{pi}";
+    }
+    
+    function toEdit(){
+    	$("#editForm").submit();
+    }
+    
+    function edit(){
+    	var userInfoObj={};
+    	userInfoObj.uid=$("#uid").val();
+    	userInfoObj.userType=$("#userType").val();
+    	userInfoObj.username = $("#username").val();
+    	userInfoObj.nickname = $("#nickname").val();
+    	userInfoObj.password = $("#password").val();
+    	userInfoObj.mobile = $("#mobile").val();
+    	userInfoObj.email=$("#email").val();
+    	userInfoObj.appId=$("#appId").val();
+    	userInfoObj.uiStatus = $("input[name='uiStatus']:checked").val();
+    	var mRemark=$("#mRemark").val();
+    	var mId=$("#mId").val();
+    	var mrId=$("#mrId").val();
+    	//获取复选框的值
+    	var str=$("input[name='siteId']:checked");
+    	var objarray=str.length;
+    	var siteIds="";
+    	for (i=0;i<objarray;i++){
+    		siteIds+=","+str[i].value;
+    	}
+	    var jsonParam = $.toJSON(userInfoObj);
+	    $.showLoad();
+	    $.ajax({
+	           url: '/sales/account/user_infos_edit.html',
+	           data: {"jsonParam":jsonParam,"mRemark":mRemark,"mId":mId,"mrId":mrId,"siteIds":siteIds},
+	           type: 'POST',
+	           dataType: 'json',
+                complete:function () {
+                    $.hideLoad();
+                },
+	           success: function(result) {
+	               if (result) {
+	                  top.ue.alert({
+		                title: '提示信息',
+		                content: "修改子账号成功",
+		                end: function() {
+                            top.utils.frameBackDel();
+		                    location = "/sales/account/user_infos_main.html?pi=$!{pi}";
+		                }
+		            })
+	               } else {
+	                   top.ue.msg("修改子账号失败");
+	             }
+	           }
+	        });
+    }
+    </script>
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+ 
+  <body>
+    <div class="container">
+    	#parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/sales/index.html" class="color">销售中心</a> &gt; 账户管理 &gt; <a href="/sales/account/user_infos_main.html" class="color">子账户管理</a>&gt; 修改子账号</p>
+                </div>
+            </div>
+            
+            <div class="dialog_box mt20">
+              <dl class="dialog_ctn">
+               <dd>
+                 <div class="dialog_sheet">
+                 		<!-- 隐式提交 -->
+                 		<input type="hidden" id="uid" value="$!{userInfos.uid}">
+                 		<input type="hidden" id="userType" value="$!{userInfos.userType}">
+                 		<input type="hidden" id="mId" value="$!{member.mId}">
+                 		<input type="hidden" id="mrId" value="$!{member.mrId}">
+                 		<input type="hidden" id="appId" value="$!{userInfos.appId}">
+                 <form id="editForm" name="editForm" action="" method="post">
+                   <table width="100%">
+                          <tr>
+                            <td class="tar" width="90">用户账号:</td>
+                            <td>
+                            	$!{userInfos.username}
+                              <input class="input" id="username" name="username" value="$!{userInfos.username}" type="hidden" />
+                              <input type="hidden" value="$!{userInfos.username}" id="initUserName"/>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="tar">用户昵称:</td>
+                            <td>
+                              <input class="input fl" id="nickname" name="nickname" value="$!{userInfos.nickname}" type="text" />
+                            </td>
+                          </tr>
+                          <tr style="display: none;">
+                            <td class="tar">密码:</td>
+                            <td>
+                              <input class="input fl" id="password" name="password" type="password" />
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="tar">手机号码:</td>
+                            <td>
+                              <input class="input fl" id="mobile" name="mobile" value="$!{userInfos.mobile}" type="text" />
+                              <input class="input" id="initMobile" value="$!{userInfos.mobile}" type="hidden" />
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="tar">email:</td>
+                            <td>
+                              <input class="input fl" id="email" name="email" value="$!{userInfos.email}" type="text" />
+                              <input class="input" id="initEmail"value="$!{userInfos.email}" type="hidden" />
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="tar">备注:</td>
+                            <td>
+                              <input class="input" id="mRemark" value="$!{member.mRemark}" type="text" />
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="tar">状态:</td>
+                            <td>
+                            #if($!{userInfos.uiStatus} == 1)
+                            	<input class="radio" type="radio" name="uiStatus" value="1" id="radio_01" checked="checked"/>
+                                <label class="text" for="radio_01">启用</label>
+                                <input class="radio" type="radio" name="uiStatus" value="0" id="radio_02" />
+                                <label class="text" for="radio_02">禁用</label>
+                            #elseif($!{userInfos.uiStatus} == 0)
+                            	<input class="radio" type="radio" name="uiStatus" value="1" id="radio_01" />
+                                <label class="text" for="radio_01">启用</label>
+                                <input class="radio" type="radio" name="uiStatus" value="0" id="radio_02" checked="checked"/>
+                                <label class="text" for="radio_02">禁用</label>
+                            #end
+                            
+                              
+                            </td>
+                          </tr>
+                          #if($!{userInfos.userType}==3)
+                          <tr>
+                            <td class="tar" valign="top">管理权限:</td>
+                            <td>
+                            #set($var = $siteList.size())
+		                    #if($var>0)
+                              #foreach($site in $!siteList)
+                              	  #set($checked = "unchecked")
+	                              #foreach($siteChecked in $!siteListChecked)
+	                               	  #if($!{siteChecked.siteId} == $!{site.siteId})
+		                              	#set($checked = "checked")
+	                               	  #end
+	                              #end
+	                              <span class="w60">
+	                           	  	 <input class="checkbox" name="siteId" type="checkbox"  #if($!checked=="checked")checked="checked"#end value="$!{site.siteId}" id="checkbox_$!{site.siteId}">
+	                              	 <label class="text" for="checkbox_$!{site.siteId}">$!{site.siteName}</label>
+                              	  </span>
+                              #end
+                              <label id="siteId-error" class="error" for="siteId" style="margin-top: 0px;float: none;padding-left: 0px;"></label>
+                            #else
+		                         <label class="text"><font style="color:red">请先配置开通销售区域！</font></label>
+		                    #end
+                            </td>
+                          </tr>
+                          #end
+                      </table>
+                      <div class="dialog_btn">
+                      #if($!{userInfos.userType}!=3 || $siteList.size()>0)
+		                <a href="javascript:void(0);" onclick="toEdit();" class="btn">保存</a>
+		              #end
+		                <a href="javascript:back();" onclick="top.utils.frameBackDel();" class="btn">返回</a>
+		              </div>
+                     </form>
+                 </div>
+               </dd>
+              </dl>
+              
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+    
+  </body>
+</html>

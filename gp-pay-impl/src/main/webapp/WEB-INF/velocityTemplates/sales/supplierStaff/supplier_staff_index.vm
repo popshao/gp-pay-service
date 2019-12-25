@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>开票管理员 - 我的医药网</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}"/>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+    <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript" src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm") #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 账户管理 &gt; 开票管理员</p>
+                    </div>
+                    <div class="order_query">
+                        <form id="searchForm"
+                              action="/sales/supplierStaff/supplierStaff.html" method="post">
+                            <input type="hidden" name="suId" value="$!{suId}"/> <input
+                                type="hidden" name="pi" value="$!pi"> <input
+                                type="hidden" name="ps" value="$!ps">
+
+                            <ul>
+                                <li class="li_four"><label>开票员名称：</label> <input
+                                        class="input" name="ssName" id="ssName" type="text"
+                                        value="$!{ssName}"></li>
+                                <li class="li_four"><label>职位：</label> <input
+                                        class="input" name="ssPosition" id="ssPosition" type="text"
+                                        value="$!{ssPosition}"></li>
+                            </ul>
+                            <div class="btn tac">
+                                <a
+                                        href="javascript:searchPager('/sales/supplierStaff/supplierStaff.html',false);"
+                                        class="btn_query kpy_chaxun">查询</a> <a
+                                    href="javascript:searchPager('/sales/supplierStaff/supplierStaff.html',true);"
+                                    class="btn_reset btn-empty"><img src="/image/icon-refresh.png" alt="">清空查询条件</a>
+                            </div>
+                            <div class="function">
+                                <a class="btn kpy_add" href="javascript:void(0)" id="addStaff"
+                                   onclick="addStaff()">添加</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="order_detail">
+                        <div class="table">
+                            <table cellpadding="0" cellspacing="0">
+                                <thead class="head">
+                                <tr class="line">
+                                    <th>开票员名称</th>
+                                    <th>开票员编号</th>
+                                    <th>职位</th>
+                                    <th>添加时间</th>
+                                    <th>修改时间</th>
+                                    <th width="160">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    #if(!$null.isNull($supplierStaffList) && $supplierStaffList.size()!=0)
+                                        #foreach($item in $supplierStaffList)
+                                        <tr>
+                                            <td>$!{item.ssName}</td>
+                                            <td>$!{item.ssNo}</td>
+                                            <td>$!{item.ssPosition}</td>
+                                            <td>$utils.formatDate($!{item.ssAddTime},"yyyy-MM-dd
+												HH:mm:ss")</td>
+                                            <td>$utils.formatDate($!{item.ssEditTime},"yyyy-MM-dd
+												HH:mm:ss")</td>
+                                            <td><a href="javascript:;" class="btn-txt kpy_update" ssid="$!{item.ssId}"
+                                                   id="editStaff" onclick="editStaff($!{item.ssId})">修改</a>
+                                                <a href="javascript:;" class="btn-txt kpy_delete" ssid="$!{item.ssId}"
+                                                   id="deleteStaff" onclick="deleteStaff($!{item.ssId})">删除</a>
+                                                <a href="javascript:;" class="btn kpy_qiye"
+                                                   onclick="showEnterpriseStaff($!{item.ssId},$!{item.suId})">企业关系</a>
+                                            </td>
+                                        </tr>
+                                        #end
+                                    #else
+                                    <tr>
+                                        <td colspan="6">无相关数据</td>
+                                    </tr>
+                                    #end
+                                </tbody>
+                            </table>
+                            <!--分页开始 -->
+                            #if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+                                #pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/supplierStaff/supplierStaff.html")
+                            #end #end
+                            <!--分页结束 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+    #parse("/common/footer.vm")
+
+
+<script type="text/javascript">
+    var suId = $!{suId};
+    var content = "";
+    content += '<div class="dialog_box"><dl class="dialog_ctn"><dd style="border:medium none;">';
+    content += '<div class="dialog_sheet"><table width="100%"><tr>';
+    content += '<td class="tar" width="90">开票员名称：<span class="mark">*</span></td>';
+    content += '<td><input class="input" name="ss_name" type="text" value="#ssName#"/></td>';
+    content += '</tr><tr><td class="tar tdtop">开票员编号：</td>';
+    content += '<td><input class="input" name="ss_no" type="text" value="#ssNo#"/></td>';
+    content += '</tr><tr><td class="tar">职位：</td>';
+    content += '<td><input class="input" name="ss_position" type="text" value="#ssPosition#"/></td>';
+    content += '</tr></table></div></dd></dl>';
+    content += '</div>';
+
+    function addStaff() {
+        var content1 = content;
+        content1 = content1.replace("#ssName#", "");
+        content1 = content1.replace("#ssNo#", "");
+        content1 = content1.replace("#ssPosition#", "");
+
+        top.rui.dynamic({
+            title: "开票员信息",
+            skin: "dialog-old dialog-old-no-title",
+            area: ["580px"],
+            content: content1,
+            yes: function (idx,lay) {
+                top.ue.close(idx);
+                var ssName = $('input[name="ss_name"]', top.document).val(),
+                        ssNo = $('input[name="ss_no"]', top.document).val(),
+                        ssPosition = $('input[name="ss_position"]', top.document).val();
+                if ($.trim(ssName) == "") {
+                    top.ue.msg("开票员名称不能为空");
+                    return false;
+                }
+                top.ue.load();
+                $.ajax({
+                    url: '/sales/supplierStaff/add_supplierStaff.html',
+                    data: {suId: suId, ssName: ssName, ssNo: ssNo, ssPosition: ssPosition},
+                    type: 'POST',
+                    dataType: 'json',
+                    complete:function () {
+                        top.ue.closeLoad();
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            top.ue.alert({
+                                title: "开票员信息",
+                                content: "添加开票员信息成功",
+                                end: function () {
+                                    window.location.reload(true);
+                                }
+                            });
+                        } else {
+                            var mes = "添加开票员信息失败，请联系客服人员";
+                            if (data.data == "1001" || data.data == "1002") {
+                                mes = data.message;
+                            }
+                            top.ue.msg(mes);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+    //删除
+    function deleteStaff(ssId) {
+        //var ssId = $("#deleteStaff").attr('ssId');
+        top.ue.confirm({
+            title: "开票员信息",
+            content: "是否确认删除该开票员",
+            ok: function () {
+                top.ue.load();
+                $.ajax({
+                    url: '/sales/supplierStaff/delete_supplierStaff.html',
+                    data: {ssId: ssId},
+                    type: 'POST',
+                    dataType: 'json',
+                    complete:function () {
+                        top.ue.closeLoad();
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            top.ue.alert({
+                                title: "开票员信息",
+                                content: "删除开票员信息成功",
+                                end: function () {
+                                    window.location.reload(true);
+                                }
+                            });
+                        } else {
+                            top.ue.msg("删除开票员信息失败，请联系客服人员");
+                        }
+                    }
+                });
+            },
+            okVal: "确定",
+            cancel: true
+        });
+    }
+
+    //修改
+    function editStaff(ssId) {
+        //var ssId = $("#editStaff").attr('ssId');
+        $.post('/sales/supplierStaff/get_supplierStaff.html', {ssId: ssId}, function (data) {
+            if (data.success) {
+                var content2 = content;
+                content2 = content2.replace("#ssName#", data.data.ssName);
+                content2 = content2.replace("#ssNo#", data.data.ssNo);
+                content2 = content2.replace("#ssPosition#", data.data.ssPosition);
+
+                top.rui.dynamic({
+                    title: "开票员信息",
+                    skin: "dialog-old dialog-old-no-title",
+                    area: ["580px"],
+                    content: content2,
+                    yes: function (idx,lay) {
+                        var ssName = $('input[name="ss_name"]', top.document).val(),
+                                ssNo = $('input[name="ss_no"]', top.document).val(),
+                                ssPosition = $('input[name="ss_position"]', top.document).val();
+                        if ($.trim(ssName) == "") {
+                            top.ue.msg("开票员名称不能为空");
+                            return false;
+                        }
+                        top.ue.load();
+                        $.ajax({
+                            url: '/sales/supplierStaff/update_supplierStaff.html',
+                            data: {suId: suId, ssId: ssId, ssName: ssName, ssNo: ssNo, ssPosition: ssPosition},
+                            type: 'POST',
+                            dataType: 'json',
+                            complete:function () {
+                                top.ue.closeLoad();
+                            },
+                            success: function (data) {
+                                if (data.success) {
+                                    top.ue.close(idx);
+                                    top.ue.alert({
+                                        title: "开票员信息",
+                                        content: "修改开票员信息成功",
+                                        end: function () {
+                                            window.location.reload(true);
+                                        }
+                                    });
+                                } else {
+                                    var mes = "修改开票员信息失败，请联系客服人员";
+                                    if (data.message == "1001") {
+                                        mes = "开票员名称不能超过32个字符";
+                                    } else if (data.message == "1002") {
+                                        mes = "职位不能超过64个字符";
+                                    } else if (data.message == "1003") {
+                                        mes = "开票员编号不能超过128个字符";
+                                    }
+                                    top.ue.msg(mes);
+                                }
+                            }
+                        });
+                    }
+                });
+            } else {
+                top.ue.msg("连接超时，请刷新重试");
+            }
+        });
+    }
+
+    function showEnterpriseStaff(ssId, suId) {
+        window.location.href = "/sales/supplierStaff/enterRelation.html?ssId=" + ssId + "&suId=" + suId;
+    }
+</script>
+
+
+</body>
+</html>

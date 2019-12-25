@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>商品信息添加  - 我的医药网</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+         #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+              		<div style="zoom: 1;">
+				<table class="table-border" width="100%">
+					<col width="20%">
+					<col width="40%">
+					<col width="40%">
+					<tr>
+						<td class="th">请选择</td>
+						<td class="td"><a
+							href="/sales/goods/goods_downLoadTemplate"
+							class="easyui-linkbutton" icon="icon-download" plain="true">下载导入模板</a>
+						</td>
+						<td class="td"><a id="uploadExcel"
+							href="javascript:void(0);"
+							class="easyui-linkbutton" icon="icon-excel" plain="true">导入商品数据</a>
+						</td>
+					</tr>
+					<tr>
+						<b style="color:red;text-align:center" >建议一次最多导入1000条数据</b>
+					</tr>
+				</table>
+		</div>
+                
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+	$(function() {
+		renderUploader();
+	});
+	
+	function getSuVal(){
+		return $("#su_id").combobox('getValue');
+	}
+
+	function renderUploader() {
+		var uploadPic = $("#uploadExcel");//图片上传点击按钮
+		var uper=new AjaxUpload(uploadPic, {
+			action : "/sales/goods/goods_uploadSave", //动作
+			name : 'file_path',//固定参数
+			data:{bbb:'abc'},
+			responseType:'json',
+			onSubmit : function(file, ext) {
+					if (ext && /^(xls|xlsx)$/.test(ext)) {//过滤上传文件格式
+						ext_str = ext;
+					} else {
+						$.messager.alert('错误信息', '非Excel文件格式,请重传', 'error');
+						return false;
+					}
+					$.showLoad();
+				},
+			onComplete : function(file, response) {
+					if (response == "outofsize") {
+						$.messager.alert("系统提示", "文件过大，无法上传", "info");
+					}
+					if (response == "error") {
+						$.messager.alert("系统提示", "文件上传失败，请重新上传", "info");
+					} else {
+                        top.ue.msg(response.message);
+					}
+					$.hideLoad();
+				}
+		});
+	}
+</script>
+    
+  </body>
+</html>

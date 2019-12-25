@@ -1,0 +1,345 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>渠道分组管理 - 我的医药网</title>
+
+<!-- mypharma_公共资源 -->
+<meta name="keywords" content="">
+	<meta name="description" content="">
+		<link rel="icon" type="image/x-icon" href="/favicon.ico">
+			<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+				<!-- mypharma_样式 -->
+				<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+					<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+						<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+   
+							<!--PNG格式图片兼容IE6解决方案 -->
+							<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="container">
+		#parse("common/header_top.vm") #parse("common/header.vm")
+		<div class="content">
+			<div class="wrap cc">
+				#parse("common/left_menu_sales.vm")
+				<div class="user_right fl">
+					<!-- 用户中心_主体内容_S -->
+					 <div class="indmain">
+            			<div class="path">
+                            <p><a class="color" href="/sales/index.html">销售中心</a>&gt; 客户管理 &gt; 客户分组管理</p>
+                        </div>
+                        <div class="order_query order">
+                            <form action="" method="get" id="order_form">
+                                <h3 class="packet_title line">业务分组 <span id="msgForType" style="color:#ff0000;background-color:#ffffff;border:0;font-size:12px;font-weight:normal;"></span></h3>
+                                <ul class="packet_add_ul cc" id="ywlxUl">
+                                	<li>$!{allCount}</li>
+                                	#foreach($type in $!listType)
+	                                    <li>
+											#if($!{type.shopCustomerType.isErp}!=1)
+	                                    	<input class="input fl" type="text" name="editSctName" id="editSctName_$!{type.shopCustomerType.sctId}" value="$!{type.shopCustomerType.sctName}" onblur="javascript:editType($!{type.shopCustomerType.sctId})">
+											#else
+											<input class="input fl" disabled="disabled" name="editSctName" id="editSctName_$!{type.shopCustomerType.sctId}" value="$!{type.shopCustomerType.sctName}">
+											#end
+											<span class="fl">($!{type.bizCount})</span>
+											#if($!{type.shopCustomerType.isErp}!=1)
+	                                        	<a class="btn_remove" href="javascript:deleteType($!{type.shopCustomerType.sctId},$!{type.bizCount})"></a>
+											#else
+                                                <a class="btn_remove" data-tips-title="该分组同步自ERP不可编辑" data-tips="true" href="javascript:void())"></a>
+											#end
+										</li>
+                                    #end
+                                    <li id="addType" style="display: none;"><input class="input" type="text" name="addSctName" value="请输入新分组名称" id="addSctName" onfocus="clearContent(this)" onblur="javascript:addType();"></li>									
+                                </ul>
+                                <a class="btn_packet_add fr" href="javascript:showAddType()">+ 新增分组</a>
+                                <h3 class="packet_title line">区域分组 <span id="msgForRegion" style="color:#ff0000;background-color:#ffffff;border:0;font-size:12px;font-weight:normal;"></span></h3>
+                                <ul class="packet_add_ul cc" id="regionUl">
+                                	<li>$!{allCount}</li>
+                                    #foreach($region in $!listRegion)
+	                                    <li>
+	                                    	<input class="input fl" type="text" name="editRegionName" id="editRegionName_$!{region.supplierRegion.regionId}" value="$!{region.supplierRegion.regionName}" onblur="javascript:editRegion($!{region.supplierRegion.regionId})">
+	                                        <span class="fl">($!{region.bizCount})</span>
+	                                        <a class="btn_remove" href="javascript:deleteRegion($!{region.supplierRegion.regionId},$!{region.bizCount})"></a>
+	                                    </li>
+                                    #end
+                                    <li id="addRegion" style="display: none;"><input class="input" type="text" name="addRegionName" value="请输入新分组名称" onfocus="clearContent(this)" id="addRegionName" onblur="javascript:addRegion();"></li>
+                                </ul>
+                                <a class="btn_packet_add fr" href="javascript:showAddRegion()">+ 新增分组</a>
+                               <!--  <div class="packet_btn">
+                                    <a href="javascript:;">连锁大客户</a>
+                                    <div class="prompt">提示：保存成功</div>
+                                </div> -->
+                            </form>
+                        </div>
+                    </div>
+					<!-- 用户中心_主体内容_E -->
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("/common/footer.vm")
+
+	<!-- mypharma_脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/load.js?v=$!{jscss_version}"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+	#parse("common/common_script.vm")
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"
+		type="text/javascript"></script>
+    <script src="/js/layui/layui.js?v=$!{jscss_version}" type="text/javascript"></script>
+
+    <script>
+		var layer;
+		layui.use(['layer'],function () {
+            layer = layui.layer;
+        })
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+			render:true,
+            handler:function (btn) {
+                location.href = '/sales/channel/channel_main.html';
+            }
+        })
+
+		function showAddType(){
+			$("#addType").show();
+		}
+		function addType(){
+			var sctName = $("#addSctName").val();
+			if(sctName == null || sctName ==""){
+                top.ue.msg("请输入业务分组的名称");
+				return;
+			}
+			if(sctName.length>10){
+                top.ue.msg("业务分组的名称的长度不能超过10");
+				return false;
+			}
+//			var Typelength = $("#ywlxUl li").length;
+//			if(Typelength>11){
+//                top.ue.msg("业务分组只能添加10个");
+//				return false;
+//			}
+			$.ajax({
+				url : '/sales/channel/add_sort_type.html',
+				data : {
+					"sctName" : sctName
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					if (result.data == true) {
+                        top.ue.msg("添加成功");
+					   // $("#msgForType").html("添加成功！");
+						window.location.reload(true);
+					} else {
+						if(result.message != null && result.message !=''){
+                            top.ue.msg(result.message);
+							//$("#msgForType").html(result.message);
+						}else{
+                            top.ue.msg("添加失败，请稍后重试");
+							//$("#msgForType").html("添加失败，请稍后重试！");
+						}
+						window.location.reload(true);
+					}
+				}
+			});
+		}
+		
+		function editType(sctId){
+			if(sctId == null || sctId ==""){
+				return;
+			}
+			var sctName = $("#editSctName_"+sctId).val();
+			if(sctName == null || sctName ==""){
+                top.ue.msg("请输入业务分组的名称");
+				return;
+			}
+			if(sctName.length>10){
+                top.ue.msg("业务分组的名称的长度不能超过10");
+				return;
+			}
+			
+			$.ajax({
+				url : '/sales/channel/edit_sort_type.html',
+				data : {
+					"sctIdStr" : sctId,
+					"sctName" : sctName
+					
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					if (result.data == true) {
+					   // $("#msgForType").html("修改成功！");
+                        top.ue.msg("修改成功");
+						window.location.reload(true);
+					} else {
+						if(result.message != null && result.message !=''){
+                            top.ue.msg(result.message);
+							//$("#msgForType").html(result.message);
+						}else{
+                            top.ue.msg("修改失败，请稍后重试");
+							//$("#msgForType").html("修改失败，请稍后重试！");
+						}
+						window.location.reload(true);
+					}
+				}
+			});
+			
+		}
+		
+		function deleteType(sctId,count){
+			if(count>0){
+                top.ue.msg("该分类下有客户,不能删除");
+				return;
+				
+			}
+			$.ajax({
+				url : '/sales/channel/delete_sort_type.html',
+				data : {
+					"sctIdStr" : sctId
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					if (result.data == true) {
+					    $("#msgForType").html("删除成功");
+						window.location.reload(true);
+					} else {
+						$("#msgForType").html("删除失败，请稍后重试");
+					}
+				}
+			});
+		}
+		
+		function showAddRegion(){
+			$("#addRegion").show();
+		}
+		function addRegion(){
+			var regionName = $("#addRegionName").val();
+			if(regionName == null || regionName ==""){
+                top.ue.msg("请输入区域分组的名称");
+				return;
+			}
+			if(regionName.length>10){
+                top.ue.msg("区域分组的名称的长度不能超过10");
+				return;
+			}
+			
+			$.ajax({
+				url : '/sales/channel/add_sort_region.html',
+				data : {
+					"regionName" : regionName
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					if (result.data == true) {
+                        top.ue.msg("添加成功");
+					    //$("#msgForRegion").html("添加成功！");
+						window.location.reload(true);
+					} else {
+						if(result.message != null && result.message !=''){
+                            top.ue.msg(result.message);
+							//$("#msgForRegion").html(result.message);
+						}else{
+                            top.ue.msg("添加失败，请稍后重试");
+							//$("#msgForRegion").html("添加失败，请稍后重试！");
+						}
+						window.location.reload(true);
+						
+					}
+				}
+			});
+		}
+		
+		function editRegion(regionId){
+			if(regionId == null || regionId ==""){
+				return;
+			}
+			var regionName = $("#editRegionName_"+regionId).val();
+			if(regionName == null || regionName ==""){
+                top.ue.msg("请输入区域分组的名称!");
+				return;
+			}
+			if(regionName.length>10){
+                top.ue.msg("区域分组的名称的长度不能超过10!");
+				return;
+			}
+			$.ajax({
+				url : '/sales/channel/edit_sort_region.html',
+				data : {
+					"regionIdStr" : regionId,
+					"regionName" : regionName
+					
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					if (result.data == true) {
+                        top.ue.msg("修改成功");
+					    //$("#msgForRegion").html("修改成功！");
+						window.location.reload(true);
+					} else {
+						if(result.message != null && result.message !=''){
+                            top.ue.msg(result.message);
+							//$("#msgForRegion").html(result.message);
+						}else{
+                            top.ue.msg("修改失败，请稍后重试");
+							//$("#msgForRegion").html("修改失败，请稍后重试！");
+						}
+						window.location.reload(true);
+					}
+				}
+			});
+			
+		}
+		
+		function deleteRegion(regionId,count){
+			if(count>0){
+                top.ue.msg("该分类下有客户,不能删除!");
+				return;
+				
+			}
+			$.ajax({
+				url : '/sales/channel/delete_sort_region.html',
+				data : {
+					"regionIdStr" : regionId
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					if (result.data == true) {
+					    $("#msgForRegion").html("删除成功");
+						window.location.reload(true);
+					} else {
+						$("#msgForRegion").html("删除失败，请稍后重试");
+					}
+				}
+			});
+		}
+		
+		function clearContent(A){
+			if(A.value=="请输入新分组名称"){
+		  		A.value="";
+		  	}
+		}
+	</script>
+
+</body>
+</html>

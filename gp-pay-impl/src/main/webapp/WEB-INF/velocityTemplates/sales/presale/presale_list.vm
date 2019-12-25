@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>促销管理-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+      <style>
+          .btn-box{
+              margin: 20px 0;
+          }
+          a.btn-query{
+              margin-right: 10px;
+              display: inline-block;
+              width: 120px;
+              height: 36px;
+              line-height: 36px;
+              color: #fff;
+              text-align: center;
+              background: #0f93ce;
+          }
+          a.btn-query:hover{
+              color: white;
+          }
+          .disabled{
+              color: #888!important;
+              border: 1px solid #888!important;
+          }
+      </style>
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+
+              <!-- 用户中心_主体内容_S -->
+              <div class="c-box">
+
+                  <div class="user-path">销售中心 &gt; 销价管理 &gt; <i class="up-h">预售管理</i></div>
+                  <div class="user-notice">
+                              <div class="user-query"  style="background: none; border: 1px solid #d3d7da">
+                              <form action="/sales/presale/list.html" method="post" id="searchForm">
+                              		<input type="hidden" name="pi" value="$!pi" />
+								    <input type="hidden" name="ps" value="$!ps" />
+                                  <table class="uq-table" border="0" cellpadding="0" cellspacing="0">
+                                      <tr>
+                                          <td class="tar" width="100px">预售活动名称：</td>
+                                          <td width="130"><input class="input input-170" type="text" name="p_name" id="p_name" value="$!{p_name}"/></td>
+                                          <td class="tar" width="100px">活动开始时间：</td>
+                                          <td width="130"><input class="input input-170" type="text" name="p_start_time" id="p_start_time" value="$!{p_start_time}" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'p_start_time'+'\\'+'\')}'})"/></td>
+                                          <td class="tar" width="100px">活动结束时间：</td>
+                                          <td width="130"><input class="input input-170" type="text" name="p_end_time" id="p_end_time" value="$!{p_end_time}" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'p_end_time'+'\\'+'\')}'})"/></td>
+                                          <td class="tar" width="90px">活动状态：</td>
+                                          <td width="auto">
+                                              <div class="sltitem sltitem-140">
+                                                  <span>请选择</span>
+                                                  <ul>
+                                                      <li data-value="0"><a href="javascript:;">未开始</a></li>
+                                                      <li data-value="1"><a href="javascript:;">进行中</a></li>
+                                                      <li data-value="2"><a href="javascript:;">已禁用</a></li>
+                                                      <li data-value="3"><a href="javascript:;">已到期</a></li>
+                                                  </ul>
+                                                  <input type="hidden" name="status" id="status" value="$!{status}">
+                                              </div>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td colspan="8" class="tac">
+                                              <a href="javascript:;" onclick="searchPager('/sales/presale/list.html',false);" class="f-none mt20 btn-query">查询</a>
+                                              <a href="javascript:;" onclick="searchPager('/sales/presale/list.html',true);" class="f-none mt20 btn-empty"><i class="icon"></i>清空查询条件</a>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </form>
+                              </div>
+
+                      <div class="btn-box">
+                          <a href="javascript:;"
+                             onclick="presale.addCheck()" class="btn-query btn_add_event #if($!{disable} == 'true')disabled#end" style="background: none; border: 1px solid #0f93ce; color: #0f93ce;"> + 新增预售</a>
+                      </div>
+
+                              <div class="user-form mt10">
+                                  <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                      <thead>
+                                          <tr>
+                                              <th>预售活动名称</th>
+                                              <th>当前状态</th>
+                                              <th>预售药品数量</th>
+                                              <th>创建时间</th>
+                                              <th>开始时间</th>
+                                              <th>结束时间</th>
+                                              <th>操作</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                      #if($!presaleList && $!presaleList.size() > 0)
+                                         #foreach($presale in $presaleList)
+                                         <tr>
+                                              <td>$!{presale.pName}</td>
+                                              <td>$!{presale.pStatus}</td>
+                                              <td>$!{presale.presaleGoodsCount}</td>
+                                              <td>$utils.formatDate($!{presale.createTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                              <td>$utils.formatDate($!{presale.pStartTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                              <td>$utils.formatDate($!{presale.pEndTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                              #if($!{presale.pStatus} == '未开始')
+                                              <td>
+		                                        <a href="/sales/presale/$!{presale.pId}/editPresale.html?pi=$!pi&ps=$!ps&p_name=$!{p_name}&p_start_time=$!{p_start_time}&p_end_time=$!{p_end_time}&status=$!{status}" class="t-link">编辑</a><br>
+                                              	<a href="javascript:;" onclick="presale.delPresale($!{presale.pId})" class="t-link">删除</a>
+                                              </td>
+                                              #elseif($!{presale.pStatus} == '进行中')
+                                 				<td>
+	                                              	<a href="javascript:void(0);" onclick="presale.stopPresale($!{presale.pId})" class="t-link">禁用</a><br>
+			                                        <a href="javascript:void(0);" onclick="top.utils.openWithTab('ckys','查看预售','/sales/presale/$!{presale.pId}/showPresale.html',{fstBread:'预售管理'})" class="t-link">查看</a>
+	                                              </td>
+                                              #elseif($!{presale.pStatus} == '已禁用')
+                                 				<td>
+                                                    <!--
+                                                    <a href="javascript:;" onclick="presale.starPresale($!{presale.pId})" class="t-link">启用</a>
+
+			                                        <a href="/sales/presale/$!{presale.pId}/editPresale.html" class="t-link">编辑</a>
+                                                    -->
+                                                    <a href="javascript:void(0);" onclick="top.utils.openWithTab('ckys','查看预售','/sales/presale/$!{presale.pId}/showPresale.html',{fstBread:'预售管理'})" class="t-link">查看</a>
+                                                </td>
+	                                           #else
+	                                           	<td>
+	                                              	<a href="javascript:void(0);" onclick="top.utils.openWithTab('ckys','查看预售','/sales/presale/$!{presale.pId}/showPresale.html',{fstBread:'预售管理'})" class="t-link">查看</a>
+	                                              </td>
+	                                           #end		
+                                          </tr>
+                                          #end
+                                       #else
+                                         <tr>
+			                             <td colspan="6">无相关数据！</td>
+			                             </tr>
+                                       #end
+                                      </tbody>
+                                  </table>
+                              </div>
+
+                              <!--分页开始 -->
+								#if($!{pagerInfo}) 
+									#if($!{pagerTotal} > 1)
+										#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/presale/list.html")
+									#end 
+								#end
+                          </div>
+              </div>
+              <!-- 用户中心_主体内容_E -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+    <script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+	<script src="/js/presale/presaleList.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+  <script>
+      $(function () {
+          $.sltitem.select("status", "$!status");
+      })
+  </script>
+  </body>
+</html>

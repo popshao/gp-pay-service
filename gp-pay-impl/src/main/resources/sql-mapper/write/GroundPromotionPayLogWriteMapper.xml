@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.write.GroundPromotionPayLogWriteDao">
+	<insert id="add" parameterType="com.mph.coreapi.gp.pay.entity.GroundPromotionPayLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into `ground_promotion_pay_log` (
+		  `request_data`,
+		  `response_data`,
+		  `bill_id`,
+		  `payment_no`,
+		  <if test="status != null">
+              status,
+          </if>
+        <if test="businessType != null">
+            business_type,
+        </if>
+		  `remark`,
+		  `pay_type`,
+		  `status_des`,
+		  `request_time`,
+		  `amount`
+		) values (
+		  #{requestData},
+		  #{responseData},
+		  #{oSn},
+		  #{paymentNo},
+        <if test="status != null">
+            #{status},
+        </if>
+        <if test="businessType != null">
+            #{businessType},
+        </if>
+		  #{remark},
+		  #{payType},
+		  #{statusDes},
+		  #{requestTime},
+		  #{amount}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.mph.coreapi.gp.pay.entity.GroundPromotionPayLog">
+		update `ground_promotion_pay_log`
+		set
+		  `response_data`=#{responseData},
+		  `response_time`=#{responseTime},
+		  `status_des`=#{statusDes}
+		where
+		  `payment_no` = #{paymentNo} and `pay_type` = #{payType}
+	</update>
+
+    <update id="updateLogById" parameterType="com.mph.coreapi.gp.pay.entity.GroundPromotionPayLog">
+        update `ground_promotion_pay_log`
+        <set>
+            <if test="responseData != null">
+                `response_data`=#{responseData},
+            </if>
+            <if test="responseTime != null">
+                `response_time`=#{responseTime},
+            </if>
+            <if test="statusDes != null">
+                `status_des`=#{statusDes},
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        where
+        id = #{id}
+    </update>
+
+    <update id="updateLogStatus" parameterType="com.mph.coreapi.gp.pay.entity.GroundPromotionPayLog">
+        update `ground_promotion_pay_log`
+        set
+        status = #{status}
+        where
+        id = #{id}
+    </update>
+</mapper>

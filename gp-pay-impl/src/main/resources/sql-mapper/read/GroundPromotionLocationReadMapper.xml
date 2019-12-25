@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.read.GroundPromotionLocationReadDao">
+    <resultMap id="baseResultMap" type="com.mph.coreapi.gp.pay.entity.GroundPromotionLocation">
+        <result property="id" column="id" />
+        <result property="locationName" column="location_name" />
+        <result property="locationCode" column="location_code" />
+        <result property="locationType" column="location_type" />
+        <result property="parentLocationCode" column="parent_location_code" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,location_name,location_code,location_type,parent_location_code
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="baseResultMap">
+        select <include refid="Base_Column_List" /> from ground_promotion_location where id = #{id}
+    </select>
+
+    <select id="listProvince" resultMap="baseResultMap">
+        select <include refid="Base_Column_List" /> from ground_promotion_location where location_type = 1
+    </select>
+
+    <select id="listCityByProvinceCode" resultMap="baseResultMap">
+        select <include refid="Base_Column_List" /> from ground_promotion_location where parent_location_code = #{locationCode}
+    </select>
+
+    <select id="getLocationInfo" resultMap="baseResultMap">
+        select <include refid="Base_Column_List" /> from ground_promotion_location where 1=1
+        <if test="locationType != null">
+            and location_type=#{locationType}
+        </if>
+        <if test="locationCode != null">
+            and location_code=#{locationCode}
+        </if>
+    </select>
+</mapper>

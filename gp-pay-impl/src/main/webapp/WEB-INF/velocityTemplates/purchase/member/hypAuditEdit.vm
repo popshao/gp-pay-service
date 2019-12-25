@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>采购管理-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content=""> 
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+           
+    <!-- hyp 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/default.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/style.css?v=$!{jscss_version}">
+<script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+      #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            	<div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a> &gt; 订单中心 &gt; 采购关系管理 &gt; 激活帮你付</p>
+                </div>
+                <div class="rocky-bnf">
+					<form id="form">
+					<input type="hidden" id="suId" name="suId" value="$!suInfo.suId" />
+					<input type="hidden" id="ghaId" name="ghaId" value="$!auditInfo.ghaId" />
+				    <div class="rc-tips" style="margin-top:10px">
+				        <p>恭喜！您已顺利通过<font color="red">$!{suInfo.suName}</font>与您的“帮你付”产品授权 ,激活后将正式启用 。
+				            <!-- <a href="javascript:void(0);">了解更多</a> -->
+				        </p>
+				    </div>
+				
+				    <div class="rc-content mt10">
+				
+				        <!--未认证的时候显示
+				        <div class="bnf-wsh">
+				            <p>您还未通过企业资质认证，通过认证后方可开通帮你付产品，
+				                <a href="#">点此进行企业认证>></a>
+				            </p>
+				        </div>-->
+				
+				
+				        <!--上传的时候显示-->
+				        <div class="bnf-scrz">
+				            <div class="rc-upload-top">
+				                #if ($!{entInfo.hypStatus} == 3)
+				                	<!--资质审核不正确的时候显示-->
+					                <div class="rc-error" style="margin-top:5px;">
+					                    <a><span class="color-red">金融审核未通过</span>   原因：<span>$!entInfo.hypReason</span></a>
+					                </div>
+					                <!-- <p>请上传企业法人手持正面身份证的照片 + 身份证正面照片 + 身份证反面照片</p> -->
+				                	<p class="color-grey">（上传控件）</p>
+				                #end
+				            </div>
+				
+				            <div class="rc-upload">
+				            	
+				                <div class="up-box" style="margin-left:0;">
+				                	#set($picInfo2 = $!picList[2])
+				                    <input type="hidden" id="picUrl3" name="picUrl3" class="picUrl">
+									<input type="hidden" id="bucketKey3" name="bucketKey3" class="bucketKey" value="$picInfo2.bucket_key">
+									<input type="hidden" id="imageInfo3" name="imageInfo3" class="imageInfo">
+				                    #if ("$!picInfo2.imgUrl" != "")
+				                    	<img src="$!picInfo2.imgUrl" #if ($!entInfo.hypStatus == 3) class="file-img" #end >
+				                    	<p>手持正面身份证照片</p>
+				                    #end
+				                	
+				                </div>
+				                <div class="up-arrow"></div>
+				
+				                <div class="up-box">
+				                	#set($picInfo0 = $!picList[0])
+									<input type="hidden" id="picUrl1" name="picUrl1" class="picUrl">
+									<input type="hidden" id="bucketKey1" name="bucketKey1" class="bucketKey" value="$picInfo0.bucket_key">
+									<input type="hidden" id="imageInfo1" name="imageInfo1" class="imageInfo">
+				                    #if ("$!picInfo0.imgUrl" != "")
+				                    	<img src="$!picInfo0.imgUrl" #if ($!entInfo.hypStatus == 3) class="file-img" #end >
+				                    	<p>身份证正面照片</p>
+				                    #end
+				                </div>
+				                <div class="up-arrow"></div>
+				
+				                <div class="up-box" style="margin-right:0;">
+				                	#set($picInfo1 = $!picList[1])
+				                    <input type="hidden" id="picUrl2" name="picUrl2" class="picUrl">
+									<input type="hidden" id="bucketKey2" name="bucketKey2" class="bucketKey" value="$picInfo1.bucket_key">
+									<input type="hidden" id="imageInfo2" name="imageInfo2" class="imageInfo">
+				                    #if ("$!picInfo1.imgUrl" != "")
+				                    	<img src="$!picInfo1.imgUrl" #if ($!entInfo.hypStatus == 3) class="file-img" #end >
+				                    	<p>身份证反面照片</p>
+				                    #end
+				                </div>
+				
+				                <div class="name-inp">
+				                    <label for="legalName">法人姓名：</label>
+				                    <input id="legalName" name="legalName" type="text" placeholder="请输入法人姓名" value="$!entInfo.hypName" maxlength="20" #if ($!entInfo.hypStatus != 3) readonly #end>
+				                </div>
+				
+				                <div class="clear-fixed"></div>
+				                
+				            </div>
+				        </div>
+				
+				        <div class="clear-fixed"></div>
+				    </div>
+				
+				    <div class="rc-status">
+				        <p class="color-red">金融资质审核通过且商业公司开通权限后系统将自动开通帮你付产品使用权限</p>
+				
+				        <p>平台审核状态：
+				            #if ($!{entInfo.hypStatus} == 0)
+				            	<!-- 未开通 -->
+				            #elseif ($!{entInfo.hypStatus} == 1)
+				            	<a href="javascript:void(0);" class="color-red">审核中</a>
+				            #elseif ($!{entInfo.hypStatus} == 2)
+				            	<a href="javascript:void(0);" class="color-blue">通过</a>
+				            #elseif ($!{entInfo.hypStatus} == 3)
+				            	<a href="javascript:void(0);" class="color-red">未通过</a>
+				            #end
+				        </p>
+				        <p>商业开通状态：
+				            #if ($!{auditInfo.auditStatus} == 2)
+				            	<a href="javascript:void(0);" class="color-blue">开通</a>
+				            #else
+				            	<a href="javascript:void(0);" class="color-red">未开通</a>
+				            #end
+				        </p>
+				    </div>
+				
+				    <div class="rc-btns">
+				    	#if ($!{entInfo.hypStatus} == 1)
+				    		<a href="javascript:void(0);" class="rc-btn rc-btn-grey">已提交 等待平台审核</a>
+				    	#elseif ($!{entInfo.hypStatus} == 2 && $!{auditInfo.auditStatus} == 0)
+				    		<a href="javascript:active();" class="rc-btn rc-btn-yellow">确认激活</a>
+				    	#elseif ($!{entInfo.hypStatus} == 2 && $!{auditInfo.auditStatus} == 1)
+				    		<a href="javascript:void(0);" class="rc-btn rc-btn-grey">已提交 等待商业激活</a>
+				    	#elseif ($!{entInfo.hypStatus} == 3)
+				    		<a href="javascript:submitForm();" class="rc-btn rc-btn-yellow">提交审核</a>
+				    	#end 
+				    </div>
+					</form>
+				</div>
+            </div>
+            
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/validate-methods.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/public/public.js?v=$!{jscss_version}"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+	<script type="text/javascript">
+		function submitForm(){
+			$("#form").submit();
+		}
+		
+		function upload(obj) {
+		    new AjaxUpload(obj, {
+		        action: "/cdn/imageInfo_upload.html?type=1",
+		        name: 'file_path',
+		        responseType: "json",
+		        onSubmit: function(file, ext) {
+		            if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+		                // ext_str = ext;
+		            } else {
+		                dialog({
+		                    title: "提示信息",
+		                    content: "非图片文件格式,请重传",
+		                    width: 300
+		                });
+		                return false;
+		            }
+		            $.showLoad();
+		        },
+		        onComplete: function(file, result) {
+		            if (result.success == false) {
+		                if (result.message == "outofsize") {
+		                    dialog({
+		                        title: "提示信息",
+		                        content: "文件过大，无法上传",
+		                        width: 300
+		                    });
+		                } else if (result.message == "error") {
+		                    dialog({
+		                        title: "提示信息",
+		                        content: "文件过大，无法上传",
+		                        width: 300
+		                    });
+		                }
+		                return false;
+		
+		            } else {
+		            	var _obj = $(obj);
+		            	var _objParent = _obj.parent();
+		            	
+		                _obj.attr("src", result.data.picUrl.replace("&amp;","&"));
+		                _objParent.find(".picUrl").val(result.data.picUrl.replace("&amp;","&"));
+		                _objParent.find(".bucketKey").val(result.data.id);
+		                _objParent.find(".imageInfo").val($.toJSON(result.data.imageInfo));
+		            }
+		            $.hideLoad();
+		        }
+		    });
+		}
+		
+		function active() {
+			$.showLoad();
+			$.ajax({
+				type: 'post',
+				url: '/purchase/member/hypActive.html',
+				data: {
+					"suId": "$!suInfo.suId"
+				},
+				dataType: 'json',
+				success: function(data) {
+					if (data) {
+						top.ue.alert({
+							title: '提示信息',
+							content: "激活成功",
+							cancelVal: "确定",
+							end: function() {
+								location = "/purchase/member/hypAudit.html?suId=$!suInfo.suId";
+							}
+						})
+					} else {
+						top.ue.msg("激活帮你付失败");
+					}
+					
+					$.hideLoad();
+				}
+			});
+		}
+		
+		function save(){
+			$.showLoad();
+			var hypAuditWrapper = $("#form").serializeJson();
+			hypAuditWrapper = $.toJSON(hypAuditWrapper);
+			$.ajax({
+				type: 'post',
+				url: '/purchase/member/hypActiveSave.html',
+				data: {
+					"hypAuditWrapper": hypAuditWrapper
+				},
+				dataType: 'json',
+				success: function(data) {
+					if (data) {
+						top.ue.alert({
+							title: '提示信息',
+							content: "保存成功",
+							cancelVal: "确定",
+							end: function() {
+								location = "/purchase/member/hypAudit.html?suId=$!suInfo.suId";
+							}
+						})
+					} else {
+						top.ue.msg("提交金融资质审核失败");
+					}
+					
+					$.hideLoad();
+				}
+			});
+		}
+			
+		$(function() {
+			//验证
+			$("#form").validate({
+	            submitHandler: save, //如果验证通过的回调函数
+				ignore: "",
+	            rules: {
+					bucketKey1:{
+						required: true
+					},
+					bucketKey2:{
+						required: true
+					},
+					bucketKey3:{
+						required: true
+					},
+					legalName:{
+						required: true
+					}
+				},
+	            messages: {
+	            	bucketKey1:{
+	            		required: "请上传身份证正面照片"
+	            	},
+					bucketKey2:{
+	            		required: "请上传身份证反面照片"
+	            	},
+					bucketKey3:{
+	            		required: "请上传手持正面身份证照片"
+	            	},
+					legalName: {
+						required: "请填写法人姓名"
+					}
+	            },
+				errorPlacement: function(error, element) {
+					error.appendTo(element.parent());
+				},
+				errorElement:"label"
+	        });
+	        
+	        #if ($!entInfo.hypStatus == 3)
+		    $(".up-box").each(function() {
+		        // var _file = $(this).find("input[type=file]");
+		        var _img = $(this).find(".file-img");
+		        upload(_img[0]);
+		    })
+			#end
+		});
+	</script>
+  </body>
+</html>

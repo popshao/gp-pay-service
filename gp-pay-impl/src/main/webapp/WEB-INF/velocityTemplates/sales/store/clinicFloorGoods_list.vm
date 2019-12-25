@@ -1,0 +1,552 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>诊所专区 - 我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    #parse("common/header_css_new.vm")
+    <link rel="stylesheet" type="text/css" href="/front/css/user_common.css"/>
+    <link rel="stylesheet" type="text/css" href="/front/css/user_clinic.css"/>
+    <link rel="stylesheet" type="text/css" href="/front/css/user_clinic_dialog.css"/>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm") #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="c-box">
+                    <div class="user-clinic-title cc">
+                        <span class="user-t-gray">维护<b class="user-t-black" id='cfNameFloor'></b>楼层商品</span>
+                    </div>
+                    <div class="user-btn user-btn-clinic cc">
+                        <a href="javascript:void(0)" class="user-btn-b" id='addGoods'>+ 添加楼层商品</a>
+                        <a href="javascript:void(0)" class="user-btn-b" onclick="batchDelpGoods()">批量删除</a>
+                        <span class="user-t-black ml10"><i class="user-t-red">*</i> 每个楼层最多可添加<i class="user-t-red">20</i>个商品，前台显示排序的前<i class="user-t-red">8</i>个商品。</span>
+                    </div>
+                    
+                    <div class="user-form user-sheet-box user-sheet-clinic mt20">
+			            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+			                <thead>
+			                <tr>
+			                    <th>序号</th>
+			                    <th>商品名称</th>
+			                    <th>商品内码</th>
+			                    <th>生产厂家</th>
+                                <th>规格</th>
+                                <th>批准文号</th>
+                                <th>上下架状态</th>
+                                <th>排序</th>
+			                    <th>操作</th>
+			                </tr>
+			                </thead>
+			                <tbody class="user-tbody" id="listBox">
+			                </tbody>
+			            </table>
+			        </div>
+
+                    <script type="text/html" id="listTpl">
+                        {{# if(d && d.datas && d.datas.length){ }}
+                        {{# $.each(d.datas,function(index,item){ var $index = index; }}
+                        <tr id="data-{{ item.cfgId }}">
+                            
+                            <td>{{$index+1}}</td>
+                            <td>{{top.utils.notNull(item.gname,'--')}}</td>
+                            <td>{{top.utils.notNull(item.ginSn,'--')}}</td>
+                            <td>{{top.utils.notNull(item.gmanufacture,'--')}}</td>
+                            <td>{{top.utils.notNull(item.gspecifications,'--')}}</td>
+                            <td>{{top.utils.notNull(item.glicenseNo,'--')}}</td>
+                            <td>
+                                {{# if (item.gstatus == 1) { }}
+                                                                                                             上架
+                                {{# }else{ }}
+                                    <span class="user-t-red">下架</span>
+                                {{# } }}
+                            </td>
+                            <td>
+                                <input type="hidden" name="itemOrder" value="{{ item.cfgOrder }}"/>
+                                <input type="hidden" name="itemId" value="{{ item.cfgId }}"/>
+                                {{# if (d.datas.length == 1) { }}
+                                {{# }else if($index == 0){ }}
+                                   <a href="javascript:void(0)" class="user-link" onclick="moveDownGoods({{ item.cfgId }},this)">下移</a>
+                                {{# }else if($index == d.datas.length-1){ }}
+                                   <a href="javascript:void(0)" class="user-link" onclick="moveUpGoods({{ item.cfgId }},this)">上移</a>
+                                {{# }else{ }}
+                                   <a href="javascript:void(0)" class="user-link" onclick="moveDownGoods({{ item.cfgId }},this)">下移</a>
+                                   <a href="javascript:void(0)" class="user-link" onclick="moveUpGoods({{ item.cfgId }},this)">上移</a>
+                                {{# } }}
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" class="t-link" onclick="deleteFloorGoods({{item.cfgId}});">删除</a>
+                            </td>
+
+                        </tr>
+                        {{# }); }}
+
+                        {{# }else{ }}
+                        <tr><td colspan="9"><div class="t-no-data">您还没有添加楼层商品</div></td></tr>
+                        {{# } }}
+                   </script>
+                </div>
+            <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+    #parse("/common/footer.vm")
+
+    <div id="floorDialog" style="display:none;">
+         <div class="user-dialog-ctn" style="width: 580px;">
+             <div class="c-box">
+
+                 <div class="user-form-table user-form-table-clinic">
+
+                     <form id='clinicFloorForm'>
+                        <input type="hidden" name="cfId" id="cfId"></input>
+                        <table border="0" cellpadding="0" cellspacing="0">
+                             <tbody>
+                              <tr>
+                                 <td class="tar" width="135"><i class="user-t-red">＊</i> 楼层名称：</td>
+                                 <td width="auto">
+                                     <input class="user-input user-input-274" type="text" name='cfName' placeholder="最多可输入8个字">
+                                 </td>
+                             </tr>
+                             <tr>
+                                 <td class="tar" valign="top">楼层描述：</td>
+                                 <td>
+                                     <textarea class="user-textarea user-textarea-274 fl" name='cfDesc' placeholder="会在楼层上展示，最多可输入30个字，可不填写"></textarea>
+                                 </td>
+                             </tr>
+                             <tr>
+                                 <td class="tar">添加“更多>>”链接：</td>
+                                 <td>
+                                     <input class="user-input user-input-274" type="text" name='cfMoreLink'  placeholder="非必填，如未填写楼层无“更多>>”按钮">
+                                 </td>
+                             </tr>
+                             <tr>
+                                 <td class="tar">APP跳转地址：</td>
+                                 <td>
+                                     <select id="clPgCode" name="adPgCode" placeholder="请选择">
+                                         <option value="0">请选择</option>
+                                     </select>
+                                 </td>
+                             </tr>
+
+                             <tr data-value="1001" style="display:none;" class="clinic-app">
+                                <td class="tar"><i class="user-t-red">＊</i> H5链接：</td>
+                                <td>
+                                    <input class="user-input user-input-274" type="text" name="url" id="url" placeholder="">
+                                </td>
+                            </tr>
+
+                             <tr data-value="1001" style="display:none;" class="clinic-app">
+                                <td class="tar">页面标题：</td>
+                                <td>
+                                    <input class="user-input user-input-274" type="text" name="title" id="title" placeholder="">
+                                    <input type="hidden" name="hasTitle" id="hasTitle" value="1" >
+                                </td>
+                            </tr>
+                            
+                            <tr data-value="1054" style="display:none;" class="clinic-app" id="app_1054">
+                                <td class="tar">关键词：</td>
+                                <td>
+                                    <input type="hidden" name="s_supplier" id="s_supplier" value="$!{supplier.suName}">
+                                    <input type="hidden" name="sellerId" id="sellerId" value="$!{supplier.suId}">
+                                    <input type="hidden" name="suDomainPrefix" id="suDomainPrefix" value="$!{supplier.suDomainPrefix}">
+                                    <input class="user-input user-input-274" type="text" name="s_key" id="s_key" placeholder="">
+                                </td>
+                            </tr>
+                            
+                            <tr data-value="1013" style="display:none;" class="clinic-app" id="app_1013">
+                                <td class="tar">商城域名前缀：</td>
+                                <td>
+                                    <input class="user-input user-input-274" type="text" name="suDomainPrefix" id="suDomainPrefix" readonly="readonly"  value="$!{supplier.suDomainPrefix}">
+                                    <input  type="hidden" name="suType" id="suType" value="1">
+                                </td>
+                            </tr>
+                            
+                            <tr data-value="1005" style="display:none;" class="clinic-app" id="app_1005">
+                                <td class="tar"><i class="user-t-red">＊</i> 商品ID：</td>
+                                <td>
+                                    <input class="user-input user-input-274" type="text" name="gId" id="gId" placeholder="">
+                                    <input type="hidden" name="siteId" id="siteId">
+                                </td>
+                            </tr>
+
+                             </tbody>
+                         </table>
+                     </form>
+                 </div>
+
+             </div>
+         </div>
+   </div>
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.SuperSlide.js?v=$!{jscss_version}"></script>
+<script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+<script src="/js/select2/select2.min.js?v=$!{jscss_version}"></script>
+<script src="/js/clinic/clinic.js?v=$!{jscss_version}"></script>
+<script src="/front/js/user_common.js?v=$!{jscss_version}"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+
+<script>
+var cfId = getUrlParam("cfId"),
+    cfName = getUrlParam("cfName");
+var layer,laypage,laytpl,GoodLists=[];
+
+	layui.config({
+	    base:'/js/layui/extend/'
+	}).use(['layApp','layer','laypage','laytpl'],function () {
+		layer = layui.layer,laypage = layui.laypage,laytpl = layui.laytpl;
+		$(function(){
+			 setTimeout(function () {
+	                getData();
+	            },300);
+		});
+
+        $('#cfNameFloor').text(cfName);
+
+        /*添加楼层商品*/
+        $("#addGoods").on("click",function () {
+
+            $.ajax({
+                url: '/api/clinicZoneGoods/count',
+                type: 'POST',
+                dataType: 'json',
+                success: function(result) {
+                    if (result.code == 0 && result.data!=null) {
+                        if(result.data<=0) {
+                            top.ue.alert({
+                                content: '<p style="padding:20px 10px;text-align:center;"><span style="color:#FF4C4C;">您还未添加“诊所专区”的商品</span><a style="color:#0f93ce;" href="javascript:void(0);" id="add">马上添加>></a> </p><p> 诊所专区商品是您面向诊所展示的推荐商品，您需要先将商品设置为诊所推荐商品后再设置楼层商品</p>',
+                                area:['600px'],
+                                success: function(lay,idx){
+                                    lay.find('#add').unbind('click').bind('click', function(event){
+                                       top.ue.close(idx);
+                                       location.href = "/api/clinicZone/main";
+                                    });
+                                    
+                                    return false;
+
+                                }
+                            });
+                        } else {
+
+                            _goodInfo();   // 添加商品
+                        }
+                    }
+                }
+            });
+
+
+            function _goodInfo() {
+
+                //获取已经添加的商品
+                var _sels = [];
+                $.ajax({
+                    url: '/api/clinicFloorGoods/addedGIds',
+                    data:{cfId:cfId},
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.code == 0 && result.data !=null) {
+                            var addedGoodList = eval(result.data);
+                            $.each(addedGoodList,function (i,e) {
+                                _sels.push(e);
+                            })
+                        }
+                    }
+                });
+                var cfgsArray=new Array(),_cfgJson;
+                var cfgs="";
+                top.ue.getGoodsModal({
+                    hasSels:_sels,
+                    newUI:true,
+                    flag:true,
+                    max:20,
+                    yes: function (idx, lay, selDatas) {
+                        selDatas.push.apply(selDatas,null);
+                        $.each(selDatas,function (i,e) {
+                            _cfgJson = {
+                                cfId : cfId,
+                                goodsId:e.goods.gid
+                            }
+                            cfgsArray.push(_cfgJson);
+                        });
+                        // if(cfgsArray.length > 20) {
+                        //     top.layer.msg("您最多允许添加20个商品");
+                        //     return false;
+                        // }
+                        //调用批量添加接口
+                        $.ajax({
+                            url: '/api/clinicFloorGoods/batchAdd',
+                            type: 'POST',
+                            data: {"cfgs":$.toJSON(cfgsArray)},
+                            dataType: 'json',
+                            success: function(result) {
+                                if (result.code == 0 && result.data !=null) {
+                                    getData();
+                                    return true;
+                                }
+                            }
+                        });
+                    }
+                });
+
+            }
+        })
+
+		
+	})
+	
+    function getData() {
+        top.utils.ajax({
+            url:'/api/clinicFloorGoods/list',
+            data:{cfId:cfId},
+            success:function (data,res) {
+                if(res && res.data && res.code == 0) {
+                   $("#listBox").html(laytpl($("#listTpl").html()).render({datas:data}));
+                    if(res.data.length > 19){
+                    	$("#addGoods").hide();
+                    }
+                    
+                } else 
+                     $("#listBox").html(laytpl($("#listTpl").html()).render({error:1}));
+            },error:function () {
+                $("#listBox").html(laytpl($("#listTpl").html()).render({error:1}));
+            }
+        })
+    }
+
+    
+
+
+
+    function getUrlParam(name, path) {
+        try {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var pr = ""
+            var url = path ? path : window.location.href;
+            if (url.indexOf("#") > -1) {
+                var tmp = url.slice(url.indexOf("#") + 1, url.indexOf("?"));
+                if (!tmp) {
+                    tmp = url.slice(url.indexOf("?"), url.indexOf("#"));
+                    pr = tmp.substr(1).match(reg);
+                } else {
+                    tmp = window.location.hash.replace("#" + tmp, "");
+                    pr = tmp.substr(1).match(reg);
+                }
+            } else {
+                pr = window.location.search.substr(1).match(reg);
+            }
+            if (pr != null) {
+                return decodeURI(pr[2]);
+            }
+            return null;
+        } catch (e) {
+            return null;
+        }
+
+    }
+
+    function resetIndex() {
+        $("#listBox tr").each(function (i,e) {
+            $($(this).find("td").get(0)).text(i+1);
+        })
+        if($("#listBox tr").length < 20){
+            $("#addGoods").show();
+        }else{
+            $("#addGoods").hide();
+        }
+    }
+
+    //删除楼层
+    function deleteFloorGoods(cfgId){
+        var cfg = {cfgId:cfgId,cfgStatus:"-1"};
+        top.ue.confirm({
+            content: "<p style='padding:20px 10px;'>您确定要删除该商品吗？</p>",
+            area:['520px'],
+            ok: function(idx,lay){
+                $.ajax({
+                       url: '/api/clinicFloorGoods/update',
+                       type: 'POST',
+                       data: {cfg:$.toJSON(cfg)},
+                       dataType: 'json',
+                       complete:function(){
+                           top.ue.close(idx);
+                       },
+                       success: function(result) {
+                           if (result.code == 0) {
+                               top.layer.msg("操作成功！");
+                               $("#data-"+cfgId).remove();
+                               resetIndex();
+                           }else{
+                              top.layer.msg("系统出现异常！");
+                           }
+                       },
+                       error: function(){
+                           top.layer.msg("系统出现异常！");
+                       }
+                   });
+
+            }
+        });
+
+    }
+
+function batchDelpGoods(){
+    var idArray = [];
+    var _cur = {},_prev = {};
+
+    var prevId = $(el).parents('tr').prev().find('input[name="itemId"]').val();
+    var prevOrder = $(el).parents('tr').prev().find('input[name="itemOrder"]').val();
+    var curOrder = $(el).siblings('input[name="itemOrder"]').val();
+
+    var url,dataJson;
+    _cur.cfgId = id;
+    _cur.cfgStatus = -1;
+    idArray.push(_cur);
+
+    url = '/api/clinicFloorGoods/move';
+    dataJson = {"cfgs":$.toJSON(idArray)}
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: dataJson,
+        dataType: 'json',
+        complete:function(){
+            top.ue.closeAll("loading");
+        },
+        success: function(result) {
+            if (result.code == 0) {
+                top.layer.msg("批量删除成功！");
+                //window.location.reload(true);
+                getData();
+            }else{
+                top.layer.msg("系统出现异常！");
+            }
+        },
+        error: function(){
+            top.layer.msg("系统出现异常！");
+        }
+    });
+
+}
+
+    //上移
+    function moveUpGoods(id,el){
+       var idArray = [];
+       var _cur = {},_prev = {};
+       
+       var prevId = $(el).parents('tr').prev().find('input[name="itemId"]').val();
+       var prevOrder = $(el).parents('tr').prev().find('input[name="itemOrder"]').val();
+       var curOrder = $(el).siblings('input[name="itemOrder"]').val();
+
+        var url,dataJson;
+        _cur.cfgId = id;
+        _cur.cfgOrder = prevOrder;
+        idArray.push(_cur);
+
+        _prev.cfgId = prevId;
+        _prev.cfgOrder = curOrder;
+        idArray.push(_prev);
+
+        url = '/api/clinicFloorGoods/move';
+        dataJson = {"cfgs":$.toJSON(idArray)}
+
+       $.ajax({
+           url: url,
+           type: 'POST',
+           data: dataJson,
+           dataType: 'json',
+           complete:function(){
+               top.ue.closeAll("loading");
+           },
+           success: function(result) {
+               if (result.code == 0) {
+                   top.layer.msg("操作成功！");  
+                   //window.location.reload(true);
+                   getData();
+               }else{
+                  top.layer.msg("系统出现异常！"); 
+               }
+           },
+           error: function(){
+               top.layer.msg("系统出现异常！");
+           }
+       });
+       
+    }
+
+
+    
+    //下移
+    function moveDownGoods(id,el){
+           var idArray = [];
+           var _cur = {},_next = {};
+
+           var nextId = $(el).parents('tr').next().find('input[name="itemId"]').val();
+           var nextOrder = $(el).parents('tr').next().find('input[name="itemOrder"]').val();
+           var curOrder = $(el).siblings('input[name="itemOrder"]').val();
+
+           var url,dataJson;
+           _cur.cfgId = id;
+           _cur.cfgOrder = nextOrder;
+           idArray.push(_cur);
+
+           _next.cfgId = nextId;
+           _next.cfgOrder = curOrder;
+           idArray.push(_next);
+
+           url = '/api/clinicFloorGoods/move';
+           dataJson = {"cfgs":$.toJSON(idArray)}
+
+           $.ajax({
+               url: url,
+               type: 'POST',
+               data: dataJson,
+               dataType: 'json',
+               complete:function(){
+                   top.ue.closeAll("loading");
+               },
+               success: function(result) {
+                   if (result.code == 0) {
+                       top.layer.msg("操作成功！");  
+                       window.location.reload(true);
+                   }else{
+                       top.layer.msg("系统出现异常！");    
+                   }
+               },
+               error: function(){
+                   top.layer.msg("系统出现异常！");
+               }
+           });
+        
+    }
+
+</script>
+</body>
+</html>

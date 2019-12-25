@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>申请采购-采购管理-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+           
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+      #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            	<div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 账户中心 &gt; <a href="/purchase/member/purchase.html?status=0" class="color">采购关系管理</a>&gt; 采购申请</p>
+                </div>
+                <div class="user_kh_tips mt10 cc">
+                	<i class="img fl"></i>
+                    <p class="text fl">温馨提醒：审核通过的采购关系需要重新登录后生效。</p>
+                </div> 
+                <div class="kh_enterprise_detail kh_enterprise_line cc">
+                 	<p class="top fl">
+                        <label class="text" for="checkbox_01">$!lsResult.suName</label>
+                        <span class="fr">
+	                        #if($!scw.supplierMember && $!scw.mprStatus==1)
+	                        	 对应关系：$!scw.supplierMember.sctName
+	                        #end
+                        </span>
+                    </p> 
+                    <div class="detail fl">
+                    	<div class="left">
+                        	<div class="img">
+                       	    	<img style="width:110px;height:80px;" src="$!{lsResult.suLogo}">
+                            </div>
+                            <div class="text">商品数量：
+                            	#if($!lsResult.goodsCount)
+                            		$!lsResult.goodsCount
+                            	#else
+                            		0
+                            	#end
+                            </div>
+                        </div>
+                        <div class="right">
+                        	<p>许可证号：$!lsResult.suAllowCode</p>
+                            <p>主营业务：$!lsResult.suMain</p>
+<!--                             <p class="prompt">申请条件：
+                            		#foreach ($suReauest in $!lsResult.suRequestObjList)
+                            			$suReauest.name
+                            		#end
+                            </p> -->
+                        </div>
+                    </div>
+                    <div class="e_detail_area fl">
+                    	<a class="e_open_up fr" style="padding-left:10px;" href="javascript:;">详情</a>
+                        <div class="hide_box fl">
+                        	<div class="introduction fl">
+                        		$!lsResult.suTxt
+                        	</div>
+						#foreach($item in  $!lsResult.shopPurviewList)
+						    <dl class="drug_dl fl">
+							    <dt>
+							    	<span style="display: inline-block;">
+							    		<input class="checkbox" type="checkbox" onclick="checkChild(this)" id="checkbox_02" #if($!checked=="checked")checked="checked"#end>
+		                            	<input type="hidden" value="$!item.spId">
+		                    			<label class="text" for="checkbox_02">$item.spName</label>
+							    	</span>
+	                            </dt>
+	                            <dd class="cc">
+	                        		#foreach($item2 in  $!item.children)
+	                        			<span style="display: inline-block;">
+											#set($checked = "unchecked")
+											#foreach($shopPurview in $!{applicationShopPurviewIds})
+												#if($!{item2.spId} == $!{shopPurview})
+													#set($checked = "checked")
+												#end
+											#end
+	                        				<input class="checkbox" type="checkbox" id="" #if($!checked=="checked")checked="checked"#end>
+		                        			<input type="hidden" value="$!item2.spId">
+		                        			<label class="text" for="">$item2.spName</label>
+	                        			</span>
+	                        		#end
+	                        	</dd>
+                            </dl>
+						#end
+						
+                        </div>
+                    </div>
+                </div>
+                <div class="order_query">
+                  <div class="btn tac">
+                    <a href="javascript:void(0);" class="btn" onclick="addPurchaseRelation()">提交申请</a>
+                  </div>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+   #parse("common/footer.vm")
+  
+        <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+    <script type="text/javascript">
+    	window.onload =function(){
+    		$(".e_open_up").click();
+    	}
+		function checkChild(e){
+			if($(e)[0].checked){
+				$(e).parents("dt").next(".cc").find("input:checkbox").each(function(){
+					$(this)[0].checked =true;
+				});
+			}else{
+				$(e).parents("dt").next(".cc").find("input:checkbox").each(function(){
+					$(this)[0].checked =false;
+				});
+			}
+		}    
+    	function addPurchaseRelation(){
+    		//添加企业资质验证
+		  	var eId = "$!eId";
+		  	var userType = "$!userType";
+		  	var suId = "$!suId";
+		  	var currentSuId = "$!currentSuId";
+		  	if(userType == "1"){
+		  		//终端
+			  	$.ajax({
+					type : 'post',
+					url : '/purchase/member/checkEnterprise.html',
+					data : {
+						"eId" : eId
+					},
+					dataType : 'json',
+					success : function(data) {
+						if (!data) {
+							top.ue.alert({
+								title : '提示信息',
+								content : "请先完善企业信息",
+								width : 300,
+								ok : false,
+								cancelVal : "确定",
+								end: function() {
+                                    top.utils.openWithTab("qyrz","企业认证","/purchase/account/enterprise_certified.html",{fstBread:"账户中心"})
+								}
+							})
+						} else {
+							var mprPurviews = "";
+				    		var suType = "$!lsResult.suType";
+				    		if($("dd input.checkbox").length>0){
+				    			$("dd input.checkbox").each(function(i,o){
+				        			if($(this)[0].checked){
+				        				if(mprPurviews == ""){
+				        					mprPurviews = $(this).next("input:hidden").val();
+				        				}else{
+				        					mprPurviews += ","+$(this).next("input:hidden").val();
+				        				}
+				        			}
+				        		});
+				    		}
+				    		if(suType == 1){
+                                if(mprPurviews ==""){
+                                    top.ue.msg("请选择申请权限");
+                                    return;
+                                }
+				    		}
+				    		
+				    		var purview = {};
+				    		purview.suId = "$lsResult.suId";
+				    		purview.mprPurview = mprPurviews;
+				    		purview.mprRequest = "$lsResult.suRequest";
+				    		purview.suName = "$lsResult.suName";
+	
+							var jsonParam = $.toJSON(purview);
+				     		$.ajax({
+				                url: '/purchase/member/addPurchaseRelation.html',
+				                data: {"jsonParam": jsonParam},
+				                type:"post",
+				                async:false,
+				                success: function(data) {
+				                	//添加成功
+				                    if (data.data == 0) {
+				                    	dialog({
+				                            title: "提示信息",
+				                            content: "系统异常，请稍后重试",
+				                            width: 300
+				                        });
+				                    }else{
+				                    	dialog({
+				                            title: "提示信息",
+				                            content: "您的申请已提交成功，请等待对方审核",
+				                            width: 300
+				                        });
+				                    }
+				                }
+				            }); 
+						}
+					}
+				});
+		  	}else if(userType == "2"){
+		  		//商业
+		  		$.ajax({
+					type : 'post',
+					url : '/purchase/member/checkEnterpriseSy.html',
+					data : {
+						"eId" : eId,
+						"suId" : currentSuId
+					},
+					dataType : 'json',
+					success : function(data) {
+						if (!data) {
+							top.ue.alert({
+								title : '提示信息',
+								content : "请先完善企业信息",
+								width : 300,
+								ok : false,
+								cancelVal : "确定",
+								end : function() {
+                                    top.utils.openWithTab("qyrz","企业认证","/purchase/account/enterprise_register.html",{fstBread:"账户中心"})
+								}
+							})
+						} else {
+							var mprPurviews = "";
+				    		var suType = "$!lsResult.suType";
+				    		if($("dd input.checkbox").length>0){
+				    			$("dd input.checkbox").each(function(i,o){
+				        			if($(this)[0].checked){
+				        				if(mprPurviews == ""){
+				        					mprPurviews = $(this).next("input:hidden").val();
+				        				}else{
+				        					mprPurviews += ","+$(this).next("input:hidden").val();
+				        				}
+				        			}
+				        		});
+				    		}
+				    		if(suType == 1){
+				    			if(mprPurviews ==""){
+				        			top.ue.msg("请选择申请权限");
+				    				return;
+				        		}
+				    		}
+				    		
+				    		var purview = {};
+				    		purview.suId = "$lsResult.suId";
+				    		purview.mprPurview = mprPurviews;
+				    		purview.mprRequest = "$lsResult.suRequest";
+				    		purview.suName = "$lsResult.suName";
+	
+							var jsonParam = $.toJSON(purview);
+				     		$.ajax({
+				                url: '/purchase/member/addPurchaseRelation.html',
+				                data: {"jsonParam": jsonParam},
+				                type:"post",
+				                async:false,
+				                success: function(data) {
+				                	//添加成功
+				                    if (data.data == 0) {
+				                    	dialog({
+				                            title: "提示信息",
+				                            content: "系统异常，请稍后重试",
+				                            width: 300
+				                        });
+				                    }else{
+				                    	dialog({
+				                            title: "提示信息",
+				                            content: "您的申请已提交成功，请等待对方审核",
+				                            width: 300
+				                        });
+				                    }
+				                }
+				            }); 
+						}
+					}
+				});
+		  	}
+    		
+    	}
+    </script>
+  </body>
+</html>

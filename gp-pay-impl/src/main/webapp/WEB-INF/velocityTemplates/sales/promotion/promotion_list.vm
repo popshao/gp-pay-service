@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>促销管理-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+
+              <!-- 用户中心_主体内容_S -->
+              <div class="c-box">
+
+                  <div class="user-path">销售中心 &gt; 销价管理 &gt; <i class="up-h">促销管理</i></div>
+
+                  <div class="user-query">
+                      <table class="uq-table" border="0" cellpadding="0" cellspacing="0">
+                          <tr>
+                              <td class="tar" width="80">创建促销：</td>
+                              <td width="auto">
+                                  <a href="/sales/promotion/2/addUI.html" class="btn-cx" data-tips="true" data-tips-title="单笔订单购买活动商品总量/总金额满足条件，则该客户可获得对应的赠品。">有买有赠</a>
+                                  <a href="/sales/promotion/5/addUI.html" class="btn-cx" #*data-tips="true" data-tips-title="时间段内指定秒杀商品及秒杀价格，限制活动总库存、限制客户购买数量，超出限定购买数量后，按照活动前原价购买。"*#>限时秒杀</a>
+                                  <a href="/sales/promotion/4/addUI.html" class="btn-cx" data-tips="true" data-tips-title="针对商品特价销售，对业务分组分别设置特价价格，限制单个客户购买数量，超出限定购买数量后，按照活动前原价购买。">特价专区</a>
+                                  <a href="/sales/promotion/1/addUI.html" class="btn-cx" data-tips="true" data-tips-title="在单笔订单中购买活动商品时，活动商品的合计购买数量或合计购买金额满足设置条件时，所有活动商品单价均享受设置的折扣，可设置优惠阶梯；同时可指定部分客户专享该促销。">单品合计满减</a>
+                                  <a href="/sales/promotion/3/addUI.html" class="btn-cx" data-tips="true" data-tips-title="在单笔订单中，购买您店铺“除活动商品”以外的商品合计金额满足条件时，设置的活动商品单价均享受对应优惠，可设置优惠阶梯；同时可指定部分客户专享该促销，且可限定活动商品的最高购买数量，超出限定的购买数量按照原价购买。">低价换购</a>
+                              </td>
+                          </tr>
+                      </table>
+                  </div>
+
+                  <div class="user-notice">
+
+                      <div class="user-qyzz-tabs tab-hd">
+                          <ul class="uqt-nav tab-nav">
+                          #if($!status == 1)
+                              <li data-value="1" class="on"><a href="javascript:;" onclick="promotion.setActStatus(1);">进行中</a></li>
+                              <li data-value="2"><a href="javascript:;" onclick="promotion.setActStatus(2);">未开始</a></li>
+                              <li data-value="3"><a href="javascript:;" onclick="promotion.setActStatus(3);">已结束</a></li>
+                          #elseif($!status == 2)
+                          	  <li data-value="1"><a href="javascript:;" onclick="promotion.setActStatus(1);">进行中</a></li>
+                              <li data-value="2" class="on"><a href="javascript:;" onclick="promotion.setActStatus(2);">未开始</a></li>
+                              <li data-value="3"><a href="javascript:;" onclick="promotion.setActStatus(3);">已结束</a></li>
+                          #else
+                              <li data-value="1"><a href="javascript:;" onclick="promotion.setActStatus(1);">进行中</a></li>
+                              <li data-value="2"><a href="javascript:;" onclick="promotion.setActStatus(2);">未开始</a></li>
+                              <li data-value="3" class="on"><a href="javascript:;" onclick="promotion.setActStatus(3);">已结束</a></li>
+                          #end
+                          </ul>
+                      </div>
+
+                      <div class="tab-bd">
+
+                          <div class="tab-pal">
+
+                              <div class="user-query bg-white">
+                              <form action="/sales/promotion/list.html" method="post" id="searchForm">
+                              		<input type="hidden" name="pi" value="$!pi" />
+								    <input type="hidden" name="ps" value="$!ps" />
+								    <input type="hidden" name="status" id="status" value="$!status" />
+                                  <table class="uq-table" border="0" cellpadding="0" cellspacing="0">
+                                      <tr>
+                                          <td class="tar" width="80">促销标题：</td>
+                                          <td width="130"><input class="input input-170" type="text" name="pactTitle" id="pactTitle" value="$!{pactTitle}"/></td>
+                                          <td class="tar" width="80">开始时间：</td>
+                                          <td width="130"><input class="input input-170" type="text" name="pactStartTime" id="pactStartTime" value="$!{pactStartTime}" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'pactEndTime'+'\\'+'\')}'})"/></td>
+                                          <td class="tar" width="80">结束时间：</td>
+                                          <td width="130"><input class="input input-170" type="text" name="pactEndTime" id="pactEndTime" value="$!{pactEndTime}" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'pactStartTime'+'\\'+'\')}'})"/></td>
+                                          <td class="tar" width="80">促销类型：</td>
+                                          <td width="auto">
+                                              <div class="sltitem sltitem-140">
+                                                  <span>请选择</span>
+                                                  <ul>
+                                                      <li data-value="2"><a href="javascript:;">有买有赠</a></li>
+                                                      <li data-value="5"><a href="javascript:;">限时秒杀</a></li>
+                                                      <li data-value="4"><a href="javascript:;">特价专区</a></li>
+                                                      <li data-value="1"><a href="javascript:;">单品合计满减</a></li>
+                                                      <li data-value="3"><a href="javascript:;">低价换购</a></li>
+                                                  </ul>
+                                                  <input type="hidden" name="pactType" id="pactType" value="$!pactType">
+                                              </div>
+                                              #*<select type="text" class="mn-ftext mn-select" name="pactType" placeholder="">
+                                                  <option value="2" #if($!pactType == 2) selected="selected" #end>有买有赠</option>
+                                                  <option value="5" #if($!pactType == 5) selected="selected" #end>限时秒杀</option>
+                                                  <option value="4" #if($!pactType == 4) selected="selected" #end>特价专区</option>
+                                                  <option value="1" #if($!pactType == 1) selected="selected" #end>单品合计满减</option>
+                                                  <option value="3" #if($!pactType == 3) selected="selected" #end>低价换购</option>
+                                              </select>*#
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td colspan="8" class="tac">
+                                              <a href="javascript:;" onclick="searchPager('/sales/promotion/list.html',false);" class="f-none mt20 btn-query">查询</a>
+                                              <a href="javascript:;" onclick="searchPager('/sales/promotion/list.html',true);" class="f-none mt20 btn-empty"><img src="/image/icon-refresh.png">重置筛选条件</a>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </form>
+                              </div>
+
+                              <div class="user-form mt10">
+                                  <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                      <thead>
+                                          <tr>
+                                              <th>促销名称</th>
+                                              <th>促销类型</th>
+                                              <th>开始时间</th>
+                                              #if($!status == 3)
+                                              <th>操作</th>
+                                              #else
+                                              <th>当前状态</th>
+                                              <th>操作</th>
+                                              <th>活动页</th>
+                                              #end
+                                              
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                      #if($!pactList && $!pactList.size() > 0)
+                                         #foreach($pact in $pactList)
+                                         <tr>
+                                              <td>$!{pact.pactTitle} </br>
+                                              	 #set( $appTypeList = $utils.splitString($!{pact.pactAppTypeText})) 
+                                              	 #if($!appTypeList && $!appTypeList.size() > 0)
+                                              	 #foreach($appType in $appTypeList)
+                                              	 <i class="tag-cx">$appType</i>
+                                              	 #end
+                                              	 #end
+                                              </td>
+                                              <td>$!{pact.pactName}</td>
+                                              <td>$utils.formatDate($!{pact.pactStartTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                              #if($!status == 3)
+	                                              #if($!{pact.pactRecordSource}==1) ##销售中心创建的
+	                                              	  <td>
+		                                              	#if(!$!{pact.expire})
+			                                          	<a href="javascript:;" onclick="promotion.updatePactStatus($!{pact.pactId},1)" class="t-link">启用</a><br>
+			                                          	#end
+			                                          	<a href="javascript:;" onclick="promotion.copyPolicy(1,$!{pact.pactId},$!{pact.pactType});" class="t-link">复制政策</a>
+			                                          	<a href="javascript:void(0);" onclick="top.utils.openWithTab('ckcx','查看促销','/sales/promotion/$!{pact.pactType}/$!{pact.pactId}/viewUI.html',{fstBread:'促销管理'})" class="t-link" >查看</a>
+			                                          </td>
+	                                              #else ##运营后台创建的只能查看
+			                                          <td>
+		                                              	<a href="javascript:void(0);" onclick="top.utils.openWithTab('ckcx','查看促销','/sales/promotion/$!{pact.pactType}/$!{pact.pactId}/viewUI.html',{fstBread:'促销管理'})" class="t-link" >查看</a>
+		                                              </td>
+	                                              #end
+                                              #else
+                                              <td>$!{pact.statusText}<i class="order-tips" data-tips="true" data-tips-title="结束时间：$utils.formatDate($!{pact.pactEndTime},"yyyy-MM-dd HH:mm:ss")"></i></td>
+                                              #if($!{pact.pactRecordSource}==1) ##销售中心创建的
+                                              <td>
+                                                  <a href="javascript:;" onclick="promotion.updatePactStatus($!{pact.pactId},0)" class="t-link">停用</a><br>
+		                                          <a href="/sales/promotion/$!{pact.pactType}/$!{pact.pactId}/editUI.html?status=$!status&pi=$!pi&pactTitle=$!{pactTitle}&pactStartTime=$!{pactStartTime}&pactEndTime=$!{pactEndTime}&pactType=$!pactType" class="t-link">修改</a>
+		                                          <a href="javascript:;" onclick="promotion.copyPolicy(1,$!{pact.pactId},$!{pact.pactType});" class="t-link">复制政策</a>
+		                                          <a href="javascript:void(0);" onclick="top.utils.openWithTab('ckcx','查看促销','/sales/promotion/$!{pact.pactType}/$!{pact.pactId}/viewUI.html',{fstBread:'促销管理'})" class="t-link" >查看</a>
+                                              </td>
+                                              #else ##运营后台创建的只能查看
+                                              <td>
+		                                          <a href="javascript:void(0);" onclick="top.utils.openWithTab('ckcx','查看促销','/sales/promotion/$!{pact.pactType}/$!{pact.pactId}/viewUI.html',{fstBread:'促销管理'})" class="t-link" >查看</a>
+                                              </td>
+                                              #end
+                                              #if($!{pact.pactRecordSource}==1) ##销售中心创建的
+                                              <td>
+                                                  #if($!{pact.themeId} == 0)
+	                                                 <a href="/sales/promotion/addTheme.html?pactId=$!{pact.pactId}&status=$!status&pi=$!pi&ps=$!ps&pactTitle=$!{pactTitle}&pactStartTime=$!{pactStartTime}&pactEndTime=$!{pactEndTime}&pactType=$!pactType&isNewPromotion=0" class="t-link">创建活动页面</a>
+	                                              #else
+	                                                 #if($!{pact.themeStatus} == 0)
+	                                                 <a href="javascript:;" onclick="promotion.updateThemeStatus($!{pact.themeId},1)" class="t-link">启用活动页面</a>
+	                                                 #else
+	                                                 <a href="http://$!{pact.suDomainPrefix}.${domain}/promotion/$!{pact.pactId}.html" target="_blank" class="t-link">预览电脑页面</a><br>
+	                                                 <a href="javascrpt:void(0);" class="t-link" data-tips="true" data-tips-style="{width:'140px',color:'#906b24'}" data-tips-title="<span id='tipsTip$!{pact.pactId}'>二维码载入中...</span><img width='140' height='140' alt='二维码载入中...' onload='removeEl($!{pact.pactId})' src='http://qr.topscan.com/api.php?w=140&text=$!{mallUrl}/mall_$!{pact.suDomainPrefix}/activity.html%3fpactId=$!{pact.pactId}%26suDomainPrefix=$!{pact.suDomainPrefix}%26sellerId=$!{pact.suId}' ><p style='margin-top: 5px; font-size: 14px; text-align: center;'>手机扫码查看</p>">预览手机页面</a><br>
+	                                                 <a href="/sales/promotion/addTheme.html?pactId=$!{pact.pactId}&status=$!status&pi=$!pi&ps=$!ps&pactTitle=$!{pactTitle}&pactStartTime=$!{pactStartTime}&pactEndTime=$!{pactEndTime}&pactType=$!pactType&isNewPromotion=0" class="t-link">修改活动页面</a><br>
+	                                                 <a href="javascript:;" onclick="promotion.updateThemeStatus($!{pact.themeId},0)" class="t-link">停用活动页面</a>
+	                                                 #end
+	                                              #end  
+                                              </td>
+                                              #else ##运营后台创建的没有活动页的相关功能
+                                              <td></td>
+                                              #end
+                                              #end
+                                          </tr>
+                                          #end
+                                       #else
+                                         <tr>
+			                             <td colspan="6">无相关数据！</td>
+			                             </tr>
+                                       #end
+                                      </tbody>
+                                  </table>
+                              </div>
+
+                              <!--分页开始 -->
+								#if($!{pagerInfo}) 
+									#if($!{pagerTotal} > 1)
+										#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/promotion/list.html")
+									#end 
+								#end
+                          </div>
+                      </div>
+                  </div>
+
+              </div>
+              <!-- 用户中心_主体内容_E -->
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+    <script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+	<script src="/js/promotion/promotionActivityContext.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+    <script>
+		$(function(){
+			top.ue.closeAll("loading");
+			$.sltitem.select("pactType", "$!pactType");
+            <!-- uf-table表格最后一行无下边框 -->
+            $(".uf-table").find("tr:last td").css("border-bottom","none");
+		})
+
+        function removeEl(id) {
+            $("#tipsTip"+id).remove();
+        }
+		
+    </script>
+  </body>
+</html>

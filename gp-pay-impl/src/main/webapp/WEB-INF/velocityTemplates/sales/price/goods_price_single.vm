@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>商品定价 - 我的医药网</title>
+
+<!-- mypharma_公共资源 -->
+<meta name="keywords" content="">
+<meta name="description" content="">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+<!-- mypharma_样式 -->
+<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+<!--PNG格式图片兼容IE6解决方案 -->
+<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="container">
+		#parse("common/header_top.vm") #parse("common/header.vm")
+		<div class="content">
+			<div class="wrap cc">
+				#parse("common/left_menu_sales.vm")
+				<div class="user_right fl">
+					<!-- 用户中心_主体内容_S -->
+				   		<div class="indmain">
+                <div class="path">
+                    <p>首页 &gt; 销价管理 &gt; 按商品定价 &gt; 批量设定</p>
+                </div>
+                <div class="order_detail">
+                    <h3 class="tit-box">第一步&nbsp; 选择商品</h3>
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th>商品名称</th>
+                                    <th>商品规格</th>
+                                    <th>生产厂家</th>
+                                    <th>基价</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>$!{goodsBiz.goods.gName}</td>
+                                    <td>$!{goodsBiz.goods.gSpecifications}</td>
+                                    <td>$!{goodsBiz.goods.gManufacture}</td>
+                                    <td>$!{goodsBiz.goods.gBasePrice}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>              
+                    <h3 class="tit-box">第二步&nbsp; 选择客户</h3>
+                    <div class="toogle-wrap">
+                        <div class="mt">
+                          <ul class="tab-mt">
+                                <li  class="coupon-tab-item curr">按单个客户设定</li>
+                                <li  class="coupon-tab-item">按分组进行设定</li>
+                            </ul>
+                        </div>
+                        <div class="tab-box">
+                        <div  class="tab-con">
+                            <ul id="customer-list">
+                                <li>
+                                    <div class="customer-item item-selected"><b></b>山东天元大药房</div>
+                                </li>
+                                <li>
+                                    <div class="customer-item "><b></b>山东天元大药房</div>
+                                </li>
+                                <li>
+                                    <div class="customer-item"><b></b>山东天元大药房</div>
+                                </li>
+                                <li>
+                                    <div class="customer-item"><b></b>山东天元大药房</div>
+                                </li>
+                                <li>
+                                    <div class="customer-item"><b></b>山东天元大药房</div>
+                                </li>
+                                <li>
+                                    <div class="customer-item"><b></b>山东天元大药房</div>
+                                </li>
+                                <li><a href="javascript:addCusteomer();" class="add_pro" id="sel-a">+ 添加客户</a></li>
+                          </ul>
+                        </div>
+                        <div  class="tab-con" style="display: none;">
+	                          <div class="type-box">
+                        <dl>
+                            <dt class="type-t">业务分组</dt>
+                            <dd><div class="customer-item item-selected"><b></b>普通客户（20）</div></dd>
+                            <dd><div class="customer-item"><b></b>普通客户（20）</div></dd>
+                            <dd><div class="customer-item"><b></b>普通客户（20）</div></dd>
+                            <dd><div class="customer-item"><b></b>普通客户（20）</div></dd>
+                        </dl>
+                    </div>
+                    <div class="type-box">
+                        <dl>
+                            <dt class="type-t">区域分组</dt>
+                            <dd><div class="customer-item item-selected"><b></b>华南区（20）</div></dd>
+                            <dd><div class="customer-item"><b></b>华南区（20）</div></dd>
+                            <dd><div class="customer-item"><b></b>华南区（20）</div></dd>
+                            <dd><div class="customer-item"><b></b>华南区（20）</div></dd>
+                            <dd><div class="customer-item"><b></b>华南区（20）</div></dd>
+                        </dl>
+                    </div>
+                        </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="tit-box">第三步&nbsp; 设定浮动价格</h3>
+                    <div class="price_box">
+                        <div class="pbox">
+                           <label for="">统一设定：</label>
+                            <input type="text" class="priceNum" value="上浮1%"> 
+                            <a href="javascript:;" class="up"></a> 
+                            <a href="javascript:;" class="down"></a>
+                        </div>
+                    </div>
+                    <div class="btn mt12"><a href="javascript:void(0);" class="add_pro">保存</a></div>
+                </div>
+            </div>
+				   <!-- 用户中心_主体内容_E -->
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("/common/footer.vm")
+
+	<!-- mypharma_脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/load.js?v=$!{jscss_version}"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+	   #parse("common/common_script.vm")
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"
+		type="text/javascript"></script>
+	<script src="/js/enterpriseHelp.js?v=$!{jscss_version}" type="text/javascript"></script>
+ <script>    
+      $(function(){
+       $('.tab-mt >li').click(function(){
+           var index = $(this).index();
+           $(this).addClass('curr').siblings().removeClass('curr');
+           $('.tab-box >div').hide().eq(index).show();
+       })    
+      })
+      
+    $(function(){
+       $('.customer-item').hover(function(){
+        $(this).addClass('customer-item-hover');
+        },function(){
+            $(this).removeClass('customer-item-hover');
+        }); 
+    })
+    
+      $(function(){
+       $('.tab-mt >li').click(function(){
+           var index = $(this).index();
+           $(this).addClass('curr').siblings().removeClass('curr');
+           $('.tab-box >div').hide().eq(index).show();
+       })    
+       
+       $(".type-box dd").click(function(){
+           $(this).parent().find("div").removeClass("item-selected");
+           $(this).find("div").addClass("item-selected");
+       });
+      })
+    </script> 
+	<script>
+		
+		function addCusteomer(){
+	    	var mask = $("#popUpMaskCustomer");
+			var dialog = $("#popUpDIVCustomer");
+	            $.ajax({
+	                url: "/sales/biz/enterprise_help.html",
+	                type: "POST",
+	                data: {},
+	                dataType: "html",
+	                cache: false,
+	                success: function (result) {
+	    	            if (result.success == false) {
+	    	            	top.ue.msg(result.message);
+	    	            }else{
+							//设置弹出框内容
+							document.getElementById("content").innerHTML = result;
+							//显示弹出层与遮照层
+							showPopUpDIV(dialog,mask);
+	    	            }
+	                }
+	            });
+	    
+			
+		}
+		
+		function chooseEnterprise(){
+			var length = $("input[name='chk']:checked").length;
+	    	if(length == 0){
+	    		top.ue.msg("请选择你要添加的客户！");
+	    		return ;
+	    	}
+	    	$("input[name='chk']:checked").each(function(){
+	    		
+	    		var tr = $(this).parent().parent();
+	    		alert(tr.children('td').eq(2).text());
+	    		//tr.find("td").each(function(){
+	    		//	alert($(this).text());
+	    		//})
+	    	});
+	    	
+	    	//var temp = [];
+	    	//$("input[name='chk']:checked").each(function(i){
+	    	//	temp.push($(this).attr("id"));
+	    	//});
+	    	//for(var i=0;i<temp.length;i++){
+	    	//	alert("企业编号:"+temp[i].substring(1,temp.indexOf("_")+1) +" --- 企业名称:" + temp[i].substring(temp[i].indexOf("_")+1,temp[i].length));
+	    	//}
+	    
+	    	closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');
+		}
+	</script>
+	<!-- 添加页面 -->
+    <div class="mask" id="popUpMaskCustomer"></div>
+    <div class="dialog w460" id="popUpDIVCustomer" style="width:800px;height:700px;">
+      <div class="head"><span class="dialog-title">选择客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');window.location.reload(true);" class="btn-close"></a></div>  
+      <div class="con" id="content">
+      </div>
+    </div>
+</body>
+</html>

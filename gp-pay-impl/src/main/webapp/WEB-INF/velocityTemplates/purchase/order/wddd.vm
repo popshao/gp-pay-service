@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>已买到的药品-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- mypharma_样式 -->
+      <link rel="stylesheet" href="/js/webupload/webuploader.css?v=1.13">
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}" />
+        <link rel="stylesheet" type="text/css" href="/js/webupload/webuploader.css?v=$!{jscss_version}" />
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+      <style>
+          .down-zjd-modal {
+              font-size: 14px;
+          }
+          .down-zjd-modal .layui-layer-title{
+              padding: 0 20px 0 20px;
+              height: 45px;
+              line-height:45px;
+              color: #ffffff;
+              text-align: center;
+              background: #0092d0;
+          }
+          .down-zjd-modal .layui-layer-setwin .layui-layer-close1 {
+              background: url("/image/index/icons/icon-close-white.png") no-repeat center;
+          }
+          .down-zjd-modal .layui-layer-btn .layui-btn-disabled{
+              border: 1px solid #e6e6e6;
+              background-color: #FBFBFB;
+              color: #C9C9C9;
+              cursor: not-allowed;
+              opacity: 1;
+          }
+          .down-zjd-modal .layui-layer-btn .layui-layer-btn0 {
+              width: 122px;
+              height: 34px;
+              line-height: 34px;
+              color: #ffffff;
+              border-color: #0092d0;
+              background-color: #0092d0;
+          }
+          .order_list .tabnav li.rocky-btn-fuck{
+              float: right;
+              padding: 6px 0 0 7px;
+          }
+          .rocky-btn-fuck .btn_query{
+              display: inline-block;
+              width: 102px;
+              height: 32px;
+              line-height: 32px;
+              background-color: #52b3c1;
+              color: #fff;
+              text-align: center;
+              margin: 0px 0 10px;
+          }
+          .rocky-btn-fuck .btn_query:hover{
+              background-color: #0f94a5;
+          }
+      </style>
+  </head>
+
+  <body>
+    <div class="container" id="ctxBoxFixed"style="display: none">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 订单中心 &gt; 采购订单</p>
+                </div>
+     <div class="rocky-tips">
+         <p class="rocky-tips-text">温馨提示：物流配送成功后48小时订单自动确认收货，若无物流信息则发货后7天订单自动确认收货，如遇收货问题请及时点击延期收货</p>
+     </div>
+                <div class="order_list">
+                    <div class="tabnav">
+                        <ul>
+                            <li data-value="0" #if($!status==0)class="on"#end><a href="javascript:submitForm(0);"><span>全部订单</span></a></li>
+                            <li data-value="1" #if($!status==1)class="on"#end><a href="javascript:submitForm(1);"><span>待付款<i>$!waitPayCount</i></span></a></li>
+                            <li data-value="2" #if($!status==2)class="on"#end><a href="javascript:submitForm(2);"><span>待发货<i>$!waitSendCount</i></span></a></li>
+                            <li data-value="3" #if($!status==3)class="on"#end><a href="javascript:submitForm(3);"><span>待收货<i>$!waitAcceptCount</i></span></a></li>
+                            <li data-value="4" #if($!status==4)class="on"#end><a href="javascript:submitForm(4);"><span>已收货<i>$!alreadyAcceptCount</i></span></a></li>
+                            <li data-value="5" #if($!status==5)class="on"#end><a href="javascript:submitForm(5);"><span>取消/驳回<i>$!cancelAndRebutCount</i></span></a></li>
+                            #if($supg>0)
+                                <li class="rocky-btn-fuck">
+                                    <a href="javascript:void(0)" class="btn_query btn_l" data-tips="true"  data-tips-title="可下载已经提供”销售合同模板“文件,下载后在对应订单上上传加盖本公司公章的销售合同,提供合作供应商下载"><span
+                                            style="color: white; font-size: 14px;">下载销售合同模板</span></a>
+                                </li>
+                            #end
+                            #if($!status == 1 && $!creditBatchPayAble == 1)
+                                <li class="rocky-btn-fuck">
+                                    <a href="javascript:void(0)" class="btn_query" onclick="creditBatchPay();"><span
+                                            style="color: white; font-size: 14px;">账期批量付款</span></a>
+                                </li>
+                            #end
+                        </ul>
+                    </div>
+                <div class="tab">
+                <!--全部订单-->
+                       <!--未付款-->
+                       <div class="order_query" id="queryForm">
+
+							<form action="/purchase/order/wddd.html" method="post" id="searchForm" name="searchForm">
+								<input type="hidden" name="pi" value="$!pi">
+                                <input type="hidden" name="status" value="$!status">
+								#if($!status == 0)
+								<ul>
+									<li>
+                                        <label>订单类型&nbsp;</label>
+                                        <div class="sltitem w150">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="-1"><a href="javascript:void(0);">全部</a></li>
+                                                <li data-value="0"><a href="javascript:void(0);">普通订单</a></li>
+                                                <li data-value="1"><a href="javascript:void(0);">团购订单</a></li>
+                                                <li data-value="5"><a href="javascript:void(0);">预售订单</a></li>
+                                            </ul>
+                                            <input type="hidden" name="orderType" id="orderType">
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <label>订单来源&nbsp;</label>
+                                        <div class="sltitem w150">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                                <li data-value="1"><a href="javascript:void(0);">PC订单</a></li>
+                                                <li data-value="2"><a href="javascript:void(0);">手机订单</a></li>
+                                            </ul>
+                                            <input type="hidden" name="sourceCode" id="sourceCode">
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <label>支付方式&nbsp;</label>
+                                        <div class="sltitem w150">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                                <li data-value="1"><a href="javascript:void(0);">在线支付</a></li>
+                                                <li data-value="2"><a href="javascript:void(0);">账期付款</a></li>
+                                                <li data-value="3"><a href="javascript:void(0);">线下付款</a></li>
+                                                <li data-value="4"><a href="javascript:void(0);">药白条</a></li>
+                                                <li data-value="5"><a href="javascript:void(0);">帮你付</a></li>
+                                                <li data-value="6"><a href="javascript:void(0);">闪贷</a></li>
+                                                <li data-value="7"><a href="javascript:void(0);">余额支付</a></li>
+                                            </ul>
+                                            <input type="hidden" name="oPaymentMethod" id="oPaymentMethod">
+                                        </div>
+                                    </li>
+                                    <li><label>订单号&nbsp;</label>
+										<input name="oSn" type="text" value="$!oSn" class="w-txt w-150">
+									</li>
+									<li><label>供应商&nbsp;</label>
+										<input name="oSellerName" value="$!oSellerName" type="text" value="$!oSn" class="w-txt w-150">
+									</li>
+									<li >
+										<label>下单时间&nbsp;</label>
+										<input type="text" name="oAddTimeBegin" id="oAddTimeBegin" value="$!oAddTimeBegin" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'oAddTimeEnd'+'\\'+'\')}'})" class="w-txt w130" style="width:120px;">
+										<i class="slt_t">至</i>
+										<input type="text" name="oAddTimeEnd" id="oAddTimeEnd" value="$!oAddTimeEnd" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'oAddTimeBegin'+'\\'+'\')}'})" class="w-txt w130" style="width:120px;">
+									</li>
+								</ul>
+								<div class="btn tac">
+									<a href="javascript:void(0);" onclick="return searchPager('/purchase/order/wddd.html',false);" class="btn_query">查询</a>
+						            <a href="javascript:void(0);" onclick="searchPager('/purchase/order/wddd.html',true);" class="btn_query btn_export btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+								</div>
+                                <div class="btn">
+                                    <a href="javascript:void(0);" onclick="exportByCondition();" class="btn_query btn_export btn-line mr7" title="点击导出当前查询条件下的订单信息">导出Excel</a>
+                                </div>
+								#end
+							</form>
+						</div>
+
+                <div class="order_detail yh order_font">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th width="25"></th>
+                                    <th width="240">订单号</th>
+                                    <th width="80">下单时间</th>
+                                    <th>供应商</th>
+                                    <th>订单状态</th>
+                                <!--      <th>付款方式</th>-->
+                                    <th>付款状态</th>
+                                    <th width="80">订单金额(元)</th>
+                                    <th width="80">签收时间</th>
+                                    <th width="130">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+							#if(!$null.isNull($orderList) && $orderList.size()!=0)
+                            #foreach($item in $orderList)
+                            #set($pageOrder = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+                               <tr>
+                                    <td>$!pageOrder</td>
+                                   <td class="tal">
+                                       #if($!item.orderType==5)
+                                           <i class="pre-sell">预售</i>
+                                       #end
+                                    #if($!item.orderType == 1)
+		                               <span class="tg_order">
+		                               <a class="a-link" href="javascript:view($!item.oId);"><b>$!item.oSn</b></a>
+		                               </span>
+		                               #* 订单备注图标加tips效果 *#
+		                               #if ($!item.deliveryNote != "")
+		                               <img src="/image/msg.png" data-tips="true"  data-tips-title="$!item.deliveryNote" class="img-tips" width="20" height="20"/>
+		                               #end
+		                            #else
+		                               <a class="a-link" onclick="view($!item.oId);">
+		                               <b>$!item.oSn</b>
+		                               </a>
+		                               #* 菲加云订单图标加tips效果 *#
+		                               #if ($!item.sourceCode == "saas" || $!item.sourceCode == "saas-cp")
+		                               <i class="order-tips-fjy" data-tips-style="{color:'#000'}" data-tips="true" data-tips-title="此订单来源于菲加云"></i>
+		                               #end
+		                               #* 订单备注图标加tips效果 *#
+		                               #if ($!item.deliveryNote != "")
+		                               <i class="order-tips-msg" data-tips-style="{color:'#000'}" data-tips="true" data-tips-title="$!item.deliveryNote"></i>
+		                               #end
+		                            #end
+                                    </td>
+                                    <td>$utils.formatDate($!item.oAddTime,"yyyy-MM-dd HH:mm:ss")</td>
+                                    <td><a class="a-link" href="$!item.suUrl" target="_blank">$!item.oSellerName</a></td>
+                                    <td>
+                                    ##买家订单状态
+						            #if($!item.oStatus == -90)
+						                            已取消
+						            #elseif($!item.oStatus == -21 || $!item.oStatus == -22)
+						                            已取消
+						            #elseif($!item.oStatus == -10)
+						                            卖家驳回
+						            #elseif($!item.oStatus == 0)
+						                            待审核
+						            #elseif($!item.oStatus == 10)
+						                            卖家未发货
+						            #elseif($!item.oStatus == 30)
+						                            卖家未发货
+						            #elseif($!item.oStatus == 90)
+						                            卖家已发货
+		                            </br>
+		                            #if("$!item.autoReceiptTips" != "")
+                                        <img src="/image/msg.png" data-tips="true"  data-tips-title="$!item.autoReceiptTips" class="img-tips" width="20" height="20"/>
+								    #end
+						            #elseif($!item.oStatus == 100)
+						                             已签收
+						            #else
+						              $!item.oStatus
+						            #end
+                                    #if($!item.orderType==5&&$!item.oStatus <90&&$!item.oStatus >=0)
+                                        <p class="pre-sell-user">$!item.pdSaleTimeStr</p>
+                                    #end
+                                    </td>
+                                    <td>
+                                    <!-- 买家订单支付状态 -->
+						            #if($!item.payStatus == 0)
+						              --
+						            #elseif($!item.payStatus == 10)
+						                                    未付款
+						            #elseif($!item.payStatus == 50)
+						                                    已支付
+						            #else
+						            #end
+
+						            #if($!item.oPaymentMethod == 1)
+						            <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“在线支付”">在线支付</span>
+						            #elseif($!item.oPaymentMethod == 2)
+						            <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“账期付款”">账期付款</span>
+						            	#if($item.leftTime&&$item.payStatus==10&&$item.leftTime<=7&&$item.oStatus!=-100&&$item.oStatus!=-90&&$item.oStatus!=-21&&$item.oStatus!=-22&&$item.oStatus!=-10)
+								            <script>
+								            		var  leftTime=${item.leftTime};
+								            		var str="";
+								            		if(leftTime<0){
+								            			str="账期付款逾期将影响支付方式使用，请及时付款";
+								            		}else{
+								            			str="账期付款即将到期，请及时付款";
+								            		}
+												    var _img = '<img src="/image/msg.png" data-tips="true" data-tips-title="'+str+'" class="img-tips" width="20" height="20"/>';
+												    document.writeln(_img)
+										    </script>
+										#end
+						            #elseif($!item.oPaymentMethod == 3)
+						            <span class="pay-txt blue" style="cursor:pointer;" title="该订单支付方式是“线下付款”">线下付款</span>
+						            #elseif($!item.oPaymentMethod == 4)
+						            <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“药白条”">
+						            #if($!item.fnName)
+						                                    药白条-$!item.fnName
+						            #else
+						                                    药白条
+						            #end
+						            </span>
+						            #elseif($!item.oPaymentMethod == 5)
+						            <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“帮你付”">
+						            #if($!item.fnName)
+						                                    帮你付-$!item.fnName
+						            #else
+						                                    帮你付
+						            #end
+						            </span>
+						            #elseif($!item.oPaymentMethod == 6)
+						            <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“闪贷”">
+						            #if($!item.fnName)
+						                                    闪贷-$!item.fnName
+						            #else
+						                                    闪贷
+						            #end
+						            </span>
+                                    #elseif($!item.oPaymentMethod == 7)
+                                        <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“余额支付”">余额支付</span>
+						            #end
+                                    </td>
+                                   	<td>
+                                   	#if($!item.orderType == 1)
+		                                    #if($!item.orderType == 1&&$!item.oStatus ==0)
+	                                    	未确定
+	                                    #end
+	                                    #if($!item.orderType == 1&&$!item.oStatus>0)
+	                                        	$!utils.priceFormart($!{item.oTotalPrice})
+	                                    #end
+	                                    #if($!item.orderType == 1&&0>$!item.oStatus)
+	                                        #if(-10==$!item.oStatus)
+	                                        	$!utils.priceFormart($!{item.oTotalPrice})
+	                                        #else
+	                                        		--
+	                                    	#end
+	                                    #end
+                                 	#else
+                                 	$!utils.priceFormart($!{item.oTotalPrice})
+                                 	#end
+                                 	#if($!item.sourceCode!="" && ($!item.sourceCode=="wdyy-app" || $!item.sourceCode=="wdzs-app"))
+                                 	<span class="pay-txt phone" style="cursor:pointer;" title="使用手机在我的医药网app采购的订单">手机订单</span>
+                                 	#end
+	                            	</td>
+	                            	<td>
+	                            	#if($item.acceptTime)
+	                            	$utils.formatDate($!item.acceptTime,"yyyy-MM-dd HH:mm:ss")
+	                            	#else
+	                            	--
+	                            	#end
+	                            	</td>
+                                    <td width="130">
+                                    #if($!item.orderType == 0 || $!item.orderType == 5)
+                                    #if($!item.oStatus==90 || $!item.oStatus==100 || $!item.oStatus==-90 || $!item.oStatus==-21 || $!item.oStatus==-22 || $!item.oStatus==-10)
+                                    <a class="btn-txt-n" href="javascript:void(0);" onclick="buyAgain($!item.oId);" >再次购买</a>
+                                    #end
+                                    #end
+                                    <a class="btn-txt-n" href="javascript:void(0);" onclick="view($!item.oId);" >查看</a>
+
+                                    #if($!item.orderType != 1)
+                                    #if($!item.oStatus < 30 && $!item.oStatus >=0 )
+
+                                    #if(($!item.orderType == 5 && $!item.payStatus==50)||($!item.oPaymentMethod==4 && $!item.payStatus==50)||($!item.oPaymentMethod==6)||($!item.oPaymentMethod==5&&($!item.oStatus==10||$!item.oStatus==-10)) )
+                                    #else
+
+                                    ## 平安租赁的订单不能取消
+                                    #if($!item.ofnId != 3)
+                                    <a class=btn-txt-n href="javascript:void(0);" onclick="cancel($!item.oId);" >取消订单</a>
+                                    #end
+
+                                    #end
+
+                                    #end
+                                    #end
+
+                                    #if($!item.payStatus == 50 && $!{item.payPrice} > 0)
+                                    <a href="javascript:download($!item.oId);" class="btn-txt-n">下载回单</a>
+                                    #end
+
+                                    #if($!item.oPaymentMethod!=3 && $!item.oPaymentMethod!=4&& $!item.oPaymentMethod!=5&& $!item.oPaymentMethod!=6)#if($!item.oStatus >= 10)#if($!item.payStatus == 10)
+
+                                    #if($!item.payMoney > 0)
+                                    <a class="btn-txt-n" href="javascript:void(0);" onclick="pay($!item.oId) ;" >立即支付</a>
+                                    #end
+                                    #end#end#end
+
+								    #if($!item.oStatus == 90)
+								    <a class="btn-txt-n" href="javascript:void(0);" onclick="accept($!item.oId);" >确认收货</a>
+								    #end
+
+								    #if($!item.isDelay == 0&&$!item.isClose == 0&&$!item.oStatus==90)
+								    <script>
+									    var now = new Date("$utils.formatDate($!item.sendTime,"yyyy/MM/dd HH:mm:ss")");
+									    var timestamp = Date.parse(now);
+									    var timestamp2 = Date.parse(new Date());
+									    if(timestamp2-timestamp>0){
+									    	document.writeln('<a class="btn-txt-n" href="javascript:delay($!item.oId);">延期收货</a>')
+									    }
+								    </script>
+								    #end
+
+									 #if($!item.leaseDocument2 == 1)
+								    <a class="btn-txt-n" href="javascript:void(0);" onclick="showPeerModal('$!item.oId',2,0)">上传签收单</a>
+								    #end
+								    #if($!item.leaseDocument2 == 2)
+								    <a class="btn-txt-n" href="javascript:void(0);" onclick="showPeerModal('$!item.oId',2,1)">修改签收单</a>
+								    #end
+
+								    #if($!item.leaseDocument3 == 1)
+								    <a class="btn-txt-n" href="javascript:void(0);" onclick="showPeerModal('$!item.oId',3,0)">上传发票</a>
+								    #end
+								    #if($!item.leaseDocument3 == 2)
+								    <a class="btn-txt-n" href="javascript:void(0);" onclick="showPeerModal('$!item.oId',3,1)">修改发票</a>
+								    #end
+
+                                    #if($!item.isGy==1)
+                                        #if(!$item.orderContract.contractFileKey)
+                                            <a class="btn-txt-n btn-small-file  jzb-ht-btn"  data-oid="$!item.oId"   href="javascript:void(0);" >上传销售合同</a>
+                                        #end
+                                        #if($item.orderContract.contractFileKey)
+                                            <a class="btn-txt-n btn-small-file  chakan"   data-oid="$!item.oId"  data-name="$!item.orderContract.contractFileName"  data-key="$!item.orderContract.contractFileKey"  href="javascript:void(0);" >查看销售合同</a>
+                                        #end
+                                    #end
+
+                                    #if($item.pingAnYbtStatus==1)
+                                        <a class="btn-txt-n" style="width: auto;" href="javascript:void(0);"onclick="submitPingAn('$!item.pingAnBuyerUrl','$!item.pingAnSecret','$!item.pingAnAppid','$!item.oSn')">债权转让签章</a>
+                                    #end
+                                    #if($item.pingAnYbtStatus==3)
+                                        <a class="btn-txt-n" href="javascript:void(0);"onclick="submitPingAn2('$!item.pingAnReceiptUrl','$!item.pingAnSecret','$!item.pingAnAppid','$!item.oSn')">签收签章</a>
+                                    #end
+
+								    #if($!item.obStatus)
+
+								    #if($!item.obStatus == 0)
+								    <br><b>退货中</b>
+								    #end
+
+								    #else
+
+								    #*
+								    #if($!item.oStatus>=10 && $!item.oStatus<90 && $!item.payStatus == 50)
+								    <a class="btn-txt-n" href="javascript:backAll($!item.oId);" >全部退货</a>
+								    #end
+								    *#
+
+								    #end
+
+								    #if($!item.sdStatus==2)
+								    <a class="btn-txt-n" style="width:100px;"  quality-data="$!item.oId" href="javascript:void(0);"   id="btn_$!item.oId"   onclick="loanConfirm($!item.oId)">确认还款计划</a>
+								    #end
+
+								    ##下载质检报告单按钮
+								    #if($!item.hasGoodsBatch==1)
+								    <a class="btn-txt-l" quality-data="$!item.oId" href="javascript:void(0);" >下载质检报告单</a>
+								    #end
+
+								    </td>
+                                </tr>
+                                #end
+                                #else
+		                           <tr>
+		                             <td colspan="11">无相关数据！</td>
+		                           </tr>
+                                #end
+						     </tbody>
+                         </table>
+                         <!--分页开始 -->
+							#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+							#pagerInfo($!pagerInfo,$!{pagerTotal},"/purchase/order/wddd.html")
+							#end #end
+                      </div>
+                      <form id="operForm" name="operForm" method="post">
+                      <input type=hidden name="source" value="1"/>
+				      <input type=hidden name="oId" />
+				      <input type=hidden name="backUrl" value="/purchase/order/wddd.html"/>
+				      <input  type="hidden" name="returnPageParam" id="returnPageParam" value="$!{returnPageParam}"/>
+				      </form>
+				      <form id="payForm" action="" name="payForm" method="get" target="_blank">
+				    	<input  type="hidden" name="oId" id="oId"/>
+				      </form>
+				      <form id="cartForm" action="" name="cartForm" method="post" target="_blank">
+				      </form>
+                </div>
+                    <!--未发货-->
+                <!--未收货-->
+                <!--已完成-->
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("/common/footer.vm")
+
+    <div class="back-info">
+        <div class="bi-title">
+            <h3>退款信息填写</h3>
+            <a href="javascript:void(0);" class="close-btn">×</a>
+        </div>
+        <div class="bi-ctx">
+            <p class="bi-tips">
+                该订单需原路退款，请维护支付时使用的银行卡信息
+            </p>
+            <form class="">
+                <input type="hidden" id="lineOid" name="lineOid" value="$!ra.raId">
+                <div class="form-line">
+                    <label >账号类型：</label>
+                    <input type="radio" name="zhlx" value="1" id="zhlx1" style="width: 18px; vertical-align: middle;">
+                    <label for="radio1" style="width: auto">个人</label>
+                    <input type="radio" name="zhlx" value="2" id="zhlx2" style="width: 18px;vertical-align: middle;">
+                    <label for="radio2" style="width: auto">企业</label>
+                </div>
+                <div class="form-line" style="margin-top: 0">
+                    <label for="khd">开户地：</label>
+                    <select name="province" id="province" placeholder="请选择" data-tips="开户地省份">
+                        <option value="">请选择</option>
+                    </select>
+                    <select name="city" id="city" placeholder="请选择" data-tips="开户地市区">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="form-line">
+                    <label  for="khyh">开户银行：</label>
+                    <select name="bankid" id="bankid" placeholder="请选择" style="width: 248px;">
+                        <option value="">请选择</option>
+                    #if($bankList && $!bankList.size!=0)
+                    #foreach($item in $bankList)
+                    <option value="$!item.id">$!item.name</option>
+                    #end
+                    #end
+                    </select>
+                </div>
+                <div class="form-line">
+                    <label for="khzh">开户支行：</label>
+                    <input type="text" id="khzh" name="khzh" placeholder="请输入开户支行名称">
+                </div>
+                <div class="form-line">
+                    <label for="skr">收款账户：</label>
+                    <input type="text" id="skr" name="skr" placeholder="请输入收款人姓名">
+                </div>
+                <div class="form-line">
+                    <label for="yhzh">银行账号：</label>
+                    <input type="text" id="yhzh" data-reg="/^(\d{8,})$/" name="yhzh" data-plc1="$!ra.accountNumber" data-plc="请输入银行卡账号">
+                </div>
+                <div class="form-line mn-btns" style="text-align: left; margin-top: 20px;">
+                    <label for=""></label>
+                    <a href="javascript:void(0);" class="mn-btn btn-filled bi-confirm" style="margin-left: 0">确认</a>
+                    <a href="javascript:void(0);" class="mn-btn bi-cancel">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <form id="pingAnForm" method="post" target="_blank">
+        <input type="hidden" name="appsecret" id="appsecret"/>
+        <input type="hidden" name="appid" id="appid"/>
+        <input type="hidden" name="templateNo" id="templateNo" value="1"/>
+        <input type="hidden" name="orderNo" id="orderNo"/>
+    </form>
+
+	<script type="text/html" id="sugpTpl" >
+	<div id="sugp"  class="sugp-css" style="display: table; width: 95%;">
+		#if(!$null.isNull($contractTemplates) && $contractTemplates.size()!=0)
+	    <div style="width: 100%; display: table-cell; vertical-align: middle;">
+	        #foreach($item in $contractTemplates)
+	            <p class="cc">$!item.suName &nbsp;&nbsp;<a class="s-text" href="javascript:void(0)" onclick="top.app.frameWindow.downloadHT('$!item.templateFileKey','$!item.templateName')">$!item.templateName</a>&nbsp;&nbsp;<a class="s-link" href="javascript:void(0)" onclick="top.app.frameWindow.downloadHT('$!item.templateFileKey','$!item.templateName')">下载</a></p>
+	        #end
+	    </div>
+		 #end
+	</div>
+	</script>
+
+	<script type="text/html" id="editJzbOrderTpl">
+		<div id="order_jzb" class="sugp-css" style="display: table; width: 95%;">
+		    <div style="width: 100%; display: table-cell; vertical-align: middle;">
+			    <p class="cc">
+			        <a class="s-text" href="javascript:void(0)" onclick="top.app.frameWindow.downloadHT('{{d.key}}','{{d.name}}')">{{d.name}}</a>
+			        <a href="javascript:void(0);" data-name="{{d.name}}" data-oid="{{d.id}}" data-option="1" class="s-link btn-small-file jzb-hack" style="padding:3px 5px!important; margin: 0 0 0 20px;">修改</a>
+			        <a class="s-link" href="javascript:void(0);"  data-id="{{d.id}}" onclick="top.app.frameWindow.deletetemp({{d.id}},'{{d.name}}')" style="padding:3px 5px;">删除</a>
+			    </p>
+		    </div>
+		</div>
+		<div style="position: absolute; bottom: 1px; left: 50%; margin-left: -130px; color: #e35c5c;">提示：该订单确认收货后不可修改和删除</div>
+	</script>
+
+    #*同行单弹窗TPL*#
+    <script type="text/html" id="txdModalTpl">
+        <div class="txd-modal">
+            <div class="txd-left fl">
+                <div class="txd-head">
+                    <span>
+                        {{# if(d.fileList && d.fileList.length){ }}
+                        {{# }else{ }}
+                            {{# if(d.type==1){ }}
+                            随货同行单
+                            {{# }else if(d.type==2){ }}
+                            签收单
+                            {{# }else if(d.type==3){ }}
+                            发票
+                            {{# } }}范例
+                        {{# } }}
+                    </span>
+                </div>
+                <div class="txd-ctx" style="padding: 0">
+                    {{# if(d.fileList && d.fileList.length){ }}
+                        {{# for(var i=0;i<d.fileList.length;i++){ var file = d.fileList[i]; }}
+                            {{# if(i==0){ }}
+                            <img src="$!{downloadUrl}/{{file.originalStoreKey}}" alt="" class="exp-img">
+                            {{# } }}
+                        {{# } }}
+                    {{# }else{ }}
+                        <img src="/image/txd-{{d.type}}.jpg" alt="示例" class="exp-img">
+                    {{# } }}
+                </div>
+            </div>
+            <div class="txd-right fr">
+                <div class="txd-head">
+                    <span>
+                        {{# if(d.type==1){ }}
+                        随货同行单
+                        {{# }else if(d.type==2){ }}
+                        签收单
+                        {{# }else if(d.type==3){ }}
+                        发票
+                        {{# } }}
+                    </span>
+                    <img class="layer-close" src="/image/index/icons/icon-close-white.png" alt="关闭">
+
+                </div>
+                <div class="txd-ctx">
+                    <div class="txd-upfile-box">
+                        <p class="txd-tips">
+                            {{# if(d.audit_result){ }}
+                            {{d.audit_result}}
+                            {{# }else{ }}
+                            请上传
+                            {{# if(d.type==1){ }}
+                            随货同行单
+                            {{# }else if(d.type==2){ }}
+                            签收单
+                            {{# }else if(d.type==3){ }}
+                            发票
+                            {{# } }}
+                            原件照片或原件扫描件
+                            {{# } }}
+                        </p>
+                        <div class="txd-file-list">
+                            {{# if(d.fileList){ }}
+                            {{# for(var i=0;i<d.fileList.length;i++){ var file = d.fileList[i] }}
+                            <div class="txd-file">
+                                <div class="prev-box" data-fid="{{file.fileId}}" data-file='{{ JSON.stringify(file) }}' >
+                                    <input type="hidden" name="fileName" value="{{file.fileName}}">
+                                    <input type="hidden" name="originalStoreKey" value="{{file.originalStoreKey}}">
+                                    <input type="hidden" name="remark" value="{{file.remark}}">
+                                    <img class="btn-del" src="/image/icon-del-file.png" alt="删除">
+                                    <img class="prev-img" src="$!{downloadUrl}/{{file.thumbStoreKey}}" data-big="$!{downloadUrl}/{{file.originalStoreKey}}">
+                                </div>
+                            </div>
+                            {{# } }}
+                            {{# } }}
+
+                            <div class="txd-file txd-file-add"></div>
+                        </div>
+                    </div>
+                    <div class="txd-btn-box">
+                        <div class="txd-btn-wrap">
+                            <p>格式要求JPG、JPEG、PNG、BMP格式，单张图片不大于2M</p>
+                            {{# if(d.edit){ }}
+                            <a href="javascript:void(0);" onclick="submitPeer('{{d.oid}}',{{d.type}},'{{d.remark}}',this,1)" class="txd-btn">重新提交审核</a>
+                            {{# }else { }}
+                            <a href="javascript:void(0);" onclick="submitPeer('{{d.oid}}',{{d.type}},'{{d.remark}}',this,1)" class="txd-btn">提交审核</a>
+                            {{# } }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </script>
+
+    <script>
+        if(top.window == window){
+            location.replace("/index.html?tabScdTit=采购订单&tabFstTit=订单中心&tabUrl=/purchase/order/wddd.html");
+        }else{
+            document.getElementById("ctxBoxFixed").style.display = "block";
+        }
+    </script>
+
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/layui/layui.js?v=$!{jscss_version}" type="text/javascript" ></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script type="text/javascript" src="/js/jquery.nicescroll.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/webupload/webuploader.nolog.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/peerModal.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+    <script type="text/javascript">
+
+	 function submitPingAn(url,secret,appid,orderNo) {
+        $("#pingAnForm").prop("action",url);
+        $("#appid").val(appid);
+        $("#appsecret").val(secret);
+         $("#templateNo").val(1);
+        $("#orderNo").val(orderNo);
+        $("#pingAnForm").submit();
+    }
+ function submitPingAn2(url,secret,appid,orderNo) {
+        $("#pingAnForm").prop("action",url);
+        $("#appid").val(appid);
+        $("#appsecret").val(secret);
+         $("#templateNo").val(2);
+        $("#orderNo").val(orderNo);
+        $("#pingAnForm").submit();
+    }
+
+
+	var layer,layApp,laytpl;
+    layui.config({
+        base: '/js/layui/extend/'
+    }).use(['layApp','layer','form','laytpl'], function () {
+        layer = layui.layer;
+        layApp = layui.layApp,laytpl = layui.laytpl;
+        layApp.citySelect({
+            province: "#province",
+            city: "#city",
+            url: "/location/provincialCity",
+            place:true
+        })
+
+        $(function(){
+
+            $.sltitem.select("orderType", "$!orderType");
+            $.sltitem.select("sourceCode", "$!sourceCode");
+            $.sltitem.select("oPaymentMethod", "$!oPaymentMethod");
+
+            $(".jzb-ht-btn").each(function(){
+                initJZBHT($(this),-1)
+            })
+
+            /***
+             * 下载质检报告单
+             */
+            $(".btn-txt-l").on("click",function () {
+                var $this = $(this);
+                var oid = $(this).attr("quality-data");
+                layer.open({
+                    type: 2,
+                    title: '<b>请选择批次号下载质检报告单</b>',
+                    skin:'down-zjd-modal',
+                    shadeClose: false,
+                    shade: 0.8,
+                    area: ['70%', '400px'],//宽和高
+                    content: '/purchase/order/orderDetailQuality.html?oid='+oid,
+                    btn:['下载质检报告单'],
+                    btnAlign:'c',
+                    success:function (lay,idx) {
+                        var  iframe = lay.find("iframe");
+                        var _ifmBody = $(iframe[0].contentDocument).find("body"); //得到iframe页面的body 对象，可以用此对象来获取iframe页面的所有元素，包括已选择的checkbox；
+                        var array = [];
+                        //lay.find(".layui-layer-btn0").addClass("layui-btn-disabled");
+                        $(_ifmBody).find("input[type='checkbox']").each(function (i, item) {
+                            $(this).on("click",function () {
+                                if($(_ifmBody).find("input[type='checkbox']:checked").length){
+                                    lay.find(".layui-layer-btn0").removeClass("layui-btn-disabled");
+                                }else{
+                                    lay.find(".layui-layer-btn0").addClass("layui-btn-disabled");
+                                }
+                            })
+                        });
+                    },
+                    yes:function (idx,lay) {
+                        var  iframe = lay.find("iframe");
+                        var _ifmBody = $(iframe[0].contentDocument).find("body"); //得到iframe页面的body 对象，可以用此对象来获取iframe页面的所有元素，包括已选择的checkbox；
+                        var array = [];
+
+                        $(_ifmBody).find("input[type='checkbox']:checked").each(function (i, item) {
+                            var obj = {};
+                            obj.gid = $(item).val();
+                            obj.batch = $(item).attr("batch");
+                            array.push(obj);
+                        });
+
+                        if (array.length > 0) {
+                            layer.load();
+                            window.location.href = "/purchase/quality/oderDownload.html?batchList="+$.toJSON(array);
+                            layer.closeAll("loading");
+                            /* layer.close(idx);*/   //关闭弹窗  可自由控制是否关闭
+                        }else{
+                            layer.msg("请选择要下载的质检单批次号");
+                        }
+                    }
+                });
+            })
+            $(".btn_l").on("click",function () {
+                var $this = $(this);
+                top.ue.alert({
+                    title: '<b>下载销售合同模板</b>',
+                    content: $("#sugpTpl").html(),
+                    area:["530px","auto"],
+                    skin:'down-zjd-modal',
+                    btn:['关闭']
+                })
+            })
+
+            $(".chakan").on("click",function () {
+                var $this = $(this);
+                var _data = {
+                    name : $this.attr("data-name"),
+                    key:$this.attr("data-key"),
+                    id:$this.attr("data-oid")
+                }
+
+                /*layer.open({
+                    type: 1,
+                    title: '<b>查看销售合同</b>',
+                    skin:'down-zjd-modal',
+                    shadeClose: false,
+                    shade: 0.8,
+                    area: ['510px', '280px'],//宽和高
+                    content: laytpl($("#editJzbOrderTpl").html()).render(_data),
+                    btn:['关闭'],
+                    btnAlign:'c',
+                    success:function (lay,idx) {
+                        initJZBHT(lay.find(".btn-small-file"));
+                    }
+                })*/
+
+                top.ue.confirm({
+                    type: 1,
+                    title: '<b>查看销售合同</b>',
+                    skin:'down-zjd-modal',
+                    shadeClose: false,
+                    shade: 0.8,
+                    area: ['510px', '280px'],//宽和高
+                    content: laytpl($("#editJzbOrderTpl").html()).render(_data),
+                    btn:['关闭'],
+                    btnAlign:'c',
+                    success:function (lay,idx) {
+                        //initJZBHTWebUL(lay.find(".btn-small-file"),idx);
+                        top.utils.initIframeUploader(lay.find(".btn-small-file"),{},function (res,dom) {
+                            var _this = dom , response = res;
+                            var _edit=_this.attr("data-option");
+                            var _name=_this.attr("data-name");
+                            var o_id=_this.attr("data-oid");
+                            var _file = response.data;
+                            if(_edit){
+                                top.ue.confirm({
+                                    content:'确认替换已有的销售合同“'+_name+'”?',
+                                    ok:function () {
+                                        top.ue.load();
+                                        $.ajax({
+                                            url: '/purchase/order/updateOrderContract.html',
+                                            data: {
+                                                "templateName": _file.imageInfo.original_name,
+                                                "templateFileKey": _file.imageInfo.bucket_key,
+                                                "oId": o_id
+                                            },
+                                            type: 'POST',
+                                            dataType: 'json',
+                                            complete: function () {
+                                                top.ue.closeLoad();
+                                            },
+                                            success: function (data) {
+                                                if (data.data != -1) {
+                                                    top.ue.close(idx);
+                                                    window.location.reload();
+                                                } else {
+                                                    top.ue.alert({
+                                                        title: "提醒",
+                                                        content: "订单已签收无法修改",
+                                                        end: function () {
+                                                            top.ue.close(idx);
+                                                            window.location.reload();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+                                })
+
+                            }else{
+                                $.ajax({
+                                    url: '/purchase/order/insertOrderContract.html',
+                                    data: {"templateName":_file.imageInfo.original_name,"templateFileKey":_file.imageInfo.bucket_key,"oId":o_id},
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    success: function(data) {
+                                        top.ue.close(pidx);
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+
+                        })
+                    }
+                });
+            })
+
+        })
+    })
+
+
+    /*本地页面文件上传*/
+    function initJZBHT(_this,pidx) {
+        (function (_this) {
+            var uploadPic = _this;
+            var _edit=_this.attr("data-option");
+            var _name=_this.attr("data-name");
+            var o_id=_this.attr("data-oid");
+            new AjaxUpload(uploadPic, {
+                action: "/cdn/imageInfo_upload.html",
+                name: 'file_path',
+                responseType: "json",
+                onSubmit: function (file, ext) {
+                    if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+                        ext_str = ext;
+                    } else {
+                        top.ue.msg("非图片文件格式,请重传！");
+                        return false;
+                    }
+                    top.ue.load();
+                },
+                onComplete: function (file, result) {
+                    var response = result;
+                    top.ue.closeAll("loading");
+                    if (result.success == false) {
+                        if (result.message == "outofsize") {
+                            top.ue.msg("文件过大，无法上传！");
+                        } else if (result.message == "error") {
+                            top.ue.msg("文件过大，无法上传！");
+                        }
+                        return false;
+
+                    } else {
+                        if(response && response.success){
+                            var _file = response.data;
+                            if(_edit){
+                                top.ue.confirm({
+                                    content:'确认替换已有的销售合同“'+_name+'”?',
+                                    ok:function () {
+                                        top.ue.load();
+                                        $.ajax({
+                                            url: '/purchase/order/updateOrderContract.html',
+                                            data: {
+                                                "templateName": _file.imageInfo.original_name,
+                                                "templateFileKey": _file.imageInfo.bucket_key,
+                                                "oId": o_id
+                                            },
+                                            type: 'POST',
+                                            dataType: 'json',
+                                            complete: function () {
+                                                top.ue.closeLoad();
+                                            },
+                                            success: function (data) {
+                                                if (data.data != -1) {
+                                                    top.ue.close(pidx);
+                                                    window.location.reload();
+                                                } else {
+                                                    top.ue.alert({
+                                                        title: "提醒",
+                                                        content: "订单已签收无法修改",
+                                                        end: function () {
+                                                            top.ue.close(pidx);
+                                                            window.location.reload();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+                                })
+
+                            }else{
+                                $.ajax({
+                                    url: '/purchase/order/insertOrderContract.html',
+                                    data: {"templateName":_file.imageInfo.original_name,"templateFileKey":_file.imageInfo.bucket_key,"oId":o_id},
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    success: function(data) {
+                                        top.ue.close(pidx);
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+
+                        }else{
+                            top.layer.tips("文件上传失败",_this);
+                        }
+                    }
+                }
+            });
+        })(_this);
+    }
+
+
+     /*父级页面文件上传*/
+     function initJZBHTWebUL(_this , pidx){
+    	(function(_this){
+    		var _edit=_this.attr("data-option");
+        	var _name=_this.attr("data-name");
+        	var o_id=_this.attr("data-oid");
+        	uploader1 = WebUploader.create({
+                swf: '/js/webupload/uploader.swf',
+                server: '/cdn/imageInfo_upload.html',
+                pick: _this,
+                resize: false,
+                auto:true,
+                fileVal:"files[]",
+                accept: {
+                    title: 'Images',
+    	            extensions: 'doc,docx,pdf,jpg,png,rar,zip'
+                },
+                fileSingleSizeLimit:1024*1024*10
+            });
+
+            //上传失败拦截
+            uploader1.on("error",function (errType) {
+                layer.closeAll("loading");
+                switch (errType){
+                    case "Q_TYPE_DENIED":
+                        top.layer.tips("对不起，您上传的文件格式不对，请选择正确的格式",_this);
+                        break;
+                    case "F_EXCEED_SIZE":
+                        top.layer.tips("对不起，您上传的文件太大，文件不能超过10M",_this);
+                        break;
+                    case "F_DUPLICATE":
+                        top.layer.tips("对不起，请不要重复选择同一个文件",_this);
+                        break;
+                    default :
+                        top.layer.tips("文件选择失败",_this);
+                        break;
+                }
+                uploader1.reset();
+            })
+            //添加成功事件
+            uploader1.on("fileQueued",function (file) {
+               top.ue.load();
+            })
+            uploader1.on("uploadSuccess",function (file,response) {
+                if(response && response.success){
+                    var _file = response.data;
+                    if(_edit){
+                        top.ue.confirm({
+                            content:'确认替换已有的销售合同“'+_name+'”?',
+                            ok:function () {
+                                top.ue.load();
+                                $.ajax({
+                                    url: '/purchase/order/updateOrderContract.html',
+                                    data: {
+                                        "templateName": _file.imageInfo.original_name,
+                                        "templateFileKey": _file.imageInfo.bucket_key,
+                                        "oId": o_id
+                                    },
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    complete: function () {
+                                        top.ue.closeLoad();
+                                    },
+                                    success: function (data) {
+                                        if (data.data != -1) {
+                                            top.ue.close(pidx);
+                                            window.location.reload();
+                                        } else {
+                                            top.ue.alert({
+                                                title: "提醒",
+                                                content: "订单已签收无法修改",
+                                                end: function () {
+                                                    top.ue.close(pidx);
+                                                    window.location.reload();
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        })
+
+                    }else{
+                        $.ajax({
+        	            	url: '/purchase/order/insertOrderContract.html',
+                            data: {"templateName":_file.imageInfo.original_name,"templateFileKey":_file.imageInfo.bucket_key,"oId":o_id},
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function(data) {
+                                top.ue.close(pidx);
+                                window.location.reload();
+                            }
+                        });
+                    }
+
+                }else{
+                    top.layer.tips("文件上传失败",_this);
+                }
+                uploader1.reset();
+                top.ue.closeLoad();
+            })
+            uploader1.on( 'uploader1ror', function( file ) {
+                top.ue.closeLoad();
+                uploader1.reset();
+                top.layer.tips("文件上传失败",_this);
+            });
+    	})(_this)
+
+    }
+
+    function deletetemp(oId,_name){
+         top.ue.confirm({
+             content:'确认删除销售合同“' + _name + '”吗？',
+             ok:function () {
+                 $.ajax({
+                     url: '/purchase/order/deleteOrderContract.html',
+                     data: {"oId": oId},
+                     type: 'POST',
+                     dataType: 'json',
+                     success: function (data) {
+                         if (data.data != -1) {
+                             top.ue.msg("删除成功");
+                             window.location.reload();
+                         } else {
+                             top.ue.alert({
+                                 title: "提醒",
+                                 content: "订单已签收无法删除",
+                                 end: function () {
+                                     window.location.reload();
+                                 }
+                             });
+                         }
+                     }
+                 });
+             }
+         })
+        /*layer.confirm('确认删除销售合同“' + _name + '”吗？', function (index) {
+            layer.closeAll();
+            $.ajax({
+                url: '/purchase/order/deleteOrderContract.html',
+                data: {"oId": oId},
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.data != -1) {
+                        window.location.reload();
+                    } else {
+                        top.ue.alert({
+                            title: "提醒",
+                            content: "订单已签收无法删除",
+                            end: function () {
+                                window.location.reload();
+                            }
+                        });
+                    }
+                }
+            });
+            layer.close(index);
+        });*/
+    }
+
+
+	function cancel(id){
+    	top.ue.confirm({
+    		title: '取消订单',
+    		content: "您确认要取消此笔订单吗？",
+    		ok: function(idx,lay) {
+    		    top.ue.close(idx);
+    		    top.ue.load();
+    		    $.ajaxPost("/purchase/order/isDualPay.html", {"oid":id}, function(result) {
+                    top.ue.closeLoad();
+    	      	    if (result != "") {
+    	           	    var obj=eval("("+result+")");
+    	           	    if(1 == obj.data){
+                            var editFst = false;
+                            var zjDiag = layer.open({
+                                title:false,
+                                type:1,
+                                content:$(".back-info"),
+                                area:["400px","470px"],
+                                closeBtn:0,
+                                success:function (lay,idx) {
+                                    var _lineOid = "$!ra.raId",_len = 8;
+                                    var form = lay.find("form");
+                                    form.unbind("change");
+                                    if(_lineOid){
+                                        editFst = true;
+                                        $("#yhzh").attr("placeholder",$("#yhzh").attr("data-plc1"));
+                                    }else{
+                                        editFst = false;
+                                        $("#yhzh").attr("placeholder",$("#yhzh").attr("data-plc"));
+                                    }
+
+                                    $(lay).find(".close-btn,.bi-cancel").on("click",function () {//取消和右上角按钮
+                                        layer.close(idx);
+                                    });
+                                    $("#bankid").val("$!ra.bankId");
+                                    if("$!ra.provinceCode") $("#province").val($!ra.provinceCode).trigger("change");
+                                    setTimeout(function(){
+                                    	$("#city").val("$!ra.cityCode");
+                                        form.on("change",function (e) {
+                                            if(editFst){
+                                                editFst = false;
+                                                clearForm(form,e.target);
+                                            }
+                                        })
+                                    },500);
+                                    $("#khzh").val("$!ra.branchName");
+                                    $("#skr").val("$!ra.accountName");
+                                    $("#zhlx$!ra.accountType").prop("checked","checked");
+
+                                    $(lay).find(".bi-confirm").unbind("click").on("click",function () { //确认按钮
+                                        var selizeForm = $(form).serializeArray();//序列化form表单值
+                                        var _flag = 1;
+                                        if(selizeForm.length != _len){
+                                            layer.msg("请选择账号类型！");
+                                            return false;
+                                        }
+                                        $.each(selizeForm,function (key,v) {
+                                            var _obj = $("#"+v.name);
+                                            var _text = _obj.attr("data-tips")?_obj.attr("data-tips"):_obj.parents(".form-line").find("label").text().replace(/：|:/g,"");
+                                            if(!(v.name == "yhzh" && _lineOid)){
+                                                if(!_lineOid && v.name == "lineOid"){
+
+                                                }else{
+                                                    if(!v.value){
+                                                        layer.msg(_text+"不能为空！");
+                                                        _flag = 0;
+                                                        return false;
+                                                    }
+                                                    var _reg = _obj.attr("data-reg");
+                                                    if(_reg && !eval(_reg).test(v.value)){
+                                                        layer.msg(_text+"格式不对！");
+                                                        _flag = 0;
+                                                        return false;
+                                                    }
+                                                }
+                                             }else{
+                                                var _reg = _obj.attr("data-reg");
+                                                if(!editFst && !v.value){
+                                                    layer.msg(_text+"不能为空！");
+                                                    _flag = 0;
+                                                    return false;
+                                                }
+                                                if(v.value && _reg && !eval(_reg).test(v.value)){
+                                                    layer.msg(_text+"格式不对！");
+                                                    _flag = 0;
+                                                    return false;
+                                                }
+                                            }
+                                        })
+                                        if(!_flag){
+                                            return false;
+                                        }
+                                        layer.load();
+                                        $.ajaxPost("/purchase/bankAccountSave.html", {"selizeForm":selizeForm,"oid":id}, function(result) {
+                                            layer.closeAll("loading");
+                                            if (result != "") {
+                            	           	    var obj=eval("("+result+")");
+	                            	           	if(1 == obj.data){
+	                            	           		layer.load();
+	                        	         	    	$.ajaxPost("/purchase/order/ddqx.html", {"oid":id}, function(result) {
+	                        	                  	    layer.closeAll("loading");
+	                        	                  	    if (result != "") {
+	                        	          	            	 var obj=eval("("+result+")");
+	                        	          	            	 if(1 == obj.data){
+	                        	          		    				layer.load();
+	                        	          		    				window.location.href = "/purchase/order/wddd.html?$!utils.getReuturnParam($!{returnPageParam})";
+	                        	          				        	return false;
+	                        	          		        	  }else if(0 == obj.data){
+	                        	          		        			top.ue.msg("订单取消失败，请稍后重试！",{},function () {
+                                                                        layer.load();
+                                                                        window.location.href = "/purchase/order/wddd.html?$!utils.getReuturnParam($!{returnPageParam})";
+                                                                    });
+	                        	          				        	return false;
+	                        	          		        	  }
+	                        	          	             }
+	                        	                    });
+	                            	           	}else if(0 == obj.data){
+	        	          		        			top.ue.msg("退款信息保存失败，请稍后重试！",{},function () {
+                                                        layer.load();
+                                                        window.location.href = "/purchase/order/wddd.html?$!utils.getReuturnParam($!{returnPageParam})";
+                                                    });
+	        	          				        	return false;
+	        	          		        	    }
+                            	           	}
+                                        })
+                                    })
+                                }
+                            })
+    	                    return false;
+    	         	    }else if(0 == obj.data){
+    	         	    	top.ue.load();
+    	         	    	$.ajaxPost("/purchase/order/ddqx.html", {"oid":id}, function(result) {
+                                top.ue.closeLoad();
+    	                  	    if (result != "") {
+    	          	            	 var obj=eval("("+result+")");
+    	          	            	 if(1 == obj.data){
+    	          		    				layer.load();
+    	          		    				window.location.href = "/purchase/order/wddd.html?$!utils.getReuturnParam($!{returnPageParam})";
+    	          				        	return false;
+    	          		        	  }else if(0 == obj.data){
+    	          		        			top.ue.msg("订单状态发生变更，请刷新后再操作",{},function () {
+                                                layer.load();
+                                                window.location.href = "/purchase/order/wddd.html?$!utils.getReuturnParam($!{returnPageParam})";
+                                            });
+    	          				        	return false;
+    	          		        	  }
+    	          	             }
+    	                    });
+    	         	    }else{
+    	         	    	top.ue.msg("订单状态发生变更，请刷新后再操作",{},function () {
+                                layer.load();
+                                window.location.href = "/purchase/order/wddd.html?$!utils.getReuturnParam($!{returnPageParam})";
+                            });
+  				        	return false;
+    	         	    }
+        	      	}
+    		    });
+        	}
+    	})
+	}
+
+	function clearForm(form,target) {
+        var _v =$(target).val();
+        form[0].reset();
+        if(target.name == "zhlx"){
+            $("#zhlx"+_v).prop("checked","checked");
+        }
+        else $(target).val(_v);
+        $("#yhzh").attr("placeholder",$("#yhzh").attr("data-plc"));
+    }
+
+    //下载回单
+    function download(id){
+    	window.location.href="/purchase/order/downloadOnePayReceipt.html?oId="+id;
+    	return false;
+    }
+
+    //下载合同
+    function downloadHT(key,name){
+    	window.location.href="/order/downloadHT.html?key="+key+"&name="+name;
+    	return false;
+    }
+
+    //导出excel
+    function exportByCondition(){
+     	$("#searchForm").attr("action", "/purchase/order/exportByCondition.html");
+		$("#searchForm").submit();
+		$("#searchForm").attr("action", "");
+    }
+
+    function view(id){
+
+        top.utils.openWithTab('ckddxaq', '订单详情', '/purchase/order/ddxq.html?oId='+id, {
+            fstBread: top.app.index.firstBread,
+            scdBread:{
+                text:top.app.index.secondBread,
+                url:location.href,
+                prevBread: top.app.index.firstBread
+            },
+            thirdBread:'订单详情'
+        })
+        return false;
+
+    	layer.load();
+    	$("#operForm").attr("target","_self");
+    	$("#operForm").find("input[name=oId]").val(id);
+    	$("#operForm").attr("action","/purchase/order/ddxq.html");
+    	$("#operForm").submit();
+    }
+
+    function buyAgain(id){
+    	top.ue.load();
+    	$.ajax({
+            url: "/order/buyAgain",
+            type: "POST",
+            data: {"oid":id,"source":"mypharma"},
+            cache: false,
+            dataType: "json",
+            async:false,
+            complete:function () {
+                top.ue.closeLoad();
+            },
+            success: function (result) {
+            	if (result.code == -1) {
+            		 top.ue.msg(result.message);
+                     return;
+            	}else{
+            		if(result.data == -1){
+            			 top.ue.msg("订单中的商品全部为无效商品，无法加入进货单。无效商品包含无价格、无库存、无采购权限或者已下架");
+                         return;
+            		}
+            		if(result.data == 0){
+            			top.ue.alert({
+                            title: '提示信息',
+                            content:"订单中的商品全部加入进货单",
+                            end: function() {
+                                // 新打开浏览器标签页方法，解决https到http跨协议问题
+                                top.utils.open("http://$!{wwwHostAndPort}/cart.html", "_blank");
+         	               }
+                        })
+                        return;
+            		}
+            		if(result.data > 0){
+                        top.ue.alert({
+                            title: '提示信息',
+                            content:"订单中有"+result.data+"个无效商品，无法加入进货单。无效商品包含无价格、无库存、无采购权限或者已下架",
+                            width: 300,
+                            okVal: "确定",
+                            end: function() {
+                                // 新打开浏览器标签页方法，解决https到http跨协议问题
+                                top.utils.open("http://$!{wwwHostAndPort}/cart.html", "_blank");
+         	               }
+                        })
+                        return;
+            		}
+            	}
+            }
+        });
+    }
+
+    function pay(id){
+    	layer.load();
+    	$.ajax({
+            url: "/order/orderIsCanPay.html",
+            type: "POST",
+            data: {"oId":id},
+            cache: false,
+            async : false,  //同步属性设为false
+            dataType: "json",
+            success: function (result) {
+            	layer.closeAll("loading");
+            	if (result.success == true) {
+            		if(1 == result.data){
+        				//$("#oId").val(id);
+                        //$("#payForm").attr("action", "http://$!{wwwHostAndPort}/orderSuccessPurchase.html");
+        		    	//$("#payForm").submit();
+
+                        // 新打开浏览器标签页方法，解决https到http跨协议问题
+                        var url = "http://$!{wwwHostAndPort}/orderSuccessPurchase.html?oId=" + id;
+                        top.utils.open(url, "_blank");
+            		}else{
+                        top.ue.msg("订单状态已经发生改变，请刷新页面！",{},function(){
+                            layer.load();
+                            window.location.href = "/purchase/order/wddd.html";
+                        });
+            			return false;
+            		}
+            	}
+            }
+        });
+    }
+
+    function backPart(id){
+    	layer.load();
+    	$("#operForm").attr("target","_self");
+    	$("#operForm").find("input[name=oId]").val(id);
+    	$("#operForm").attr("action","/purchase/order/ddthPart.html");
+    	$("#operForm").submit();
+    }
+
+    function backAll(id){
+    	layer.load();
+    	$.ajaxPost("/order/orderIsCanBack.html", {"oId":id}, function(result) {
+    		layer.closeAll("loading");
+    		if (result != "") {
+    			var obj=eval("("+result+")");
+    			if(1 == obj.data){
+        			layer.load();
+        			$("#operForm").attr("target","_self");
+        			$("#operForm").find("input[name=oId]").val(id);
+                	$("#operForm").attr("action","/purchase/order/ddth.html");
+                	$("#operForm").submit();
+        		}else{
+                    top.ue.msg("订单状态已经发生改变，请刷新页面！");
+        			layer.load();
+        	    	window.location.href = "/purchase/order/wddd.html";
+        			return false;
+        		}
+    		}
+        });
+    }
+
+    function accept(id){
+    	layer.load();
+    	$.ajaxPost("/order/orderIsCanAccept.html", {"oId":id}, function(result) {
+    		layer.closeAll("loading");
+    		if (result != "") {
+    			var obj=eval("("+result+")");
+    			if(1 == obj.data){
+    				layer.load();
+    				$("#operForm").attr("target","_self");
+    				$("#operForm").find("input[name=oId]").val(id);
+    		    	$("#operForm").attr("action","/purchase/order/ddsh.html");
+    		    	$("#operForm").submit();
+        		}else{
+                    top.ue.msg("订单状态已经发生改变，请刷新页面！");
+        			layer.load();
+        	    	window.location.href = "/purchase/order/wddd.html";
+        			return false;
+        		}
+    		}
+       });
+    }
+
+    function delay(id){
+        top.ue.confirm({
+            title: '延期收货',
+            content: "您确认要将此订单延期7天收货吗？",
+            ok: function () {
+                layer.load();
+                $.ajaxPost("/purchase/order/delay", {"oid": id}, function (result) {
+                    layer.closeAll("loading");
+                    if (result != "") {
+                        var obj = eval("(" + result + ")");
+                        if (result.code == -1) {
+                   		    top.ue.msg(result.message);
+                            return;
+                   	    }else{
+                   	    	if(result.data == 1){
+                   	    	    top.ue.msg("延期7天收货成功！");
+                                window.location.href = "/purchase/order/wddd.html";
+                   	    	}else{
+                   	    	    top.ue.msg("延期7天收货失败！");
+                                return false;
+                   	    	}
+                   	    }
+                    }
+                });
+            }
+        })
+    }
+
+    function loanConfirm(oId){
+        var _html = "<p style='text-align: center; margin-top: 15px; font-size: 18px;'>是否同意一次性还本付息?</p>" +
+                "<p style='text-align: center;  color: #333; font-size:14px; margin-top:10px;'>(同意资金方将付款;不同意将终止贷款流程)</p>"
+        layApp.alert({
+            head:"",
+            html: _html,
+            btn:['同意','不同意'],
+            ok:function (v,idx,lay) {//确定事件
+            	layer.close(idx);
+            	loanConfirmd(oId,1);
+            },btn2:function(idx,lay){//不同意
+            	layer.close(idx);
+            	loanConfirmd(oId,2);
+            }
+        })
+    }
+    function loanConfirmd(id,val){
+    	$("#btn_"+id).remove();
+    	top.utils.iframeLoad()
+    	$.ajax({
+            url: "/order/loanConfirm.html",
+            type: "POST",
+            data: {"oId":id,"confirmation":val},
+            dataType: "json",
+            complete:function (){
+            	top.ue.closeAll("loading");
+            },
+            success: function (result) {
+            	if (result.data ==1) {
+            		window.location.reload();
+            	}else{
+                    top.ue.msg("还款计划状态发生变化,请刷新后重试");
+            		window.location.reload();
+            	}
+            }
+        });
+    }
+
+    function submitForm(i){
+    	layer.load();
+    	window.location.href = "/purchase/order/wddd.html?status="+i;
+		return false;
+    }
+
+    function creditBatchPay(){
+        layer.load();
+        window.location.href = "/purchase/order/creditMergePay.html?status="+1;
+        return false;
+    }
+    </script>
+  </body>
+</html>

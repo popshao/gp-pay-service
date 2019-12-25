@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>查看促销-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; <a class="color" href="/sales/market/promotion/businessMain.html">工业政策邀请</a> &gt; 查看促销</p>
+                </div>
+                
+                <div class="order_query order cc">
+                    <!-- 促销政策信息 -->
+                    #set($industryPromotion = $!{industryPromotionWrapper.industryPromotion})
+                    <!-- 促销模板信息 -->
+                    #set($ipt = $!{industryPromotionWrapper.industryPromotionTemplate})
+                    <!-- 登录促销企业信息 -->
+                    #set($ipsup = $!{industryPromotionWrapper.industryPromotionSupplier})
+                    <!-- 促销商品信息 -->
+                    #set($goodsList = $!{industryPromotionWrapper.goodsList})
+                    <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <input type="hidden" name="ipId" id="ipId" value="$!{industryPromotion.ipId}"/>
+                        <td class="tar" width="150"><span class="red">*</span>促销标题：</td>
+                        <td class="text-blue" width="auto">$!{industryPromotion.ipTitle}</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">关联商品：</td>
+                        <td>
+                            #if($!goodsList && $!goodsList.size() > 0)
+                        	<div class="cx_scrollbar cx_scrollbar_h_170">
+                                <div class="order_detail">
+                                    <div class="table table-top table-cx">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            #foreach($!goods in $!goodsList)
+                                                <tr>
+                                                <td title="$!utils.getGoodsName($!{goods.gName},$!{goods.gCommonName})">$!utils.substring($!utils.getGoodsName($!{goods.gName},$!{goods.gCommonName}),30)</td>
+                                                <td>$!{goods.gSpecifications}</td>
+                                                <td>$!{goods.gManufacture}</td>
+                                                <td>$!{goods.gLicenseNo}</td>
+                                                </tr>
+                                            #end
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            #end 
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">促销政策模板：</td>
+                        <td>
+                        	<div class="cx_scrollbar">
+                            	
+                                <ul class="cx_template cc">
+                                    #if($!ipt)
+                                	<li>
+                                    	<div class="img"><img class="img" src="$!{downloadUrl}$!{ipt.tplViewImg}"></div>
+                                        <div class="operation">
+                                        	<a href="javascript:void(0);" onclick="ipObj.enlargeImg(this);" class="fl a_enlarge"></a>
+                                        </div>
+                                    </li>
+                                    #end
+                                </ul>
+                                
+                            </div>
+                            #if($!ipsup && $!{ipsup.ipIsShow} == 1)
+                            <input class="fl check" id="ipIsShow" type="checkbox" name="ipIsShow" checked="checked">
+                            #else
+                            <input class="fl check" id="ipIsShow" type="checkbox" name="ipIsShow">
+                            #end
+                            <label class="fl ml5" for="check_01">允许显示在商城banner广告位</label>
+                            <div class="fl user_cx_tips mt5 ml5">默认显示该模板入口在旗舰商城banner广告位，点击跳转到促销信息详情页面。</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">促销政策对商业：</td>
+                        <td class="text-blue">$!{industryPromotion.ipToBusiness}</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar"><span class="red">*</span>促销政策对终端：</td>
+                        <td class="text-blue">$!{industryPromotion.ipToTerminal}</td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">起止时间：</td>
+                        <td>
+                        	<span class="fl text-blue">$utils.formatDate($!{industryPromotion.ipStartTime},"yyyy-MM-dd HH:mm:ss")</span>
+                            <span class="to">至</span>
+                            <span class="fl text-blue">
+                            #if($!{industryPromotion.ipEndTime} && $!{industryPromotion.ipEndTime} != '')
+                               $utils.formatDate($!{industryPromotion.ipEndTime},"yyyy-MM-dd HH:mm:ss")
+                            #else
+                                                                                              长期有效
+                            #end
+                            </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">执行：</td>
+                        <td class="text-gray">表示同意加入该厂家的促销政策，旗舰商城首页和逛厂家该工业展示位置上显示广告信息和旗舰商城的入口。</td>
+                      </tr>
+                   </table>
+                   
+                   <div class="btn tac">
+                        #if($!processStatus == 1)
+                        <a href="javascript:ipObj.updateIpIsShow();" class="btn">保存</a>
+                        <a href="javascript:ipObj.updateIpIsExecuted(2);" class="btn">停止</a>
+                        <a href="javascript:top.utils.frameBackDel();history.go(-1);" class="btn">返回</a>
+                        #elseif($!processStatus == 2)
+                        <a href="javascript:ipObj.updateIpIsExecuted(1);" class="btn">执行政策</a>
+                        <a href="javascript:top.utils.frameBackDel();history.go(-1);" class="btn">返回</a>
+                        #else
+                        <a href="javascript:top.utils.frameBackDel();history.go(-1);" class="btn">返回</a>
+                        #end
+                    </div>
+
+                </div>
+                
+            <!-- 用户中心_主体内容_E -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/promotion/industryPromotion.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script>
+        $(function(){
+
+            $(".jsje-tips-show").mouseenter(function(){
+                $(this).find(".jsje-tips").show();
+            });
+
+            $(".jsje-tips-show").mouseleave(function(){
+                $(this).find(".jsje-tips").hide();
+            });
+
+        })
+    </script>
+  </body>
+</html>

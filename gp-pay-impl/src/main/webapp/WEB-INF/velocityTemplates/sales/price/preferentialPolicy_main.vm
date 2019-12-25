@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的医药网 - 订单关联单品政策</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/promotion.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; <a class="color" href="/sales/price/preferentialPolicy_main.html">订单关联单品政策</a></p>
+                </div>
+                <div class="user_kh_tips mt20 p10 cc">
+                <form action="/sales/price/preferentialPolicy_main.html" method="post" id="searchForm">
+                        <input type="hidden" name="pi" value="$!pi" />
+					    <input type="hidden" name="ps" value="$!ps" />
+					    <input type="hidden" name="status" id="status" value="$!status" />
+                </form>
+                    <p class="text-t">说明：在单笔订单中，购买您店铺任意商品的订单总金额满足条件时，设置的活动商品单价享受对应优惠，可设置优惠阶梯；同时可指定部分客户专享该促销。</p>
+                    <p class="text-eg">示例：促销添加活动商品A、B,促销规则为购买订单总额满100元，活动商品单价优惠1%；<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单笔订单中有商品A、B、C、D，全部A、B、C、D的商品总金额为100元，那么A、B两个活动商品单价均优惠1%。</p>
+                </div>
+                <div class="order_list">
+                    <div class="tabnav">
+                        <ul>
+                           #if($!status == 1)
+                           <li data-value="1" class="on"><a href="javascript:setActivityStatus(1);"><span>进行中</span></a></li>
+                           <li data-value="2"><a href="javascript:setActivityStatus(2);"><span>未开始</span></a></li>
+                           <li data-value="3"><a href="javascript:setActivityStatus(3);"><span>已结束</span></a></li>
+                           #elseif($!status == 2)
+                           <li data-value="1"><a href="javascript:setActivityStatus(1);"><span>进行中</span></a></li>
+                           <li data-value="2" class="on"><a href="javascript:setActivityStatus(2);"><span>未开始</span></a></li>
+                           <li data-value="3"><a href="javascript:setActivityStatus(3);"><span>已结束</span></a></li>
+                           #else
+                           <li data-value="1"><a href="javascript:setActivityStatus(1);"><span>进行中</span></a></li>
+                           <li data-value="2"><a href="javascript:setActivityStatus(2);"><span>未开始</span></a></li>
+                           <li data-value="3" class="on"><a href="javascript:setActivityStatus(3);"><span>已结束</span></a></li>
+                           #end
+                           <a href="/sales/price/preferentialPolicy_addUI.html" class="btn_add_event btn_add_line" onclick="top.utils.iframeLoad({},3000);">+添加政策</a>
+                        </ul>
+                    </div>
+                <div class="tab">
+                       <!--进行中-->
+                <div class="order_detail yh mt10"> 
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th>优惠政策</th>
+                                    <th>条件</th>
+                                    <th>指定客户</th>
+                                    <th>指定商品</th>
+                                    <th>生效时间</th>
+                                    <th>失效时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            #if($!policyList && $!policyList.size()>0)
+	                            #foreach($policy in $policyList)
+	                            <tr>
+                                    <td>$!{policy.policyStr}</td>
+                                    <td>订单总额</td>
+                                    <td>
+                                    #if($!{policy.ppExistEid} != 0)
+                                    <a href="javascript:policyObj.showCustomer($!{policy.ppId},$!{policy.ppExistEid});" class="btn">查看客户</a>
+                                    #end
+                                    </td>
+                                    <td><a href="javascript:policyObj.showPolicyGoods($!{policy.ppId});" class="btn">查看商品</a></td>
+                                    <td>$utils.formatDate($!{policy.ppStartTime},"yyyy-MM-dd")</td>
+                                    <td>$utils.formatDate($!{policy.ppEndTime},"yyyy-MM-dd")</td>
+                                    <td>
+                                    <a href="/sales/price/preferentialPolicy_editUI.html?ppId=$!{policy.ppId}" class="btn-txt"  onclick="top.utils.iframeLoad({},3000);">修改</a>
+                                    <a href="javascript:policyObj.deletePolicy($!{policy.ppId});" class="btn-txt">删除</a>
+                                    <a href="javascript:policyObj.addPolicyGoods($!{policy.ppId});" class="btn" >添加商品</a>
+                                    </td>
+                                </tr>
+	                            #end
+                            #end
+                            </tbody>
+                        </table>
+                      </div>
+                      <!--分页开始 -->
+						#if($!{pagerInfo}) 
+							#if($!{pagerTotal} > 1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/price/preferentialPolicy_main.html")
+							#end 
+						#end
+                </div>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("common/footer.vm")
+    <!-- 商品添加页面 -->
+    <div class="mask" id="popUpMaskQ"></div>
+    	<div class="dialog w460" id="popUpDIVQ" style="width:1200px;height:520px;">
+	      <div class="head"><span class="dialog-title">选择商品</span><a href="javascript:closePopUpDIV('popUpMaskQ','popUpDIVQ');" class="btn-close"></a></div>  
+	      <div class="con" id="content"></div>
+    </div>
+    <!-- 商品查看页面 -->
+    <div class="mask" id="popUpMaskP"></div>
+    	<div class="dialog w460" id="popUpDIVP" style="width:1200px;height:520px;">
+	      <div class="head"><span class="dialog-title">查看商品</span><a href="javascript:closePopUpDIV('popUpMaskP','popUpDIVP');" class="btn-close"></a></div>  
+	      <div class="con" id="contentp"></div>
+    </div>
+    
+    <!-- 查看客户页面 -->
+    <div class="mask" id="popUpMaskCustomer"></div>
+    <div class="dialog w460" id="popUpDIVCustomer" style="width:1000px;height:470px;">
+      <div class="head"><span class="dialog-title">查看客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');" class="btn-close"></a></div>  
+      <div class="con" id="contentEnterprise">
+      </div>
+    </div>
+    
+    <!-- 查看客户分组页面 -->
+    <div class="mask" id="popUpMaskCustomerGroup"></div>
+    <div class="dialog w460" id="popUpDIVCustomerGroup" style="width:600px;">
+      <div class="head"><span class="dialog-title">查看客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomerGroup','popUpDIVCustomerGroup');" class="btn-close"></a></div>  
+      <div class="con" >
+      	<div class="tab-con">
+            <div class="type-box cc" id="sct_ids">
+                <dl></dl>
+            </div>
+            <div class="type-box cc" id="regionIds">
+                <dl></dl>
+            </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/price/preferentialPolicy.js?v=$!{jscss_version}&t=1" type="text/javascript"></script>
+	<script src="/js/price/chooseGoodsHelper_addSave.js?v=$!{jscss_version}&t=1" type="text/javascript"></script>
+	<script src="/js/price/chooseGoodsHelper_view.js?v=$!{jscss_version}&t=1" type="text/javascript"></script>
+	<script src="/js/price/chooseEnterpriseHelper_view.js?v=$!{jscss_version}&t=1" type="text/javascript"></script>
+       #parse("common/common_script.vm")
+    <script type="text/javascript">
+       var wwwUrl = '$!{wwwHostAndPort}';
+       var userUrl = '$!{userHostAndPort}';
+    $(function(){
+    	$("body tbody tr").unbind("mouseover");
+    })
+    
+    //设置活动是否进行中
+	function setActivityStatus(value){
+		$("#status").val(value);
+		//查询活信息
+		searchPager('/sales/price/preferentialPolicy_main.html',false);
+	}
+    </script>
+  </body>
+</html>

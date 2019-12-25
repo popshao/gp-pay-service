@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>金融订单账期还款-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+   
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 金融产品 &gt; 还款计划</p>
+                    </div>
+                    <div class="order_query">
+                        <form action="" method="post" id="searchForm" name="searchForm">
+                            <input type="hidden" name="pi" value="$!pi">
+                            <ul>
+                                <li>
+                                    <label>资金方&nbsp;</label>
+                                    <div class="sltitem sltitem-top w150">
+                                        <span class="">全部</span>
+                                        <ul style="display: none;">
+                                            <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                            <li data-value="1"><a href="javascript:void(0);">金诺</a></li>
+                                            <li data-value="2"><a href="javascript:void(0);">海尔金融</a></li>
+                                            <li data-value="3"><a href="javascript:void(0);">平安租赁</a></li>
+                                            <li data-value="4"><a href="javascript:void(0);">雁阵</a></li>
+                                        </ul>
+                                        <input type="hidden" name="fnId" id="fnId">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label>还款状态&nbsp;</label>
+                                    <div class="sltitem sltitem-top w150">
+                                        <span class="">全部</span>
+                                        <ul style="display: none;">
+                                            <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                            <li data-value="1"><a href="javascript:void(0);">已还款</a></li>
+                                            <li data-value="2"><a href="javascript:void(0);">未还款</a></li>
+                                        </ul>
+                                        <input type="hidden" name="repayStatus" id="repayStatus">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label class="w70">到期日&nbsp;</label>
+                                    <input type="text" name="timeBegin" id="timeBegin" value="$!timeBegin" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'timeEnd'+'\\'+'\')}'})" class="w-txt w-150">
+                                    <i class="slt_t">至</i>
+                                    <input type="text" name="timeEnd" id="timeEnd" value="$!timeEnd" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'timeBegin'+'\\'+'\')}'})" class="w-txt w-150">
+                                </li>
+
+                            </ul>
+                            <div class="btn">
+                                <a href="javascript:searchPager('/purchase/finance/repay_info.html',false);" class="btn_query">查询</a>
+                                <a href="javascript:searchPager('/purchase/finance/repay_info.html',true);" class="btn_query btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="order_detail yh order_font">
+                        <div class="table">
+                            <table cellpadding="0" cellspacing="0">
+                                <thead class="head">
+                                <tr class="line">
+                                    <th width="50">
+                                    <th width="200">订单号</th>
+                                    <th width="200">支付时间</th>
+                                    <th width="100">下单金额</th>
+                                    <th width="150">资金方</th>
+                                    <th width="200">应还金额</th>
+                                    <th width="200">到期日</th>
+                                    <th width="150">还款状态</th>
+                                    <th width="200">还款日期</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    #if(!$null.isNull($repayInfoList) && $repayInfoList.size()!=0)
+                                        #foreach($item in $repayInfoList)
+                                            #set($pageOrder = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+                                        <tr>
+                                            <td>$!pageOrder</td>
+                                            <td>$!item.orderNo</td>
+                                            <td>$utils.formatDate($!item.payTime,"yyyy-MM-dd")</td>
+                                            <td>$!utils.priceFormart($!item.originalAmount)</td>
+                                            <td>
+                                                $!item.fnName
+                                            </td>
+                                            <td>$!utils.priceFormart($!item.originalRepayAmount)</td>
+                                            <td>$utils.formatDate($!item.dueTime,"yyyy-MM-dd")</td>
+                                            <td>
+                                                #if($!item.repayStatus == 1)
+                                                    已还款
+                                                    #else
+                                                    未还款
+                                                #end
+                                            </td>
+                                            <td>$utils.formatDate($!item.repayTime,"yyyy-MM-dd")</td>
+                                        </tr>
+                                        #end
+                                    #else
+                                    <tr>
+                                        <td colspan="11">无查询结果，请重新查询后再申请结算</td>
+                                    </tr>
+                                    #end
+                                </tbody>
+                            </table>
+                            <!--分页开始 -->
+                            #if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+                                #pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/order/ddgl.html")
+                            #end #end
+                        </div>
+                        #*<form id="operForm" name="operForm" method="post">
+                            <input type=hidden name="backUrl" value="/sales/order/ddgl.html"/>
+                            <input  type="hidden" name="returnPageParam" id="returnPageParam" value="$!{returnPageParam}"/>
+                        </form>
+
+                        <form id="operFormSettle" name="operFormSettle" method="post">
+                            <input type=hidden name="backUrl" value="/sales/order/ddgl.html"/>
+                            <input  type="hidden" name="returnPageParam" id="returnPageParam" value="$!{returnPageParam}"/>
+                        </form>*#
+                    </div>
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mask" id="popUpMask"></div>
+    #parse("common/footer.vm")
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+#parse("common/common_script.vm")
+<script type="text/javascript">
+
+    function constructConditionQueryStr() {
+        var settlementId=$("#settlementId").val();
+        var settelmentStatus = $("#repayStatus").val();
+        var tmp = '';
+        if (settlementId != '' || settelmentStatus != ''){
+            tmp += "?";
+            if (settlementId != ''){
+                tmp += "settlementId=";
+                tmp += settlementId;
+            }
+
+            if (settelmentStatus != ''){
+                if (tmp != "?"){
+                    tmp += "&";
+                }
+
+                tmp += "settelmentStatus=";
+                tmp += settelmentStatus;
+            }
+        }
+
+        return tmp;
+    }
+
+
+    $(function(){
+        $.sltitem.select("repayStatus", "$!repayStatus");
+        $.sltitem.select("fnId", "$!fnId");
+    })
+
+
+    function view(id){
+        $.showLoad();
+        $("#operForm").append("<input type=hidden name=oId value="+id+" />");
+        $("#operForm").attr("action","/sales/order/ddxq.html");
+        $("#operForm").submit();
+    }
+
+</script>
+
+</body>
+
+</html>

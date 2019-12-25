@@ -1,0 +1,130 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<!--[if gte mso 9]><xml><x:ExcelWorkbook>
+<x:ExcelWorksheets><x:ExcelWorksheet><x:Name>
+</x:Name><x:WorksheetOptions><x:Selected/></x:WorksheetOptions>
+</x:ExcelWorksheet>
+</x:ExcelWorksheets></x:ExcelWorkbook></xml>
+<![endif]-->
+<style>
+.table-dotted {
+    border-collapse: collapse;
+}
+.table-dotted tbody .th {
+    border: 1px #99bbe8;
+    background-color:#8DB4E3;
+    border-spacing: 1px;
+    text-align: right;
+    font-weight: normal;
+    white-space: nowrap;
+    padding: 2px;
+    line-height:22px;
+}
+
+.table-dotted tbody .td {
+    border: 1px #99bbe8;
+    border-spacing: 1px;
+    text-align: left;
+    padding: 2px;
+    line-height:22px;
+}
+.format{
+mso-number-format:'\@';
+}
+</style>
+
+</head>
+<body leftmargin=0 topmargin=0 marginwidth=0 marginheight=0>
+<table class="table-dotted" width="100%">
+<tbody>
+	<tr>
+		<td class="th" style="text-align: center;">订单ID</td>
+		<td class="th" style="text-align: center;">订单编号</td>
+        <td class="th" style="text-align: center;">结算状态</td>
+		<td class="th" style="text-align: center;">供应商名称</td>
+        <td class="th" style="text-align: center;">供应商订单号</td>
+		<td class="th" style="text-align: center;">采购商名称</td>
+        <td class="th" style="text-align: center;">支付方式</td>
+		<td class="th" style="text-align: center;">平台承担随机立减金额(元)</td>
+        <td class="th" style="text-align: center;">平台承担随机立减驳回退货金额(元)</td>
+        <td class="th" style="text-align: center;">平台承担随机立减结算金额(元)</td>
+        <td class="th" style="text-align: center;">商家承担随机立减金额(元)</td>
+        <td class="th" style="text-align: center;">商家承担随机立减驳回退货金额(元)</td>
+        <th class="th" style="text-align: center;">随机立减结算单号</th>
+        <th class="th" style="text-align: center;">随机立减结算单生成时间</th>
+        <th class="th" style="text-align: center;">随机立减结算单审核时间</th>
+        <th class="th" style="text-align: center;">开票员</th>
+        <th class="th" style="text-align: center;">开票员ID</th>
+        <td class="th" style="text-align: center;">采购商内码</td>
+	</tr>
+	#if($settlementOrdersList && $!settlementOrdersList.size()!=0)
+    #foreach($item in $settlementOrdersList)
+	<tr>
+        <td class="td" style="text-align: center;" nowrap="nowrap">
+            $!item.pStdBillId<span>&nbsp;</span></span>
+        </td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">
+            $!item.pStdBillSn<span>&nbsp;</span></span>
+        </td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">
+            #if($!item.pStState == 1)
+                已结算
+            #elseif($!item.pStState == 0)
+                待结算
+            #elseif($!item.pStState == -1)
+                银行处理中
+            #else
+                $!item.pStState
+            #end </td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.stdBillSeller</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.oerpSn</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.stdBillBuyer</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">                                   
+        							 #if($!item.payType == 1)  
+						                            中金
+						            #elseif($!item.payType == 2)  
+						                            民生
+						            #elseif($!item.payType == 3)  
+						                            支付宝
+						            #elseif($!item.payType == 4)  
+						                            易宝
+                                     #elseif($!item.payType == 5)
+                                            微信
+                                      #elseif($!item.payType == 6)
+                                                    浦发
+                                      #elseif($!item.payType == 7)
+                                                    闪贷
+                                     #elseif($!item.payType == 8)
+                                                    余额
+						            #else  
+						              线下付款
+						            #end </td>
+	    <td class="td" style="text-align: center;" nowrap="nowrap">$!item.platformPromotion</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.platformRefundAmount</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.stdBillAmount</td>
+
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.businessPromotion</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.businessRefundAmount</td>
+
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.pstSn</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$utils.formatDate($!{item.pstAddTime},"yyyy-MM-dd HH:mm:ss")</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$utils.formatDate($!{item.pstAuditTime},"yyyy-MM-dd HH:mm:ss")</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.drawerName}</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.drawerId != 0)
+                $!{item.drawerId}
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align: center;" nowrap="nowrap">$!item.oSeInternalCode</td>
+     </tr>
+     #end
+     #end
+</tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.pay.dao.read.GroundPromotionPayReceiptDetailReadDao">
+	<resultMap id="groundPromotionPayReceiptDetailResult" type="com.mph.coreapi.gp.pay.entity.GroundPromotionPayReceiptDetail">
+		<result property="id" column="id" />
+		<result property="receiptId" column="receipt_id" />
+		<result property="incomeId" column="income_id" />
+		<result property="createTime" column="create_time" />
+	</resultMap>
+
+	<sql id="baseColumns">
+            id,
+            receipt_id,
+            income_id,
+            create_time
+	</sql>
+
+	<select id="listGroundPromotionPayReceiptDetail" parameterType="Long" resultMap="groundPromotionPayReceiptDetailResult">
+		select <include refid="baseColumns"></include>
+		from ground_promotion_pay_receipt_detail
+
+		where 1=1
+        <if test="receiptId != null">
+            and receipt_id=#{receiptId}
+        </if>
+        <if test="incomeId != null">
+            and income_id=#{incomeId}
+        </if>
+	</select>
+
+	<select id="listGroundPromotionPayReceiptDetailAll" parameterType="Long" resultMap="groundPromotionPayReceiptDetailResult">
+		select <include refid="baseColumns"></include>
+		from ground_promotion_pay_receipt_detail
+	</select>
+</mapper>

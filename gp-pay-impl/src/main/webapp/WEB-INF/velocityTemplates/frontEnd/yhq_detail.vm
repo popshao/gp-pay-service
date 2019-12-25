@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>查看优惠券 - 我的医药网</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}" />
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="c-box">
+
+                    <div class="user-path">
+                        <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; 优惠券管理 &gt; <a class="up-h" href="#">查看优惠券</a></p>
+                    </div>
+
+                    <div class="user-ckyhj-box mt20">
+                        <div class="ucb-th cc">
+                            <h3 class="u-t-title fl">查看优惠券</h3>
+                            <a class="u-t-linke fr" href="javascript:void(0)">去查看优惠券统计></a>
+                        </div>
+                        <div class="ucb-table ucb-table-line mt10">
+
+                            <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="tar" width="140">优惠券名称：</td>
+                                    <td width="auto">广州大众满1000减50大放送</td>
+                                </tr>
+                                <tr>
+                                    <td class="tar">优惠券规则：</td>
+                                    <td>一笔订单中条件商品总金额满500元打9.8折</td>
+                                </tr>
+                                <tr>
+                                    <td class="tar">优惠券数量：</td>
+                                    <td><span class="red">1000</span>张</td>
+                                </tr>
+                                <tr>
+                                    <td class="tar">使用期限：</td>
+                                    <td>2017.03.12-2017.03.29</td>
+                                </tr>
+                                <tr>
+                                    <td class="tar">备注：</td>
+                                    <td>购买任意商品满1000减50元，仅限新用户特享</td>
+                                </tr>
+                            </table>
+
+                        </div>
+                        <div class="ucb-table mt10">
+
+                            <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td class="tar" width="140">可用商品范围：：</td>
+                                    <td width="auto">指定部分商品</td>
+                                </tr>
+                                <tr>
+                                    <td class="tar"></td>
+                                    <td>
+                                        <div class="user-form">
+                                            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                                <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>商品编号</th>
+                                                    <th>商品内码</th>
+                                                    <th>商品名称</th>
+                                                    <th>规格</th>
+                                                    <th>厂家</th>
+                                                    <th>是否拆零</th>
+                                                    <th>中包装</th>
+                                                    <th>基价</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>223341</td>
+                                                    <td>23423432</td>
+                                                    <td>阿米西林</td>
+                                                    <td>60s*600瓶</td>
+                                                    <td>湖北仁悦药业有限公司</td>
+                                                    <td>是</td>
+                                                    <td>50</td>
+                                                    <td>50</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>223341</td>
+                                                    <td>23423432</td>
+                                                    <td>阿米西林</td>
+                                                    <td>60s*600瓶</td>
+                                                    <td>湖北仁悦药业有限公司</td>
+                                                    <td>是</td>
+                                                    <td>50</td>
+                                                    <td>50</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tar">是否与促销同时享用：</td>
+                                    <td>是</td>
+                                </tr>
+                                <tr>
+                                    <td class="tar">可用支付方式：</td>
+                                    <td>全部支付方式都可以</td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+    #parse("/common/footer.vm")
+
+
+
+#*脚本文件引入及页面交互逻辑代码区*#
+<script src="/front/js/rog-ui.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+<script src="/js/publish.js?v=$!{jscss_version}"></script>
+<script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+<script>
+
+    $(function(){
+
+        <!-- uf-table表格最后一行无下边框 -->
+        $(".uf-table").find("tr:last td").css("border-bottom","none");
+
+    })
+
+</script>
+</body>
+
+</html>

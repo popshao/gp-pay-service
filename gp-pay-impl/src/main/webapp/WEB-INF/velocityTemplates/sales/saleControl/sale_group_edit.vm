@@ -1,0 +1,787 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>编辑商品客户信息 - 我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm") #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+
+                <!-- 用户中心_主体内容_S -->
+                <div class="c-box">
+
+                    #if($!userType==2)
+                        <div class="user-path"><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; <a class="color" href="/sales/control/sale_group_main.html">专供控销 </a> &gt; <i class="up-h">编辑控销专区</i></div>
+                    #else
+                        <div class="user-path"><a class="color" href="/sales/index.html">销售中心</a> &gt; 销售政策管理 &gt; <a class="color" href="/sales/control/sale_group_main.html">渠道管理 </a> &gt; <i class="up-h">编辑渠道管理</i></div>
+                    #end
+
+                    <div class="user-query">
+                        #if($!userType==2)
+                            <h3 class="uq-title">编辑控销专区</h3>
+                        #else
+                            <h3 class="uq-title">编辑渠道管理</h3>
+                        #end
+                        <table class="uq-table mt20" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                #if($!userType==2)
+                                    <td class="tar">控销专区名称：</td>
+                                #else
+                                    <td class="tar" width="120">销售渠道名称：</td>
+                                #end
+                                <td colspan="3">
+                                    <input maxlength="8" class="input" name="scgName" type="text" placeholder="最多可输入8个字" onkeyup="ControlData.scgName=this.value" onchange="ControlData.scgName=this.value;" value="$!{controlGroup.scgName}"/>
+                                    #if($!userType==2)
+                                    <div class="fl user_tips">每个控销专区在前台以楼层方式显示，但是当设置商品少于4个的情况下，统一显示在系统默认的“单品专供控销区”</div>
+                                    #end
+                                </td>
+                            </tr>
+                            #if($!userType==2)
+                            <tr>
+                                <td class="tar" width="120">控销专区描述：</td>
+                                <td width="450">
+                                    <input maxlength="30" name="scgDesc" class="input input-430" type="text" placeholder="用于提示前台用户，最多可输入30个字" onkeyup="ControlData.scgDesc=this.value" onchange="ControlData.scgDesc=this.value;" value="$!{controlGroup.scgDesc}"/>
+                                </td>
+                                <td class="tar" width="120">前台显示排序：</td>
+                                <td width="auto">
+                                    <input onkeyup="this.value=this.value.replace(/\D/g,'');ControlData.scgSort=this.value" onchange="ControlData.scgSort=this.value;" onafterpaste="this.value=this.value.replace(/\D/g,'');" name="scgSort" class="input input-90" type="text" value="$!{controlGroup.scgSort}" maxlength="8" />
+                                </td>
+
+                            </tr>
+                            #end
+                        </table>
+                    </div>
+
+                    #if($!userType==2)
+                    <div class="user-tips mt10">提示：建议每个专供控销区最多设置6组价格，由于当前控销区功能为基础版；如果要更多种更复杂功能，请联系我们。</div>
+                    #end
+
+                    #foreach($group in $controlGroup.groups)
+                        #if($!velocityCount == 1)
+                            <div class="user-form mt20 add-group-box">
+                                <table class="uf-table fl-only main-tb" border="0" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th width="30"><input type="checkbox" class="check sel-all"/></th>
+                                        <th class="t-number" width="40" style="padding: 20px 0">序号</th>
+                                        <th style="padding: 0;"><span>商品名称</span></th>
+                                        <th width="50"><span>#if($!userType == 2)基价#end</span></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="goodsPartFirst">
+                                        #foreach($good in $group.goods)
+                                        <tr data-rm-gid="rm-goods-$!good.gid">
+                                            <td><input type="checkbox" class="check sel-rows" data-gid="$!good.gid" />
+                                                <input type="hidden" name="gid" value="$!good.gid">
+                                            </td>
+                                            <td class="t-number">$!velocityCount</td>
+                                            <td>#if($!good.gName.length() > 12)
+                                                <span  data-tips="true" data-tips-title="$!good.gName">$!good.gName.substring(0,11)</span>
+                                            #else
+                                                $!good.gName
+                                            #end</td>
+                                            <td ><span class="rocky-ck">#if($!userType == 2)$number.format("#0.00",$!good.gBasePrice)#end</span></td>
+                                        </tr>
+                                        #end
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td colspan="4">
+                                            <a href="javascript:;" class="fl btn btn-120 btn-addgds">+ 添加商品</a>
+                                            <a href="javascript:;" class="fl btn btn-120 btn-delbatch" style="margin-right: 0">批量删除</a>
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                                <div class="add-group fl-only">
+                                    <div class="scroll-main">
+                                        <table class="uf-table uf-table1 fl-only">
+                                            <thead>
+                                            <th><span>规格</span></th>
+                                            <th><span>厂家</span></th>
+                                            #if($!userType==2)
+                                            <th width="100"><span>前台显示顺序</span></th>
+                                            #end
+                                            </thead>
+                                            <tbody id="goodsPartScd">
+                                                #foreach($good in $group.goods)
+                                                <tr data-rm-gid="rm-goods-$!good.gid">
+                                                    <td>#if($!good.gSpecifications.length() > 10)
+                                                        <span  data-tips="true" data-tips-title="$!good.gSpecifications">$!good.gSpecifications.substring(0,9)</span>
+                                                    #else
+                                                        $!good.gSpecifications
+                                                    #end</td>
+                                                    #if($!userType==2)<td>#else<td class="t-span">#end
+                                                        #if($!good.gManufacture.length() > 12)
+                                                        <span  data-tips="true" data-tips-title="$!good.gManufacture">$!good.gManufacture.substring(0,11)</span>
+                                                        #else
+                                                            <span>$!good.gManufacture</span>
+                                                        #end
+                                                    </td>
+                                                    #if($!userType==2)
+                                                    <td>
+                                                        <input maxlength="8" value="$!good.scggSort" class="input input-80 good-sort" type="text"
+                                                               onkeyup="this.value=this.value.replace(/\D/g,'');ControlData._setSort($!good.gid,this.value);"
+                                                               onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                                                               onchange="ControlData._setSort($!good.gid,this.value);"/>
+                                                    </td>
+                                                    #end
+                                                </tr>
+                                                #end
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                #if($!userType==2)
+                                                <td class="t-group" colspan="3" style="border-left: 0 none;">
+                                                #else
+                                                <td class="t-group" colspan="2" style="border-left: 0 none;">
+                                                #end
+                                                    <a class="btn btn-auto" style="visibility: hidden;">删除</a>
+                                                </td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+
+                                        #foreach($grp in $controlGroup.groups)
+                                            #set($gidx = $!velocityCount)
+                                            <table class="uf-table uf-table2 fl-only #if($gidx == 1)fst#end" data-grp-idx="$velocityCount">
+                                                <thead>
+                                                <tr>
+                                                    <th class="t-group" #*style="padding-top: 18px;"*#>
+                                                        <span>#if($!userType==2)控销客户组#else渠道客户组#end（<span class="group-index">$velocityCount</span>）</span>
+
+                                                        <a href="javascript:;" class="btn btn-auto btn-addgp" #if($gidx != $controlGroup.groups.size()) style="display: none" #end>#if($!userType==2)+ 添加控销客户组#else+ 添加渠道客户组#end</a>
+                                                        <a href="javascript:;" class="btn btn-auto btn-delgp">删除</a>
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="goodsPartThird">
+                                                    #foreach($gd in $grp.goods)
+                                                    <tr data-rm-gid="rm-goods-$!gd.gid">
+                                                        <td class="t-group">
+                                                            <i class="t-red">*</i>
+                                                            <span class="t-text">价格</span>
+                                                            <input value="$!gd.scggPrice" class="input input-80 grp-price" type="text" maxlength="8" />
+                                                        </td>
+                                                    </tr>
+                                                    #end
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <td class="t-group">
+                                                        <a href="javascript:;" class="btn btn-120 btn-setcs" style="width: 150px;">#if($!userType==2)设置控销客户组#else设置渠道客户组#end<span class="group-index">$velocityCount</span>名单</a>
+                                                    </td>
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+                                        #end
+
+                                    </div>
+                                </div>
+                                <div class="clear-fix"></div>
+                            </div>
+                        #end
+                    #end
+
+
+                    #*商品第一段 TPL*#
+                    <script type="text/html" id="goodsPartFirstTpl">
+                        <tr data-rm-gid="rm-goods-{{d.gid}}">
+                            <td><input type="checkbox" class="check sel-rows" data-gid="{{d.gid}}" />
+                                <input type="hidden" name="gid" value="{{d.gid}}">
+                            </td>
+                            <td class="t-number"></td>
+                            <td>{{helper.substr(d.gname,12)}}</td>
+                            <td ><span class="rocky-ck">#if($!userType == 2){{parseFloat(d.gbasePrice).toFixed(2)}}#end</span></td>
+                        </tr>
+                    </script>
+                    #*商品第二段 TPL*#
+                    <script type="text/html" id="goodsPartScdTpl">
+                        <tr data-rm-gid="rm-goods-{{d.gid}}">
+                            <td>{{helper.substr(d.gspecifications,10)}}</td>
+                            #if($!userType==2)<td>#else<td class="t-span">#end{{helper.substr(d.gmanufacture,12)}}</td>
+                            #if($!userType==2)
+                            <td><input class="input input-80 good-sort" maxlength="8" type="text" onkeyup="this.value=this.value.replace(/\D/g,'');ControlData._setSort({{d.gid}},this.value);"  onafterpaste="this.value=this.value.replace(/\D/g,'')" onchange="ControlData._setSort({{d.gid}},this.value);"  /></td>
+                            #end
+                        </tr>
+                    </script>
+                    #*商品第三段TPL*#
+                    <script type="text/html" id="goodsPartThirdTpl">
+                        <tr data-rm-gid="rm-goods-{{d.gid}}">
+                            <td class="t-group">
+                                <i class="t-red">*</i>
+                                <span class="t-text">价格</span>
+                                <input class="input input-80 grp-price" type="text" maxlength="8" />
+                            </td>
+                        </tr>
+                    </script>
+
+
+                    <div class="user-btn mt20 tac">
+                        <a href="javascript:;" class="btn-confirm">确认生效</a>
+                        #if($!{controlGroup.scgStatus} != 1)
+                        <a href="javascript:;" class="btn-confirm btn-draft" data-type="tmp">保存草稿</a>
+                        #end
+                    </div>
+
+                </div>
+
+
+                <!--设置客户名单 TPL-->
+                <script type="text/html" id="setCsList">
+                    <div class="user-dialog-box user-dialog-box-950 no-border">
+                        #*<a href="javascript:;" class="btn-close"></a>
+                        <div class="udb-title">设置客户名单</div>*#
+                        #if($!userType==2)
+                        <div class="udb-zg-tips">提示：如果您想要针对一部分客户设置不可购买（禁销）的情况下，点击<a href="javascript:void(0);" onclick="top.utils.openWithTab('spjx','商品禁销','/sales/sale_banned/gy_xsgl.html?resourceId=925',{fstBread:'销价管理'})" class="link">禁销商品渠道管理</a>中设置。</div>
+                        #end
+                        <div class="order_detail">
+
+                            #if($!userType==2)
+                            <div class="toogle-wrap mt10">
+
+                                <div class="mt">
+                                    <div class="fl title">按客户分组设置</div>
+                                    <a href="javascript:void(0);" onclick="top.utils.openWithTab('khfzgl','分组管理','/sales/channel/channel_main.html?resourceId=221',{fstBread:'客户管理'})"   class="fr link">分组管理</a>
+                                </div>
+
+                                <div class="tab-box">
+
+                                    <div class="tab-con">
+                                        <div class="type-box cc" id="cSTypeList">
+                                            <dl>
+                                                <dt class="type-t">业务分组</dt>
+                                                {{# for(var i=0;i<d.customerType.length;i++){ }}
+                                                <dd data-nums="{{d.customerType[i].bizCount}}" data-ctype='{{ JSON.stringify(d.customerType[i])}}'>
+                                                    <div data-id="{{d.customerType[i].shopCustomerType.sctId}}" class="customer-item"><b></b>{{d.customerType[i].shopCustomerType.sctName}}（{{d.customerType[i].bizCount}}）</div>
+                                                </dd>
+                                                {{# } }}
+
+                                            </dl>
+                                        </div>
+                                        <div class="type-box cc" id="cSRegionList">
+                                            <dl>
+                                                <dt class="type-t">区域分组</dt>
+                                                {{# for(var i=0;i<d.region.length;i++){ }}
+                                                <dd data-nums="{{d.region[i].bizCount}}"  data-region='{{ JSON.stringify(d.region[i])}}'>
+                                                    <div data-id="{{d.region[i].supplierRegion.regionId}}" class="customer-item"><b></b>{{d.region[i].supplierRegion.regionName}}（{{d.region[i].bizCount}}）</div>
+                                                </dd>
+                                                {{# } }}
+                                            </dl>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            #end
+
+                            <div class="toogle-wrap mt10">
+
+                                <div class="mt">
+                                    <div class="fl title">单独指定部分客户</div>
+                                    <span class="fl division">|</span>
+                                    <span class="fl text">您共选择了<span class="amount" id="specialCsAmount">0</span>个客户！</span>
+                                </div>
+
+                                <div class="tab-box">
+
+                                    <div class="tab-con" id="specialCustomerScroll" style="height: 100px;">
+                                        <ul >
+                                            <div id="customerListMain">
+                                            </div>
+                                            <li><a href="javascript:void(0);" class="add_pro" data-list='{{JSON.stringify(d)}}'>+ 添加客户</a></li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        #*<div class="udb-btn">
+                            <a href="javascript:;" class="btn btn-save">保存</a>
+                            <a href="javascript:;" class="btn btn-cancel">取消</a>
+                        </div>*#
+                    </div>
+                </script>
+
+                #*已选择的企业客户 TPL*#
+                <script type="text/html" id="customerListMainTpl">
+                    <li data-smlist='{{JSON.stringify(d)}}' data-smid="{{d.eid}}">
+                        <div class="customer-item item-selected"><b class="btn-delete"></b>{{d.smName}}</div>
+                    </li>
+                </script>
+
+                <!--选择客户 TPL-->
+                <script type="text/html" id="selectCs">
+                    <div class="user-dialog-box user-dialog-box-950 no-border">
+                        #*<a href="javascript:;" class="btn-close"></a>
+                        <div class="udb-title">选择客户</div>*#
+
+                        <div class="user-query" style="padding: 0">
+                            <table class="uq-table" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    #if($!userType==2)
+                                    <td class="tar" width="80">业务分组：</td>
+                                    <td width="130">
+                                        <div class="sltitem" style="width: 140px">
+                                            <span>请选择</span>
+                                            <ul style="width: 138px;">
+                                                {{# for(var i=0;i<d.customerType.length;i++){ }}
+                                                <li data-value="{{d.customerType[i].shopCustomerType.sctId}}"><a href="javascript:;">{{d.customerType[i].shopCustomerType.sctName}}</a></li>
+                                                {{# } }}
+                                            </ul>
+                                            <input type="hidden" name="selectType">
+                                        </div>
+                                    </td>
+                                    <td class="tar" width="80">区域分组：</td>
+                                    <td width="130">
+                                        <div class="sltitem" style="width: 140px">
+                                            <span>请选择</span>
+                                            <ul style="width: 138px;">
+                                                {{# for(var i=0;i<d.region.length;i++){ }}
+                                                <li data-value="{{d.region[i].supplierRegion.regionId}}"><a href="javascript:;">{{d.region[i].supplierRegion.regionName}}</a></li>
+                                                {{# } }}
+                                            </ul>
+                                            <input type="hidden" name="selectRegion">
+                                        </div>
+                                    </td>
+                                    #else
+                                    <td class="tar" width="80">企业编码：</td>
+                                    <td width="130">
+                                        <input class="input" type="text" style="width: 130px" />
+                                    </td>
+                                    <td class="tar" width="80">企业内码：</td>
+                                    <td width="130">
+                                        <input class="input" type="text" style="width: 130px" />
+                                    </td>
+                                    #end
+                                    <td class="tar" width="80">企业名称：</td>
+                                    <td width="210">
+                                        <input class="input" type="text" name="smName" style="width: 130px" />
+                                    </td>
+                                    <td width="auto" class="tac">
+                                        <a href="javascript:;" class="f-none btn-query">查询</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="user-form mt10" style="height: 320px">
+                            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th><input type="checkbox" class="check sel-all"/></th>
+                                    <th>企业ID</th>
+                                    <th>企业编码</th>
+                                    #if($!userType==2)#else<th>企业内码</th>#end
+                                    <th>企业名称</th>
+                                    <th>企业地址</th>
+                                </tr>
+                                </thead>
+                                <tbody id="customerList">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="rocky-page" id="customerListPage"></div>
+
+                        #*<div class="udb-btn">
+                            <a href="javascript:;" class="btn btn-save">保存</a>
+                            <a href="javascript:;" class="btn btn-cancel">取消</a>
+                        </div>*#
+                    </div>
+                </script>
+
+                #*企业客户列表 TPL*#
+                <script type="text/html" id="customerListTpl">
+                    {{# for(var i=0;i<d.length;i++){ }}
+                    <tr {{# if(disableScCheckbox(d[i].eid)){ }} bgcolor="#f1f1f1" data-tips-title="该企业已设置控销，不可重复设置，如需设置请将已设置的删除。" {{# } }}>
+                        <td><input {{# if(disableScCheckbox(d[i].eid)){ }} disabled="disabled" {{# } }} type="checkbox" class="check sel-rows" data-smlist='{{JSON.stringify(d[i])}}' /></td>
+                        <td>{{notNull(d[i].eid)}}</td>
+                        <td>{{notNull(d[i].smCode)}}</td>
+                        #if($!userType==2)#else<td></td>#end
+                        <td>{{notNull(d[i].smName)}}</td>
+                        <td>{{notNull(d[i].smAddress)}}</td>
+                    </tr>
+                    {{# } }}
+                    {{# if(d.error == 1){ }}
+                    <tr>
+                        <td colspan="5">暂无数据</td>
+                    </tr>
+                    {{# } }}
+                </script>
+
+                <!--添加商品 TPL-->
+                <script type="text/html" id="addGoods">
+                    <div class="user-dialog-box user-dialog-box-950 no-border">
+                        #if($!userType == 2)
+                        <div class="udb-zg-tips cc">
+                            <span class="tit">提示：</span>
+                            <span class="ctn">已设置控销和促销的商品不可重复设置；为了用户采购方便，每个专供控销区最多可添加50个商品，如果需要设置多商品，建议设置多组专供控销区。</span>
+                        </div>
+                        #end
+
+                        <div class="user-query" style="padding: 0">
+                            <table class="uq-table" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    #if($!userType == 2)
+                                        <td class="tar" width="80">商品名称：</td>
+                                        <td width="120">
+                                            <input name="gName" class="input input-110" type="text"/>
+                                        </td>
+                                        <td class="tar" width="80">商品内码：</td>
+                                        <td width="120">
+                                            <input name="gInSn" class="input input-110" type="text"/>
+                                        </td>
+
+                                        <td class="tar" width="80">生产厂家：</td>
+                                        <td width="120">
+                                            <input name="gManufacture" class="input input-110" type="text"/>
+                                        </td>
+
+                                        <td class="tar" width="80">商品编码：</td>
+                                        <td width="120">
+                                            <input name="gSn" class="input input-110" type="text"/>
+                                        </td>
+                                    #else
+                                        <td class="tar" width="80">商品名称：</td>
+                                        <td width="210">
+                                            <input name="gName" class="input" type="text" style="width: 210px"/>
+                                        </td>
+                                        <td class="tar" width="80">商品内码：</td>
+                                        <td width="130">
+                                            <input name="gInSn" class="input" type="text" style="width: 130px"/>
+                                        </td>
+                                        <td class="tar" width="80">商品编码：</td>
+                                        <td width="130">
+                                            <input name="gSn" class="input" type="text" style="width: 130px"/>
+                                        </td>
+                                    #end
+                                    <td width="auto">
+                                        <a href="javascript:;"  class="f-none btn-query">查询</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="user-form mt10" style="height: 320px;">
+                            <table class="uf-table" border="0" cellpadding="0" cellspacing="0" >
+                                <thead>
+                                <tr>
+                                    <th><input type="checkbox" class="check sel-all"/></th>
+                                    <th>商品编码</th>
+                                    <th>商品名称</th>
+                                    <th>批准文号</th>
+                                    <th>生产厂家</th>
+                                    <th>规格</th>
+                                    <th>零售价</th>
+									#if($!userType == 2)
+                                    <th>基价</th>
+									#end
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody id="goodsList">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="rocky-page" id="goodsListPage">
+                        </div>
+
+                    </div>
+                </script>
+
+                #*商品列表模板*#
+                <script type="text/html" id="goodsListTpl">
+                    {{# for(var i=0;i<d.length;i++){ }}
+                    <tr {{# if(disableCheckbox(d[i].goods.gid)){ }} bgcolor="#f1f1f1" data-tips-title="该商品已设置控销，不可重复设置，如需设置请将已设置的删除。" {{# } }}>
+                        <td><input {{# if(disableCheckbox(d[i].goods.gid)){ }} disabled="disabled" {{# } }} type="checkbox" class="check sel-rows" data-good='{{JSON.stringify(d[i])}}' /></td>
+                        <td>{{d[i].goods.gsn}}</td>
+                        <td>{{d[i].goods.gname}}</td>
+                        <td>{{d[i].goods.glicenseNo}}</td>
+                        <td>{{d[i].goods.gmanufacture}}</td>
+                        <td>{{d[i].goods.gspecifications}}</td>
+                        <td>{{d[i].goods.gprice}}</td>
+						#if($!userType == 2)
+                        <td>{{d[i].goods.gbasePrice}}</td>
+						#end
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {{# } }}
+                    {{# if(d.error == 1){ }}
+                    <tr>
+                        <td colspan="10">暂无数据</td>
+                    </tr>
+                    {{# } }}
+                </script>
+
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+    #parse("/common/footer.vm")
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+<script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+<script src="/js/publish.js?v=$!{jscss_version}"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"
+        type="text/javascript"></script>
+<script src="/js/enterpriseHelp.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/base.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.nicescroll.min.js?v=$!{jscss_version}"></script>
+<script src="/js/saleControlLiveEvt.js?v=$!{jscss_version}&t=5"></script>
+<script>
+
+    /*设置框架返回按钮*/
+    if(top.utils.getUrlParam('backbtn',window) != 0){
+        top.utils.frameBack({
+            handler:function (btn) {
+                location.href = document.referrer;
+            }
+        })
+    }
+
+
+    var groupScroller = null,
+            specialCustomerScroller = null,
+            laytpl,laypage,localLay,
+            ControlData = {},//全局数据
+            GoodsList = [];//全局商品
+    $(function () {
+        initControlData();
+
+        #if(!$null.isNull($controlGroupJSON))
+        var ServerData = $!controlGroupJSON;
+        if(ServerData){
+            ControlData.scgName = ServerData.scgName;
+            ControlData.scgDesc = ServerData.scgDesc;
+            ControlData.scgSort = ServerData.scgSort;
+            var serverGroup = [];
+            $.each(ServerData.groups,function(i,group){
+                var sGroup = {};
+                if(group.goods){
+                    var sGoods = [];
+                    $.each(group.goods,function (j,good) {
+                        var _good = {
+                            goods:good,
+                            gid:good.gid
+                        }
+                        sGoods.push(_good)
+                    })
+                    sGroup.goods = sGoods;
+                    GoodsList = $.extend(true,[],sGoods);
+                    $.each(GoodsList,function (mgdIdx,mgd) {
+                        delete GoodsList[mgdIdx].goods.scggPrice;
+                    })
+                }
+                if(group.customer){
+                    sGroup.customer = {};
+                    if(group.customer.shopCustomerType){
+                        var sShopCustomerType = [];
+                        $.each(group.customer.shopCustomerType,function (a,t) {
+                            var _shopCustomerType = {
+                                shopCustomerType:{
+                                    sctId:t
+                                }
+                            }
+                            sShopCustomerType.push(_shopCustomerType);
+                        })
+                        sGroup.customer.shopCustomerType = sShopCustomerType
+                    }
+                    if(group.customer.supplierRegion){
+                        var sSupplierRegion = [];
+                        $.each(group.customer.supplierRegion,function (b,s) {
+                            var _supplierRegion = {
+                                supplierRegion:{
+                                    regionId:s
+                                }
+                            }
+                            sSupplierRegion.push(_supplierRegion);
+                        })
+                        sGroup.customer.supplierRegion = sSupplierRegion
+                    }
+                    if(group.members){
+                        var sSpecialCustomer = [];
+                        $.each(group.members,function (c,m) {
+                            if(m.eId) m.eid = m.eId;
+                            sSpecialCustomer.push(m);
+                        })
+                        sGroup.customer.specialCustomer = sSpecialCustomer;
+                    }
+                }
+                serverGroup.push(sGroup);
+            })
+            ControlData.groups = serverGroup;
+            ControlData.scgId = ServerData.scgId;
+        }
+        #end
+
+        $(".main-tb").width($(".add-group-box").width() - $($(".add-group").get(0)).width());
+        setTimeout(function () {
+            $(".main-tb").width($(".add-group-box").width() - $($(".add-group").get(0)).width());
+        },300)
+        resetScroll();
+        $(".add-group-box").css("opacity",1);
+        groupScroller = $(".add-group").niceScroll({
+            cursorcolor: '#0f93ce',
+            autohidemode: false
+        })
+
+        layui.use(["layer", "laytpl","laypage"], function () {
+            laytpl = layui.laytpl,laypage = layui.laypage , localLay = layui.layer;
+        })
+
+        liveBind();
+
+
+        $(".btn-confirm").on("click",function () {
+            var _type = $(this).attr("data-type");
+            var formData = {
+                scgDesc:ControlData.scgDesc,
+                scgName:ControlData.scgName,
+                scgSort:ControlData.scgSort,
+                groups:[]
+            };
+            layer.closeAll("tips");
+//            if(!formData.scgName){
+//                layer.tips("控销专区名称为必填项",$("input[name=scgName]"),{
+//                    tips:[3,'#e35c5c'],
+//                    time:5000
+//                });
+//                $("input[name=scgName]").focus();
+//                return;
+//            }
+            var _grps = ControlData.groups;
+            $.each(_grps,function (groupIdx,group) {
+                var _goods = group.goods;
+                var _customer = group.customer;
+                var formGroup = {
+                    customer:{
+                        shopCustomerType:[],
+                        supplierRegion:[],
+                        specialCustomer:[]
+                    },
+                    goods:[]
+                }
+                $.each(_goods,function (goodIdx,good) {
+                    var _good = {
+                        gid:good.goods.gid,
+                        scggSort:good.goods.scggSort?good.goods.scggSort:"",
+                        scggPrice:good.goods.scggPrice?good.goods.scggPrice:""
+                    };
+                    formGroup.goods.push(_good);
+                })
+                if(_customer){
+                    if(_customer.shopCustomerType && _customer.shopCustomerType.length>0){
+                        $.each(_customer.shopCustomerType,function (sctIdx,sct) {
+                            formGroup.customer.shopCustomerType.push(sct.shopCustomerType.sctId);
+                        })
+                    }
+                    if(_customer.supplierRegion && _customer.supplierRegion.length>0){
+                        $.each(_customer.supplierRegion,function (srIdx,sr) {
+                            formGroup.customer.supplierRegion.push(sr.supplierRegion.regionId);
+                        })
+                    }
+                    if(_customer.specialCustomer && _customer.specialCustomer.length>0){
+                        $.each(_customer.specialCustomer,function (spcIdx,spc) {
+                            formGroup.customer.specialCustomer.push(spc.eid);
+                        })
+                    }
+                }
+                formData.groups.push(formGroup);
+                
+            })
+            
+            if(!formData.groups[0].goods || formData.groups[0].goods.length == 0){
+                layer.msg("请添加商品");
+                return false;
+            }
+            var priceOk = true;
+            if(_type != "tmp"){
+                $(".grp-price").each(function () {
+                    if(!$(this).val()){
+                        priceOk = false;
+                        var _groupIdx = $(this).closest(".uf-table2").attr("data-grp-idx");
+                        var _rowIdx = $(this).parents("tr").index()+1;
+                        layer.msg("第"+_rowIdx+"个商品的客户组（"+_groupIdx+"）价格未设置");
+                        return false;
+                    }
+                })
+            }
+
+            formData.groups=JSON.stringify(formData.groups);
+            formData.scgStatus = _type?"0":1;
+            formData.scgType = 1;
+            formData.scgId = ControlData.scgId;
+            //if(!formData.scgName) formData.scgName = "控销名称未填写";
+            if(priceOk){
+                layer.load(0,{shade:.1,time:600000});
+                $.ajax({
+                    url:'/sales/control/control_group_save.html',
+                    data:formData,
+                    type:'POST',
+                    complete:function () {
+                        layer.closeAll("loading");
+                    },
+                    success:function (res) {
+                        if(res.data == 1){
+                            top.utils.frameBackDel();
+                            location.href='/sales/control/sale_group_main.html?keys=$!keys&pi=$!pi';
+                        }else{
+                            layer.msg("添加失败，请联系管理员");
+                        }
+                    },error:function () {
+                        layer.msg("添加失败，请联系管理员");
+                    }
+                })
+            }
+
+        })
+    })
+
+</script>
+
+</body>
+</html>

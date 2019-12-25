@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>买家商家成长值体系 - 金币明细</title>
+    
+	<!-- mypharma_公共资源 -->
+	<meta name="keywords" content=""/>
+	<meta name="description" content=""/>
+	<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+       
+	<!-- mypharma_样式 -->
+	<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" /> 
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="scripts/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm") #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            
+              <div class="path">
+                  <p><a href="/purchase/index.html" class="color">采购中心</a> &gt; 药金币 &gt; 药金币明细</p>
+              </div>
+                
+              <div class="integral_top cc">
+                	<p class="text fl line">药金币：<b class="red">$!pointSum</b>个</p>
+                    <p class="text_r fl">即将过期的药金币：<b class="red">0</b>个<span class="date">（2016.12.31）</span><img class="img" src="../../image/icon_27.png" title="有效期：每年年底12月31日，统一清除上一年的全部药金币。" onclick="toJfxm();"></p>
+				  <div class="order_query fr">
+                      <p class="btn"><a href="http://$!{wwwHostAndPort}/integralShop/index.html" target="_black" class="btn_query">前去兑换</a></p>
+				  </div>
+              </div>
+
+                <div class="order_query order">
+							<form action="/purchase/point/jfmx.html" method="post" id="searchForm">
+								<input type="hidden" name="pi" value="$!pi" />
+								<ul>
+                                    <li class="fl">
+                                        <label>订单号：</label>
+                                        <input name="pointRefCode" type="text" value="$!pointRefCode" class="w-txt w130" />
+                                    </li>
+                                    <li class="fl">
+                                        <label>获得药金币时间：</label>
+                                        <input type="text" id="startTime" class="w-txt w130" name="startTime" value="$!startTime" onblur="javascript:$.sltitem.select('quick','9');" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'endTime\')}'})" />
+                                        <div class="fl mr10">-</div>
+                                        <input type="text" id="endTime" class="w-txt w130" name="endTime" value="$!endTime" onblur="javascript:$.sltitem.select('quick','9');" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'startTime\')}'})" />
+                                    </li>
+									<li class="fl">
+										<div class="btn">
+											<a href="javascript:searchPager('/purchase/point/jfmx.html',false);" class="btn_query">查询</a>
+										</div>
+									</li>
+								</ul>
+								
+							</form>
+				</div>
+                
+                <div class="integral_table">
+                	<table border="0" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr class="line">
+                                <th>药金币<img class="img" src="../../image/icon_27.png" title="点击查看药金币规则" onclick="toJfxm();"/></th>
+                                <th>类型</th>
+                                <th>详情</th>
+                                <th>时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        	#if(!$null.isNull($list) && $list.size()!=0) 
+							#foreach($bizEnterprisePoint in $list)
+                            <tr>
+                                	#if($!bizEnterprisePoint.pointCountType == 1)
+                                	<td class="red">
+                                	+$!bizEnterprisePoint.pointValue个
+                                	</td>
+                                	#else
+                                	<td class="green">
+                                	$!bizEnterprisePoint.pointValue个
+                                	</td>
+                                	#end
+                                <td>
+                                	#if($!bizEnterprisePoint.pointType == 1)
+                                		登录
+                                	#elseif($!bizEnterprisePoint.pointType == 2)
+                                		企业认证
+                                	#elseif($!bizEnterprisePoint.pointType == 3)
+                                		下单
+                                	#elseif($!bizEnterprisePoint.pointType == 4)
+                                		会员升级
+                                	#elseif($!bizEnterprisePoint.pointType == 5)
+                                		签到
+                                	#elseif($!bizEnterprisePoint.pointType == 6)
+                                		中奖
+                                	#elseif($!bizEnterprisePoint.pointType == 7)
+                                		抽奖
+                                	#elseif($!bizEnterprisePoint.pointType == 8)
+                                        兑换
+									#elseif($!bizEnterprisePoint.pointType == 9)
+                                        账户安全
+                                	#elseif($!bizEnterprisePoint.pointType == -1)
+                                		兑话费
+                                	#end
+                                </td>
+                                <td>$!bizEnterprisePoint.pointSource</td>
+                                <td>$utils.formatDate($!bizEnterprisePoint.pointAddTime,"yyyy-MM-dd")</td>
+                            </tr>
+                            #end
+							#else
+							<tr>
+								<td colspan="10">
+									暂无药金币获取记录
+								</td>
+								</tr>
+							#end
+                        </tbody>
+                    </table>
+                    <!--分页开始 -->
+					#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+					#pagerInfo($!pagerInfo,$!{pagerTotal},"/purchase/point/jfmx.html")
+					#end #end
+					<!--分页结束 -->
+                </div>
+                
+          </div>
+          
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	#parse("common/common_script.vm")
+    
+    <script>
+// 		$(function(){
+// 			$('.order_list .tabnav li').click(function(){
+// 				var index=$(this).index();
+// 				$(this).addClass('on').siblings().removeClass('on');
+// 				$('.tab>div').hide().eq(index).show();
+// 			}); 
+// 		})
+	function toJfxm(){
+		window.open("http://cms.mypharma.com/node/134");
+	}
+    </script>
+    
+  </body>
+</html>

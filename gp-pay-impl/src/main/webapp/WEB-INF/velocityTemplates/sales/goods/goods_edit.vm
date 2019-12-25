@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>商品信息修改  - 我的医药网</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      	#parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+         #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                	<p><a href="/sales/index.html" class="color">销售中心 </a>&gt; 商品管理 &gt; 商品信息修改</p>
+                </div>
+                <h3 class="info_title">商品信息</h3>
+                <div class="info_sheet cc">
+                	<form action="" method="post" id="">
+                        <ul>
+                            <li>
+                                <label>通用名（化学名）<font color="red">*</font>：</label>
+                                <input class="input" name="gName" type="text" value="$!{goods.gName}" id="gName" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>商品助记码<font color="red">*</font>：</label>
+                                <input class="input" name="gNameCode" type="text" value="$!{goods.gNameCode}" id="gNameCode" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>别名：</label>
+                                <input class="input" name="gAlias" type="text" value="$!{goods.gAlias}" id="gAlias" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>批准文号<font color="red">*</font>：</label>
+                                <input class="input" name="gLicenseNo" type="text" value="$!{goods.gLicenseNo}" id="gLicenseNo" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>生产厂家<font color="red">*</font>：</label>
+                                <input class="input" name="gManufacture" type="text" value="$!{goods.gManufacture}" id="gManufacture" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>生产厂家助记码<font color="red">*</font>：</label>
+                                <input class="input" name="gManufactureCode" type="text" value="$!{goods.gManufactureCode}" id="gManufactureCode" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>商品规格<font color="red">*</font>：</label>
+                                <input class="input" name="gSpecifications" type="text" value="$!{goods.gSpecifications}" id="gSpecifications" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>基本单位<font color="red">*</font>：</label>
+                                <input class="input" name="gUnit" type="text" value="$!{goods.gUnit}" id="gUnit" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>是否拆零销售<font color="red">*</font>：</label>
+                                <input class="input" name="gCanSplit" type="text" #if($goods.gCanSplit==1) value="是" #else value="否" #end id="gCanSplit" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>中包装数量<font color="red">*</font>：</label>
+                                <input class="input" name="gMiddlePackage" type="text" value="$!{goods.gMiddlePackage}" id="gMiddlePackage" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>大包装数量<font color="red">*</font>：</label>
+                                <input class="input" name="gBigPackage" type="text" value="$!{goods.gBigPackage}" id="gBigPackage" disabled="disabled">
+                            </li>
+                            
+                            <li>
+                                <label>商品状态<font color="red">*</font>：</label>
+                                <input class="input" name="gStatus" type="text" #if($goods.gStatus==1) value="上架" #else value="下架" #end id="gStatus" disabled="disabled">
+                           </li>
+                           <li>
+                                <label>商品销售控制：</label>
+                                <input class="input" name="gControl" type="text" #if($goods.gControl==0) value="普通药品" #else #if($goods.gControl==1) value="医院专供" #end #end id="gControl" disabled="disabled">                       
+                            </li>
+                            <li>
+                                <label>商品条形码：</label>
+                                <input class="input" name="gBarCode" type="text" value="$!{goods.gBarCode}" id="gBarCode" disabled="disabled">                               
+                            </li>
+                            #if($isErp==1)
+                            <li>
+                                <label>商品内码(供应商)：</label>
+                                <input class="input" name="gBarCode" type="text" value="$!{goods.gInSn}" id="gBarCode" disabled="disabled">                               
+                            </li>
+                            #end
+                        </ul>
+               		</form>
+                </div>
+                <h3 class="info_title">商品分类信息 &nbsp;&nbsp;#if($goods.gType==1)<span id="text_span" style="color:red">挂单品种库存为0，用户也可下单并提交采购需求量，属于预售。注：正常其他商品库存为0用户不可下单</span>#end</h3>
+                <div class="info_sheet cc">
+                	<form action="" method="post" id="">
+                	    <input type="hidden" id="gId" name="gId"  value="$!{goods.gId}"/>
+                        <ul>
+                           #if($!{user.userType}==2 && ${supplier.suIsErp}==0 && ${supplier.suIsShop}==1)
+                            <li class="li_sort">
+                                <label>商品分类：<span class="red">*</span></label>
+                                <div class="sltitem sltitem_top">
+                                    <span class=""></span>
+                                    <ul>
+                                        <li data-value=""><a href="javascript:;"></a></li>
+                                    </ul>
+                                    <input type="hidden" name="gcId1" id="gcId1" value="0">
+                                </div>
+                                <div class="sltitem sltitem_top">
+                                    <span class=""></span>
+                                    <ul>
+                                        <li data-value=""><a href="javascript:;"></a></li>
+                                    </ul>
+                                   <input type="hidden" name="gcId2" id="gcId2" value="0">
+                                </div>
+                            </li>
+                           #end                        
+                            <li>
+                                <label>商品类型：</label>
+                                <input class="radio" type="radio" name="gType" id="gType2" #if($goods.gType==2) checked="checked" #end value="2" onclick="typeCheck('2')"/>
+                            	<label class="text" for="gType2">新品上架 </label>
+                            	<input class="radio" type="radio" name="gType" id="gType1" value="1" #if($goods.gType==1) checked="checked" #end  onclick="typeCheck('1')"/>
+                            	<label class="text" for="gType1">挂单品种</label>
+                            	<input class="radio" type="radio" name="gType" id="gType0" value="0" #if($goods.gType==0) checked="checked" #end  />
+                            	<label class="text" for="gType0">普通</label>
+                            </li>
+                            <li>
+                                <label>药品剂型分类：</label>
+                                 #if(!$null.isNull($!{goodsDosageFormsList}) && ($!goodsDosageFormsList.size()>0))
+                                        #foreach($item in $goodsDosageFormsList)
+                                          #if($!{item.gdfId} == $!{goods.gdf_id})
+                                          <input class="input" name="" type="text" value="$!{item.gdfName}" id="gdf_id" disabled="disabled">
+                                          #end
+                                        #end                              
+                                 #end
+                            </li>
+                        </ul>
+               		</form>
+                </div>
+                <h3 class="info_title">价格和库存</h3>
+                <div class="info_sheet cc">
+                	<form action="" method="post" id="">
+                        <ul>
+                            <li>
+                                <label>成本价：</label>
+                                <input class="input" name="gCost" type="text" value="$!{goods.gCost}" id="gCost" disabled="disabled">                    
+                            </li>
+                            <li>
+                                <label>零售价<font color="red">*</font>：</label>
+                                <input class="input" name="gPrice" type="text" value="$!{goods.gPrice}" id="gPrice" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>商品基价<font color="red">*</font>：</label>
+                                <input class="input" name="gBasePrice" type="text" value="$!{goods.gBasePrice}" id="gBasePrice" disabled="disabled">
+                            </li>
+                            <li>
+                                <label>商品库存<font color="red">*</font>：</label>
+                                <input class="input" name="gNumber" type="text" value="$!{goods.gNumber}" id="gNumber" disabled="disabled">
+                            </li>            
+##                            #if(!$null.isNull($!{shopCustomerTypeList}) && ($!shopCustomerTypeList.size()>0))
+##                            #foreach($item in $shopCustomerTypeList)
+##                            <li>
+##                                <label>$!{item.sctName}的采购库存数量：</label>
+##                                <input class="input_price" id="gcn_$!{velocityCount}" name="$!{item.sctNumberField}" type="text" value="$!{goodsCustomNumber.get($item.sctNumberField)}" disabled="disabled">
+##                            </li>
+##                            #end
+##                            #end
+                        </ul>
+               		</form>
+                </div>
+                <h3 class="info_title">关键权限</h3>
+                <div class="info_sheet cc">
+                	<form action="" method="post" id="">
+                        <ul>
+                           <li>
+                                <label>内外销<font color="red">*</font>：</label>   
+                                <input class="input" name="gArea" type="text" #if($goods.gArea==0) value="不限" #end #if($goods.gArea==1) value="内销" #end #if($goods.gArea==2) value="外销" #end id="gArea" disabled="disabled">
+                            </li>
+                            <li>
+                            	
+                            </li>
+                            <li>
+                                <label>分单类别 仓储地点<font color="red">*</font>：</label>
+                                #if(!$null.isNull($!{shopOrderCateList}) && ($!shopOrderCateList.size()>0))
+		                        #foreach($item in $shopOrderCateList)
+		                           #if($!{item.socId} == $!{goods.gOrderCate})
+		                           <input class="input" name="gOrderCate" type="text" value="$!{item.socName}" id="gOrderCate" disabled="disabled"> 
+		                           #end                        	                                           
+		                        #end
+		                        #else
+		            	         <label>没有登记可选的仓储地点！</label>
+		                        #end                      
+                            </li>
+                            <li>
+                                <label>采购权限<font color="red">*</font>：</label>      
+                                 <input class="input" name="gPurview" type="text" value="$!{shopPurvieName}" id="gPurview" disabled="disabled">    
+                            </li>
+                        </ul>                       
+               		</form>
+                </div>
+                #if(!$null.isNull($!{goodsPicList}) && ($!goodsPicList.size()>0))
+                <h3 class="info_title">此标准已关联图片</h3>
+                    <div id="mph_goods_pic" border="false">
+                       <table class="table-border" width="100%">
+    	                  <tr>
+        	                #foreach( $item in $goodsPicList)
+        	                    <td class="td" width="20%">
+        		                    <div style="text-align: center;vertical-align: middle;">
+           			                   <img id="showPic" width="100px" height="100px" src="$!{picUrl}$!{item.g_pic}$!{picSize}"/>
+           			                   <br/>
+           			                   #if($item.gpicDefault==1)默认图片#end
+       			                    </div>
+        	                    </td>
+        	                 #end
+    	                  </tr>
+                        </table>
+                    </div>
+                #end    
+                <div class="info_btn">
+                	<a href="javascript:editSave();" class="btn">保存</a>
+                	<a href="/sales/goods/goods_index.html;" class="btn">取消</a>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+     <script>
+     $(function(){
+    	 $.sltitem.select("gdfId", "$!{goods.gdfId}");
+ 		//装载一级商品类别，二级商品类别
+ 		loadLocation('','','','/goods/getGoodsCateByPid');
+ 		$("#gcId1").change(function(){
+ 			var provinceId = $(this).val();
+ 			var townId = findLocation($("#gcId2"),"",provinceId,'/goods/getGoodsCateByPid');
+ 			loadSltitem();
+ 		});
+ 		$("#sgcId1").change(function(){
+ 			var provinceId = $(this).val();
+ 			var townId = findShopGoodsGate($("#sgcId2"),"",provinceId,'/sales/store/shop_goodscate_getShopGoodsCateByPid');
+ 			loadSltitem();
+ 		});
+ 	});
+  	
+  	//商品类别加载
+ 	function loadLocation(provinceId,townId,areaId,url){
+ 		if(provinceId){
+ 			findLocation($("#gcId1"),provinceId,0,url);
+ 			findLocation($("#gcId2"),townId,provinceId,url);
+ 		}else{
+ 			var _provinceId = findLocation($("#gcId1"),"",0,url);
+ 			var _townId = findLocation($("#gcId2"),"",_provinceId,url);	
+ 		}
+ 		loadSltitem();
+ 	}
+ 	
+ 	//object:加载对象    value:默认值  lpId:上级id , url 请求地址
+ 	function findLocation(object,value,lpId,url){
+ 		var id = 0;
+ 		$.ajax({
+             url: url,
+             data: {"pId": lpId},
+             type:"post",
+             async:false,
+             success: function(data) {
+ 				var location = data.data;
+ 				if(location!=''){  
+                     var jObject = $(object).siblings("ul");  
+                     jObject.prev().text("");
+                     jObject.empty();//清除select中的 option  
+                     $.each(location,function(index,item){  
+                     	if(index ==0 ){
+                     		id = item.gcId;
+                     		if(!value){
+                     			jObject.prev().text(item.gcName).removeClass("on");
+                        			jObject.next().val(item.gcId).change();
+                     		}
+                     	}
+                     	if(value == item.gcId){
+                     		jObject.prev().text(item.gcName).removeClass("on");
+                     		jObject.next().val(item.gcId);
+                     	}
+                         var opt ='<li data-value="'+item.gcId+'"><a href="javascript:;">'+item.gcName+'</a></li>'; 
+                         jObject.append(opt);  
+                     });  
+                 }else{  
+                 	location = '';  
+                 }
+             }
+         });
+ 		return id;
+ 	}
+ 	
+ 	//下拉框点击事件
+ 	function loadSltitem(){
+ 		$(".sltitem").unbind("click");
+ 	    //自定义下拉框
+ 		$(".sltitem").click(function(e){
+ 			e.stopPropagation();
+ 			var len = $(this).find('li').length;
+ 			$(this).find("span").addClass("on");
+ 			if(len > 6){
+ 				$(this).find("ul").css('height','120px').show();
+ 			}else{
+ 				$(this).find("ul").show();
+ 			}		
+ 		});
+ 	    
+ 		$(".sltitem li").unbind("click");
+ 		$(".sltitem li").click(function(e){
+ 			e.stopPropagation();
+ 			var text = $(this).text();
+ 			var value = $(this).data("value");
+ 			$(this).closest("ul").prev().text(text).removeClass("on");
+ 			$(this).closest("ul").next().val(value).change();
+ 			$(this).closest("ul").hide();
+ 		});
+ 	}
+        function editSave() {
+        var goodsObj = {};
+            goodsObj.gId = $("#gId").val();
+            var gType = $("input[name='gType']:checked").val();
+            if(gType == undefined){
+            	gType = 0;
+            }
+            goodsObj.gType = gType;    
+			var jsonParam = $.toJSON(goodsObj);   
+          $.ajax({
+	           url: '/sales/goods/goods_edit.html',
+	           data: {"jsonParam":jsonParam},
+	           type: 'POST',
+	           dataType: 'json',
+	           success: function(result) {
+	               if (result.data == true) {
+	                  top.ue.alert({
+		                title: '提示信息',
+		                content: "修改商品成功",
+		                end: function() {
+		                    window.location.href = "/sales/goods/goods_index.html";
+		                }
+		            })
+	               } else {
+	                   top.ue.msg("修改商品失败");
+	             }
+	           }
+	       });
+        } 
+        
+        function typeCheck(o){
+        	
+        	if(o=="1"){
+        		$("#text_span").css("display","block");
+        		$("#gType2").attr("checked",false);
+        	}else if(o=="2"){
+        		$("#text_span").css("display","none");
+        		$("#gType1").attr("checked",false);
+        	}
+        }
+      </script>
+    
+  </body>
+</html>

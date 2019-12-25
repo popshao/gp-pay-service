@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.read.GroundPromotionBankInfoReadDao">
+	<resultMap id="groundPromotionBankInfoResult" type="com.mph.coreapi.gp.pay.entity.GroundPromotionBankInfo">
+		<result property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="identityCardNo" column="identity_card_no" />
+		<result property="bankCardNo" column="bank_card_no" />
+		<result property="bankName" column="bank_name" />
+		<result property="bankCode" column="bank_code" />
+		<result property="branchName" column="branch_name" />
+		<result property="provinceCode" column="province_code" />
+		<result property="cityCode" column="city_code" />
+        <result property="deleted" column="deleted" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+	</resultMap>
+
+	<sql id="baseColumns">
+            id,
+            user_id,
+            identity_card_no,
+            bank_card_no,
+            bank_name,
+            bank_code,
+            branch_name,
+            province_code,
+            city_code,
+            deleted,
+            create_time,
+            update_time
+	</sql>
+
+	<select id="listgroundPromotionBankInfo" resultMap="groundPromotionBankInfoResult">
+		select <include refid="baseColumns"></include>
+		from ground_promotion_bank_info
+		where user_id = #{userId} and deleted=0
+	</select>
+
+	<select id="listgroundPromotionBankInfoAll" resultMap="groundPromotionBankInfoResult">
+		select <include refid="baseColumns"></include>
+		from ground_promotion_bank_info where deleted=0
+	</select>
+</mapper>

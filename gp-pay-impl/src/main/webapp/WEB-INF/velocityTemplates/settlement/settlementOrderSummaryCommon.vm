@@ -1,0 +1,118 @@
+<div class="rocky-jsxxhz">
+<div class="rc-com">
+    <h3>
+       
+		#if($stype==4)
+        <span >总计结算金额 (元)：<span class="rc-price"><b>$!utils.priceFormart($!settlementStatis.amount)</b></span></span>
+        #end
+		#if($stype==1)
+			#if($payType==1)
+			<span >订单中金结算金额 (元)：<span class="rc-price"><b>$!utils.priceFormart($!settlementStatis.zjUnit.amount)</b></span></span>
+                <span class="last-cell">结算单号：<span>${settlementStatis.zjUnit.itemSn}</span></span>
+                <span class="last-cell">结算单状态：<span>${settlementStatis.zjUnit.status}</span></span>
+			#end
+			#if($payType==3)
+			<span >订单支付宝结算金额 (元)：<span class="rc-price"><b>$!utils.priceFormart($!settlementStatis.zfbUnit.amount)</b></span></span>
+                <span class="last-cell">结算单号：<span>${settlementStatis.zfbUnit.itemSn}</span></span>
+                <span class="last-cell">结算单状态：<span>${settlementStatis.zfbUnit.status}</span></span>
+			#end
+			#if($payType==4)
+			<span>订单易宝结算金额 (元)：<span class="rc-price"><b>$!utils.priceFormart($!settlementStatis.ybUnit.amount)</b></span></span>
+                <span class="last-cell">结算单号：<span>${settlementStatis.ybUnit.itemSn}</span></span>
+                <span class="last-cell">结算单状态：<span>${settlementStatis.ybUnit.status}</span></span>
+			#end
+			#if($payType==5)
+			<span >订单微信结算金额 (元)：<span class="rc-price"><b>$!utils.priceFormart($!settlementStatis.wxUnit.amount)</b></span></span>
+                <span class="last-cell">结算单号：<span>${settlementStatis.wxUnit.itemSn}</span></span>
+                <span class="last-cell">结算单状态：<span>${settlementStatis.wxUnit.status}</span></span>
+			#end
+			#if($payType==8)
+			<span >订单余额结算金额 (元)：<span class="rc-price"><b>$!utils.priceFormart($!settlementStatis.wlUnit.amount)</b></span></span>
+                <span class="last-cell">结算单号：<span>${settlementStatis.wlUnit.itemSn}</span></span>
+                <span class="last-cell">结算单状态：<span>${settlementStatis.wlUnit.status}</span></span>
+			#end
+		#end
+		#if($stype==2)
+			<span >优惠券结算金额 (元)：<span class="rc-price"><b>$!utils.priceFormart($!settlementStatis.couponUnit.amount)</b></span></span>
+            <span class="last-cell">结算单号：<span>${settlementStatis.couponUnit.itemSn}</span></span>
+            <span class="last-cell">结算单状态：<span>${settlementStatis.couponUnit.status}</span></span>
+		#end
+		#if($stype==3)
+			<span>随机立减结算金额 (元)：<span class="rc-price"><b>$!utils.priceFormart($!settlementStatis.promotionUnit.amount)</b></span></span>
+            <span class="last-cell">结算单号：<span>${settlementStatis.promotionUnit.itemSn}</span></span>
+            <span class="last-cell">结算单状态：<span>${settlementStatis.promotionUnit.status}</span></span>
+		#end
+		<span class="last-cell">结算单生成日期 ：$!{settlementStatis.createTime}</span>
+    </h3>
+	#if($stype==4)
+    <div class="rc-je-tb">
+        <div class="je-line">
+            <p>订单中金结算金额 (元)：<span class="rc-price">#if($!settlementStatis.zjUnit)$!utils.priceFormart($!settlementStatis.zjUnit.amount)#else 0.00 #end</span>
+                <b class="jeddh">
+                    <span href="">(#if($!settlementStatis.zjUnit)${settlementStatis.zjUnit.itemSn}-${settlementStatis.zjUnit.status}#else -- #end)</span>
+                </b>
+			</p>
+            <p>订单支付宝结算金额 (元)：<span class="rc-price">#if($!settlementStatis.zfbUnit)$!utils.priceFormart($!settlementStatis.zfbUnit.amount)#else 0.00 #end</span>
+				<b class="jeddh">
+					<span href="">(#if($!settlementStatis.zfbUnit)${settlementStatis.zfbUnit.itemSn}-${settlementStatis.zfbUnit.status}#else -- #end)</span>
+				</b>
+			</p>
+            <p class="last-cell">订单易宝结算金额 (元)：<span class="rc-price">#if($!settlementStatis.ybUnit)$!utils.priceFormart($!settlementStatis.ybUnit.amount)#else 0.00 #end</span>
+                <b class="jeddh">
+                    <span href="">(#if($!settlementStatis.ybUnit)${settlementStatis.ybUnit.itemSn}-${settlementStatis.ybUnit.status}#else -- #end)</span>
+                </b>
+			</p>
+        </div>
+		<div class="je-line">
+            <p >订单余额结算金额 (元)：<span class="rc-price">#if($!settlementStatis.wlUnit)$!utils.priceFormart($!settlementStatis.wlUnit.amount)#else 0.00 #end</span>
+                <b class="jeddh">
+                    <span href="">(#if($!settlementStatis.wlUnit)${settlementStatis.wlUnit.itemSn}-${settlementStatis.wlUnit.status}#else -- #end)</span>
+                </b>
+			</p>
+		   <p>订单微信结算金额 (元)：<span class="rc-price">#if($!settlementStatis.wxUnit)$!utils.priceFormart($!settlementStatis.wxUnit.amount)#else 0.00 #end</span>
+               <b class="jeddh">
+                   <span href="">(#if($!settlementStatis.wxUnit)${settlementStatis.wxUnit.itemSn}-${settlementStatis.wxUnit.status}#else -- #end)</span>
+               </b>
+		   </p>
+            <p class="last-cell">优惠券结算金额 (元)：<span class="rc-price">#if($!settlementStatis.couponUnit)$!utils.priceFormart($!settlementStatis.couponUnit.amount)#else 0.00 #end</span>
+                <b class="jeddh">
+                    <span href="">(#if($!settlementStatis.couponUnit)${settlementStatis.couponUnit.itemSn}-${settlementStatis.couponUnit.status}#else -- #end)</span>
+                </b>
+			</p>
+		</div>
+        <div class="je-line">
+            <p class="last-cell">随机立减结算金额 (元)：<span class="rc-price">#if($!settlementStatis.promotionUnit)$!utils.priceFormart($!settlementStatis.promotionUnit.amount)#else 0.00 #end</span>
+                <b class="jeddh">
+                    <span href="">(#if($!settlementStatis.promotionUnit)${settlementStatis.promotionUnit.itemSn}-${settlementStatis.promotionUnit.status}#else -- #end)</span>
+                </b>
+			</p>
+        </div>
+        <div class="clear-fix"></div>
+    </div>
+#end
+    </div>
+</div>
+<div class="order_query">
+    <div class="btn">
+        <a href="/sales/settlement/exportOrderDetails.html?amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{settlementStatis})})&$!{commonUrl}" class="btn_query btn_export mr7">导出订单明细</a>
+        <a href="/sales/settlement/exportOrderGoodsDetails.html?amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{settlementStatis})})&$!{commonUrl}" class="btn_query btn_export mr7">导出商品明细</a>
+			#if($stype==1)
+					#if($payType==1 && $!settlementStatis.zjUnit.status=="已结算")
+						<a href="/sales/settlement/downloadSettlementReceipt.html?stSns=$!utils.urlEncode($!settlementStatis.zjUnit.itemSn)" class="btn_query btn_export mr7" style="width: 130px;">下载全部电子回单</a>
+					#end
+        			#if($payType==3 && $!settlementStatis.zfbUnit.status=="已结算")<a href="/sales/settlement/downloadSettlementReceipt.html?stSns=$!utils.urlEncode($!settlementStatis.zfbUnit.itemSn)" class="btn_query btn_export mr7" style="width: 130px;">下载全部电子回单</a>
+        			#end
+        			#if($payType==4 && $!settlementStatis.ybUnit.status=="已结算")<a href="/sales/settlement/downloadSettlementReceipt.html?stSns=$!utils.urlEncode($!settlementStatis.ybUnit.itemSn)" class="btn_query btn_export mr7" style="width: 130px;">下载全部电子回单</a>
+        			#end
+        			#if($payType==5  && $!settlementStatis.wxUnit.status=="已结算")<a href="/sales/settlement/downloadSettlementReceipt.html?stSns=$!utils.urlEncode($!settlementStatis.wxUnit.itemSn)" class="btn_query btn_export mr7" style="width: 130px;">下载全部电子回单</a>
+        			#end
+        			#if($payType==8  && $!settlementStatis.wlUnit.status=="已结算")<a href="/sales/settlement/downloadSettlementReceipt.html?stSns=$!utils.urlEncode($!settlementStatis.wlUnit.itemSn)" class="btn_query btn_export mr7" style="width: 130px;">下载全部电子回单</a>
+        			#end
+			#end
+			#if($stype==4  && $!settlementStatis.receiptAble && $!settlementStatis.amount>0)
+				<a href="/sales/settlement/downloadSettlementReceipt.html?stSns=$!utils.urlEncode($!settlementStatis.zjUnit.itemSn)" class="btn_query btn_export mr7" style="width: 130px;">下载全部电子回单</a>
+			#end
+					
+		
+    </div>
+</div>

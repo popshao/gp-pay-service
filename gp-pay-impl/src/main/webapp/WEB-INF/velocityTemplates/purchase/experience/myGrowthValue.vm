@@ -1,0 +1,338 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>买家商家成长值体系 - 成长值规则</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico" />
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+           
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="scripts/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm") #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心 </a>&gt; 我的成长值 &gt; <span class="color">成长值规则</span></p>
+                </div>
+                
+              <div class="integral_top cc">
+              	<div class="privilege-growth">
+                    <div class="growth-progress-bar">
+                        <div class="bar-progress-mask">#if($!expSum > 0)<span></span>#end</div>
+                        <ul class="bar-ls clearfix">
+                            <li class="bar-li li-rank-1 ">
+                                <a href="javascript:toCzzsm();"><i class="icon-growth icon-growth-1"></i></a>
+                            </li>
+                            <li class="bar-li li-rank-2 ">
+                                <a href="javascript:toCzzsm();"><i class="icon-growth icon-growth-2"></i></a>
+                            </li>
+                            <li class="bar-li li-rank-3 ">
+                                <a href="javascript:toCzzsm();"><i class="icon-growth icon-growth-3"></i></a>
+                            </li>
+                            <li class="bar-li li-rank-4 ">
+                                <a href="javascript:toCzzsm();"><i class="icon-growth icon-growth-4"></i></a>
+                            </li>
+                            <li class="bar-li li-rank-5 ">
+                                <a href="javascript:toCzzsm();"><i class="icon-growth icon-growth-5"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+              	<div class="tac mt10">
+              		#if($!expSum == 0)
+              		<p class="info">
+                    	您的成长值为
+                    	<a class="a_red" href="/purchase/growth/czzmx.html">0</a>
+                                                                      成长值大于0即可升级为<span class="info_red">普通会员</span>。
+                        <a class="info_link" href="http://cms.mypharma.com/node/137" target="_black">查看成长值加速系数介绍</a>
+                    </p>
+                    #elseif($!expSum >= 50000)
+                    <p class="info">
+                    	您的成长值为
+                    	<a class="a_red" href="/purchase/growth/czzmx.html">$!expSum</a>
+                                                                        ，已是最高等级会员。
+                        <a class="info_link" href="http://cms.mypharma.com/node/137" target="_black">查看成长值加速系数介绍</a>
+                    </p>
+					#elseif($!expSum > 0 && $!expSum < 50000)
+                	<p class="info">
+                    	您的成长值为
+                    	<a class="a_red" href="/purchase/growth/czzmx.html">$!expSum</a>
+                                                                       还差
+                        <span class="info_red">$!sub</span>
+                                                                       成长值升级为
+                        <span class="info_red">$!levelName会员</span>。
+                        <a class="info_link" href="http://cms.mypharma.com/node/137" target="_black">查看成长值加速系数介绍</a>
+                    </p>
+                     #end
+                </div>
+					
+              </div>
+                
+                <div class="integral_table mt20">
+                	<table border="0" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr class="line">
+                                <th>注册会员</th>
+                                <th>普通会员</th>
+                                <th>白银会员</th>
+                                <th>黄金会员</th>
+                                <th>钻石会员</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>无</td>
+                                <td>成长值0-999</td>
+                                <td>成长值1000-9999</td>
+                                <td>成长值10000-49999</td>
+                                <td>成长值50000以上</td>
+                            </tr>
+                            <tr class="even">
+                                <td>永久有效</td>
+                                <td>永久有效</td>
+                                <td>
+                                    会员有效期1年，1年后扣除<br>
+                                    500成长值，根据剩余成长<br>
+                                    值重新计算等级
+                                </td>
+                                <td>
+                                    会员有效期1年，<br>
+                                    1年后扣除1200成长值，<br>
+                                    根据剩余成长值重新计算等级
+                                </td>
+                                <td>
+                                  会员有效期1年，<br>
+                                  1年后扣除2000成长值，<br>
+                                  根据剩余成长值重新计算等级
+                              </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="integral_table mt20">
+                	<table border="0" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr class="line">
+                                <th>权益类型</th>
+                                <th>权益项</th>
+                                <th>普通会员</th>
+                                <th>白银会员</th>
+                                <th>黄金会员</th>
+                                <th>钻石会员</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+<!--                             <tr> -->
+<!--                                 <td rowspan="2">尊享服务</td> -->
+<!--                                 <td>新人礼包</td> -->
+<!--                                 <td><img class="img" src="../../image/icon_28.png" /></td> -->
+<!--                                 <td>— —</td> -->
+<!--                                 <td>— —</td> -->
+<!--                                 <td>— —</td> -->
+<!--                             </tr> -->
+<!--                             <tr> -->
+<!--                                 <td>升级礼包</td> -->
+<!--                                 <td>— —</td> -->
+<!--                                 <td><img class="img" src="../../image/icon_28.png" /></td> -->
+<!--                                 <td><img class="img" src="../../image/icon_28.png" /></td> -->
+<!--                                 <td><img class="img" src="../../image/icon_28.png" /></td> -->
+<!--                             </tr> -->
+                            <tr class="even">
+                                <td>参与活动</td>
+                                <td>会员专享活动</td>
+                                <td><img class="img" src="../../image/icon_28.png" /></td>
+                                <td><img class="img" src="../../image/icon_28.png" /></td>
+                                <td><img class="img" src="../../image/icon_28.png" /></td>
+                                <td><img class="img" src="../../image/icon_28.png" /></td>
+                            </tr>
+                            <tr>
+                                <td>身份尊享</td>
+                                <td>专属会员勋章</td>
+                                <td><img class="img" src="../../image/icon_28.png"></td>
+                                <td><img class="img" src="../../image/icon_28.png"></td>
+                                <td><img class="img" src="../../image/icon_28.png"></td>
+                                <td><img class="img" src="../../image/icon_28.png"></td>
+                            </tr>
+                            <tr class="even">
+                              <td>在线商学院</td>
+                              <td>行业信息和优质课程</td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                            </tr>
+                            <tr>
+                              <td>快速采购</td>
+                              <td>极速补货服务</td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                            </tr>
+                            <tr class="even">
+                              <td>优惠特权</td>
+                              <td>指定商品折扣优惠</td>
+                              <td>— —</td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                            </tr>
+                            <tr>
+                              <td>专属客服</td>
+                              <td>专属客服服务</td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                            </tr>
+                            <tr class="even">
+                              <td>数据支持（建设中）</td>
+                              <td>数据分析服务</td>
+                              <td>— —</td>
+                              <td>— —</td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                            </tr>
+                            <tr>
+                              <td>信用贷款</td>
+                              <td>提供纯信用的贷款</td>
+                              <td>— —</td>
+                              <td>— —</td>
+                              <td><img src="../../image/icon_28.png" alt="" class="img"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                            </tr>
+                            <tr class="even">
+                              <td rowspan="3">优先特权</td>
+                              <td>参与活动优先权</td>
+                              <td>— —</td>
+                              <td>— —</td>
+                              <td>— —</td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                            </tr>
+                            <tr class="even">
+                              <td>活动优先推荐权</td>
+                              <td>— —</td>
+                              <td>— —</td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                            </tr>
+                            <tr class="even">
+                              <td>独家产品优先代理权</td>
+                              <td>— —</td>
+                              <td>— —</td>
+                              <td>— —</td>
+                              <td><img class="img" src="../../image/icon_28.png"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+<!--               <div class="integral_package cc"> -->
+<!--                 	<div class="integral_package_title">什么是新人礼包？</div> -->
+<!--                     <p> -->
+<!--                         1. 首单在我的医药网采购商品时,未使用优惠券且实际支付金额满500元， <span>交易成功后7天即赠送10元代金券1张；</span><br /> -->
+<!--                         2. 指定品牌系列商品200元代金券<br /> -->
+<!--                         以上权益计算和发放起始时间为2016年9月13日 <br /> -->
+<!--                         <span class="red">注：新人礼包计算和发放起始时间为2016年9月13日。</span> -->
+<!--                     </p> -->
+<!--                 </div> -->
+                
+<!--                 <div class="integral_package cc"> -->
+<!--                 	<div class="integral_package_title">什么是升级礼包？</div> -->
+<!--                     <p class="ctn_left fl"> -->
+<!--                         <span>1. 普通会员升级到白银会员，赠送20元代金券；</span><br /> -->
+<!--                         2. 白银会员升级到黄金会员，赠送50元代金券；<br /> -->
+<!--                         3. 黄金会员升级到钻石卡会员，赠送100元代金券； -->
+<!--                     </p> -->
+<!--                     <p class="ctn_right fl mt10"> -->
+<!--                         会员在达到相应等级的7天内(含当天)<br /> -->
+<!--                         升级礼包将发送至您的账户 -->
+<!--                     </p> -->
+<!--                     <p class="ctn_text fl"> -->
+<!--                     	<span class="red">注：以上权益从2016年9月13日起计算并发放。</span> -->
+<!--                     </p> -->
+<!--                     <div class="integral_package_text"> -->
+<!--                         ★备注：<br /> -->
+<!--                         如有恶意诋毁“我的医药网”或在平台经营范围内从事不正当经营，违反药品销售法规和不正当经营行为的，一经发现，取消会员资格。 -->
+<!--                     </div> -->
+<!--                 </div> -->
+                
+          </div>
+          
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+	</div>
+    #parse("/common/footer.vm")  
+    <!-- mypharma_脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	#parse("common/common_script.vm")
+    <script>
+    $(function() {
+		//计算百分比
+		var count = '$!expSum';
+		
+		
+		if(count > 0 && count < 1000){//普通
+			var w = (count-0)/(1000-0) * 188 + 188;
+			$(".bar-progress-mask").css("width",w);		
+		}else if(count >= 1000 && count < 10000){
+			var w = (count-1000)/(10000-1000) * 188 + 188 +188;
+			$(".bar-progress-mask").css("width",w);		
+		}else if(count >= 10000 && count < 50000){
+			var w = (count-10000)/(50000-10000) * 188 + 188 + 188 + 188;
+			$(".bar-progress-mask").css("width",w);
+		}else if(count >= 50000){
+			var w = 188 + 188 + 188 +188;
+			$(".bar-progress-mask").css("width",w);
+		}
+		
+		
+    	//判断当前会员等级
+		if(count == 0){
+			$(".li-rank-1").addClass("current");
+		}else if(count > 0 && count < 1000){
+			$(".li-rank-2").addClass("current");
+		}else if(count >= 1000 && count < 10000){
+			$(".li-rank-3").addClass("current");
+		}else if(count >= 10000 && count < 50000){
+			$(".li-rank-4").addClass("current");
+		}else if(count >= 50000){
+			$(".li-rank-5").addClass("current");
+		}
+		
+	})
+	
+	function toCzzsm(){
+			window.location.href = "/purchase/growth/czzsm.html";
+		}
+    </script>
+    
+  </body>
+</html>

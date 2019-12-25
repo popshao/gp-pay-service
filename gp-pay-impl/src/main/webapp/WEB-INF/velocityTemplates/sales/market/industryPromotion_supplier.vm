@@ -1,0 +1,114 @@
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script type="text/javascript">
+		$(function(){
+			$("body tbody tr").unbind("mouseover");
+			$.sltitem.select("siteId", "$!siteId");
+			
+		});
+		
+		$("#selectQuerySup").click(function(){
+	    	var c_type = $("#selectQuerySup")[0].checked;
+	    	$("#querySupTab").find("input[type=checkbox]")
+	    	     .not("input[disabled='disabled']")
+	    	     .not("#selectQuerySup").each(function(){
+	    		$(this)[0].checked = c_type;
+	    	});
+	    });
+
+	    $("#querySupTab").find("input[type=checkbox]").not("#selectQuerySup").click(function(){
+	    	var check_type = true;
+	    	$("#querySupTab").find("input[type=checkbox]").not("#selectQuerySup").each(function(){
+				if($(this)[0].checked == false){
+					 check_type = false;
+					 return false;
+				}            		
+	    	});
+	    	$("#selectQuerySup")[0].checked = check_type;
+	    });
+	    
+	    $("#selectAllSup").click(function(){
+	    	var c_type = $("#selectAllSup")[0].checked;
+	    	$("#selectedSupplierList").find("input[type=checkbox]").not("#selectAllSup").each(function(){
+	    		$(this)[0].checked = c_type;
+	    	});
+	    });
+
+	    $("#selectedSupplierList").find("input[type=checkbox]").not("#selectAllSup").click(function(){
+	    	var check_type = true;
+	    	$("#selectedSupplierList").find("input[type=checkbox]").not("#selectAllSup").each(function(){
+				if($(this)[0].checked == false){
+					 check_type = false;
+					 return false;
+				}            		
+	    	});
+	    	$("#selectAllSup")[0].checked = check_type;
+	    });
+	    
+</script>
+                            <div class="fl select-box">
+                            	
+                                <div class="order_query order">
+                                    <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                                      <tr>
+                                      	<td class="tar" width="75">所在地区：</td>
+                                        <td class="td_region" width="95">
+                                        	 <div class="sltitem">
+                                                <span>请选择</span>
+                                                <ul style="display: none;">
+                                                    #if($!siteList && $!siteList.size()>0)
+                                                       #foreach($!site in $!siteList)
+                                                          <li data-value="$!{site.siteId}"><a href="javascript:void(0);">$!{site.siteName}</a></li>
+                                                       #end
+                                                    #end
+                                                </ul>
+                                                <input type="hidden" name="siteId" id="siteId"/>
+                                            </div>
+                                        </td>
+                                         <td width="auto">
+                                            <input class="input" type="text" name="suName" id="suName" value="$!suName" placeholder="企业名称" />
+                                            <a href="javascript:top.app.frameWindow.ipObj.querySupplier();" class="btn-jxsp">查询</a>
+                                            <a href="javascript:top.app.frameWindow.ipObj.chooseSupplier();" class="fr btn">选择</a>
+                                        </td>
+                                      </tr>
+                                   </table>
+                                </div>
+                                
+                                <div class="cx-scrollbar">
+                                	
+                                    <div class="order_detail">
+                
+                                        <div class="table table-top table-cx">
+                                            <table border="0" cellpadding="0" cellspacing="0">
+                                            
+                                             #if($!supplierList && $!supplierList.size()>0)
+                                                <tbody id="querySupTab">
+                                                #foreach($!supplier in $!supplierList)
+                                                      #if($!utils.isContais($!{supplier.suId},$!suIds))
+	                                                  <tr class="none">
+						                                	<td>
+							                                	<input type="checkbox" disabled=“disabled” class="check" name="chk" id="$!{supplier.suId}">
+						                                	</td>
+						                               #else
+					                                	<tr>
+					                                	<td>
+					                                		<input type="checkbox" class="check" name="chk" id="$!{supplier.suId}">
+					                                	</td>
+	                                                  #end
+	                                                    <td>$!{supplier.suName}</td>
+	                                                    <td>$!{supplier.siteName}</td>
+	                                                  </tr>
+                                                #end
+                                                </tbody>
+                                             #end
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn cc">
+                                    <input class="fl check" id="selectQuerySup" type="checkbox"/>
+                                    <label class="check_text" for="selectQuerySup">全选</label>
+                                </div>
+                            </div>
+                            
+                 
+

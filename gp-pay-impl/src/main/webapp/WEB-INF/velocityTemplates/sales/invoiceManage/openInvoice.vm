@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 开票</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+    <style type="text/css">
+        .c-box .user-sheet-box .uf-table tr:nth-child(2n) td{
+                 background: none; 
+        }
+    </style>
+</head>
+<body>
+
+<!--页面主体 -->
+    <div class="c-box">
+
+        <div class="user-kp-top cc" style='position:fixed;top:0;left:0;width:100%;z-index:99;padding: 10px 0;border-bottom: 1px solid #ddd;margin: 0;background: #fff;'>
+            <div class='ml10'>
+                 <a href="javascript:void(0)" class="user-btn-n mr10" onclick='saveSubmit()'>确定开票</a>
+                 <a href="javascript:void(0)" class="user-btn-b" onclick='top.utils.closeExitsTab(top.utils.getActTab().dom);' style='width: 65px;'>取消</a>
+            </div>
+        </div>
+
+        <div class="user-kp-title" style='margin-top:65px;'>
+            <span class="ukt-title">采购商信息</span>
+        </div>
+        <div id='infoCounts'></div>
+        <script type="text/html" id="infoCountsTpl">
+        {{# if(d && !d.error && d.datas){ }}
+        {{# var d = d.datas; }}
+            <div class="user-kp-info-box">
+                <form>
+                    <div class="user-form-table" id='info-table-top'>
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                            <tr>
+                                <td class="tar" width="120">采购商企业名称：</td>
+                                <td width="auto">
+                                    <input class="user-input" type="text" value="{{top.utils.notNull(d.ename)}}" placeholder="" id='ename'>
+                                    <i class="user-t-red ml5">请输入正确的企业名称，不要加#¥ *（）&amp;等特殊符号</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tar">采购商纳税人识别号：</td>
+                                <td>
+                                    <input class="user-input" type="text" value="{{top.utils.notNull(d.bidentifyNumber)}}" placeholder="" id='bidentifyNumber'>
+                                    <i class="user-t-red ml5">请输入正确的12位纯数字纳税人识别号</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tar">采购商联系邮箱：</td>
+                                <td>
+                                    <input class="user-input" type="text" value="{{top.utils.notNull(d.bemail)}}" placeholder="" id='bemail'>
+                                    <i class="user-t-red ml5">邮箱格式不正确</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tar">采购商联系人手机号：</td>
+                                <td>
+                                    <input class="user-input" type="text" value="{{top.utils.notNull(d.bmobile)}}" placeholder="" id='bmobile'>
+                                    <i class="user-t-red ml5">请输入正确的11位手机号码</i>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="user-kp-title">
+                <span class="ukt-title">订单明细</span>
+            </div>
+        {{#  }}
+        {{# } }}
+        </script>
+        
+
+        <div class="user-form user-sheet-box invoice-table user-kp-form mt10">
+            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>商品</th>
+                    <th>规格</th>
+                    <th>单位</th>
+                    <th>数量</th>
+                    <th>单价(含税)</th>
+                    <th>商品金额小计</th>
+                    <th>商品税率(%)</th>
+                    <th>税额</th>
+                    <th>订单金额</th>
+                </tr>
+                </thead>
+                <tbody id='listBox'>
+                </tbody>
+            </table>
+        </div>
+
+        <script type="text/html" id="listTpl">
+        
+            {{# if(d && !d.error && d.datas.length){ }}
+            {{# $.each(d.datas,function(index,item){ var item = item; var $index = index }}
+                {{# if(item.isDiscount!=1){ }}
+                    <tr class='tr_good'>
+                        <td style='padding:5px;'>
+                            <p style-="text-align: left; padding-left: 20px;">{{item.name}}</p>
+                            <p style-="text-align: left; padding-left: 20px;" class='mt10'>{{item.manufacture}}</p>
+                        </td>
+                        <td>{{item.specifications}}</td>
+                        <td>{{item.unit}}</td>
+                        <td>{{item.num}}</td>
+                        <td>{{top.utils.notNullPrice(item.price)}}</td>
+                        <td>{{top.utils.notNullPrice(item.totalPrice)}}</td>
+                        <td>
+                            <select class="user-input select_id" type="text" style='width:auto;' id='select_change_{{$index}}' data-good='{{JSON.stringify(item)}}' value="{{item.rate}}"></select>％
+                        </td>
+                        <td>{{top.utils.notNullPrice(item.ratePrice)}}</td>
+                        <td>{{top.utils.notNullPrice(item.orderPrice)}}</td>
+                    </tr>
+                {{# } else if(item.isDiscount==1){ }}
+                    <tr>
+                        <td class="td-promotion" colspan="9">
+                            <div class="tr-arrow-top"></div>
+                        </td>
+                    </tr>
+                    <tr class="tr-promotion">
+                        <td><p  style-="text-align: left; padding-left: 20px;">{{item.name}}</p></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>-{{top.utils.notNullPrice(item.totalPrice)}}</td>
+                        <td><input class="user-input" type="text" disabled="disabled" value='{{item.rate}}'>％</td>
+                        <td>-{{top.utils.notNullPrice(item.ratePrice,'--')}}</td>
+                        <td>-{{top.utils.notNullPrice(item.orderPrice)}}</td>
+                    </tr>
+                {{# } }}
+
+            {{# }); }}
+            <tr style=' background: #eef9ff;'>
+                <td><span class="user-t-gray">全部订单合计：</span></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td id='totalPrice'></td>
+                <td></td>
+                <td id='ratePrice'></td>
+                <td id='orderPrice'></td>
+            </tr>
+            {{# }else{ }}
+             <tr><td colspan="9">暂无数据</td></tr>   
+            {{# } }}
+
+        </script>
+        <div class="page rocky-page" style="text-align: right;    height: auto;">
+        </div>           
+
+
+        <div class="tar" style='font-size: 12px;color: #151515;'>
+            <span class="ukt-text ml5">
+                <i class="user-t-red">＊</i><i class="user-t-gray">截止到</i><em id='endTimeData'></em>
+                ，剩余可开票张数：<i class="user-t-red" id='leftUsedNumData'></i>
+                ，电票余额：<i class="user-t-red" id='leftNumData'></i>
+                ，发票联：<i class="user-t-red" id='numData'></i>。
+            </span>
+        </div>
+
+        <div class="user-kp-title cc">
+            <span class="ukt-title">备注</span>
+            <div class="ukt-btn">
+                <a href="javascript:void(0)" class="user-btn-n fr ml10" id='erpOrderId'>插入ERP订单号</a>
+                <a href="javascript:void(0)" class="user-btn-n fr" id='mphOrderId'>插入平台订单号</a>
+            </div>
+        </div>
+
+        <div class="user-kp-form mt20">
+            <textarea class="user-textarea" placeholder="发票备注信息(非必填)" value='' id='textRemark'></textarea>
+        </div>
+
+    </div>
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>
+
+<script>
+
+    /*/!*设置框架返回按钮*!/
+    top.utils.frameBack({
+        handler:function (btn) {
+            top.utils.closeExitsTab(top.utils.getActTab().dom);
+        }
+    })*/
+
+    var oId= getUrlParam("oId");  // 
+    var layer,laypage,laytpl,subData,flag=false , _repick = 0;
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage','laytpl'],function () {
+        layer = layui.layer,laypage = layui.laypage,laytpl = layui.laytpl;
+        $(function(){
+            $('body').addClass('user-has-js');
+            initSelect();
+
+            $(".btn-reset").on("click",function () {
+                $("#searchForm").get(0).reset();
+                $(".usb-select2,.usb-select2-s").each(function () {
+                    $(this).select2("destroy");
+                    initSelect();
+                })
+              //  $('.btn-query').trigger("click");
+            //    getData();
+              
+            })
+
+            if(top.utils.getUrlParam('repick',window)){
+                _repick = top.utils.getUrlParam('repick',window);
+            }
+
+            setTimeout(function () {
+                initDetail();
+            },300);
+
+
+            $("#erpOrderId").click(function(event) {
+                $(this).addClass("disable");
+                var _erpId = subData.erpSn;
+                var _t = $('#textRemark').text();
+                if(_t.indexOf(_erpId) > -1 ){
+                    return;
+                } 
+                $('#textRemark').text(_erpId+'    '+_t);
+            });
+
+            $("#mphOrderId").click(function(event) {
+                $(this).addClass("disable");
+                var _mphId = subData.osn;
+                var _t = $('#textRemark').text();
+                if(_t.indexOf(_mphId) > -1 ) {
+                    return;
+                }
+                $('#textRemark').text(_mphId+'    '+_t);
+            });
+        });
+
+
+    })
+
+    function initDetail(){
+        top.utils.ajax({
+           url: '/sales/order/invoiceDetail',
+           data:{oIds:oId,repick:_repick},
+           success:function (data,res) {
+
+                if(res && res.code == 0 && res.data){
+                    subData  = res.data;
+                    $("#infoCounts").html(laytpl($("#infoCountsTpl").html()).render({datas:res.data}));
+                    $('#info-table-top').find('i.user-t-red').hide().text('');
+
+                    if(!subData.erpSn || subData.erpSn==null) 
+                        $("#erpOrderId").hide();
+
+                    if(!subData.osn || subData.osn==null) 
+                        $("#mphOrderId").hide();
+
+                    getData(res.data.tempId);
+
+                    $("#endTimeData").text(top.utils.dateFmt(res.data.endTime,'yyyy-MM-dd'))
+                    $("#leftUsedNumData").text(top.utils.notNull(res.data.leftUsedNum,'0'))
+                    $("#leftNumData").text(top.utils.notNull(res.data.leftNum,'0'))
+                    $("#numData").text(top.utils.notNull(res.data.num,'0'))
+
+                } else {
+                    top.ue.msg(res.message,{},function () {
+                        top.utils.closeExitsTab(top.utils.getActTab().dom);
+                    });
+                   //$("#infoCounts").html(laytpl($("#infoCountsTpl").html()).render({error:true}));
+                   
+                }
+           },
+           error:function(res) {
+               top.ue.msg(res.message,{},function () {
+                   top.utils.closeExitsTab(top.utils.getActTab().dom);
+               });
+               //$("#infoCounts").html(laytpl($("#infoCountsTpl").html()).render({error:true}));
+           }
+        })
+    }
+
+    var nowPage = 1;
+    function getData(tempId) {
+        var _d = {
+            tempId:tempId,
+            pi: nowPage
+        };
+        top.utils.pageList({
+            first:true,
+            url:'/sales/order/invoiceDetailList',
+            dom:$('#listBox'),
+            tpl:$("#listTpl"),
+            data:_d,
+            isAdd:true,
+            filter:'#searchForm',
+            doc:document.body,
+            win: window,
+            laypage:laypage,
+            isGjh:true,
+           // noRender: true,
+            complete:function (res) {
+                if(res && res.code == 0 && res.data){
+                //    $("#listBox").html(laytpl($("#listTpl").html()).render({datas:res.data}));
+                    if(res.data.list.length>0)
+                        getGoodsRate();
+                    flag = true;
+                    
+                }
+            },rendered:function (res,settings) {
+              //  _rateGoods();
+                nowPage = settings.data.pi;
+                if(res && res.code == 0 && res.data) {
+                    $("#listBox .tr_good",document).each(function (i,e) {
+                        $(this).find('.select_id').on("change",function () {
+
+                            var _goods = $(this).data('good');
+                            var _rateVal = $(this).find('option:selected').text();
+                            top.utils.ajaxForGaoJiHuo({
+                               url:'/sales/order/invoiceUpdate',
+                               data:{id:_goods.id,rate:_rateVal},
+                               success:function (data,res) {
+                                    if(res && res.code == 0 && res.data && res.data.length){
+                                        getData(tempId);
+                                    }
+                               }
+                            })
+                        })
+                    }) 
+
+                    $('#totalPrice').html(top.utils.notNullPrice(res.data.totalPrice,'--'));
+                    $('#ratePrice').html(top.utils.notNullPrice(res.data.ratePrice,'--'));
+                    $('#orderPrice').html(top.utils.notNullPrice(res.data.orderPrice,'--'));
+
+
+                }
+
+
+
+
+            }
+        })
+    }
+
+    function getGoodsRate(){
+        top.utils.ajax({
+           url:'/sales/order/getGoodsRate',
+           success:function (data,res) {
+                if(res && res.code == 0 && res.data && res.data.length){
+                    var rateJson = res.data;
+                    if(rateJson.length<=1)
+                        $('.select_id').attr('disabled', '');
+                    $.each(rateJson,function(i,n){
+                        $('.select_id').append('<option value='+i+'>'+n+'</option>');
+                    })
+                    $("#listBox .tr_good").each(function (i,e) {
+                        var _gds = $(this).find('.select_id').data('good'),_rate;
+                        if(_gds) 
+                           _rate = _gds.rate;
+                        else
+                            _rate = 0;
+                        $(this).find('.select_id').children("option").each(function(){
+                             if($(this).text() == _rate){
+                                 $(this).attr("selected",true);
+                             }
+                        })
+                    })
+
+                    
+
+                } else{
+                    $('.select_id').attr('disabled', 'disabled');
+                }
+           }
+        })
+    }
+
+
+// tempId (string): 临时id ,
+// eid (integer): 采购商企业id ,
+// mid (integer, optional): 会员id ,
+// mname (string, optional): 会员名称 ,
+// ename (string): 采购商企业名称 ,
+// identifyNumber (string): 采购商纳税人识别号 ,
+// email (string): 采购商联系邮箱 ,
+// mobile (string): 采购商联系人手机号 ,
+// remark (string, optional): 备注
+
+    /*确定开票*/
+    function saveSubmit() {
+        if(!flag || !subData) {
+            top.layer.msg('数据异常，请稍后重试');
+            return;
+        }
+        if(!_verifySubmit())
+            return;
+        var _jsonPrame = {
+            tempId: subData.tempId,
+            eid:subData.eid,
+            mid:subData.mid,
+            mname:subData.mname,
+            ename:$('#ename').val(),
+            identifyNumber:$('#bidentifyNumber').val(),
+            email:$('#bemail').val(),
+            mobile:$('#bmobile').val(),
+            remark:$('#textRemark').val(),
+            repick:_repick
+        };
+        top.utils.ajaxForGaoJiHuo({
+           url:'/sales/order/invoice',
+           data:_jsonPrame,
+           success:function (data,res) {
+
+                localStorage.removeItem('data_q');
+                if(res && res.code == 0){
+                        var data_q = res.data;
+                        localStorage.setItem('data_q',JSON.stringify(data_q));
+                    if(res.data.invoices.length>=1) {  // 多张 单张
+                        top.utils.iframeLoad();
+                        top.utils.closeTopTab(null,true,function(){
+                            top.utils.openWithTab(top.utils.getRandom(), '开票成功','/sales/invoice/openInvoiceSuccess.html', {fstBread:'发票'});
+                        })
+                    } else if(res.data.invoices.length==0){    //  等待
+
+                        top.rui.dynamic({
+                            title: '确认开票',
+                            content: '<p style="margin:20px 0;text-align:center;">开票中<em class="times" style="color:#FF4C4C;"></em>后再次查询，请等待..</p>',
+                            skin: "dialog-old dialog-old-no-title xjgl-dialog-ctn",
+                            area: ['400px', '200px'],
+                            btn:  false,
+                            success: function (lay, idx) {
+                                lay.find('.rui-btn-close').unbind("click").on("click",function () {
+                                    top.utils.closeExitsTab(top.utils.getActTab().dom);
+                                })
+                                var iTime,count=50;
+                                var timer = function () {
+                                    if(count%30 == 0){
+                                        _queryInvoice();
+                                    }
+                                    if (count<=0) {
+                                        clearTimeout(iTime);
+                                        _queryInvoice(true);
+                                        return;
+                                    }
+                                     count--;
+                                     lay.find('.times').html(count+'s');
+                                     iTime=setTimeout(function(){timer()},1000);
+                                }
+                                timer();
+
+                                function _queryInvoice(flag) {
+                                    top.utils.ajax({
+                                       url:'/sales/order/queryInvoiceStatus',
+                                       data:{groupNo:res.data.groupNo},
+                                       success:function (data,res) {
+                                            localStorage.removeItem('data_q');
+                                            if(res && res.code == 0){
+                                                // var q = JSON.stringify(res.data) || "";
+                                                var data_q = res.data;
+                                                localStorage.setItem('data_q',JSON.stringify(data_q));
+                                                if(res.data.invoices.length >=1) {  // 多张 单个 
+
+                                                    top.utils.iframeLoad();
+                                                    top.utils.closeTopTab(null,true,function(){
+                                                        top.utils.openWithTab(top.utils.getRandom(), '开票成功','/sales/invoice/openInvoiceSuccess.html', {fstBread:'发票'});
+                                                    })
+                                                } else{
+                                                    // 跳转等待页面
+                                                    // top.utils.iframeLoad();
+                                                    // top.utils.closeTopTab(null,true,function(){
+                                                    //     top.utils.openWithTab(top.utils.getRandom(), '开票等待中','/sales/invoice/openInvoiceWait.html', {refresh: true});
+                                                    // })
+                                                    if(flag){
+                                                        top.rui.dynamic({
+                                                            title: '',
+                                                            content: '<h2 style="margin:40px 0 25px;text-align:center;font-weight: bold;font-size: 20px;">开票请求已发送，但未获得结果</h2><p style="text-align:center;">您的发票因为未知原因没有获得开具结果，请稍后尝试在历史发票中查看</p>',
+                                                            skin: "dialog-old dialog-old-no-title xjgl-dialog-ctn",
+                                                            area: ['500px', '240px'],
+                                                            btn:  ['好的'],
+                                                            success: function (lay,idx) {
+                                                                lay.find('.layui-layer-btn0').click(function(event) {
+                                                                    top.utils.iframeLoad();
+                                                                    top.utils.closeTopTab();
+                                                                });
+                                                            }
+
+                                                        })
+                                                    }
+                                                }
+
+                                            }else{
+                                                top.ue.msg("开票失败");
+                                                top.ue.close(idx);
+                                            }
+                                        }
+                                    })
+                                }
+                                
+
+                            }
+                            
+                        })
+                    } else {
+                        // 失败
+                        top.ue.msg("开票失败");
+                        top.ue.close(idx);
+                    }
+
+                    // 成功  {res.data.list.length>1  多张   res.data.list.lrngth ==1 }
+                    //等待 !res.data
+                } else {
+                    // 失败
+                    top.ue.msg("开票失败");
+                    top.ue.close(idx);
+                }
+           }
+        })
+         
+    }
+
+
+    /*验证*/
+    function _verifySubmit() {
+        if (!$('#ename').val()) {
+            $('#ename').siblings('.user-t-red').show().text('请输入企业名称');
+            return false;
+        } else if (/[#\¥\^&()\*]+/g.test($('#ename').val())) {
+            $('#ename').siblings('.user-t-red').show().text('请输入正确的企业名称，不要加#￥*（）&等特殊符号');
+            return false;
+        }else{
+            $('#ename').siblings('.user-t-red').hide();
+        }
+
+        if (!$('#bidentifyNumber').val()) {
+            $('#bidentifyNumber').siblings('.user-t-red').show().text('请输入采购商纳税人识别号');
+            return false;
+        } else{
+            $('#bidentifyNumber').siblings('.user-t-red').hide();
+        }
+        // else if (!/^\d{12}$/.test($('#bidentifyNumber').val())) {
+        //     $('#bidentifyNumber').siblings('.user-t-red').show().text('请输入正确的12位纯数字纳税人识别号');
+        //     return false;
+        // }
+
+        // if (!$('#bemail').val()) {
+        //     $('#bemail').siblings('.user-t-red').show().text('请输入采购商联系邮箱');
+        //     return false;
+        // } else if (!/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/.test($('#bemail').val())) {
+        //     $('#bemail').siblings('.user-t-red').show().text('邮箱格式不正确');
+        //     return false;
+        // }else{
+        //     $('#bemail').siblings('.user-t-red').hide();
+        // }
+
+        // if (!$('#bmobile').val()) {
+        //     $('#bmobile').siblings('.user-t-red').show().text('请输入手机号码');
+        //     return false;
+        // } else if (!/^1[3|4|5|7|8]\d{9}$/.test($('#bmobile').val())) {
+        //     $('#bmobile').siblings('.user-t-red').show().text('请输入正确的11位手机号码');
+        //     return false;
+        // }else{
+        //     $('#bmobile').siblings('.user-t-red').hide();
+        // }
+        
+        return true;
+    }
+
+</script>
+
+</body>
+</html>

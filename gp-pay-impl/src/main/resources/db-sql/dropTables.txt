@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS `ground_promotion_income_detail`;
+DROP TABLE IF EXISTS `ground_promotion_bank_info`;
+DROP TABLE IF EXISTS `ground_promotion_pay_receipt`;
+DROP TABLE IF EXISTS `ground_promotion_pay_receipt_detail`;
+DROP TABLE IF EXISTS `ground_promotion_commission_config`;
+DROP TABLE IF EXISTS `ground_promotion_pay_config`;
+DROP TABLE IF EXISTS `ground_promotion_achievement`;
+DROP TABLE IF EXISTS `ground_promotion_pay_log`;
+DROP TABLE IF EXISTS `ground_promotion_location`;

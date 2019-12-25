@@ -1,0 +1,1091 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>APP广告管理- 我的医药网 </title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+ 
+  <body>
+    <div class="container">
+	#parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                <p><a href="/sales/index.html" class="color">销售中心</a> &gt; 商城管理 &gt; APP商城广告管理</p>
+                </div>
+                <div class="order_query order">
+                    <form action="/sales/store/app_ad_main.html?sasId=$!sasId" method="post" id="searchForm">
+                                <input type="hidden" name="pi" value="$!pi">
+								<input type="hidden" name="ps" value="$!ps">
+                                <ul>
+                                    <li>
+                                        <label>广告标题：</label>
+                                        <input name="saTitle" type="text" value="$!{saTitle}" class="w-txt w192">
+                                    </li>
+                                </ul>
+                            </form>
+                    <div class="btn tac">
+						<a href="javascript:searchPager('/sales/store/app_ad_main.html?sasId=$!sasId',false);" class="btn_query">查询</a>
+						<a href="javascript:searchPager('/sales/store/app_ad_main.html?sasId=$!sasId',true);" class="btn_query btn_export btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+					</div>
+                    <div class="btn">
+                        <a href="javascript:editItem('',$!suType,'add');" class="btn_query btn_add btn-line" id="sel-a">添加</a>
+                    </div>
+                </div>
+                <div class="order_detail">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th width="130">图片</th>
+                                    <th>链接地址</th>
+                                    <th>标题</th>
+                                    #if($!suType == 2)
+                                    <th width="100">展示区域</th>
+                                    #end
+                                    <th width="80">生效时间</th>
+                                    <th width="80">失效时间</th>
+                                    <th width="30">状态</th>
+                                    <th width="50">排序</th>
+<!--                                     <th>上次编辑时间</th> -->
+<!--                                     <th>创建时间</th> -->
+                                    <th width="130">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            #if(!$null.isNull($shopAdList) && $shopAdList.size()!=0)
+	                            #foreach($shopAd in $shopAdList)
+	                               <tr>
+	                                    #if($!{shopAd.saImgPath})
+<!-- 	                                    <td><img alt="图片" src="$!{picUrl}$!{shopAd.saImgPath}$!{picSize}"></td> -->
+	                                    <td><img alt="图片" src="$!{downloadUrl}$!{shopAd.bucket_key}?imageView2/2/w/130"></td>
+	                                    #else
+	                                    <td></td>
+	                                    #end
+	                                    <td><span class="con_w" title="$!shopAd.saLinkUrl">$!shopAd.saLinkUrl</span></td>
+	                                    <td><span class="con_w" title="$!shopAd.saTitle">$!shopAd.saTitle</span></td>
+	                                    #if($!suType == 2)
+	                                    <td><span class="con_w" title="$!shopAd.adSiteStr">$!shopAd.adSiteStr</span></td>
+	                                    #end
+	                                    <td>$utils.formatDate($!shopAd.saStartTime,"yyyy-MM-dd HH:mm:ss")</td>
+	                                    <td>$utils.formatDate($!shopAd.saEndTime,"yyyy-MM-dd HH:mm:ss")</td>
+	                                    <td>
+	                                    #if($!{shopAd.saStatus} == 1)
+	                                                                                                                     启用
+	                                    #else
+	                                                                                                                    停用
+	                                    #end
+	                                    </td>
+	                                    <td>$!shopAd.saOrder</td>
+<!-- 	                                    <td>$utils.formatDate($!shopAd.saEditTime,"yyyy-MM-dd HH:mm:ss")</td> -->
+<!-- 	                                    <td>$utils.formatDate($!shopAd.saAddTime,"yyyy-MM-dd HH:mm:ss")</td> -->
+	                                    <td>
+	                                        <a href="javascript:view($!shopAd.saId,$!suType);" class="btn-txt">查看</a>
+											<a href="javascript:editItem($!{shopAd.saId},$!suType,'edit');" class="btn-txt">修改</a>
+											<a href="javascript:adDel($!shopAd.saId);" class="btn-txt color-bg">删除</a>
+										</td>
+	                                </tr>
+	                            #end
+	                        #else
+	                           <tr>
+	                             <td colspan="11">无相关数据！</td>
+	                           </tr>
+                            #end
+                           </tbody> 
+                        </table>
+						<!--分页开始 -->
+							#if($!{pagerInfo})
+								#if($!{pagerTotal} > 1)
+									#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/store/app_ad_main.html?sasId=$!sasId")
+								#end
+							#end
+						<!--分页结束 -->
+                    </div>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+	<!-- 添加修改页面 -->
+	<div class="mask" id="popUpMask"></div>
+	<div class="dialog w700" id="popUpDIV">
+      <div class="head"><span class="dialog-title">添加</span><a href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn-close"></a></div>   
+      <div class="con">
+          <form id="editAdForm">
+			 <input type="hidden" name="saId" id="saId" />
+			 <input type="hidden" name="sasId" id="sasId" value="$!sasId"/>
+			 <input type="hidden" name="saImgPath" id="saImgPath" />
+			 <input type="hidden" name="bucket_key" id="bucket_key" />
+			 <input type="hidden" name="imageInfo" id="imageInfo" />
+			 <input type="hidden" name="suType" id="suType" value="$!suType"/>
+			 <input type="hidden" name="suId" id="s_suId" value="$!suId"/>
+			 <input type="hidden" name="suName" id="s_suName" value="$!suName"/>
+			 <input type="hidden" name="suDomainPrefix" id="s_suDomainPrefix" value="$!suDomainPrefix"/>
+			 <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                    <tr>
+                        <td class="table-tit">上传图片<i>*</i>：</td>
+                        <td colspan="3">
+                        <div class="imgArea"><img id="showPic" width="136px" height="60px"/></div>
+                        <a style="cursor:pointer" id="uploadPic"> 
+                     		<img alt="upload" src="/image/ico_upload.jpg" /> 
+                    	</a>
+                    	<span>建议上传尺寸<span style="color:red">1200*450</span> 或者 <span style="color:red">750*281</span></span>
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td width="90" class="table-tit">图片标题：</td>
+                        <td width="auto"><input type="text" name="saTitle" id="saTitle"  maxlength="100" class="txt"></td> 
+                        <td class="table-tit">排序<i>*</i>：</td>       
+                    	<td><input type="text" name="saOrder" id="saOrder" min="0" max="99999" maxlength="5" class="txt"></td> 
+                    </tr>
+                <tr>
+             		 <td class="table-tit">跳转页面<i>*</i>：</td>
+             		 <td>
+	                     <select class="select select-ad" onchange="top.app.frameWindow.kx_sel_group(this)" id="select_option">
+	                     	  <option value="0" va="d_0" class="op_0">请选择</option>
+	                     #if(!$null.isNull($!{appPageGuideList}) && ($!appPageGuideList.size()!=0))
+	                     	#foreach($item in $appPageGuideList)
+                              <option value="$!{item.pageCode}" va="d_$!{item.id}" class="op_$!{item.pageCode}">$!{item.pageName}</option>
+                             #end 
+                          #end    
+                          </select>
+	                 </td>
+	                 
+                     <td colspan="2" valign="top">
+                     	<div class="user-form mt10" id="d_0"></div>
+                     	
+                     	<!-- 活动详情H5 -->
+                     	<div class="user-form mt10" id="d_1" style="display:none;">
+                     		<div class="cc">
+                     			<span class="text-l fl">H5链接<i>*</i>：</span>
+	                     		<input type="text" id="url_h5" maxlength="180" class="txt">
+                     		</div>
+                     		<div class="cc">
+                     			<span class="text-l fl">页面标题：</span>
+	                     		<input type="text" id="h5_hasTitle" maxlength="30" class="txt">
+                     		</div>
+                     	</div>
+                     	
+                     	<!-- 采药首页 -->
+                     	<div class="user-form mt10" id="d_2" style="display:none;"></div>
+                     	
+                     	<!-- 搜索结果页 -->
+                     	<div class="user-form mt10" id="d_40" style="display:none;">
+	                     	<div class="cc">
+                     			<span class="text-n fl">关键词<i>*</i>：</span>
+	                     		<input type="text" id="s_key" maxlength="180" class="txt">
+                     		</div>
+                     	</div>
+                     	
+                     	<!-- 单品页 -->
+                     	<div class="user-form mt10" id="d_5" style="display:none;">
+	                     	<div class="cc">
+                     			<span class="text-n fl">商品ID<i>*</i>：</span>
+	                     		<input type="text" id="gId" maxlength="9" class="txt">
+	                     		<input type="hidden" id="g_siteId" class="txt" value="">
+                     		</div>
+                     	</div>
+                     	
+                     	<!-- 购物车页 -->
+                     	<div class="user-form mt10" id="d_6" style="display:none;"></div>
+                     	
+                     	<!-- 旗舰店首页-->
+                     	<div class="user-form mt10" id="d_13" style="display:none;">
+	                     	<input type="hidden" id="suDomainPrefix" class="txt" value="$!{suDomainPrefix}">
+                     	</div>
+                     	
+                     	<!-- 分类页 -->
+                     	<div class="user-form mt10" id="d_16" style="display:none;"></div>
+                     	
+                     	<!-- 抢优惠 -->
+                     	<div class="user-form mt10" id="d_18" style="display:none;">
+	                     	<div class="cc">
+                     			<span class="text-l fl">H5链接<i>*</i>：</span>
+	                     		<input type="text" id="qyh_url" maxlength="180" class="txt">
+                     		</div>
+                     		<div class="cc">
+                     			<span class="text-l fl">页面标题：</span>
+	                     		<input type="text" id="qyh_hasTitle" maxlength="30" class="txt">
+                     		</div>
+                     	</div>
+                     	
+                     	<!-- 快速采购 -->
+                     	<div class="user-form mt10" id="d_36" style="display:none;"></div>
+                     	
+                     	<!-- 旗舰店-新品上市 -->
+                     	<div class="user-form mt10" id="d_37" style="display:none;"></div>
+                     	
+                     	<!-- 旗舰店-促销活动 -->
+                     	<div class="user-form mt10" id="d_38" style="display:none;"></div>
+                     	
+                     	<!-- 旗舰店-促销活动详情 -->
+                     	<div class="user-form mt10" id="d_39" style="display:none;">
+	                     	<div class="cc">
+                     			<span class="text-l fl">H5链接<i>*</i>：</span>
+	                     		<input type="text" id="s_url" maxlength="180" class="txt">
+                     		</div>
+                     		<div class="cc">
+                     			<span class="text-l fl">页面标题：</span>
+	                     		<input type="text" id="s_hasTitle" maxlength="30" class="txt">
+                     		</div>
+                     	</div>
+                     	
+                     </td>
+                </tr>
+                <tr>
+                    <td class="table-tit">生效时间：</td>
+                    <td><input type="text" name="saStartTime" id="saStartTime" class="txt" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'saEndTime'+'\\'+'\')}'})"/></td>
+                    <td class="table-tit">失效时间：</td>
+                    <td><input type="text" name="saEndTime" id="saEndTime" class="txt" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'saStartTime'+'\\'+'\')}'})"/></td>
+                 </tr> 
+                 #if($!suType == 2)
+                 <tr>
+					<td class="table-tit" valign="top">展示区域：</td>
+					<td colspan="3" class="label_check">
+                        <label class="label_check">
+                            <input type="checkbox" value="1" id="allChoose">全选
+                        </label>
+						<br/>
+                        #foreach($site in $openSiteList)
+                        <label class="label_check">
+                          	<input type="checkbox" value="$!{site.siteId}"  name="siteId">$!{site.siteName}
+                        </label>  	
+                        #end
+					</td>
+				 </tr>
+				 #end
+                 <tr>
+                    <td class="table-tit">状态：</td>
+                    <td>
+                    <input type="radio" id="saStatus_1" name="saStatus" class="btn-state" value="1" checked="checked">启用  
+                    <input type="radio" id="saStatus_0" name="saStatus" value="0" class="btn-state ml21">停用
+                    </td>
+                 </tr>
+              </tbody>
+          </table>
+              <div class="btn"><a href="javascript:saveAd();" class="btn-txt mr7">保存</a><a href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn-txt" >关闭</a></div>
+          </form>
+      </div>
+    </div>
+    
+    <!-- 查看页面 -->
+	<div class="mask" id="popUpMaskQ"></div>
+	<div class="dialog w700" id="popUpDIVQ">
+      <div class="head"><span class="dialog-title">添加</span><a href="javascript:closePopUpDIV('popUpDIVQ','popUpMaskQ');" class="btn-close"></a></div>   
+      <div class="con">
+          <form id="adViewForm">
+          <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                    <tr>
+                        <td class="table-tit">上传图片<i>*</i>：</td>
+                        <td colspan="3">
+                        <div class="imgArea"><img id="showPicQ" width="136px" height="60px"/></div>
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td class="table-tit" width="90">图片标题：</td>
+                        <td width="220"><span id="saTitleQ"></span></td> 
+                        <td class="table-tit" width="90">排序<i>*</i>：</td>       
+                     	<td width="auto"><span id="saOrderQ"></span></td> 
+                    </tr>
+                <tr>
+                     <td class="table-tit">跳转页面<i>*</i>：</td>
+                     <td><span id="saAdPgCodeQ"></span></td> 
+                     <td colspan="2">
+                     	<div class="user-form pageCodeQText"></div>
+                     </td> 
+                    </tr>
+                <tr>
+                    <td class="table-tit">生效时间：</td>
+                    <td><span id="saStartTimeQ"></span></td>
+                    <td class="table-tit">失效时间：</td>
+                    <td><span id="saEndTimeQ"></span></td>
+                 </tr>
+                 #if($!suType == 2)
+                 <tr>
+					<td class="table-tit">展示区域：</td>
+					<td colspan="3"><span id="adSiteStr"></span></td>
+				 </tr>
+                 #end
+                 <tr>
+                    <td class="table-tit">状态：</td>
+                    <td>
+                    <span id="saStatusQ"></span>
+                    </td>
+                 </tr>
+              </tbody>
+          </table>
+          </form>
+      </div>
+    </div>
+
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+    $(function(){
+    	var uploadPic = $("#uploadPic");
+        new AjaxUpload(uploadPic,{
+            action: "/cdn/imageInfo_upload.html",
+            name: 'file_path',
+            responseType:"json",
+            onSubmit : function(file, ext){
+            	if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+                    ext_str = ext;
+                } else {
+                	dialog({
+	                       title: "提示信息",
+	                       content: "非图片文件格式,请重传",
+	                       width: 300
+	                   });
+                    return false;
+                }
+                $.showLoad();
+            },
+            onComplete: function(file, result){
+                $.hideLoad();
+            	if (result.success == false) {
+            		if(result.message == "outofsize"){
+            			dialog({
+ 	                       title: "提示信息",
+ 	                       content: "文件过大，无法上传",
+ 	                       width: 300
+ 	                    });
+            		}else if(result.message == "error"){
+            			dialog({
+ 	                       title: "提示信息",
+ 	                       content: "文件过大，无法上传",
+ 	                       width: 300
+ 	                    });
+            		}
+            		return false;
+            		
+            	}else{
+            		$("#saImgPath").val(result.data.id);//response返回的是mogoDB记录id
+//                 	$('#showPic').attr("src",result.data.picUrl+result.data.id+result.data.picSize);
+                	$('#showPic').attr("src",result.data.picUrl);
+                	$("#bucket_key").val(result.data.id);
+                	$("#imageInfo").val($.toJSON(result.data.imageInfo));
+            	}
+            	
+            }
+        });
+    });
+
+
+    function  initFileUpload(lay) {
+        var uploadPic = $("#uploadPic",lay);
+        new top.AjaxUpload(uploadPic, {
+            action: "/cdn/imageInfo_upload.html",
+            name: 'file_path',
+            responseType: "json",
+            onSubmit: function (file, ext) {
+                if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+                    ext_str = ext;
+                } else {
+                    top.ue.msg("非图片文件格式,请重传");
+                    return false;
+                }
+                top.ue.load();
+            },
+            onComplete: function (file, result) {
+                top.ue.closeAll("loading");
+                if (result.success == false) {
+                    if (result.message == "outofsize") {
+                        top.ue.msg("文件过大，无法上传");
+                    } else if (result.message == "error") {
+                        top.ue.msg("文件过大，无法上传");
+                    }
+                    return false;
+
+                } else {
+                    $("#saImgPath",lay).val(result.data.id);//response返回的是mogoDB记录id
+                    $('#showPic',lay).attr("src", result.data.picUrl);
+                    $("#bucket_key",lay).val(result.data.id);
+                    $("#imageInfo",lay).val($.toJSON(result.data.imageInfo));
+                }
+
+            }
+        });
+    }
+
+    function saveAd(){
+    	$('#editAdForm').submit();
+    }
+    
+    function checkForm(lay) {
+        $("#editAdForm",lay).validate({
+            submitHandler: saveItem, //如果验证通过的回调函数
+            rules: {
+				saOrder: {
+					required: false,
+					digits: true
+                }
+            },
+            messages: { 
+                saOrder: {
+                	required: "请输入排序",
+                	digits: "请输入整数"
+                }
+            }
+           
+        });
+    }
+    $('#allChoose').click(function(){
+        if($('input[id="allChoose"]').prop("checked"))
+        {
+        	$("#editAdForm input[name=siteId]").prop("checked",true);
+        }
+        else
+            $("#editAdForm input[name=siteId]").prop("checked",false);
+    });
+    
+    //查看详情
+    function view(id,suType){
+    	var mask = $("#popUpMaskQ");
+		var dialog = $("#popUpDIVQ");
+            $.ajax({
+                url: "/sales/store/ad_editUI.html",
+                type: "POST",
+                data: {"id": id,"suType":suType},
+                cache: false,
+                success: function (result) {
+    	            if (result.success == false) {
+    	            	dialog({
+		                       title: "提示信息",
+		                       content: result.message,
+		                       width: 300
+		                   });
+    	            }else{
+						//显示弹出层与遮照层
+						/*showPopUpDIV(dialog,mask);
+						//给弹出层表单设值
+    	                setViewFormValue(result.data,suType);
+						//设置弹出层标题
+    	                dialog.find('.dialog-title').text("查看详情");*/
+
+                        top.rui.dynamic({
+                            title: "查看详情",
+                            content: dialog.html(),
+                            skin: "dialog-old dialog-old-no-title",
+                            area: ["720px"],
+							btn:false,
+                            success: function (lay, idx) {
+                                $(".error",lay).parent().find("label").remove();
+                                setViewFormValue(result.data,suType, lay);
+                                top.rui.initTools(lay);
+                            }
+                        })
+    	            }
+                }
+            });
+    	
+    }
+    
+		//增加与编辑，mode值有：add与edit
+		function editItem(id,suType,mode) {
+			var mask = $("#popUpMask");
+			var dialog = $("#popUpDIV");
+            if (mode == "edit") {
+                $.ajax({
+                    url: "/sales/store/ad_editUI.html",
+                    type: "POST",
+                    data: {"id": id,"suType":suType},
+                    cache: false,
+                    success: function (result) {
+        	            if (result.success == false) {
+        	            	dialog({
+			                       title: "提示信息",
+			                       content: result.message,
+			                       width: 300
+			                   });
+        	            }else{
+							/*//显示弹出层与遮照层
+							showPopUpDIV(dialog,mask);
+							//给弹出层表单设值
+        	                setFormValue(result.data,suType);
+							//设置弹出层标题
+        	                dialog.find('.dialog-title').text("编辑广告");
+        	                //清除错误信息
+        	            	$(".error").parent().find("label").remove();
+        	                //验证表单
+        	                checkForm();*/
+
+                            top.rui.dynamic({
+                                title: "编辑广告",
+                                content: dialog.html(),
+                                skin: "dialog-old dialog-old-no-title",
+                                area: ["720px"],
+                                success: function (lay, idx) {
+                                    $(".error",lay).parent().find("label").remove();
+                                    setFormValue(result.data,suType, lay);
+                                    checkForm(lay);
+                                    $('#editAdForm', lay).attr("data-did", idx);
+                                    initFileUpload(lay);
+                                    top.rui.initTools(lay);
+                                },
+                                yes: function (idx, lay) {
+                                    $('#editAdForm', lay).submit();
+                                }
+                            })
+        	            }
+                    }
+                });
+            }else {
+                /*//显示弹出层与遮照层
+				showPopUpDIV(dialog,mask);
+				//设值弹出层表单值
+				setFormValue(null,suType);
+				//设置弹出层标题
+                dialog.find('.dialog-title').text("添加广告");
+                //清除错误信息
+            	$(".error").parent().find("label").remove();
+				//验证表单
+                checkForm();*/
+
+                top.rui.dynamic({
+                    title: "添加广告",
+                    content: dialog.html(),
+                    skin: "dialog-old dialog-old-no-title",
+                    area: ["720px"],
+                    success: function (lay, idx) {
+                        $(".error",lay).parent().find("label").remove();
+                        setFormValue(null,suType, lay);
+                        checkForm(lay);
+                        $('#editAdForm', lay).attr("data-did", idx);
+                        initFileUpload(lay);
+                        top.rui.initTools(lay);
+                    },
+                    yes: function (idx, lay) {
+                        $('#editAdForm', lay).submit();
+                    }
+                })
+
+            }
+        }
+		
+		//给查看详情弹出层表单设值
+		function setViewFormValue(obj,suType,lay){
+			if (obj){
+// 				$('#showPicQ').attr("src","$!{picUrl}"+obj.saImgPath+"$!{picSize}");
+				$('#showPicQ',lay).attr("src","$!{downloadUrl}"+obj.bucket_key+"?imageView2/2/w/130");
+    			$('#saTitleQ',lay).text(obj.saTitle);
+    			$('#saColorQ',lay).text(obj.saColor);
+    			$('#saOrderQ',lay).text(obj.saOrder);
+    			$('#saStartTimeQ',lay).text(dtFormatDateTime(obj.saStartTime,"yyyy-MM-dd"));
+    			$('#saEndTimeQ',lay).text(dtFormatDateTime(obj.saEndTime,"yyyy-MM-dd"));
+    			$("#saAdPgCodeQ",lay).text(isEmpty(obj.adPgCodeStr) ? "" : obj.adPgCodeStr);
+    			if(suType==2){
+    				$('#adSiteStr',lay).text(obj.adSiteStr);
+    			}
+    			if(obj.saStatus == 1){
+    				$('#saStatusQ',lay).text("启用");
+    			}else{
+    				$('#saStatusQ',lay).text("停用");
+    			}
+    			var padeCode = obj.adPgCode;
+    			$(".pageCodeQText",lay).html("");
+    			if(!isEmpty(obj.adPageParam)){
+    				var parmaAdObjQ=JSON.parse(obj.adPageParam);
+    				if(padeCode == 1001 || padeCode == 1018 || padeCode == 1059){
+        				var txt  = 	'<div class="cc"><span class="text-l fl">H5链接<i>*</i>：</span><span class="text-r fl" title="'+parmaAdObjQ.url+'">'+substring(parmaAdObjQ.url,25)+'</span></div>';
+        					txt += 	'<div class="cc"><span class="text-l fl">页面标题：</span><span class="text-r fl" title="'+parmaAdObjQ.title+'">'+substring(parmaAdObjQ.title,10)+'</span></div>';
+                         	
+                 		$(".pageCodeQText",lay).html(txt);
+        				
+        			}else if(padeCode == 1054){
+        				var txt = '<div class="cc"><span class="text-l fl">关键词<i>*</i>：</span><span class="text-r fl">'+parmaAdObjQ.s_key+'</span></div>';
+        				$(".pageCodeQText",lay).html(txt);
+        				
+        			}else if(padeCode == 1005){
+        				var txt ='<div class="cc"><span class="text-l fl">商品ID<i>*</i>：</span><span class="text-r fl">'+parmaAdObjQ.gId+'</span></div>';
+        					
+        				$(".pageCodeQText",lay).html(txt);
+        				
+        			}
+    			}
+    			
+			}
+		}
+		
+		
+		//给弹出层表单设值
+		function setFormValue(obj,suType,lay){
+			$(".select-ad option",lay).each(function(){
+ 			   var t = $(this);
+ 			   $(this).prop("selected",true);
+ 			});
+			if (obj){
+				$('#saId',lay).val(obj.saId);
+				$('#sasId',lay).val(obj.sasId);
+// 				$('#showPic').attr("src","$!{picUrl}"+obj.saImgPath+"$!{picSize}");
+				$('#showPic',lay).attr("src","$!{downloadUrl}"+obj.bucket_key+"?imageView2/2/w/130");
+				$('#saImgPath',lay).val(obj.saImgPath);
+				$('#bucket_key',lay).val(obj.bucket_key);
+    			$('#saLinkUrl',lay).val(obj.saLinkUrl);
+    			$('#saTitle',lay).val(obj.saTitle);
+    			$('#saColor',lay).val(obj.saColor);
+    			$('#saOrder',lay).val(obj.saOrder);
+    			$('#saStartTime',lay).val(dtFormatDateTime(obj.saStartTime,"yyyy-MM-dd"));
+    			$('#saEndTime',lay).val(dtFormatDateTime(obj.saEndTime,"yyyy-MM-dd"));
+    			if(obj.saStatus == 1){
+    				$('#saStatus_1',lay).prop("checked",true);
+    			}else{
+    				$('#saStatus_0',lay).prop("checked",true);
+    			}
+    			
+    			
+    			#if($!suType == 2)
+	    			$("#editAdForm input[name=siteId]",lay).each(function(){
+	    			     $(this).prop("checked",false);
+	    			});
+    			   $("#allChoose",lay).attr("checked",false);
+	    			
+	    			var selectdAdList = obj.adSiteList;
+	    			
+	    			$("#editAdForm input[name=siteId]",lay).each(function(){
+	    			   var value = parseInt($(this).val());
+	    			   if($.inArray(value,selectdAdList) > -1){
+	    			     $(this).prop("checked",true);
+	    			   }
+	    			});
+    			#end
+    			
+    			var seId = obj.adPgCode;
+    			if(seId == 1054 || seId == 1005 || seId == 1013 || seId == 1001){
+    				$("#select_option",lay).find(".op_"+seId).prop("selected",true);
+    			}else{
+    				$("#select_option",lay).find(".op_0").prop("selected",true);
+    			}
+
+    			$("#d_1",lay).hide();
+    			$("#d_2",lay).hide();
+    			$("#d_40",lay).hide();
+    			$("#d_5",lay).hide();
+    			$("#d_6",lay).hide();
+    			$("#d_13",lay).hide();
+    			$("#d_16",lay).hide();
+    			$("#d_18",lay).hide();
+    			$("#d_36",lay).hide();
+    			$("#d_37",lay).hide();
+    			$("#d_38",lay).hide();
+    			$("#d_39",lay).hide();
+    			$("#url_h5",lay).val("");
+    			$("#h5_hasTitle",lay).val("");
+    			if(!isEmpty(obj.adPageParam)){
+    				var parmaAdObj=JSON.parse(obj.adPageParam);
+    				if(seId == 1001){
+        				$("#d_1",lay).show();
+        				$("#url_h5",lay).val(parmaAdObj.url);
+        				$("#h5_hasTitle",lay).val(parmaAdObj.title);
+        				   
+        			}else if(seId == 1054){
+           				$("#d_40",lay).show();
+        				$("#s_key",lay).val(parmaAdObj.s_key);
+        				   
+        			}else if(seId == 1005){
+           				$("#d_5",lay).show();
+        				$("#gId",lay).val(parmaAdObj.gId);
+        				   
+        			}else if(seId == 1018){
+        				$("#d_18",lay).show();
+        				$("#qyh_url",lay).val(parmaAdObj.url);
+        				$("#qyh_hasTitle",lay).val(parmaAdObj.title);
+
+        			}else if(seId == 1059){
+        				$("#d_39",lay).show();
+        				$("#s_url",lay).val(parmaAdObj.url);
+        				$("#s_hasTitle",lay).val(parmaAdObj.title);
+
+        			}else if(seId == 1002){
+        				$("#d_2",lay).show();
+        			}else if(seId == 1006){
+        				$("#d_6",lay).show();
+        			}else if(seId == 1013){
+        				$("#d_13",lay).show();
+        			}else if(seId == 1016){
+        				$("#d_16",lay).show();
+        			}else if(seId == 1036){
+        				$("#d_36",lay).show();
+        			}else if(seId == 1057){
+        				$("#d_37",lay).show();
+        			}else if(seId == 1058){
+        				$("#d_38",lay).show();
+        			}
+    			}
+    			
+			}else{
+				$("#select_option",lay).find(".op_0").prop("selected",true);
+				$('#saId',lay).val("");
+				$('#saLinkUrl',lay).val("");
+				$('#showPic',lay).attr("src","");
+				$('#saImgPath',lay).val("");
+				$('#bucket_key',lay).val("");
+    			$('#saTitle',lay).val("");
+    			$('#saColor',lay).val("");
+    			$('#saOrder',lay).val("");
+    			$('#saStartTime',lay).val("");
+    			$('#saEndTime',lay).val("");
+    			$('#saStatus_1',lay).prop("checked",true);
+    			#if($!suType == 2)
+    			$("#editAdForm input[name=siteId]",lay).each(function(){
+    			     $(this).prop("checked",true);
+    			});
+    			$("#allChoose",lay).attr("checked",true);
+    			#end
+    			
+    			$("#select_option",lay).find(".op_0").attr("selected",true);
+    			
+   				$("#d_1",lay).hide();
+   				$("#url_h5",lay).val("");
+   				$("#h5_hasTitle",lay).val("");
+   				   
+      			$("#d_40",lay).hide();
+   				$("#s_key",lay).val("");
+   				   
+      			$("#d_5",lay).hide();
+   				$("#gId",lay).val("");
+   				   
+   				$("#d_18",lay).hide();
+   				$("#qyh_url",lay).val("");
+   				$("#qyh_hasTitle",lay).val("");
+   				
+   				$("#d_39",lay).hide();
+   				$("#s_url",lay).val("");
+   				$("#s_hasTitle",lay).val("");
+
+   				$("#d_2",lay).hide();
+   				$("#d_6",lay).hide();
+   				$("#d_13",lay).hide();
+   				$("#d_16",lay).hide();
+   				$("#d_36",lay).hide();
+   				$("#d_37",lay).hide();
+   				$("#d_38",lay).hide();
+			}
+		}
+		//增加或修改保存
+		function saveItem(obj){
+            var idx = $(obj).attr("data-did");
+            var lay = top.$("#layui-layer" + idx);
+			var saImgPath = $("#saImgPath",lay).val();
+			if(isEmpty(saImgPath)){
+				dialog({
+                    title: "提示信息",
+                    content: "请上传图片",
+                    width: 300
+                });
+				
+				return false;
+			}
+			
+			var url = null;
+			var flag = true;
+			var id = $("#editAdForm",lay).find("#saId").val();
+        	if(!isEmpty(id)){
+        		url = "/sales/store/app_ad_edit.html";
+        	    flag = false;
+        	}else{
+        		url = "/sales/store/app_ad_add.html";
+        	}
+        	var seId = $('#select_option option:selected',lay).val();//选中的值
+        	
+        	if(isEmpty($("#saOrder",lay).val())){
+        		dialog({
+                    title: "提示信息",
+                    content: "请输入排序",
+                    width: 300
+                });
+				
+				return false;
+        	}
+        	
+        	if(seId == 0){
+        		seIdDZ();
+				return false;
+			}
+           var pamamStr = "";
+ 		   if(seId == 1001){
+ 			  if(isEmpty($("#url_h5",lay).val().trim())){
+ 				 h5Url();
+ 				return false;
+ 			  }
+ 			 var pamamObj = {};
+ 			   pamamObj.url = $("#url_h5",lay).val().trim();
+			   pamamObj.title = $("#h5_hasTitle",lay).val().trim();
+			   pamamObj.hasTitle = 1;
+			   pamamStr = $.toJSON(pamamObj);
+ 			   
+ 		   }else if(seId == 1054){
+ 			  if(isEmpty($("#s_key",lay).val().trim())){
+ 				 s_keyword();
+ 				return false;
+  			  }
+ 			 var pamamObj = {};
+			   pamamObj.s_supplier = $("#s_suName",lay).val();
+			   pamamObj.s_mark = "";
+			   pamamObj.s_classify1 = "";
+			   pamamObj.s_classify2 = "";
+			   pamamObj.s_goods = "";
+			   pamamObj.store = "";
+			   pamamObj.s_key = $("#s_key",lay).val().trim();
+			   pamamStr = $.toJSON(pamamObj);
+ 			   
+ 		   }else if(seId == 1005){
+ 			  var gg_id = $("#gId",lay).val().trim();
+ 			  if(isEmpty(gg_id) || gg_id < 0){
+ 				 gIdSR();
+ 				return false;
+   			  }
+ 			  
+ 			  var r = /^\+?[1-9][0-9]*$/;　　//正整数 
+ 			  if(!r.test(gg_id)){
+ 				 gIdSSZ();
+ 				 return false;
+ 			  }
+ 			 var pamamObj = {};
+			   pamamObj.siteId = "";
+			   pamamObj.gId = gg_id;
+			   pamamStr = $.toJSON(pamamObj);
+ 			   
+ 		   }else if(seId == 1018){
+ 			  if(isEmpty($("#qyh_url",lay).val().trim())){
+  				 h5Url();
+  				return false;
+  			  }
+ 			 var pamamObj = {};
+			   pamamObj.url = $("#qyh_url",lay).val().trim();
+			   pamamObj.title = $("#qyh_hasTitle",lay).val().trim();
+			   pamamObj.hasTitle = 1;
+			   pamamStr = $.toJSON(pamamObj);
+			   
+ 		   }else if(seId == 1057){
+  			 var pamamObj = {};
+ 			   pamamObj.suId = $("#s_suId",lay).val();
+ 			   pamamObj.suDomainPrefix = $("#s_suDomainPrefix",lay).val();
+ 			   pamamStr = $.toJSON(pamamObj);
+ 			   
+  		   }else if(seId == 1058){
+    			var pamamObj = {};
+   			   pamamObj.suId = $("#s_suId",lay).val();
+   			   pamamStr = $.toJSON(pamamObj);
+   			   
+    	   }else if(seId == 1059){
+    		  if(isEmpty($("#s_url",lay).val().trim())){
+   				 h5Url();
+   				return false;
+   			  }
+   			 var pamamObj = {};
+   			   pamamObj.url = $("#s_url",lay).val().trim();
+  			   pamamObj.title = $("#s_hasTitle",lay).val().trim();
+  			   pamamObj.hasTitle = 1;
+  			   pamamStr = $.toJSON(pamamObj);
+  			   
+ 	  	   }else if(seId == 1013){
+ 	  			 var pamamObj = {};
+ 	 			   pamamObj.suDomainPrefix = $("#s_suDomainPrefix",lay).val();
+ 	 			   pamamObj.suType = $("#suType",lay).val();
+ 	 			   pamamStr = $.toJSON(pamamObj);
+ 	  		}
+        	
+        	var adObj = {};
+		    adObj.saId = $("#saId",lay).val();
+		    adObj.sasId = $("#sasId",lay).val();
+		    adObj.saLinkUrl = $("#saLinkUrl",lay).val();
+		    adObj.saImgPath = $("#saImgPath",lay).val();
+		    adObj.bucket_key = $("#bucket_key",lay).val();
+		    adObj.imageInfo = $("#imageInfo",lay).val();
+		    adObj.saTitle = $("#saTitle",lay).val();
+		    adObj.saColor = $("#saColor",lay).val();
+		    adObj.saOrder = $("#saOrder",lay).val();
+		    adObj.saStartTime = $("#saStartTime",lay).val();
+		    adObj.saEndTime = $("#saEndTime",lay).val();
+		    adObj.saStatus = $("input[name='saStatus']:checked",lay).val();
+		    var suType = $("#suType",lay).val();
+		    if(suType==2){
+			    var str=$("input[name='siteId']:checked",lay);
+		    	var objarray=str.length;
+		    	var adSiteStr="";
+		    	for (i=0;i<objarray;i++){
+		    		adSiteStr+=","+str[i].value;
+		    	}
+		    	adObj.adSiteStr=adSiteStr;
+		    }
+		   
+		   adObj.adPgCode = seId;
+		    	
+		    var jsonParam = $.toJSON(adObj);
+			
+			$.ajax({
+	           url: url,
+	           data: {"jsonParam":jsonParam,"suType":suType, adPageParam : pamamStr},
+	           type: 'POST',
+	           dataType: 'json',
+	           success: function(result) {
+			   		
+                    if (result.success == false) {
+                    	dialog({
+		                       title: "提示信息",
+		                       content: result.message,
+		                       width: 300
+		                   });
+                    }else{
+                        top.ue.close(idx);
+                    	var content = flag?"添加广告成功":"修改广告成功";
+                    	top.ue.alert({
+			                title: '提示信息',
+			                content: content,
+			                end: function() {
+			                    window.location.reload(true);
+			                }
+			            })
+                    }
+		       }
+            });
+		}
+		
+		function h5Url(){
+			dialog({
+                title: "提示信息",
+                content: "请您输入H5页面地址",
+                width: 300
+            });
+		}
+		function seIdDZ(){
+			dialog({
+                title: "提示信息",
+                content: "请您选择跳转页面",
+                width: 300
+            });
+		}
+		function s_keyword(){
+			dialog({
+                title: "提示信息",
+                content: "请您输入关键词",
+                width: 300
+            });
+		}
+		function gIdSR(){
+			dialog({
+                title: "提示信息",
+                content: "请您输入商品ID",
+                width: 300
+            });
+		}
+		function gIdSSZ(){
+			dialog({
+                title: "提示信息",
+                content: "请您输入正确的商品ID",
+                width: 300
+            });
+		}
+		function pactIdSR(){
+			dialog({
+                title: "提示信息",
+                content: "请您填写促销活动ID",
+                width: 300
+            });
+		}
+		function substring(str,size){
+			if(str.length == 0){
+				return "";
+			}
+			if(str.length > size){
+				return str.substr(0,size) + "...";
+			}else{
+				return str;
+			}
+			
+		}
+	   
+		//删除广告
+       function adDel(value){
+           top.ue.confirm({
+               title: "提示信息",
+               content: "你确定要删除该条记录吗？",
+               ok: function () {
+                   $.ajax({
+                       url: '/sales/store/ad_del.html',
+                       data: {"id": value},
+                       type: 'POST',
+                       dataType: 'json',
+                       success: function (result) {
+                           if (result.data == true) {
+                               top.ue.alert({
+                                   title: '提示信息',
+                                   content: "删除广告成功",
+                                   end: function () {
+                                       window.location.href = "/sales/store/app_ad_main.html?sasId=$!sasId";
+                                   }
+                               })
+
+                           } else {
+                               top.ue.msg("删除广告失败");
+                           }
+                       }
+                   });
+               }
+           });
+       
+       }
+
+       
+       //请选择控销客户组
+       function kx_sel_group(t){
+           var _idx = $(t).closest("#editAdForm").attr("data-did");
+           var _lay = top.$("#layui-layer" + _idx);
+           for(var i=0;i<t.length;i++)
+           {
+        	   if($(t).find("option").get(i).selected == true){
+               		//document.getElementById(t.options[i].va).style.display="none";
+        	   	   $("#"+$($(t).find("option").get(i)).attr("va"),_lay).show()
+        	   }else{
+        	       $("#"+$($(t).find("option").get(i)).attr("va"),_lay).hide();
+//        		   document.getElementById($($(t).find("option").get(i)).attr("va")).style.display="none";
+        	   }
+           }
+       }
+      </script>
+  </body>
+</html>

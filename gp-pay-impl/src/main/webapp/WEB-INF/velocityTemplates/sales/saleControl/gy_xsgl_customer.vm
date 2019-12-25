@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的医药网 - 广告管理</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+ 
+  <body>
+    <div class="container">
+		#parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            	<div class="dialog_box_client mt20">
+            		  <input type="hidden" id="scId" name="scId" value="$!{scId}"/>	
+						<dl class="dialog_ctn">
+							<dt>
+								<span class="title">新增策略</span> <a href="javascript:;"
+									class="btn_close"></a>
+							</dt>
+							<dd>
+								<div class="dialog_sheet">
+									<h3 class="dialog_title mb5">指定客户设定</h3>
+									<div class="dialog_company_ctn">
+										<div class="dialog_company_list">
+											<div class="inquiry_top">
+												<span>待选择企业列表</span> <input class="input" type="text" name="uncheckedName" id="uncheckedName">
+												<a href="javascript:;" class="btn" onclick="searchUnchecked()">查询</a>
+											</div>
+											<div class="table">
+												<table cellpadding="0" cellspacing="0">
+													<thead class="head">
+														<tr>
+															<th></th>
+															<th><input type="checkbox" class="check"  onclick="checkAll(this,'uncheckedCustomer')"/></th>
+															<th>企业名称</th>
+															<th>企业编码</th>
+														</tr>
+													</thead>
+													<tbody>
+													   #foreach($cust in $!uncheckedCustomer)		
+														<tr>
+															<td>$!{velocityCount}</td>
+															<td><input type="checkbox" class="check" name="uncheckedCustomer" id="unchecked_$!{cust.eId}" value="$!{cust.eId}"/></td>
+															<td>$!{cust.eId}--$!{cust.eName}</td>
+															<td>$!{cust.smCode}</td>
+														</tr>
+													   #end	
+													</tbody>
+												</table>
+												#if($!{pagerInfo}) #if($!{pagerTotal} != 1)
+													#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/sale_control/gy_xsgl.html",$!{pagerQueryParam})
+												#end #end
+											</div>
+										</div>
+										<div class="dialog_company_function">
+											<a href="javascript:;" class="btn-txt top" onclick="addSaleControlEnterprise('uncheckedCustomer')">添加</a> <br> <a
+												href="javascript:;" class="btn-delete" onclick="delSaleControlEnterprise(1,'checkedCustomer')">删除</a> <br>
+											<!--<br> <a href="javascript:;" class="btn-txt">添加全部</a> <br>
+											<a href="javascript:;" class="btn-delete" onclick="delSaleControlEnterprise(2,'checkedCustomer')">删除全部</a>-->
+										</div>
+										<div class="dialog_company_list">
+											<div class="inquiry_top">
+												<span>已选择企业列表</span> <input class="input" type="text" name="checkedName" id="checkedName">
+												<a href="javascript:;" class="btn" onclick="searchChecked()">查询</a>
+											</div>
+											<div class="table">
+												<table cellpadding="0" cellspacing="0">
+													<thead class="head">
+														<tr>
+															<th></th>
+															<th><input type="checkbox" class="check"  onclick="checkAll(this,'checkedCustomer')"/></th>
+															<th>企业名称</th>
+															<th>企业编码</th>
+														</tr>
+													</thead>
+													<tbody>
+													  #foreach($customer in $!checkedCustomer)	
+														<tr>
+															<td>$!{velocityCount}</td>
+															<td><input type="checkbox" class="check" name="checkedCustomer" id="checked_$!{customer.eId}" value="$!{customer.eId}"/></td>
+															<td>$!{customer.eName}</td>
+															<td>$!{customer.eId}</td>
+														</tr>
+													   #end
+													</tbody>
+												</table>
+												#if($!{pagerInfo}) #if($!{pagerTotal} != 1)
+													#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/sale_control/gy_xsgl.html",$!{pagerQueryParam})
+												#end #end
+											</div>
+										</div>
+									</div>
+								</div>
+							</dd>
+						</dl>
+					</div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/pop_div.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+    <script>
+    	function checkAll(obj, cName){
+    		var checkboxs = document.getElementsByName(cName);
+    		for ( var i = 0; i < checkboxs.length; i+=1) {  
+   				 checkboxs[i].checked = obj.checked;
+ 		   }
+    	}
+    	
+    	function addSaleControlEnterprise(cName){
+    		var eId = "";
+    		var scId = $("#scId").val();
+    		var checkboxs = document.getElementsByName(cName);
+    		for ( var i = 0; i < checkboxs.length; i+=1){
+    			if(checkboxs[i].checked==true){
+    				eId = eId + "," + checkboxs[i].value;
+    			}
+    		}
+    		eId = eId.substring(1,eId.length);
+    		if(eId == null || eId == ""){
+                top.ue.msg("请选择需要添加的企业信息");
+	    			return false;
+    		}else{
+    			$.ajax({
+    				url:"/sales/sale_control/add_sale_control_enterprise.html",
+	    			data:{"eId":eId,"scId":scId},
+	    			type:"POST",
+	    			dataType:"json",
+	    			success:function(result){
+	    				if((typeof result)=="string"){
+    						result = $.parseJSON(result);
+    					}
+    					if (result.success == false) {
+                            top.ue.msg("数据添加信息失败");
+	    				}else{
+	    					window.location.href="";
+	    					return;
+	    				}
+	    			}
+    			});
+    		}
+    	}
+    	
+    	function searchUnchecked(){
+    		var scId = $("#scId").val();
+    		var uncheckedName = $("#uncheckedName").val();
+    		window.location.href="/sales/sale_control/list_enterprise.html?scId="+scId+"&uncheckedName="+uncheckedName+"&flag=1";
+    	}
+    	function searchChecked(){
+    		var scId = $("#scId").val();
+    		var checkedName = $("#checkedName").val();
+    		window.location.href="/sales/sale_control/list_enterprise.html?scId="+scId+"&checkedName="+checkedName+"&flag=2";
+    	}
+    	function delSaleControlEnterprise(flag,cName){
+    		var eId = "";
+    		var scId = $("#scId").val();
+    		var checkboxs = document.getElementsByName(cName);
+    		for ( var i = 0; i < checkboxs.length; i+=1){
+    			if(checkboxs[i].checked==true){
+    				eId = eId + "," + checkboxs[i].value;
+    			}
+    		}
+    		eId = eId.substring(1,eId.length);
+    		if(flag == 1){
+    			if(eId == null || eId == ""){
+                    top.ue.msg("请选择需要删除的企业信息");
+	    			return false;
+    			}
+    		}
+    		
+    			$.ajax({
+    				url:"/sales/sale_control/delete_sale_control_enterprise.html",
+	    			data:{"eId":eId,"scId":scId,"flag":flag},
+	    			type:"POST",
+	    			dataType:"json",
+	    			success:function(result){
+	    				if((typeof result)=="string"){
+    						result = $.parseJSON(result);
+    					}
+    					if (result.success == false) {
+                            top.ue.msg("数据删除信息失败");
+	    				}else{
+	    					window.location.href="";
+	    					return;
+	    				}
+	    			}
+    			});
+    		
+    	}
+    </script>
+  </body>
+</html>

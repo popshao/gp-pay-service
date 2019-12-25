@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" class="parent-html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1' />
+    <meta name="renderer" content="webkit">
+    <title>我的医药网</title>
+    <link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+    <link rel="stylesheet" href="/js/webupload/webuploader.css?v=1.13">
+    <link rel="stylesheet" type="text/css" href="/js/select2/select2.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/front/css/style.css?ver=20170421"/>
+    <link type="text/css" href="/front/js/layui/layui-cmd/css/layui.css?ver=20170421" rel="stylesheet">
+    <link type="text/css" href="/front/css/jquery.Jcrop.min.css?ver=20170421" rel="stylesheet">
+    <link type="text/css" href="/front/css/new_dialog.css?ver=$!{jscss_version}" rel="stylesheet">
+    <link type="text/css" href="/front/css/layout.css?ver=20170421" rel="stylesheet">
+</head>
+<body ms-controller="mph-manage" class="ms-controller kkmy-box">
+
+<div class="kmb-top">
+    <div class="logo-box fl">
+        <a href="http://$!{wwwHostAndPort}"><img src="/front/imgs/logo.png" alt=""></a>
+    </div>
+    <div class="tab-menu fl">
+        #if($!userType == 1)
+            <a class="active" href="javascript:void(0);" hidefocus onclick="utils.goto(null,1)" data-center="1">采购中心</a>
+            #if($!isWeiDian == 'yes')
+                <a href="$!{user.kkUrl}/merchant/loginForB2B.do?uid=$!{kkuid}&username=$!{kkusername}&ticket=$!{ticket}" target="_blank">我的康康</a>
+            #else
+                <a class="subtitle fl" href="http://act.mypharma.com/kkmyIn.html" target="_blank">轻松开网店</a>
+            #end
+        #elseif($!userType == 2)
+            #if($!mod == "sales")
+                <!--商业销售中心-->
+                <a href="javascript:void(0);" hidefocus onclick="utils.goto(null,1)" data-center="1">采购中心</a>
+                <a class="active" href="javascript:void(0);" hidefocus onclick="utils.goto(null,2)" data-center="2">销售中心</a>
+            #elseif($!mod == "purchase")
+                <!--商业采购中心-->
+                <a href="javascript:void(0);" hidefocus onclick="utils.goto(null,1)">采购中心</a>
+                <a class="active" href="javascript:void(0);" hidefocus onclick="utils.goto(null,2)" data-center="2">销售中心</a>
+            #end
+        #elseif($!userType == 3)
+            <a class="active" href="javascript:void(0);" hidefocus onclick="utils.goto(null,2)" data-center="2">销售中心</a>
+        #end
+    </div>
+    <div class="tools-bar">
+        #if($!userType!=3)
+            <a href="javascript:void(0);">下载APP采购 <i class="icon-font">&#xe650;</i>
+                <div class="toggle-menu">
+                    <img :attr="{src:@qrImg}" alt="" style="width: 97px; height: 97px;" width="97" height="97"
+                         :click="@showImg(@qrImg,'二维码');">
+                    <p class="color-red">点击图片放大</p>
+                </div>
+            </a>
+        #end
+        <a href="javascript:void(0);">客户服务 <i class="icon-font">&#xe650;</i>
+            <div class="toggle-menu">
+                <p data-href="https://cms.mypharma.com/node/116" data-target="_blank">常见问题</p>
+                <p  data-href="https://cms.mypharma.com/info/454" data-target="_blank">联系我们</p>
+            </div>
+        </a>
+        <a href="javascript:void(0);" class="top-logout" style="cursor: default">
+            <img src="/front/imgs/header_icon.png" alt="">
+            #if($!user)
+                <span>
+                #if($!{user.ename} && $!{user.ename}!='')
+                    $!utils.substring($!{user.ename},20)
+                #else
+                    $!utils.substring($!{user.mname},20)
+                #end
+                </span>
+            #end
+            <span data-href="/logout.html" target="_blank" title="退出" style="margin-left: 15px; color: #0f93ce;">退出</span></a>
+    </div>
+</div>
+
+<div class="kmb-box" :css="{height:@boxHeight}">
+    <div class="kmb-left" :css="{height:@boxHeight}">
+        <ul class="menu-p" ms-visible="@saleShow">
+            #parse("/common/left_menu_sales_new.vm")
+
+            <li class="menu-list-p" id="menu_li_9999999" style="background: none; display: none" ms-visible="@frontDebug">
+                <a href="javascript:void(0);"
+                   ms-click="@goto($event, '$!{path}/frontend/rocky_test.html' , 999999 )"
+                   ms-attr="{id:'menu_999999','data-url':'$!{path}/frontend/rocky_test.html','data-id':999999 }"
+                   hidefocus="true">
+                    <span class="menu-icon"><img src="/front/imgs/icon-qy.png" alt=""></span>
+                    <span class="menu-text">前端专用菜单</span><i class="icon-font"></i>
+                </a>
+            </li>
+
+        </ul>
+        <ul class="menu-p" ms-visible="@purchaseShow">
+            #parse("/common/left_menu_purchase_new.vm")
+        </ul>
+    ##        <p ms-visible="!@notNull(@menu)" class="menu-load">{{@menuErrText}}</p>
+    </div>
+    <div class="kmb-main" ms-css="{width:@mainWidth}" style="visibility: hidden">
+
+        <div class="main-wrap">
+            <div class="main-tabs-box">
+                <ul class="main-tabs" data-index="1">
+                    <li class="main-tab active" style="z-index: 1;">
+                        #if($!homeText)
+                            <a :attr="{'data-url':'$!redirectUrl','title':'$!homeText'}" data-id="0" id="tab_0"  href="javascript:void(0);" hidefocus="true"><span>$!homeText</span></a>
+                        #else
+                            <a :attr="{'data-url':@indexUrl,'title':@indexText+'首页'}" data-id="0" id="tab_0"  href="javascript:void(0);" hidefocus="true"><span ms-text="@indexText+'首页'" ></span></a>
+                        #end
+                    </li>
+                </ul>
+                <div class="tabs-mlist-wrapper" ms-visible="@tabs.length > 1">
+                    <div class="pos-right-tab-list">
+                        <a href="javascript:void(0);">
+                            <span ms-text="@tabs.length"></span>
+                            <img src="/image/list-tab-grey.png" alt="">
+                        </a>
+
+                    </div>
+                    <div class="tab-list-menu">
+                        <a href="javascript:void(0);" class="close-all" onclick="utils.closeAllTabs();">关闭所有选项卡</a>
+                        <ul ms-css="{'max-height':@frameBoxHeight-2}">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="main-bread">
+                <p>
+                    #if($!homeText)
+                        <a href="javascript:void(0);" :click="@showCenterIndex();" ms-text="@indexText"></a> <span><i>&gt;</i> 账户管理</span>
+                        <span><i>&gt;</i>企业认证</span>
+                    #else
+                        <a href="javascript:void(0);" :click="@showCenterIndex();" ms-text="@indexText"> </a>
+                        <span
+                            ms-visible="@notNull(@firstBread)"><i>&gt;</i><b ms-text="@firstBread"></b></span>
+                        <span
+                            ms-visible="@notNull(@secondBread)"><i>&gt;</i><a
+                            href="javascript:void(0);" #*ms-attr="{href:@actTabUrl }"*# ms-text="@secondBread"
+                            :attr="{'data-url':@secondBreadUrl,'data-prevbread':@prevBread}"
+                            :click="@actTabDbl($event);"></a></span>
+                        <span ms-visible="@notNull(@thirdBread)"><i>&gt;</i><b ms-text="@thirdBread"></b></span>
+                    #end
+                </p>
+
+            </div>
+            <div id="mainFrame" ms-css="{height:@frameBoxHeight,width:@mainWidth-42}" class="main-frame">
+                <iframe id="0-DiyFrameUUID" name="0-DiyFrameUUID" :attr="{width:@mainWidth-42,'data-src':@indexUrl}" allowtransparency="true"
+                        height="100%"
+                        frameborder="0"></iframe>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+#*加载异步框架*#
+    #parse("/common/dialog_tpl.vm")
+
+<script src="/front/js/lib/avalon-ie.min.js?ver=$!{jscss_version}"></script>
+<script src="/front/js/lib/jquery-1.8.3.min.js?ver=$!{jscss_version}"></script>
+<script src="/front/js/lib/jquery.mousewheel.min.js?ver=$!{jscss_version}"></script>
+<script src="/front/js/layui/layui-idp.min.js?ver=$!{jscss_version}"></script>
+<script src="/front/js/lib/jquery.Jcrop.min.js?ver=$!{jscss_version}"></script>
+<script src="/front/js/lib/jquery.nicescroll.min.js?ver=$!{jscss_version}"></script>
+<script src="/front/js/lib/tplTools.js?ver=$!{jscss_version}"></script>
+<script src="/js/select2/select2.min.js?v=$!{jscss_version}"></script>
+<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/webupload/webuploader.nolog.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/front/js/utils.js?ver=$!{jscss_version}&t=1"></script>
+<script src="/front/js/rog-ui.js?ver=$!{jscss_version}"></script>
+<script src="/front/js/helps/modalHelper.js?ver=$!{jscss_version}"></script>
+<script src="/front/js/app.js?ver=$!{jscss_version}"></script>
+<script src="/front/js/FrameWork.js?v=$!{jscss_version}" type="text/javascript"></script>
+
+<script>
+    var _timer = null, inviteCode , eid = '$!user.eid' , estatus = '$!user.estatus';
+    app.index.indexUrl = '$!redirectUrl' , userType = $!userType , _payStatus = parseInt("$!payStatus",0);
+    $(function () {
+        /*生成二维码*/
+        app.index.qrImg = '/front/imgs/img-qr.png';
+        if(eid == 0 || estatus != 1) app.index.isValid = 0;
+        else app.index.isValid = 1;
+
+        $(".toggle-menu").each(function () {
+            var _menu = $(this);
+            _menu.parent().on("mouseenter", function () {
+                $(".toggle-menu").not(_menu).slideUp();
+                _menu.slideDown();
+                clearTimeout(_timer);
+                _timer = null;
+            }).on("mouseleave", function () {
+                _timer = setTimeout(function () {
+                    _menu.slideUp();
+                }, 500)
+            })
+        })
+        liveEvt();
+
+        leftScroll = $(".kmb-left").height(app.index.boxHeight).niceScroll({
+            cursorborder: "0 none",
+            cursorcolor: "#e2e2e2",
+            autohidemode: false,
+            cursoropacitymin:.1,
+            cursoropacitymax:.3,
+            disableoutline:true,
+            railpadding: { top:0, right:1, left:0, bottom:0 }
+        })
+
+        showCommonMenuList();
+        getCoupon();
+
+        $(".pos-right-tab-list").find("a").hover(function () {
+            $(this).find("img").attr("src","/image/list-tab-white.png");
+        },function () {
+            $(this).find("img").attr("src","/image/list-tab-grey.png");
+        }).on("click",function () {
+            $(".tab-list-menu").slideToggle();
+            tabsListScroll.resize();
+            return false;
+        })
+
+        $(document).on("click",function () {
+            if(stopEventHanfler) {
+                stopEventHanfler = false;
+                return false;
+            }
+            $(".tab-list-menu").slideUp();
+            $(".sltitem").each(function () {
+                $(this).find("ul").hide();
+            })
+            //return false;
+        })
+
+        utils.bindIfrmClick.track($("#0-DiyFrameUUID")[0],function(){
+            if(stopEventHanfler) {
+                stopEventHanfler = false;
+                return false;
+            }
+            $(".tab-list-menu").slideUp();
+            $(".sltitem").each(function () {
+                $(this).find("ul").hide();
+            })
+        })
+
+        tabsListScroll = $(".tab-list-menu ul").niceScroll({
+                autohidemode:false
+        })
+
+        if(!$(".kmb-box").get(0).style.height){
+            setTimeout(function () {
+                $(".kmb-main").css("visibility","visible");
+                $(".kmb-box").css({"height":app.index.boxHeight+'px'});
+                $(".kmb-left").css({"height":app.index.boxHeight+'px'});
+                $(".kmb-main").css({"width":app.index.mainWidth+'px'});
+                $("#mainFrame").css({"height":app.index.frameBoxHeight+'px',"width":(app.index.mainWidth-42)+'px'});
+                $(".menu-p").hide();
+                if(app.index.purchaseShow){
+                    $($(".menu-p").get(1)).show();
+                }else{
+                    $($(".menu-p").get(0)).show();
+                }
+            },100)
+        }else{
+            $(".kmb-main").css("visibility","visible");
+        }
+
+        if(utils.checkOldLowBrowerReal()){
+            setTimeout(function () {
+                $(".main-tabs a:first").trigger("dblclick");
+            },1000)
+        }
+
+
+        if(utils.getUrlParam("frontDebug") == "yes"){
+            app.index.frontDebug = true;
+        }
+    })
+
+    /***
+     * 默认展开常用功能菜单
+     */
+    function showCommonMenuList() {
+        $(".kmb-left > .menu-p").each(function (i,e) {
+            var _dom = $($(this).find(".menu-list-p").get(0)).find(" > a");
+            var _t = $($(this).find(".menu-list-p").get(0)).find(" > a .menu-text").text();
+            if(_t.indexOf("常用") > -1){
+                var _cMenu = _dom.next(".menu-c");
+                _cMenu.slideDown(function () {
+                    if (leftScroll) leftScroll.resize();
+                });
+                _dom.find(".icon-font").html("&#xe601;");
+            }
+        })
+    }
+
+    function loadMenuPage() {
+        var _hash = location.hash;
+        if(_hash && _hash.indexOf("-") > -1){
+            _hash = _hash.replace(/#/g, "");
+            var _tmp =  _hash.split("-");
+            if(_tmp.length >= 3){
+                if(_tmp[0] == "purchase"){
+                    utils.switchCenter(1 , true);
+                }else utils.switchCenter(2 , true);
+
+                if(window.localStorage && window.localStorage.getItem("app.index.tabs")){ //支持localStorage的环境 就可以保存所有tab 并记忆状态
+                    try{
+                        var _localTabs = window.localStorage.getItem("app.index.tabs") ,_tabDom;
+                        _localTabs = JSON.parse(_localTabs);
+                        $.each(_localTabs,function (i,tab) {
+                            if(tab.id!=undefined && tab!=null && tab!=""){
+                                var _tmp = utils.addTab(tab.id,tab.text,tab.url,tab.breads);
+                                if(tab.config){
+                                    _tmp.attr("data-config",tab.config);
+                                }
+                                if(tab.active) _tabDom = _tmp;
+                            }
+                        })
+                    }catch (e){}
+                    if(_tabDom){
+                        _tabDom.find("a").trigger("dblclick");
+                        return false;
+                    }
+                }
+
+                _menu = _tmp[1] + "_" +_tmp[2];
+                if($("#" + _menu).length){
+                    $("#" + _menu).parents(".menu-c").slideDown();
+                    $("#" + _menu).addClass("select").get(0).click();
+                    return false;
+                }
+            }
+        }else{
+
+            if(!app.index.isValid){
+                //layer.msg("企业未认证！",{area:['150px']});
+                app.index.fstBread = "账户中心";
+                app.index.secondBread = "企业认证";
+            }else{
+                /*其他站点跳转逻辑控制
+                * tabUrl：跳转相对地址 必须
+                * tabFstTit：父级菜单名   可选
+                * tabScdTit：页面title名 必须
+                */
+                if(utils.getUrlParam("tabUrl") && utils.getUrlParam("tabScdTit")){
+                    var _url = utils.getUrlParam("tabUrl"),
+                            _fstBread = utils.getUrlParam("tabFstTit"),
+                            _scdBread = utils.getUrlParam("tabScdTit");
+                    try{
+                        _fstBread = eval("'"+_fstBread+"'");
+                        _scdBread = eval("'"+_scdBread+"'");
+                        if(_url.indexOf("/purchase/")>-1){
+                            utils.switchCenter(1,true);
+                        }
+                        utils.openWithTab("nohash-"+utils.getRandom(),_scdBread,_url,{
+                            fstBread:_fstBread,
+                            scdBread:_scdBread
+                        })
+                        return false;
+                    }catch (e){}
+
+                }
+            }
+        }
+
+        _fst_load = utils.iframeLoad();
+        utils.openFrame($("#0-DiyFrameUUID").attr("data-src"), 0);
+
+
+    }
+
+
+    /***
+     *  异步获取优惠券数量
+     */
+    function getCoupon() {
+        #if($!user)
+            if(!eid||eid==0){
+                return;
+            }
+            if(window.layer){
+                $.ajax({
+                    dataType:"jsonp",
+                    type:"get",
+                    data:{eid:eid},
+                    url:"https://$!{wwwHostAndPort}/vouchers/notice.do",
+                    success:function (res) {
+                        if(res && res.success && res.result){
+                            showCouponModal(res.result,eid);
+                        }
+                    }
+                })
+            }else{
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.src = "/h5/res/layer2/layer.js";
+                script.type = 'text/javascript';
+                head.appendChild(script);
+                $(script).on('load',function () {
+                    var link = document.createElement('link');
+                    link.href = "/h5/res/layer2/skin/layer.css";
+                    link.rel = 'stylesheet';
+                    link.type = 'text/css';
+                    head.appendChild(link);
+                    $.ajax({
+                        dataType:"jsonp",
+                        type:"get",
+                        data:{eid:eid},
+                        url:"https://$!{wwwHostAndPort}/vouchers/notice.do",
+                        success:function (res) {
+                            if(res && res.success && res.result){
+                                showCouponModal(res.result,eid);
+                            }
+                        }
+                    })
+                })
+            }
+        #end
+    }
+
+    /**
+     * 右下角弹出优惠券提示框
+     */
+    function showCouponModal(num,eid) {
+        var _html = '<div style="background: white; height: 100%">' +
+                '<div style="font-size: 16px;height: 100%;background: url(/image/yhq-bg.png) no-repeat center 10px; text-align: center; position: relative;" >' +
+                '<a href="javascript:void(0);" class="close-yhq-btn" style="right: 10px; top: 10px; position: absolute;"><img src="/image/yhq-close.png" alt=""></a>' +
+                '<p style=" height: 50px; color: #666666; padding-top:120px; font-weight:bold;">恭喜您,您收到<span style="color: #e35c5c">'+num+'</span>张优惠券</p>' +
+                '<p style="height: 50px;"><a data-goto="true" onclick="top.utils.openWithTab(\'youhuiquan\',\'我的优惠券\',\'/purchase/member/vouchers.html\',{fstBread:\'资产中心\',scdBread:\'我的优惠券\'})" class="read-voucher" target="_blank" style="color: #ffffff; background: #e35c5c; padding: 10px 25px;cursor: pointer;">查看优惠券</a></p>'+
+        '</div> ' +
+        '</div>'
+        var hasScroll = false;
+        layer.open({
+            type:1,
+            area:['320px','230px'],
+            title:false,
+            content:_html,
+            closeBtn:0,
+            shade:0,
+            success:function (lay,idx) {
+                lay.find(".close-yhq-btn,.read-voucher").on("click",function () {
+                    var _goto = $(this).attr("data-goto");
+                    //TODO  执行关闭逻辑
+                    $.ajax({
+                        dataType:"jsonp",
+                        type:"get",
+                        data:{eid:eid},
+                        url:"https://$!{wwwHostAndPort}/vouchers/read",
+                        complete:function () {
+                            layer.close(idx);
+                        },
+                        success:function (res) {
+                        }
+                    })
+                })
+                var _x = lay.css("left") , _y = lay.css("top");
+                layer.style(idx,{"left":parseInt(_x) - 10,"top" : parseInt(_y) - 20});
+                $("body").scrollTop(1);
+                if($("body").scrollTop()){
+                    hasScroll = false;
+                }else{
+                    hasScroll = true;
+                }
+                setTimeout(function () {
+                    $("body").scrollTop(1);
+                    if($("body").scrollTop() && hasScroll){ //页面加载导致出现滚动条后要去除滚动条的宽度
+                        var _x = lay.css("left") , _y = lay.css("top");
+                        layer.style(idx,{"left":parseInt(_x) - 17});
+                    }
+                },500);
+            },
+            offset: 'rb'
+        })
+    }
+</script>
+
+
+</body>
+</html>

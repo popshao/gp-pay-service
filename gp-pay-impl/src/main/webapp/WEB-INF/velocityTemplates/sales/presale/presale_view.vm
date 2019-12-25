@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>我的医药网 - 首页热销管理</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/promotion.css?v=$!{jscss_version}">
+
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}">
+
+    <script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+
+                <div class="indmain c-box">
+
+                    <div class="user-path">销售中心 &gt; 销价管理 &gt; <a href="/sales/promotion/list.html">预售管理</a></div>
+
+                    <div class="user-cxgl-table">
+
+                        <table class="order_table mt10" border="0" cellpadding="0" cellspacing="0">
+                            <input type="hidden" name="pStartTime" id="pStartTime" value="$utils.formatDate($!{activity.pStartTime},'yyyy-MM-dd HH:mm:ss')"/>
+                            <input type="hidden" name="pEndTime" id="pEndTime" value="$utils.formatDate($!{activity.pEndTime},'yyyy-MM-dd HH:mm:ss')"/>
+                            <tr>
+                                <td class="tar" width="102"><b>预售标题：</b></td>
+                                <td width="auto">$!{activity.pName}</td>
+                            </tr>
+                            <tr>
+                                <td class="tar"><b>预售有效期：</b></td>
+                                <td>
+                                    <span class="fl">$utils.formatDate($!{activity.pStartTime},'yyyy-MM-dd HH:mm:ss')</span>
+                                    <i class="to">至</i>
+                                    <span class="fl">$utils.formatDate($!{activity.pEndTime},'yyyy-MM-dd HH:mm:ss')</span>
+                                    <div class="fl ml10" id="timeDhm">
+                                        活动时长：
+                                        <span id="time_d"></span>天
+                                        <span id="time_h"></span>时
+                                        <span id="time_m"></span>分
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="user-cxgl-detail">
+
+                                        <div class="order_detail">
+                                            <b style="margin-left:5px;">所选商品列表：</b>
+                                            <div class="user-form">
+                                                <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                                    <thead>
+                                                    <tr>
+                                                        <th width="35">序号</th>
+                                                        <th>商品ID</th>
+                                                        <th>商品内码</th>
+                                                        <th width="130">商品名称</th>
+                                                        <th width="130">商品规格</th>
+                                                        <th width="130">生产厂家</th>
+                                                        <th>是否拆零</th>
+                                                        <th>中包装</th>
+                                                        <th>商品状态</th>
+                                                        <th>基价</th>
+                                                        <th>预售价格</th>
+                                                        <th>起购数量</th>
+                                                        <th>预售库存</th>
+                                                        <th>预计发货时间</th>
+                                                        <th>效期备注</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="presaleDetails">
+                                                        #if($!presaleDetails && $!presaleDetails.size() > 0)
+                                                            #foreach($!presaleDetail in $!presaleDetails)
+                                                            <tr>
+                                                                <td>$!velocityCount</td>
+                                                                <td>$!{presaleDetail.pdGid}</td>
+                                                                <td>$!{presaleDetail.gSn}</td>
+                                                                <td>$!{presaleDetail.gName}</td>
+                                                                <td>$!{presaleDetail.gSpecifications}</td>
+                                                                <td>$!{presaleDetail.gManufacture}</td>
+                                                                <td>
+                                                                    #if($!{presaleDetail.gCanSplitText} > 0)
+                                                                        是
+                                                                    #else
+                                                                        否
+                                                                    #end
+                                                                </td>
+                                                                <td>
+                                                                    $!{presaleDetail.gmiddlePackage}
+                                                                </td>
+                                                                <td>
+                                                                    #if($!{presaleDetail.gDownType} == 1)
+                                                                        上架
+                                                                    #else
+                                                                        下架
+                                                                    #end
+
+                                                                </td>
+                                                                <td>$!{presaleDetail.basePrice}</td>
+                                                                <td>$!{presaleDetail.pdPrice}</td>
+                                                                <td>
+                                                                    #if($!{presaleDetail.pdMinSale} != -1)
+                                                                    $!{presaleDetail.pdMinSale}
+                                                                #end
+                                                                </td>
+                                                                <td>
+                                                                    #if($!{presaleDetail.pdNumber} != -1)
+                                                                    $!{presaleDetail.pdNumber}
+                                                                #end
+
+                                                                </td>
+                                                                <td>
+                                                                    $utils.formatDate($!{presaleDetail.pdSaleTime},'yyyy-MM-dd HH:mm:ss')
+                                                                </td>
+                                                                <td>$!{presaleDetail.pdRemark}</td>
+                                                            </tr>
+                                                            #end
+                                                        #end
+                                                    <!-- 商品显示区域 -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+    #parse("common/footer.vm")
+
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+    <script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+    <script src="/js/presale/presaleList.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+</body>
+</html>

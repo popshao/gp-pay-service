@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>采购 - 发票查询</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+
+</head>
+<body>
+
+<!--页面主体 -->
+    <div class="c-box">
+
+        <div class="user-search-box mt10 user-search-invoice-box">
+            <form id="searchForm">
+                <input type="hidden" id="serialNumber">
+                <input type="hidden" id="serialNumber">
+                <input type="hidden" id="serialNumber" name="serialNumber">
+                <ul class="usb-wrap cc">
+                    <li class="usb-item">
+
+                        <div class="s-tit s-tit-select2" id='searchUserInp1'>
+                            <select class="s-select2 usb-select2-100 fl" name="" placeholder="发票编号">
+                                <option value="0">发票编号</option>
+                                <option value="1">供应商名称</option>
+                            </select>：
+                        </div>
+                        <input class="s-input s-input-445" type="text" name="number" placeholder="请输入发票编号">
+                        <input class="s-input s-input-445" type="text" name="suName" placeholder="请输入供应商名称" style='display:none;'>
+                    </li>
+                    
+                    <li class="usb-item">
+                        <span class="s-tit s-tit-not-122">开票时间：</span>
+                        <input class="s-input s-input-210" type="text" placeholder="开始时间" name='applyBeginDate' id="pactStartTime" data-startTime='start'>
+                        <span class="s-tit s-tit-not-to">至</span>
+                        <input class="s-input s-input-210" type="text" placeholder="截止时间" name='applyEndDate' id="pactEndTime" data-endTime='end'>
+                    </li>
+                    <li class="usb-item">
+                        <span class="s-tit">发票状态：</span>
+                        <select class="s-select2 usb-select2" name="isLooked" placeholder="全部">
+                            <option value=" ">全部</option>
+                            <option value="0">未查看</option>
+                            <option value="1">已查看</option>
+                        </select>
+                    </li>
+                </ul>
+            </form>
+            <div class="usb-btn">
+                <a href="javascript:void(0)" class="user-btn-n b-query mr10">筛选</a>
+                <a href="javascript:void(0)" class="user-btn-b user-btn-b-n mr10" onclick='exportInvoice()'>导出结果到本地</a>
+                <a href="javascript:void(0)" class="btn-reset"><img src="http://user.mypharma.com/image/icon-refresh.png" alt="">清空筛选条件</a>
+            </div>
+        </div>
+
+        <div class="user-form user-sheet-box mt20">
+            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>发票编号</th>
+                    <th>供应商</th>
+                    <th>发票金额</th>
+                    <th>发票状态</th>
+                    <th>
+                        开票时间
+                        <span class='user-sort-unit'>
+                            <em class='up'></em>
+                            <em class='down'></em>
+                        </span>
+                    </th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id='listBox'>
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <script type="text/html" id="listTpl">
+            {{# if(d && !d.error && d.datas.length){ }}
+            {{# $.each(d.datas,function(index,item){ var item = item; var $index = (index + 1) + (d.pageNo-1)*d.pageSize }}
+            <tr>
+                <td>{{top.utils.notNull(item.number,'--')}}</td>
+                <td>{{top.utils.notNull(item.suName,'--')}}</td>
+                <td>{{top.utils.notNullPrice(item.amount,'--')}}</td>
+                <td class="view-type">
+                    {{# if(item.isLooked!=1 ){ }}
+                        <i class="user-t-red">未查看</i>
+                    {{# } else{ }}
+                        已查看
+                    {{# } }}
+                </td>
+                <td>{{top.utils.dateFmt(item.createTime)}}</td>
+                <td>
+                    <a href="javascript:void(0)" class="user-link"  onclick="$(this).closest('tr').find('.view-type').html('已查看');gotoDetail('fpxq','/purchase/invoice/invoiceDetails.html?invoiceId={{item.id}}','发票详情')">发票详情</a>
+                </td>
+            </tr>
+            {{# }); }}
+
+            {{# }else{ }}
+            <tr><td colspan="6">暂无数据</td></tr>
+            {{# } }}
+
+        </script>
+        <div class="page rocky-page" style="text-align: right;">
+        </div>
+        
+
+    </div>
+
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>
+
+    <script>
+
+        //select2设置
+        var layer,laypage,laydate,cb,sortType = 1;
+        layui.config({
+            base:'/js/layui/extend/'
+        }).use(['layApp','layer','laypage','laydate'],function () {
+            layer = layui.layer,laypage = layui.laypage , laydate = layui.laydate;
+            initDate(document);
+            $(".usb-select2").each(function () {
+                $(this).select2({
+                    placeholder: $(this).attr("placeholder"),
+                    tags: "true",
+                    allowClear: false,
+                    minimumResultsForSearch: -1,
+                    language: "zh-CN",
+                    width: 160
+                });
+            });
+            $(".usb-select2-s").each(function () {
+                $(this).select2({
+                    placeholder: $(this).attr("placeholder"),
+                    tags: "true",
+                    allowClear: false,
+                    minimumResultsForSearch: -1,
+                    language: "zh-CN",
+                    width: 120
+                });
+            });
+            $(".usb-select2-100").each(function () {
+                $(this).select2({
+                    placeholder: $(this).attr("placeholder"),
+                    tags: "true",
+                    allowClear: false,
+                    minimumResultsForSearch: -1,
+                    language: "zh-CN",
+                    width: 100
+                }).unbind('select2:select').on('select2:select', function (e) {
+                    var _thisText = $(this).siblings('.select2').find('.select2-selection__rendered').text();
+                    var _thisOptionVal = $(this).find('option').eq(0).text();
+                        if(_thisText == _thisOptionVal) {
+                            $('#searchUserInp1').siblings('input[name="number"]').show();
+                            $('#searchUserInp1').siblings('input[name="suName"]').hide().val('');
+                        }else {
+                            $('#searchUserInp1').siblings('input[name="number"]').hide().val('');
+                            $('#searchUserInp1').siblings('input[name="suName"]').show();
+                        }
+                });
+            })
+
+            var _serialNumber = top.utils.getUrlParam('serialNumber',window),
+                _serialNumber = top.utils.getUrlParam('serialNumber',window),
+                _serialNumber = top.utils.getUrlParam('serialNumber',window);
+            if(_serialNumber){
+                $("#serialNumber").val(_serialNumber);
+            }
+
+
+            $('.b-query').on("click",function () {
+                getData(sortType);
+            })
+
+            $(".btn-reset").on("click",function () {
+                $("#searchForm").get(0).reset();
+                $(".usb-select2,.usb-select2-s").each(function () {
+                    $(this).select2("destroy");
+                    initSelect();
+                })
+              //  $('.btn-query').trigger("click");
+                getData(sortType);        
+            })
+
+            setTimeout(function () {
+                getData(sortType);
+            },300);
+
+            /*筛选 排序*/
+            sortInit(function() {
+                getData(sortType);
+            });
+
+
+        });
+
+        function getData(sortType) {
+            top.utils.pageList({
+                first:true,
+                url:'/invoice/invoicePage',
+                dom:$('#listBox'),
+                tpl:$("#listTpl"),
+                pageDom:'.rocky-page',
+                isAdd:true,
+                type:'post',
+                filter:'#searchForm',
+                doc:document.body,
+                laypage:laypage,
+                data:{userType:1,orderColumn:5,orderDirect:sortType},//销售中心 是 2  采购中心是 1
+                isGjh: true,
+                win: window,
+                complete:function (res) {
+                    if(res && res.data && res.code==0) 
+                        cb = res;
+                },rendered:function (res) {
+                    bindInvoice();
+                }
+            })   
+        }
+
+
+        function exportInvoice() {
+            if(!cb)
+                return;
+            var _data = {};
+            var doms = $('#searchForm').find("input,select");
+
+            doms.each(function () {
+                if (!$(this).is(":hidden")) {
+                    var name = $(this).attr("name");
+                    if (name) {
+                        _data[name] = $.trim($(this).val());
+                        // if($(this).attr('data-startTime') || $(this).attr('data-endTime')) {
+                        //     _data[name] = $.trim(top.utils.dateStamp($(this).val()));
+                        // }
+                    }
+                }
+            });
+
+            var _dJson = $.extend({}, _data, {pi:1,ps:9999999,userType:1});
+            if(!_dJson.suName)
+                _dJson.suName = '';
+            if(!_dJson.number)
+                _dJson.number = '';
+            var _JsonUrl = '/invoice/exportByConditon?number='+_dJson.number+'&suName='+_dJson.suName+'&applyBeginDate='+_dJson.applyBeginDate+'&applyEndDate='+_dJson.applyEndDate+'&isLooked='+_dJson.isLooked+'&pi=1&ps=9999999&userType=1';
+            top.utils.open(_JsonUrl,'_self');
+            // top.utils.ajax({
+            //    url: '/invoice/exportByConditon',
+            //    type:'get',
+            //    data:_dJson,
+            //    success:function (data,res) {
+                    
+            //    },
+            //    error:function() {
+            //    }
+            // })
+           
+        }
+
+        function sortInit(cb) {
+            /*筛选 排序*/
+            var key_sort = 0;   
+            $('.user-sort-unit').parent('th').css('cursor', 'pointer');
+            $('.user-sort-unit').parent('th').unbind('click').on('click',function(){
+                key_sort ++;
+                if(key_sort%2==0) {
+                   $(this).find('.down').addClass('on').siblings('.up').removeClass('on');
+                   sortType = 1;
+                }
+                if(key_sort%2 !=0) {
+                    $(this).find('.up').addClass('on').siblings('.down').removeClass('on');
+                    sortType = 0;
+                }
+                if(cb)  cb(sortType);
+            });
+
+        }
+        
+   
+
+    </script>
+
+
+</body>
+</html>

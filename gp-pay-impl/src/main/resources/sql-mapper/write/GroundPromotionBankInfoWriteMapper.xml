@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.write.GroundPromotionBankInfoWriteDao">
+    <insert id="createGroundPromotionBankInfo" parameterType="com.mph.coreapi.gp.pay.entity.GroundPromotionBankInfo" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ground_promotion_bank_info(
+                user_id,
+                identity_card_no,
+                bank_card_no,
+                bank_name,
+                bank_code,
+                branch_name,
+                province_code,
+                city_code
+            ) values (
+                #{userId},
+                #{identityCardNo},
+                #{bankCardNo},
+                #{bankName},
+                #{bankCode},
+                #{branchName},
+                #{provinceCode},
+                #{cityCode}
+            )
+        ]]>
+
+        <selectKey resultType="int" >
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+
+    <update id="updateGroundPromotionBankInfo">
+     update ground_promotion_bank_info
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="identityCardNo != null">
+                identity_card_no=#{identityCardNo},
+            </if>
+            <if test="bankCardNo != null">
+                bank_card_no=#{bankCardNo},
+            </if>
+            <if test="bankName != null">
+                bank_name=#{bankName},
+            </if>
+            <if test="bankCode != null">
+                bank_code=#{bankCode},
+            </if>
+            <if test="branchName != null">
+                branch_name=#{branchName},
+            </if>
+            <if test="provinceCode != null">
+                province_code=#{provinceCode},
+            </if>
+            <if test="cityCode != null">
+                city_code=#{cityCode},
+            </if>
+            <if test="deleted != null">
+                deleted=#{deleted},
+            </if>
+                update_time=NOW()
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

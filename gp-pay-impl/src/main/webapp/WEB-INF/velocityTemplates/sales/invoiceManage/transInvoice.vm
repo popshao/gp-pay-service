@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 发票分享</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+
+</head>
+<body>
+
+<!--页面主体 -->
+    <div class="c-box">
+
+        <div class="user-form-table user-kp-share-box">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td class="tar" width="100">发送邮件</td>
+                    <td width="auto">
+                        <input class="user-input" type="text" placeholder="" id='email'>
+                        <a href="javascript:void(0)" class="user-btn-n ml10" onclick='sendEmail(event)'>发送</a>
+                    </td>
+                </tr>
+                <!-- <tr>
+                    <td class="tar">发送短信</td>
+                    <td>
+                        <input class="user-input" type="text" placeholder="" id='mobile'>
+                        <a href="javascript:void(0)" class="user-btn-n ml10">发送</a>
+                    </td>
+                </tr> -->
+                <tr>
+                    <td class="tar">分享链接</td>
+                    <td>
+                        <input class="user-input" type="text" placeholder="" id='shareVal'>
+                        <a href="javascript:void(0)" class="user-btn-n ml10" onclick="copyToClipboard(document.getElementById('shareVal').value)">复制</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tar" valign="top">分享二维码</td>
+                    <td>
+                        <div class="user-two-code fl mt10">
+                            <img src="" id='ewm_img' style='width:160px;height:160px;'>
+                        </div>
+                        <div class="user-payment-box fl">
+                            <div class="upb-btn">
+                                <a href="javascript:void(0)" class="user-btn-n"  onClick="CopyImageToBoard(document.getElementById('ewm_img'))">复制二维码</a>
+                                <i class="user-t-gray">（复制二维码发给客户）</i>
+                            </div>
+                            <div class="upb-text">
+                                <i class="user-t-red">＊</i><i class="user-t-black">扫描二维码，可直接查看该发票。</i>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>
+<script>
+
+    var q= JSON.parse(getUrlParam("q"));  // 
+    if(!q) {
+        if(window.localStorage){
+           var _ss = localStorage.getItem('data_q');
+           if(_ss){
+               q = JSON.parse(_ss)
+               
+           }else{//无缓存，直接拉去最新数据
+           }
+        }else{
+            sessionStorage.removeItem('data_q');
+        }
+    } 
+
+
+    if(q) {
+
+        if(q.invoices) {
+            q = {
+                invoicePdfUrl : q.invoices[0].invoicePdfUrl,
+                mobile : q.invoices[0].buyerMobile,
+                email : q.invoices[0].buyerEmail,
+                id: q.invoices[0].id
+            }
+        }
+    }
+
+ 
+    var layer,laypage,laytpl,subData = {};
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage','laytpl'],function () {
+        layer = layui.layer,laypage = layui.laypage,laytpl = layui.laytpl;
+        $(function(){
+            $('body').addClass('user-has-js');
+            if(q)
+            {
+                $('#shareVal').val(q.invoicePdfUrl);
+                $('#mobile').val(q.mobile);
+                $('#email').val(q.email);
+                $('#ewm_img').attr('src', 'https://pan.baidu.com/share/qrcode?w=200&h=200&url='+encodeURIComponent(q.invoicePdfUrl));
+            }
+
+        });    
+    })
+
+    //发送邮箱
+    var flag = false;
+    function sendEmail(event) {
+        if(flag) {
+            return;
+        }
+        var _emailVal = $('#email').val();
+        top.utils.ajaxForGaoJiHuo({
+           url:'/invoice/sendMail',
+           data:{id:q.id,email:_emailVal},
+           success:function (data,res) {
+                top.ue.msg(res.message);
+                if(res.code == 0 && res.data) {
+                    flag = true;
+                    $(event.target).addClass('user-btn-none').text('已发送');
+                    setTimeout(function(){
+                         $(event.target).removeClass('user-btn-none').text('发送');
+                         flag = false;
+                    },10000);
+                } else{
+                    flag = false;
+                    $(event.target).removeClass('user-btn-none');
+                }
+           }
+        })
+    }
+
+    /*复制图片*/
+    function CopyImageToBoard(img){
+       if(!img.src) {
+           top.ue.msg("二维码不存在")
+           return;
+       }
+      if (typeof img.contentEditable == 'undefined' || !document.body.createControlRange){
+           top.ue.msg("您的浏览器不支持直接复制图片<br>请在图片上点击右键“复制图片")
+      }else{
+         var ctr = document.body.createControlRange();
+         img.contentEditable = true;
+         ctr.addElement(img);
+         ctr.execCommand('Copy');
+         img.contentEditable = false;
+         top.ue.ue("复制图片成功,你可以直接在聊天窗口粘贴")
+      }
+    }
+</script>
+
+
+<script type="text/javascript">
+    /*复制链接*/
+    function copyToClipboard(input) {
+        var textToClipboard = input;
+
+        var success = true;
+        if (window.clipboardData) { // Internet Explorer
+            window.clipboardData.setData("Text", textToClipboard);
+        } else {
+            // create a temporary element for the execCommand method
+            var forExecElement = CreateElementForExecCommand(textToClipboard);
+
+            /* Select the contents of the element 
+                    (the execCommand for 'copy' method works on the selection) */
+            SelectContent(forExecElement);
+
+            var supported = true;
+
+            // UniversalXPConnect privilege is required for clipboard access in Firefox
+            try {
+                if (window.netscape && netscape.security) {
+                    netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+                }
+
+                // Copy the selected content to the clipboard
+                // Works in Firefox and in Safari before version 5
+                success = document.execCommand("copy", false, null);
+            } catch(e) {
+                success = false;
+            }
+
+            // remove the temporary element
+            document.body.removeChild(forExecElement);
+        }
+
+        if (success) {
+            top.ue.msg("链接复制成功");
+        } else {
+            top.ue.msg("您的浏览器不允许访问剪贴板");
+        }
+    }
+
+    function CreateElementForExecCommand(textToClipboard) {
+        var forExecElement = document.createElement("div");
+        // place outside the visible area
+        forExecElement.style.position = "absolute";
+        forExecElement.style.left = "-10000px";
+        forExecElement.style.top = "-10000px";
+        // write the necessary text into the element and append to the document
+        forExecElement.textContent = textToClipboard;
+        document.body.appendChild(forExecElement);
+        // the contentEditable mode is necessary for the  execCommand method in Firefox
+        forExecElement.contentEditable = true;
+
+        return forExecElement;
+    }
+
+    function SelectContent(element) {
+        // first create a range
+        var rangeToSelect = document.createRange();
+        rangeToSelect.selectNodeContents(element);
+
+        // select the contents
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(rangeToSelect);
+    }
+
+
+
+
+</script>
+</body>
+</html>

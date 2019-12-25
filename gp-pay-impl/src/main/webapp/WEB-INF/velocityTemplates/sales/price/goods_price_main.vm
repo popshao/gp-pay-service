@@ -1,0 +1,547 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+#parse("common/header_css_new.vm")
+
+<!--PNG格式图片兼容IE6解决方案 -->
+<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="container">
+		#parse("common/header_top.vm") #parse("common/header.vm")
+		<div class="c-box">
+			<div class="user-prompt">提示：价格优先级为：协议价&gt;控销价&gt;促销价&gt;单个客户定价&gt;业务组定价&gt;基价；例如：A商品同时设置了<em class='fc-red'>协议价</em>和<em class='fc-red'>促销价</em>，那么页面展示只是协议价。</div>
+			<div class="wrap cc">
+				#parse("common/left_menu_sales.vm")
+				<div class="user_right fl">
+					<!-- 用户中心_主体内容_S -->
+					<div class="indmain">
+						<div class="path">
+							<p><a class="color" href="/sales/index.html">销售中心</a>&gt; 销价管理 &gt; 商品定价</p>
+						</div>
+						<div class="order_query order" style="margin-top: 10px;">
+							<form action="" method="post" id="searchForm">
+							<input type="hidden" name="pIds" value="" id="pIds"/>
+                    		<input type="hidden" name="isAllChoice" value="" id="isAllChoice"/>
+                    		<input type="hidden" name="pi" value="$!pi"/>
+                    		<input type="hidden" name="ps" value="10"/>
+                                <table>
+                    				<tr>
+                    					<td>
+                    						<span style="margin-left: 20px;">商品编码：</span><input class="input" name="gSn" id="gSn" type="text" value="$!{gSn}"/>
+                    					</td>
+                    					<td>
+                    						<span style="margin-left: 20px;">生产厂家：</span><input class="input" name="gManufacture" id="gManufacture" type="text" value="$!{gManufacture}"/>
+                    					</td>
+                    					<td>
+                    						<span style="margin-left: 20px;">商品名称：</span><input class="input" name="gName" id="gName" type="text" value="$!{gName}"/>
+                    					</td>
+                    					<td>
+                    						<span style="margin-left: 20px;">企业名称：</span><input class="input" name="eName" id="eName" type="text" value="$!{eName}"/>
+                    					</td>
+
+                    				</tr>
+                    				<tr>
+                    				#if($!suIsErp == 1)
+                    					<td colspan="3">
+                    				#else
+                    					<td colspan="2">
+                    				#end
+                    						#if($!suIsErp == 1)
+												<span style="margin-left: 20px;">商品内码：</span>
+												<input class="input" style="width: 442px;"  name="gInSns" placeholder="用逗号分隔多个内码“C102318,C102319”，每次最多200个"  onblur="checkGInSnValue('',false)" id="gInSns" type="text" value="$!{gInSns}">
+		                        			#end
+	                    						<span style="float: left; margin-left: 20px;margin-top: 6px;">定价类型：</span>
+												<select name="priceType" style="float: left; width: 172px; height:32px; line-height:32px; background: #fff; border: solid 1px #d3d7da;" >
+													<option #if($priceType==1) selected="selected" #end value ="1">商品定价</option>
+													<option #if($priceType==2) selected="selected" #end value ="2">组定价</option>
+												</select>
+                    					</td>
+
+                    				#if($!suIsErp == 1)
+                    					<td colspan="1">
+                    				#else
+                    					<td colspan="2">
+                    				#end
+	                    					<div class="btn" style="margin-left: 20px; margin-top:15px;">
+												<a
+													href="javascript:checkGInSnValue('/sales/goods_price/main.html',false);"
+													class="btn_query">查询</a><a
+													href="javascript:checkGInSnValue('/sales/goods_price/main.html',true);"
+													class="btn_query btn_export btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+											</div>
+                    					</td>
+                    				</tr>
+                    			</table>
+							</form>
+						</div>
+						<div>
+
+						</div>
+
+						<div class="order_detail user-search-box" style="margin-top: 20px;">
+							<div class="user-btn">
+								<div class="fl btn-box">
+                                    #*<a href="/sales/goods_price/batch.html"  class="btn_add btn-line" onclick="top.utils.iframeLoad({},3000);">批量设定</a>
+                                    <a href="javascript:batchDelete();"  class="btn_delete btn-line">批量删除</a>*#
+                                    <a href="javascript:agreementBatch();"  class="btn_add btn-line" style="width: 106px;">批量设定协议价</a>
+								</div>
+
+<!-- 								<div class="fr"> -->
+<!-- 									试用新版： -->
+<!-- 									<a href="/sales/set_price/main.html"  class="btn_add" style="width: 106px;">配置商品定价</a> -->
+<!-- 									<a href="/sales/agreement_price/main.html"  class="btn_add" style="width: 106px;">配置协议价</a> -->
+<!-- 									<a href="/sales/goods_price_set/main.html"  class="btn_add" style="width: 106px;">商品定价情况</a> -->
+<!-- 									<a href="/sales/customer_price/main.html"  class="btn_add" style="width: 106px;">客户定价情况</a> -->
+<!-- 								</div> -->
+
+                                <div class="b-text b-text-min fl" style="margin-left:15px;">
+                                    <i class="b-t-ps">*</i> 为让您更高效的设置商品定价，现将“批量设定”按钮调整到
+									<a class='b-t-link' href='javascript:void(0)' onclick="top.utils.openWithTab('spjg','商品价格','/sales/priceManager/goodsPrice.html',{fstBread:'销价管理'})">"商品价格"</a> 页面中的
+									<a class='b-t-link' href='javascript:void(0)' onclick="top.app.GoodsPriceSSData = null; top.utils.openWithTab('plszfzdj','批量设置客户分组','/sales/priceManager/goodsGroupPriceDetail.html?titleBack=商品定价&pathName='+location.href,{fstBread:'销价管理'})">"批量设置客户分组定价"</a>  和
+									<a  class='b-t-link' href='javascript:void(0)' onclick="top.app.GoodsPriceSDData = null; top.utils.openWithTab('plszkhdj','批量添加客户定价','/sales/priceManager/customSetDiyBatchPrice.html?titleBack=商品定价&pathName='+location.href,{fstBread:'销价管理'})">"批量添加客户定价"</a>
+                                </div>
+								<div style="clear: both;"></div>
+							</div>
+							<div class="table">
+								<table cellpadding="0" cellspacing="0">
+									<thead class="head">
+										<tr class="line">
+											<th class=""><input type="checkbox" class="check"  id="chooseAll" name="chooseAll" onclick="selectAll(this);"/></th>
+											<th class="">定价类型</th>
+											<th class="">商品名称</th>
+											<th class="">商品规格</th>
+											<th class="">生产厂家</th>
+											<th class="">企业名称</th>
+											<th class="">基价</th>
+											<th class="">价格</th>
+											<th class="">协议价</th>
+##											#*<th class="">操作</th>*#
+
+										</tr>
+									</thead>
+									<tbody>
+									  #if(!$null.isNull($listPrice) && $listPrice.size()!=0)
+										#foreach($list in $!listPrice)
+										<tr>
+											<td><input type="checkbox" class="check"  name="choose" value="$!{list.uniqueId}" onclick="choicePrices(this)"/></td>
+											<td>
+												#if($list.priceType  == 1)
+													商品定价
+												#elseif($list.priceType == 2)
+												   	 组定价
+												#end
+											</td>
+											<td>$!{list.gName}
+											<input type="hidden" name="priceId"
+												id="priceId_$!{list.priceId}" value="$!{list.priceId}" /> <input
+												type="hidden" name="eId" id="eId_$!{list.priceId}"
+												value="$!{list.eId}" /> <input type="hidden" name="gId"
+												id="gId_$!{list.priceId}" value="$!{list.gId}" /> <input
+												type="hidden" name="isAgrment"
+												id="isAgrment_$!{list.priceId}" value="$!{list.isAgreement}" />
+
+											</td>
+											<td>$!{list.gSpecifications}</td>
+											<td>$!{list.gManufacture}</td>
+											<td>$!{list.eName}</td>
+											<td>$!utils.priceFormart($!{list.gBasePrice})</td>
+											#if($list.price && $list.price>0)
+												<td>
+													<input type="hidden" name="prices"
+													id="prices_$!{list.priceId}" value="$!{list.price}" />
+													<input type="hidden" id="priceType_$!{list.priceId}" value="1"/>
+													$!utils.priceFormart($!{list.price})
+													#*<input type="text" name="price_$!{list.priceId}"
+														id="price_$!{list.priceId}" onblur="setPrice(this);"
+														value="$!{list.price}" size="10px;" onkeyup="checkNum(this);"/>*#
+												</td>
+											#else
+												<td>
+													#if($list.priceFloat>0)
+														上浮
+													#elseif($list.priceFloat<0)
+													    下浮
+													#end
+													<input type="hidden" name="prices"
+													id="prices_$!{list.priceId}" value="$!{list.priceFloat}" />
+													<input type="hidden" id="priceType_$!{list.priceId}" value="2"/>
+													#*<input type="text" name="price_$!{list.priceId}"
+														id="price_$!{list.priceId}" onblur="setPrice(this);"
+														value="$!{list.priceFloat}" size="7px;" onkeyup="checkNum(this);"/>*#$!utils.priceFormart($!{list.priceFloat})%
+														($!utils.priceFormart($!{list.lastPrice}))
+												</td>
+											#end
+											<td>
+												#if($list.priceType == 1)
+													<input type="checkbox"
+														id="isAgreement_$!{list.priceId}"
+														#if($!{list.isAgreement}==1) checked="checked" value="1"
+														#else value="0" #end onclick="setIsAgreement(this)" />
+												#end
+											</td>
+											#*<td><a
+												href="javascript:deletePrice('$!{list.uniqueId}')"
+												class="btn-txt color-bg">删除</a></td>*#
+										</tr>
+										#end
+									   #else
+									   	<tr>
+				                       		<td colspan="11">无相关数据！</td>
+				                 		</tr>
+									   #end
+									</tbody>
+								</table>
+								<!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} >1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/goods_price/main.html")
+								#end #end
+								<!--分页结束 -->
+							</div>
+						</div>
+					</div>
+
+
+
+					<!-- 用户中心_主体内容_E -->
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("/common/footer.vm")
+
+	<!-- mypharma_脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/load.js?v=$!{jscss_version}"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+	#parse("common/common_script.vm")
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"
+		type="text/javascript"></script>
+	<script src="/js/enterpriseHelp.js?v=$!{jscss_version}" type="text/javascript"></script>
+
+	<script>
+	function checkNum(obj){
+		var id = obj.id;
+		$('#'+id).keyup(function(e) {
+			var keycode = e.keyCode;
+			if (keycode === 9) { // tab切换跳出
+				return false;
+			} else if (keycode < 48 || (keycode > 57 && keycode < 96) || keycode > 105) {
+				//var number = $(this).val().replace(/\D|^0/g, '');
+				var number = $(this).val().replace(/[^\d.-]/g, "");
+				$('#'+id).val(number);
+			}
+		})
+
+
+
+	}
+		function setPrice(obj) {
+			var id = obj.id;
+			var price = $("#" + id).val();
+			var index = id.substring(id.indexOf("_") + 1, id.length);
+			var eId = $("#eId_" + index).val();
+			var gId = $("#gId_" + index).val();
+			var isAgreement = $("#isAgrment_" + index).val();
+			var priceId = index;
+			var prices = $("#prices_" + index).val();
+			var priceType = $("#priceType_" + index).val();
+			price = Math.round(price * 100) / 100;
+			prices = Math.round(prices * 100) / 100;
+			if (price == prices) {
+				return;
+			}
+			price = isNaN(parseFloat(price)) ? 1 : parseFloat(price);
+			if(priceType ==1){
+				if(price <= 0){
+                    top.ue.msg("商品价格必须大于0");
+					$("#" + id).val(price);
+					return;
+				}
+			}else{
+				if(price <= -100){
+                    top.ue.msg("商品价格浮动点数不能小于-100");
+					$("#" + id).val(prices);
+					return;
+				}else if(price > 100){
+                    top.ue.msg("商品价格浮动点数不能大于100");
+					$("#" + id).val(prices);
+					return;
+				}
+			}
+
+			price = Math.round(price*100)/100;
+			$("#" + id).val(price);
+			if (isPrice(price)) {
+				price = Math.round(price*100)/100;
+				$("#" + id).val(price);
+				$.ajax({
+					url : "/sales/goods_price/edit",
+					type : "POST",
+					data : {
+						"priceId" : priceId,
+						"gId" : gId,
+						"eId" : eId,
+						"price" : price,
+						"isAgreement" : isAgreement,
+						"single" : 1,
+						"priceType" : priceType
+					},
+					cache : false,
+					success : function(result) {
+						if ((typeof result) == "string") {
+							result = $.parseJSON(result);
+						}
+						if (result.data == false) {
+                            top.ue.msg("查询数据失败");
+							location.reload();
+						} else {
+                            top.ue.msg("修改成功");
+							location.reload();
+						}
+
+					}
+				});
+			} else {
+                top.ue.msg("价格只能输入数字，请重新输入");
+				$("#" + id).val("");
+				return;
+			}
+		}
+
+		function setIsAgreement(obj) {
+			var id = obj.id;
+			var index = id.substring(id.indexOf("_") + 1, id.length);
+			var price = $("#price_" + index).val();
+			var eId = $("#eId_" + index).val();
+			var gId = $("#gId_" + index).val();
+			var priceId = $("#priceId_" + index).val();
+			var priceType = $("#priceType_" + index).val();
+            var priceFloat =$("#prices_" + index).val();
+			var isAgreement = 0;
+			if (obj.checked) {
+				isAgreement = 1;
+			} else {
+				isAgreement = 0;
+			}
+			$.ajax({
+				url : "/sales/goods_price/setIsAgreementPrice",
+				type : "POST",
+				data : {
+					"priceId" : priceId,
+					"gId" : gId,
+					"eId" : eId,
+                    "priceFloat" : priceFloat,
+					"price" : price,
+					"isAgreement" : isAgreement,
+					"single" : 1,
+					"priceType" : priceType
+				},
+				cache : false,
+				success : function(result) {
+					if ((typeof result) == "string") {
+						result = $.parseJSON(result);
+					}
+					if (result.data == false) {
+                        top.ue.msg("查询数据失败");
+						//location.reload();
+						$("#searchForm").submit();
+					} else {
+                        top.ue.msg("修改成功");
+					//	location.reload();
+					//	location=location;
+						$("#searchForm").submit();
+					}
+
+				}
+			});
+		}
+
+		function deletePrice(uniqueId) {
+			$.ajax({
+				url : "/sales/goods_price/delete",
+				type : "POST",
+				data : {
+					"uniqueIds" : uniqueId
+				},
+				cache : false,
+				success : function(result) {
+					if ((typeof result) == "string") {
+						result = $.parseJSON(result);
+					}
+					if (result.success == false) {
+                        top.ue.msg("查询数据失败");
+					} else {
+                        top.ue.msg("删除成功");
+
+					//	location.reload();
+					//	location=location;
+						$("#searchForm").submit();
+					}
+
+				}
+			});
+
+		}
+
+
+		function selectAll(obj){
+		    if($(obj).prop("checked")){
+		       $("#isAllChoice").val(true);
+		       $("input[name='choose']").prop("checked",true);
+		    }else{
+		       $("#isAllChoice").val(false);
+		      $("input[name='choose']").prop("checked",false);
+		    }
+         }
+
+		 function choicePrices(obj){
+	            if(!$(obj).prop("checked"))
+	            {
+	                $("#isAllChoice").val(false);
+	                $("input[name='chooseAll']:checked").prop("checked",false);
+	            }
+	        }
+
+		function batchDelete(){
+			var array = $("input[name='choose']").prop("checked");
+			var chk_value =[];
+			$('input[name="choose"]:checked').each(function(){
+				chk_value.push($(this).val());
+			});
+			if(chk_value.length <1){
+                top.ue.msg("请选择商品定价");
+				return;
+			}
+			deletePrice(chk_value.toString())
+		}
+
+		function agreementBatch(){
+			var array = $("input[name='choose']").prop("checked");
+			var chk_value =[];
+			$('input[name="choose"]:checked').each(function(){
+				chk_value.push($(this).val());
+			});
+			if(chk_value.length <1){
+				top.ue.msg("请选择商品定价");
+				return;
+			}
+			$.ajax({
+				url : "/sales/goods_price/agreementBatch",
+				type : "POST",
+				data : {
+					"uniqueIds" : chk_value.toString()
+				},
+				cache : false,
+				success : function(result) {
+					if ((typeof result) == "string") {
+						result = $.parseJSON(result);
+					}
+					if (result.success == false) {
+                        top.ue.msg("修改数据失败");
+					} else {
+                        top.ue.msg("设定协议价成功");
+						$("#searchForm").submit();
+					}
+
+				}
+			});
+
+		}
+
+
+		function isPrice(s) {
+			s = $.trim(s);
+			var p = /^-?[1-9]+(\.\d+)?$|^-?0(\.\d+)?$|^-?[1-9]+[0-9]*(\.\d+)?$/;
+			return p.test(s);
+		}
+
+		function addCusteomer(){
+	    	var mask = $("#popUpMaskCustomer");
+			var dialog = $("#popUpDIVCustomer");
+	            $.ajax({
+	                url: "/sales/biz/enterprise_help",
+	                type: "POST",
+	                data: {},
+	                dataType: "html",
+	                cache: false,
+	                success: function (result) {
+	    	            if (result.success == false) {
+	    	            	top.ue.msg(result.message);
+	    	            }else{
+							//设置弹出框内容
+							document.getElementById("content").innerHTML = result;
+							//显示弹出层与遮照层
+							showPopUpDIV(dialog,mask);
+	    	            }
+	                }
+	            });
+
+
+		}
+
+		function chooseEnterprise(){
+			var length = $("input[name='chk']:checked").length;
+	    	if(length == 0){
+	    		top.ue.msg("请选择你要添加的客户");
+	    		return ;
+	    	}
+	    	$("input[name='chk']:checked").each(function(){
+
+	    		var tr = $(this).parent().parent();
+	    		alert(tr.children('td').eq(2).text());
+	    		//tr.find("td").each(function(){
+	    		//	alert($(this).text());
+	    		//})
+	    	});
+
+	    	//var temp = [];
+	    	//$("input[name='chk']:checked").each(function(i){
+	    	//	temp.push($(this).attr("id"));
+	    	//});
+	    	//for(var i=0;i<temp.length;i++){
+	    	//	alert("企业编号:"+temp[i].substring(1,temp.indexOf("_")+1) +" --- 企业名称:" + temp[i].substring(temp[i].indexOf("_")+1,temp[i].length));
+	    	//}
+
+	    	closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');
+		}
+
+		function checkGInSnValue(url,type){
+			var gInSns = $("#gInSns").val();
+			if(gInSns == undefined){
+				searchPager(url,type);
+			}else{
+				gInSns = gInSns.replace("，",",").replace(/\s+/g,"");
+				$("#gInSns").val(gInSns);
+				if(gInSns.split(",").length>200 && !type){
+					top.ue.msg("Sorry,您每次最多可导入200个内码，您可以分多次导入商品");
+					return ;
+				}else if(url){
+					searchPager(url,type);
+				}
+			}
+		}
+	</script>
+	<!-- 添加页面 -->
+    <div class="mask" id="popUpMaskCustomer"></div>
+    <div class="dialog w460" id="popUpDIVCustomer" style="width:800px;height:700px;">
+      <div class="head"><span class="dialog-title">选择客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');window.location.reload(true);" class="btn-close"></a></div>
+      <div class="con" id="content">
+      </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>子账户管理 - 我的医药网</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+           
+    <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    <script src="/js/load.js?v=$!{jscss_version}"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    <script type="text/javascript">
+    $(function() {
+    	$('#old_password,#new_password,#conf_password').focus(function(){
+            $(this).siblings(".fn-msg").hide();
+            $(".fn_erro").hide();
+            $(".fn_sess").hide();
+        })
+    })
+    
+    //删除操作
+    function deleteUserInfo(username,id,pi) {
+    	 top.ue.confirm({
+    	        title: '删除账户',
+    	        content: '您确定要删除“'+username+'”账户?',
+    	        ok: function() {
+    	            $.post('/purchase/account/user_infos_delete.html', {id : id}, function(result) {
+    	                dia.close();
+    	                if (result) {
+    	                   top.ue.alert({
+    	                        title: "提示信息",
+    	                        content: "账户删除成功",
+    	                        end:function() {
+    	                        	location="/purchase/account/user_infos_main.html?pi="+pi;
+    	                        }
+    	                    });
+    	                } else {
+    	                    top.ue.msg("账户删除失败");
+    	                }
+    	            });
+    	        }
+    	    })
+    }
+    //跳转到添加页面
+    function add(){
+    	location="/purchase/account/user_infos_toAdd.html";
+    }
+    //跳转到修改页面
+    function edit(uId,pi){
+        location.href = "/purchase/account/user_infos_toEdit.html?uId="+uId+"&pi="+pi
+        return false;
+    }
+    
+    //跳转到设置角色页面
+    function setRole(uid,username,eId,pi){
+        top.utils.openWithTab("szjs", "设置角色", "/purchase/account/role_setRole.html?uid="+uid+"&username="+username+"&eId="+eId+"&pi="+pi, {
+            fstBread: top.app.index.firstBread,
+            scdBread:{
+                text:top.app.index.secondBread,
+                url:location.href,
+                prevBread: top.app.index.firstBread
+            },
+            thirdBread:"设置角色"
+        })
+        return false;
+    }
+    
+    //重置密码
+    function resetPassword(uid){
+    	$("#uid").val(uid);
+    	$(".fn_old").hide();
+    	$(".fn_new").hide();
+    	$(".fn_conf").hide();
+    	$(".fn_sess").hide();
+    	$(".fn_erro").hide();
+    	//showPopUpDIV($(".passport"),$(".mask"));
+        top.rui.dynamic({
+            title: "重置密码",
+            area: ['550px'],
+            content: $(".passport").html(),
+            skin: "dialog-old dialog-old-no-title",
+            success: function (lay, idx) {
+
+            },
+            yes: function (idx, lay) {
+                resetPasswordSave(lay);
+            }
+        })
+    }
+    
+  	//关闭dialog
+	function closeDialog(){
+		$(".dialog").hide();
+		$(".mask").hide();
+	}
+  	
+	function show_error(fun,mes,lay){
+        lay = lay?lay:document;
+		$(fun,lay).html(mes).show();
+		$("#old_password",lay).val("");
+		$("#new_password",lay).val("");
+		$("#conf_password",lay).val("");
+	}
+  	
+	function resetPasswordSave(lay){
+		var uid = $("#uid" ,lay).val();
+		var old_password   = $("#old_password",lay).val(),
+	    new_password       = $("#new_password",lay).val(),
+	    conf_password      = $("#conf_password",lay).val();
+
+		if(old_password == ""){
+			show_error(".fn_old","请输入原密码。",lay);
+			return false;
+		}
+		if(new_password == ""){
+			show_error(".fn_new","请输入新密码。",lay);
+			return false;
+		}
+		 if (new_password.length < 6) {
+				show_error(".fn_new","密码长度太短，最少6位字符",lay);
+				return false;
+		 }
+		if(conf_password == ""){
+			show_error(".fn_conf","请输入确认新密码。",lay);
+			return false;
+		}
+		if(new_password != conf_password){
+			show_error(".fn_conf","确认新密码与新密码不一致。",lay);
+			return false;
+		}
+		if(new_password == old_password){
+			show_error(".fn_new","请输入不同的新密码。",lay);
+			return false;
+		}
+		var params = {
+				uid                 : uid, 
+				old_password		: old_password, 
+				new_password		: new_password, 
+				conf_password		: conf_password
+			};	
+		
+		$.ajax({
+			url: "/purchase/account/user_infos_resetPasswordSave.html",
+			type: "post",
+			dataType: "json",
+			data: params,
+			success: function(data) {
+				if(data.success){
+					if (data.data.status === "1") {
+						$(".fn_sess").show();
+						$("#old_password",lay).val("");
+						$("#new_password",lay).val("");
+						$("#conf_password",lay).val("");
+					} else if(data.data.status === "100"){
+						show_error(".fn_conf","确认新密码与新密码不一致。",lay);
+						
+			        } else if(data.data.status === "103"){
+						show_error(".fn_conf","新密码长度太短，最少6位字符。",lay);
+						
+			        } else if(data.data.status === "102"){
+			        	show_error(".fn_old","原密码不正确。",lay);
+			        } else {
+			        	$(".fn_erro").show();
+			        	$("#old_password",lay).val("");
+			        	$("#new_password",lay).val("");
+			        	$("#conf_password",lay).val("");
+					}
+				}else{
+					$(".fn_erro").show();
+					$("#old_password",lay).val("");
+					$("#new_password",lay).val("");
+					$("#conf_password",lay).val("");
+				}	
+			},
+			error: function() {
+				/*// 恢复登录键
+				oSub.get(0).disabled = false;
+				oSub.html("登&#12288;录");*/
+			}
+		});
+		return false;
+	}
+	
+	function submitForm(i){
+    	$.showLoad();
+        top.utils.frameBackDel();
+    	window.location.href = "/purchase/account/user_infos_main.html?tstatus="+i;
+		return false;
+    }
+	
+	function auditPass(uid,username,pi) {
+		showPopUpDIV($(".rolesaber"),$(".mask"));
+		$("#pi").val(pi);
+		$("#uid").val(uid);
+	   }
+	    
+	    function auditFail(uid,username,pi) {
+	    	top.ue.alert({
+                  title: "提示信息",
+                  content: "已拒绝通过认证",
+                  end:function() {
+                  	location="/purchase/account/user_infos_main.html?tstatus=1&pi="+pi;
+                  }
+              });
+	      }
+	    
+	    function closeRoleDialogSaber(){
+	  		$(".rolesaber").hide();
+			$(".mask").hide();
+	  	}
+	    
+	    function selectRole(){
+	    	var roleId = $("#roleId").val();
+	    	if(roleId == ''){
+	    		top.ue.msg("请选择角色");
+	    		return;
+	    	}
+	    	var pi = $("#pi").val();
+	    	var uid = $("#uid").val();
+	    	$.post('/purchase/account/user_infos_auditAccountInfo.html', {uId : uid,staffStatus:3,roleId:roleId}, function(result) {
+	                if (result) {
+	                   top.ue.alert({
+	                        title: "提示信息",
+	                        content: "已通过认证",
+	                        end:function() {
+	                        	location="/purchase/account/user_infos_main.html?tstatus=1&pi="+pi;
+	                        }
+	                    });
+	                } else {
+	                    top.ue.msg("账户通过认证失败");
+	                }
+	            });
+	    }
+    </script>
+  </head>
+ 
+  <body>
+  	<style>
+.fn-msg{display:none;padding:0 5px 0 29px;color:#555;border:1px solid #fff;vertical-align:middle;font-family:simsun;overflow:hidden;height:18px;line-height:18px}
+.fn-msg-red{display:inline-block;color:#ff0000;border-color:#DD1112;background:#fceaea url(../../image/fn_msg_red.gif) no-repeat 6px 50%}
+.fn-msg-tip{color:#f00;}
+.fn-msg-blue{display:inline-block;color:#4593D1;border-color:#4593D1;background:#DCECF7 url(../../image/fn_msg_blue.gif) no-repeat 6px 50% }
+  	</style>
+    <div class="container">
+    	#parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a> &gt; 账户中心 &gt; 子账号管理</p>
+                </div>
+                <div class="order_list">
+                    <div class="tabnav">
+                        <ul>
+                            <li data-value="0" #if($!tstatus==0)class="on"#end><a href="javascript:submitForm(0);"><span>列表</span></a></li>
+                            <li data-value="1" #if($!tstatus==1)class="on"#end><a href="javascript:submitForm(1);"><span>待审核</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                #if($!tstatus == 0)
+                <div class="order_query">
+                  <form>
+                    <div class="function">
+                      <a class="btn" href="javascript:add();">添加</a>
+                    </div>
+                  </form>
+                </div>
+                #end
+              <form action="/purchase/account/user_infos_main.html" method="post" id="searchForm">
+              					<input type="hidden" name="pi" value="$!pi">
+								<input type="hidden" name="ps" value="$!ps">
+								<input type="hidden" name="tstatus" value="$!tstatus">
+              </form>
+              <div class="order_detail">
+                    <div class="table">
+                    #if($!tstatus == 0)  
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                   <th>用户账号</th>
+                                    <th>用户昵称</th>
+                                    <th>手机号码</th>
+                                    <th>注册时间</th>
+                                    <th>上次登录时间</th>
+                                    <th>角色</th>
+                                    <th>状态</th>
+<!--                                     <th>邮箱</th> -->
+                                    <th>登录次数</th>
+                                  <th width="160">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            #if($!{childAccountList})
+	                            #foreach($childAccount in $childAccountList)
+	                                <tr>
+	                                   <td>$!childAccount.userInfos.username</td>
+	                                    <td>$!childAccount.userInfos.nickname</td>
+	                                    <td>$!childAccount.userInfos.mobile</td>
+	                                    <td>$utils.formatDate($!childAccount.userInfos.createdTime,"yyyy-MM-dd HH:mm:ss")</td>
+	                                    <td>$!childAccount.loginTime</td>
+	                                     <td>$!childAccount.roleName</td>
+	                                    <td>
+	                                    	#if($!{childAccount.userInfos.uiStatus} == 1)
+	                                    			启用
+	                                    	#else
+	                                                                                                 禁用
+	                                    	#end
+	                                    </td>
+<!-- 	                                    <td>$!childAccount.userInfos.email</td> -->
+	                                    <td>$!childAccount.loginNumber</td>
+	                                  <td>
+	                                  	<a href="javascript:void(0);" onclick="setRole($!childAccount.userInfos.uid,'$!childAccount.userInfos.username',$!childAccount.userInfos.eId,$!{pagerInfo.pageIndex});" class="btn">设置角色</a>
+	                                    <a href="javascript:void(0);" onclick="edit($!childAccount.userInfos.uid,$!{pagerInfo.pageIndex});" class="btn-txt">修改</a>
+	                                    <a href="javascript:deleteUserInfo('$!{childAccount.userInfos.username}',$!childAccount.userInfos.uid,$!{pagerInfo.pageIndex});" class="btn-delete">删除</a>
+	                                    <a href="javascript:resetPassword($!childAccount.userInfos.uid);" class="btn">重置密码</a>
+	                                  </td>
+	                                </tr>
+	                             #end
+                             #else
+                             		<tr>
+										<td colspan="9">无相关数据！ </td>
+									</tr>
+                             #end
+                            </tbody>
+                        </table>
+                        #end
+                        #if($!tstatus == 1)  
+	                        <table cellpadding="0" cellspacing="0">
+	                            <thead class="head">
+	                                <tr class="line">
+	                                   <th>序号</th>
+	                                    <th>账号</th>
+	                                    <th>姓名</th>
+	                                    <th>性别</th>
+	                                    <th>手机号</th>
+	                                  <th width="160">操作</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                            #if($!{terminalAccountList})
+		                            #foreach($childAccount in $terminalAccountList)
+		                                <tr>
+		                                 	<td>$!{velocityCount}</td>
+		                                   <td>$!childAccount.username</td>
+		                                    <td>$!childAccount.name</td>
+		                                    <td>
+		                                    	#if($!{childAccount.staffSex} == 1)
+		                                    			男
+		                                    	#else
+		                                                	女
+		                                    	#end
+		                                    </td>
+		                                    <td>$!childAccount.mobile</td>
+		                                  <td>
+		                                  	<a href="javascript:auditPass($!childAccount.uid,'$!childAccount.username',$!{pagerInfo.pageIndex});" class="btn">通过认证</a>
+		                                    <a href="javascript:auditFail($!childAccount.uid,'$!childAccount.username',$!{pagerInfo.pageIndex});" class="btn-txt">拒绝</a>
+		                                  </td>
+		                                </tr>
+		                             #end
+	                             #else
+	                             		<tr>
+											<td colspan="8">无相关数据！ </td>
+										</tr>
+	                             #end
+	                            </tbody>
+	                        </table>
+                        #end
+                        		<!--分页开始 -->
+									#if($!{pagerInfo})
+										#if($!{pagerTotal} > 1)
+											#pagerInfo($!pagerInfo,$!{pagerTotal},"/purchase/account/user_infos_main.html")
+										#end 
+									#end
+								<!--分页结束 -->
+                  </div>
+                </div>
+            </div>
+            
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+    <div class="mask"></div>
+  	<div class="dialog passport" style="width:500px;">
+      <div class="head"><span>重置密码</span><a  href="javascript:void(0);" onclick="closeDialog()"  class="btn-close"></a></div>   
+      <div class="con">
+          <form action="" method="get" id="resetPassworod">
+          		<input id="uid" type="hidden" />
+          		<ul>
+                       <li class="one">
+                           <label>原密码<i>*</i>：</label>
+                           <input name="old_password" id="old_password" type="password" value="" class="w-txt" style="width: 150px;">
+                           <span class="fn-msg fn-msg-red fn_old" style="display:none">请输入原始密码。</span>
+                       </li>
+                       <li class="one">
+                           <label>新密码<i>*</i>：</label>
+                           <input name="new_password" id="new_password" type="password" value="" class="w-txt" style="width: 150px;">
+                           <span class="fn-msg fn-msg-red fn_new" style="display:none">请输入新密码。</span>
+                       </li>
+                       <li class="one">
+                           <label>确认密码<i>*</i>：</label>
+                           <input name="conf_password" id="conf_password" type="password" value="" class="w-txt" style="width: 150px;">
+                           <span class="fn-msg fn-msg-red fn_conf" style="display:none">请输入确认密码。</span>
+                       </li>
+                       <li style="display:none" class="fn_sess">
+						   <label>&nbsp;</label>
+						   <span class="fn-msg fn-msg-blue">修改密码成功 !</span>
+					   </li>
+					   <li style="display:none" class="fn_erro">
+						   <label>&nbsp;</label>
+						   <span class="fn-msg fn-msg-red">原密码输入错误。</span>
+					   </li>  
+              </ul>
+          </form>
+          <div class="btn"><a class="left but_submit" href="javascript:void(0);" onclick="resetPasswordSave();">保存</a></div>
+      </div>
+    </div>
+    
+    <!-- 选择所属角色-->
+    <div class="dialog rolesaber" style="width:500px;">
+      <div class="head"><span>请选择此员工的角色 </span><a  href="javascript:void(0);" onclick="closeRoleDialogSaber()"  class="btn-close"></a></div>   
+      <div class="con">
+          <form action="" method="get" id="resetPassworod">
+          		<input id="uid" type="hidden"></input>
+          		<input id="pi" type="hidden"></input>
+          		<ul>
+                       <li class="one">
+                           <label>角色<i>*</i>：</label>
+                           <div class="sltitem w348 z-index" id="" style="width:282px;z-index:9">
+								<span class="" style="width:280px;"></span>
+								<ul style="display: none; width: 305px;">
+									#foreach($rgRole in $!{rgRoles})
+									<li data-value="$!{rgRole.roleId}" style="width: 305px;">
+										<a href="javascript:;">$!{rgRole.roleName}</a>
+									</li> 
+									#end
+								</ul>
+								<input type="hidden" value="" name="roleId" id="roleId" />
+						   </div>
+                       </li>
+              </ul>
+          </form>
+          <div class="btn">
+          	<a class="left but_submit" href="javascript:closeRoleDialogSaber();">再看看</a>
+          	<a class="reft but_submit" href="javascript:selectRole();">确定</a>
+          </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

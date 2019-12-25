@@ -1,0 +1,121 @@
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="order_query order">
+                   <form action="/sales/price/singlePolicy_goods.html" method="post" id="searchGoodsForm">
+                                <input type="hidden" name="pi" value="$!pi">
+								<input type="hidden" name="ps" value="$!ps">
+								<input type="hidden" name="gSellerId" value="$!gSellerId">
+								<input type="hidden" name="gStatus" value="1">
+								<input type="hidden" name="pactId" value="$!pactId">
+								<input type="hidden" name="pactType" value="$!pactType">
+                        <ul> 
+                            <li>
+                                <label>商品名称：</label><input name="gName" type="text" value="$!{gName}" class="w-txt w103">
+                            </li>
+                            <li>
+                                <label>批准文号：</label><input name="gLicenseNo" type="text" value="$!{gLicenseNo}" class="w-txt w103">
+                            </li>
+                            <li>
+                                <label>生产厂家：</label><input name="gManufacture" type="text" value="$!{gManufacture}" class="w-txt w103">
+                            </li>
+                            <li>
+                                <label class="w98">厂家助记码：</label><input name="gManufactureCode" type="text" value="$!{gManufactureCode}" class="w-txt w103">
+                            </li>
+                            #if($!suIsErp == 1)
+	                        	<li class="" style="margin-right: 10px;">
+		                            <label>商品内码：</label>
+		                            <input type="text" style="width: 500px;" name="gInSns" id="gInSns" placeholder="用逗号分隔多个内码“C102318,C102319”，每次最多200个"  onblur="top.app.frameWindow.checkGInSnValue('',false)" value="$!{gInSns}"/>
+		                        </li>
+	                        #end
+                            <li>
+                            	<a href="javascript:top.app.frameWindow.checkGInSnValue('/sales/price/singlePolicy_goods.html',false,true);" class="btn_query">查询</a>
+                       			<a href="javascript:top.app.frameWindow.checkGInSnValue('/sales/price/singlePolicy_goods.html',true);"  class="btn_query btn_export">清空查询条件</a>
+                            </li>
+                        </ul>    
+                    </form>
+                </div>
+                <div class="order_detail">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+<!--                                     <th width="90px"><input type="checkbox" class="check" id="selectAll" onclick="selectAll(this);">全选</th> -->
+                                    <th width="90px"></th>
+                                    <th width="75px">商品编码</th>
+                                    <th width="130px">商品名称</th>
+                                    <th width="130px">批准文号</th>
+                                    <th>生产厂家</th>
+                                    <th width="130px">规格</th>
+                                    <th width="75px">零售价</th>
+                                    <th width="75px">基价</th>
+                                    <th>中包装</th>
+                                    <th width="80px">是否可拆零</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            #if(!$null.isNull($goodsWrapperList) && $goodsWrapperList.size()!=0)
+	                            #foreach($goodsWrapper in $goodsWrapperList)
+	                                #if($!utils.isContais($!{goodsWrapper.goods.gId},$!gids))
+	                                	<tr class="gray">
+	                                	<td>
+		                                	<input type="checkbox" onclick="top.app.frameWindow.onlyOne(this)" checked="checked" class="check" name="chk" id="$!{goodsWrapper.goods.gId}">
+	                                	</td>
+	                                 #elseif($!{goodsWrapper.goods.gType} ==3)
+	                                	<tr class="gray">
+	                                	<td>
+		                                	<div class="checkbox_tips"  data-tips="true" data-tips-title="该商品是专供品种，不可以参与单品量价政策" >
+		                                		<input type="checkbox" disabled=“disabled” class="check" name="chk" id="$!{goodsWrapper.goods.gId}">
+	                                		</div>
+	                                	</td>
+	                                #else
+	                                	<tr>
+	                                	<td>
+	                                		<input type="checkbox"  onclick="top.app.frameWindow.onlyOne(this)" class="check" name="chk" id="$!{goodsWrapper.goods.gId}">
+	                                	</td>
+	                                #end
+                                    <td>$!{goodsWrapper.goods.gSn}</td>                                    
+                                    
+                                    <td title="$!utils.getGoodsName($!{goodsWrapper.goods.gName},$!{goodsWrapper.goods.gCommonName})">$!utils.substring($!utils.getGoodsName($!{goodsWrapper.goods.gName},$!{goodsWrapper.goods.gCommonName}),7)</td>
+                     
+                                    <td>$!{goodsWrapper.goods.gLicenseNo}</td>
+                                    <td>$!{goodsWrapper.goods.gManufacture}</td>
+                                    <td>$!{goodsWrapper.goods.gSpecifications}</td>
+                                    <td>¥$utils.doubleFormat($goodsWrapper.goods.gPrice)</td>
+                                    <td>¥$utils.doubleFormat($goodsWrapper.goods.gBasePrice)</td>
+                                    <td>$!{goodsWrapper.goods.gMiddlePackage}</td>
+                                    <td>
+                                    	#if($!{goodsWrapper.goods.gCanSplit}==0)
+                                    		否
+                                    	#else
+                                    		是
+                                    	#end
+                                    </td>
+                                    </tr>
+	                            #end
+	                        #else
+	                           <tr>
+	                             <td colspan="10">无相关数据！</td>
+	                           </tr>
+	                        #end
+                            </tbody>
+                        </table>
+                        <!--分页开始 -->
+						#if($!{pagerInfo})
+								#if($!{pagerTotal} > 1)
+									#dialogPagerInfo($!pagerInfo,$!{pagerTotal},"/sales/price/singlePolicy_goods.html")
+								#end
+							#end	
+						<!--分页结束 -->
+                    </div>
+                </div>
+               <div class="btn" style="margin-top: 15px;">
+               		<a href="javascript:saveGoods();">保存</a>
+               		<a href="javascript:closePopUpDIV('popUpMaskQ','popUpDIVQ');">取消</a>
+               </div>  
+            </div>
+            <!-- 用户中心_主体内容_E -->
+        
+              
+   
+    
+ 

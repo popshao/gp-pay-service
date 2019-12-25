@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>买家账户- 余额明细</title>
+    
+	<!-- mypharma_公共资源 -->
+	<meta name="keywords" content=""/>
+	<meta name="description" content=""/>
+	<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+       
+	<!-- mypharma_样式 -->
+	<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" /> 
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="scripts/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm") #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            
+              <div class="path">
+                  <p><a href="/purchase/index.html" class="color">采购中心</a> &gt;资产&gt; 账户余额</p>
+              </div>
+                
+              <div class="integral_top cc">
+                	<p class="text fl line">账户余额：<b class="red">$!utils.priceFormart($!{walletSum})</b>元</p>
+                	<a class="amount" style="float: left; padding: 10px 15px; margin: 0 0 0 10px; color: #0f94a5; background: #e2f5f8; font-size: 14px; text-decoration: none; font-weight: 100;" href="javascript:void(0);" onclick="top.utils.openRechargeModal();" >充值</a>
+                    <p class="text fl" style="max-width: 62%; line-height: 1.2; padding:0 0 0 20px; margin-top:-5px; color: #333;">充值说明：为了营造平台真实、合规的交易氛围，保护商家合法权益，避免恶意行为破坏市场秩序。针对充值返现金活动，平台会对充值的订单数据进行风控，对所识别的所有虚假交易的行为给予严肃处理，确定为异常订单，平台有权利取消返劵的权益，并暂停其充值的功能。活动的解释权归我的医药网所有。</p>
+                	<a class="link fr" href="http://cms.mypharma.com/node/187" target="_black">账户余额说明</a><!--zhangwanfeitigong-->
+              </div>
+                <div class="order_query order">
+							<form action="/purchase/wallet/record.html" method="post" id="searchForm">
+								<input type="hidden" name="pi" value="$!pi" />
+								<ul>
+                                    <li>
+                                        <label class="w70">订单号：</label>
+                                        <input name="billSn" type="text" value="$!billSn" class="w-txt w130" />
+                                    </li>
+                                    <li>
+                                        <label class="w70">时间：</label>
+                                        <input type="text" id="startTime" class="w-txt w130" name="startTime" value="$!startTime" onblur="javascript:$.sltitem.select('quick','9');" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'endTime\')}'})" />
+                                        <div class="fl mr10">-</div>
+                                        <input type="text" id="endTime" class="w-txt w130" name="endTime" value="$!endTime" onblur="javascript:$.sltitem.select('quick','9');" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'startTime\')}'})" />
+                                    </li>
+                                    <li>
+                                        <label class="w70">类型：</label>
+                                        <div class="sltitem w150" id="cate">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="1"><a href="javascript:void(0);">充值</a></li>
+                                                <li data-value="2"><a href="javascript:void(0);">订单支付</a></li>
+                                                <li data-value="3"><a href="javascript:void(0);">退款</a></li>
+                                            </ul>
+                                            <input type="hidden" name="wrType" id="wrType">
+                                        </div>
+                                    </li>
+									<li>
+										<div class="btn">
+											<a href="javascript:searchPager('/purchase/wallet/record.html',false);" class="btn_query">查询</a>
+                                            <a href="javascript:searchPager('/purchase/wallet/record.html',true);"
+                                               class="btn_query mr7">重置筛选条件</a>
+										</div>
+									</li>
+								</ul>
+								
+							</form>
+				</div>
+                
+                <div class="integral_table">
+                	<table border="0" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr class="line">
+                                <th>收支</th>
+                                <th>时间</th>
+                                <th>操作人员</th>
+                                <th>类型</th>
+                                <th>明细</th>
+                                <th>相关订单</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                        	#if(!$null.isNull($list) && $list.size()!=0) 
+							#foreach($walletRecord in $list)
+                            <tr>
+                                <td>#if($!walletRecord.type == 1 || $!walletRecord.type == 3 || $!walletRecord.type == 6)+#else-#end$!utils.priceFormart($!{walletRecord.amount})</td>
+                                <td>$utils.formatDate($!walletRecord.createTime,"yyyy-MM-dd HH:mm:ss")</td>
+                                <td>$walletRecord.userName</td>
+                                <td>#if($!walletRecord.type == 1)充值#elseif($!walletRecord.type == 2)订单支付 #elseif($!walletRecord.type == 3) 退款#elseif($!walletRecord.type == 6) 退款#else #end</td>
+                                <td>$walletRecord.remark</td>
+
+                                <td>
+                                    #if($!walletRecord.type == 1)#elseif($!walletRecord.type == 2)$walletRecord.billSn #elseif($!walletRecord.type == 3) $walletRecord.billSn#else #end
+                                </td>
+
+                            </tr>
+                            #end
+							#else
+							<tr>
+								<td colspan="10">
+                                    暂无余额使用记录
+								</td>
+								</tr>
+							#end
+                        </tbody>
+                    </table>
+                    <!--分页开始 -->
+					#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+					#pagerInfo($!pagerInfo,$!{pagerTotal},"/purchase/wallet/record.html")
+					#end #end
+					<!--分页结束 -->
+                </div>
+                
+          </div>
+          
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	#parse("common/common_script.vm")
+<script type="text/javascript">
+	    $(function(){
+	    	$.sltitem.select("wrType", "$!wrType");
+	    });    
+    </script>  
+  </body>
+</html>

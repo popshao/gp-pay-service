@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.write.GroundPromotionPayConfigWriteDao">
+    <insert id="createGroundPromotionPayConfig" parameterType="com.mph.coreapi.gp.pay.entity.GroundPromotionPayConfig" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ground_promotion_pay_config(
+            `type`,
+            val,
+            create_time,
+            update_time,
+            pay_description
+            )
+            VALUES
+            (
+            #{type},
+            #{val},
+            #{createTime},
+            #{updateTime},
+            #{payDescription}
+            );
+        ]]>
+
+        <selectKey resultType="int" >
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+
+    <update id="updateGroundPromotionPayConfig">
+     update ground_promotion_pay_config
+        <set>
+            <if test="userId != null">
+                `type` = #{type},
+            </if>
+            <if test="identityCardNo != null">
+                val = #{val},
+            </if>
+            <if test="bankCode != null">
+                pay_description = #{pay_description}
+            </if>
+            update_time = NOW()
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

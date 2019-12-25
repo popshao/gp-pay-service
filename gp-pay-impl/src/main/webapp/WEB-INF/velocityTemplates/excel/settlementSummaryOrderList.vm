@@ -1,0 +1,153 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<!--[if gte mso 9]><xml><x:ExcelWorkbook>
+<x:ExcelWorksheets><x:ExcelWorksheet><x:Name>
+</x:Name><x:WorksheetOptions><x:Selected/></x:WorksheetOptions>
+</x:ExcelWorksheet>
+</x:ExcelWorksheets></x:ExcelWorkbook></xml>
+<![endif]-->
+<style>
+.table-dotted {
+    border-collapse: collapse;
+}
+.table-dotted tbody .th {
+    border: 1px #99bbe8;
+    background-color:#8DB4E3;
+    border-spacing: 1px;
+    text-align: right;
+    font-weight: normal;
+    white-space: nowrap;
+    padding: 2px;
+    line-height:22px;
+}
+
+.table-dotted tbody .td {
+    border: 1px #99bbe8;
+    border-spacing: 1px;
+    text-align: left;
+    padding: 2px;
+    line-height:22px;
+}
+.format{
+mso-number-format:'\@';
+}
+</style>
+
+</head>
+<body leftmargin=0 topmargin=0 marginwidth=0 marginheight=0>
+<table class="table-dotted" width="100%">
+<tbody>
+	<tr>
+        <td class="th" style="text-align: center;">订单号</td>
+        <td class="th" style="text-align: center;">订单ID</td>
+        <td class="th" style="text-align: center;">下单时间</td>
+        <td class="th" style="text-align: center;">采购商</td>
+        <td class="th" style="text-align: center;">支付方式</td>
+        <td class="th" style="text-align: center;">供应商订单号</td>
+        <td class="th" style="text-align: center;">订单商品结算金额</td>
+        <td class="th" style="text-align: center;">优惠券平台应补贴金额</td>
+        <td class="th" style="text-align: center;">随机立减平台应补贴金额</td>
+        <td class="th" style="text-align: center;">订单应结算总金额</td>
+        <td class="th" style="text-align: center;">订单金额</td>
+        <td class="th" style="text-align: center;">订单使用优惠券金额-平台承担部分</td>
+        <td class="th" style="text-align: center;">订单使用优惠券金额-供应商承担部分</td>
+        <td class="th" style="text-align: center;">订单享受随机立减金额-平台承担部分</td>
+        <td class="th" style="text-align: center;">订单享受随机立减金额-供应商承担部分</td>
+        <td class="th" style="text-align: center;">采购商线上付款金额</td>
+        <td class="th" style="text-align: center;">佣金金额</td>
+
+        <td class="th" style="text-align: center;">驳回商品实际退款金额</td>
+        <td class="th" style="text-align: center;">驳回商品分摊平台承担优惠券金额</td>
+        <td class="th" style="text-align: center;">驳回商品分摊供应商承担优惠券金额</td>
+        <td class="th" style="text-align: center;">驳回商品分摊平台承担随机立减金额</td>
+        <td class="th" style="text-align: center;">驳回商品分摊供应商承担随机立减金额</td>
+        <td class="th" style="text-align: center;">驳回佣金金额</td>
+
+        <td class="th" style="text-align: center;">退货商品实际退款金额</td>
+        <td class="th" style="text-align: center;">退货商品分摊平台承担优惠券金额</td>
+        <td class="th" style="text-align: center;">退货商品分摊供应商承担优惠券金额</td>
+        <td class="th" style="text-align: center;">退货商品分摊平台承担随机立减金额</td>
+        <td class="th" style="text-align: center;">退货商品分摊供应商承担随机立减金额</td>
+        <td class="th" style="text-align: center;">退货佣金金额</td>
+
+        <td class="th" style="text-align: center;">签收时间</td>
+        <th class="th" style="text-align: center;">订单结算单生成时间</th>
+	    <th class="th" style="text-align: center;">订单结算单审核时间</th>
+        <th class="th" style="text-align: center;">随机立减结算单生成时间</th>
+        <th class="th" style="text-align: center;">随机立减结算单审核时间</th>
+        <th class="th" style="text-align: center;">优惠券结算单生成时间</th>
+        <th class="th" style="text-align: center;">优惠券结算单审核时间</th>
+        <th class="th">订单结算单号</th>
+        <th class="th">优惠券结算单号</th>
+        <th class="th">随机立减结算单号</th>
+
+        <th class="th">开票员</th>
+        <th class="th">开票员ID</th>
+        <th class="th">采购商内码</th>
+    </tr>
+	#if($settlementList && $!settlementList.size()!=0)
+    #foreach($item in $settlementList)
+	<tr>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.orderSn}</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.oId}</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$utils.formatDate($!{item.createTime},"yyyy-MM-dd HH:mm:ss")</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.buyerName}</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.platformDes}</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap"></td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.buyerFinalAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.finalPlatformCouponAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.platformPromotionAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.supplierFinalAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.orderPrePrice})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.platformCouponAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.supplierCouponAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.platformOriPromotionAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.supplierOriPromotionAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.payPrice})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.commission})</td>
+
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.actualRebutPrice})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.rebutPlatformCouponAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.rubutSupplierCouponAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.rebutPlatformPromotionAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.rebutSupplierPromotionAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.rebutCommission})</td>
+
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.actualBackPrice})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.backPlatformCouponAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.backSupplierCouponAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.backPlatformPromotionAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.backSupplierPromotionAmount})</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!utils.priceFormart($!{item.backCommission})</td>
+
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$utils.formatDate($!{item.receiveTime},"yyyy-MM-dd HH:mm:ss")</td>
+     	<td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$utils.formatDate($!{item.staddTime},"yyyy-MM-dd HH:mm:ss")</td>
+     	<td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$utils.formatDate($!{item.stAuditTime},"yyyy-MM-dd HH:mm:ss")</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$utils.formatDate($!{item.pstAddTime},"yyyy-MM-dd HH:mm:ss")</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$utils.formatDate($!{item.pstAuditTime},"yyyy-MM-dd HH:mm:ss")</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$utils.formatDate($!{item.cstAddTime},"yyyy-MM-dd HH:mm:ss")</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$utils.formatDate($!{item.cstAuditTime},"yyyy-MM-dd HH:mm:ss")</td>
+
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.stsn}</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.mcsSn}</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.pstsn}</td>
+
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.drawerName}</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.drawerId != 0)
+                $!{item.drawerId}
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.oSeInternalCode}</td>
+     </tr>
+     #end
+     #end
+</tbody>
+</table>
+
+</body>
+</html>

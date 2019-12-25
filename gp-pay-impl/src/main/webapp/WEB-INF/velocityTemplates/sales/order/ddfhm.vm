@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>订单发货 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            	<div class="path">
+		        <p><a href="/sales/index.html" class="color">销售中心</a>&gt; 交易管理 &gt; <a href="/sales/order/ddgl.html" class="color">销售订单</a>&gt; 订单发货</p>
+		        </div>
+                <div class="order_t">
+                    <span>订单号：$!order.oSn</span>
+                    <span>下单时间：$utils.formatDate($!order.oAddTime,"yyyy-MM-dd HH:mm:ss")</span>
+                    <span>采购商：$!order.oEName</span>
+                    <span>收货地址：$!order.oProvince $!order.oTown $!order.oArea $!order.oAddress</span>
+                    <span>收货人：$!order.oPeople</span>
+                    <span>手机：$!order.oTel</span>
+                </div>
+                <div class="order_detail">
+                    <div class="table">
+                    <a href="/sales/order/ddgl.html?$!{returnPageParam}" class="btn-return">返回</a>
+                    <a href="javascript:void(0);" onclick="send();" class="btn_ok ml6">发货</a>
+                    <a href="javascript:void(0);" onclick="rebut();" class="btn_ok ml3">驳回</a>
+                        <table id="table" cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th></th>
+                                    <th>商品名称</th>
+                                    <th>生产厂家</th>
+                                    <th>批准文号</th>
+                                    <th>规格</th>
+                                    <th>单位</th>
+                                    <th>单价（元）</th>
+                                    <th>数量</th>
+                                    <th>小计（元）</th>
+                                    <th>批次号</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+							#if(!$null.isNull($order.orderDetailList) && $order.orderDetailList.size()!=0)
+                                #foreach($item in $order.orderDetailList)
+                                <tr>
+                                    <td>$!velocityCount</td>
+                                    <td>$!item.odName<input type="hidden" name="odId" value="$!item.odId" /></td>
+                                    <td>$!item.odManufacture</td>
+                                    <td>$!item.odLicenseNumber</td>
+                                    <td>$!item.odSpecifications</td>
+                                    <td>$!item.odUnit</td>
+                                    <td>$!item.odPrice</td>
+                                    <td>$!item.odNumber</td>
+                                    <td>$!item.odSubtotal</td>
+                                    <td>
+                                    <input type="text" class="txt" name="batch" maxlength="20">
+                                    </td>
+                                </tr>
+                                #end
+                            #end
+						   </tbody>
+                        </table>
+                        备注：$!order.oNote
+                        <div class="line_b">
+                           <p>发票号：<input type="text" class="txt" id="osBill" maxlength="20" name="osBill"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+    
+        
+        function alertDialog(i){
+           	top.ue.alert({
+                  title: '提示',
+                  content: "请填写第"+i+"行商品的批次号"
+             })
+        }
+        
+        function send(){
+       	    top.ue.confirm({
+	              title: '确认',
+	              content: "您确认要商品发货吗？",
+	              ok: function() {
+	            	  var array = [];
+	            	  $("#table tbody tr").each(function(i, item){
+            		        var check = $(item).find("input[name='odId']");
+            			    var send = {};
+            			    send.odId = $(check).val();
+            			    send.osiBatch = $(item).find("input[name='batch']").val();
+            			    // if($.isEmptyObject(send.batch)){
+            			    //     alertDialog(i+1);
+            			    //     d.close();
+            			    // }
+            			    array.push(send);
+	            	   });
+	            	   //alert($.toJSON(array));return;
+	            	   $.showLoad();
+			           $.ajaxPost("/sales/order/ddfhSave.html", {"array":$.toJSON(array),"oId":"$!order.oId","suId":"$!order.oSellerId","osBill":$("#osBill").val()}, function(result) {
+			        	   $.hideLoad();
+			        	   if (result != "") {
+	 			            	 var obj=eval("("+result+")");
+	 			            	 if(1 == obj.data){
+	 			            		$.showLoad();
+	 			            		window.location.href = "/sales/order/ddgl.html?$!{returnPageParam}";
+	 				        		return false;
+	 			            	 }else if(0 == obj.data){
+                                     top.ue.msg("订单状态已经发生改变，请刷新页面");
+	 			         			 $.showLoad();
+	 			         			 window.location.href = "/sales/order/ddgl.html";
+	 				        		 return false;
+	 			            	 }else if(2 == obj.data){
+                                     top.ue.alert({
+					                        title: '提示信息',
+					                        content: "由于银行原因。订单发货失败，请稍后再试"
+					                    })
+					                    return;
+					        		}
+	 			             } 
+			           });
+	               }
+	         })
+        }
+        
+        function rebut(){
+        	top.ue.confirm({
+	              title: '确认',
+	              content: "您确认要驳回商品吗？",
+	              ok: function() {
+	            	   $.showLoad();
+			           $.ajaxPost("/sales/order/ddbhSave.html", {"oId":"$!order.oId","suId":"$!order.oSellerId"}, function(result) {
+			        	   $.hideLoad(); 
+			        	   if (result != "") {
+	 			            	 var obj=eval("("+result+")");
+	 			            	 if(1 == obj.data){
+	 			            		$.showLoad();
+	 			            		window.location.href = "/sales/order/ddgl.html?$!{returnPageParam}";
+	 				        		return false;
+	 			            	 }else if(0 == obj.data){
+                                     top.ue.msg("订单状态已经发生改变，请刷新页面");
+	 			         			 $.showLoad();
+	 			         			 window.location.href = "/sales/order/ddgl.html";
+	 				        		 return false;
+	 			            	 }else if(2 == obj.data){
+                                     top.ue.alert({
+					                        title: '提示信息',
+					                        content: "由于银行原因。订单驳回失败，请稍后再试"
+					                    })
+					                    return;
+					        		}
+	 			             } 
+			           });
+	               }
+	         })
+        }
+        
+    </script>
+  </body>
+</html>

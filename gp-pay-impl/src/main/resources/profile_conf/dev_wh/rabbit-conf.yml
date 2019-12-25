@@ -1,0 +1,8 @@
+addresses: 192.168.19.127:5672
+conf:
+  -
+    module: default
+    username: admin
+    password: password
+    vhost: /
+    confirms: true

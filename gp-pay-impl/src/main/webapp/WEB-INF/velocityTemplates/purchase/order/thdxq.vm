@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>订单退货详情 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+		       
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script type="text/javascript" src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+        
+        function showPromotion(o,valid,tit,txt,url){
+        	if(valid==1){
+        		$(o).append('<div class="cxbox"><a target="_blank" href="'+url+'">去抢购&gt;&gt;</a><h5>'+tit+'</h5><p>'+txt+'</p></div>');
+        	}else{
+        		$(o).append('<div class="cxbox"><h5>'+tit+'</h5><p>'+txt+'</p></div>');
+        	}
+        }
+        
+        function removePromotion(o){
+        	$(o).find('.cxbox').remove();
+        }
+
+        $(function(){
+       	
+	       	$(".img-tips-rc").each(function(){
+	       		$(this).on("mouseenter",function(){
+	       			var _this = $(this);
+	       			layer.tips("<img style='max-width:450px;max-height:400px;' src='"+_this.attr("data-src-ignore")+"'>",_this,{
+	       				tips: [1, '#fff'],
+	       				time:9999999999999,
+	       				success:function(lay){
+	       					lay.find("img").on('load',function(){
+	       						var _w = $(this).width() + 20;
+	       						var _h = $(this).height() + 20;
+	       						lay.css({"width":_w+"px","height":_h+"px"})
+	       					})
+	       				}
+	       			})
+	       		}).on("mouseleave",function(){
+	       			layer.closeAll("tips");
+	       		})
+	       	})
+       	
+       })
+        
+    </script>
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            	<div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 订单中心 &gt; 退货单详情</p>
+                </div>
+                <div class="order_t">
+                    <span>订单号：$!orderBack.oSn
+                      #if($!orderBack.orderType==5)
+                      <i class="pre-sell-user-detail">[预售]</i>
+                      #end
+                    </span>
+                    <span>供应商：$!orderBack.oSellerName</span>
+                    <span>下单时间：$utils.formatDate($!orderBack.oAddTime,"yyyy-MM-dd HH:mm:ss")</span>
+                </div>
+                <div class="order_detail order_font">
+                    <div class="table">
+##                    <a href="/purchase/order/thdcx.html?$!{returnPageParam}" class="btn-return">返回</a>
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th></th>
+                                    <th>商品名称</th>
+                                    <th>生产厂家</th>
+                                    <th>批次号</th>
+                                    <th>批准文号</th>
+                                    <th>规格</th>
+                                    <th>单位</th>
+                                    <th>单价（元）</th>
+                                    <th>发货数量</th>
+                                    <th>退货数量</th>
+                                    <th>退货小计</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+							#if($orderBack.orderBackInfoList && $orderBack.orderBackInfoList.size()!=0)
+                                     #foreach($item in $orderBack.orderBackInfoList)
+                               <tr>
+                                    <td class="td-none">$!velocityCount</td>
+                                    <td style="text-align:left;">
+                                    	    <dl>
+	                                   	    #if($!item.pri && $!item.pri.pactType != 0)
+	          	   	   						<dt style="cursor:pointer;" onmouseenter="showPromotion(this,'$!item.pri.isValid','$!item.pri.pactTitle','$!item.pri.rules','http://$!{suDomainPrefix}.mypharma.com/promotion/$!{item.pri.pactId}.html');" onmouseleave="removePromotion(this)">
+			                                    #if($!item.pri.pactType == 1)
+			                                    <i class="ico-bg">满减 </i>
+			                                    #elseif($!item.pri.pactType == 2)
+			                                    <i class="ico-bg">买赠 </i>
+			                                    #elseif($!item.pri.pactType == 3)
+			                                    <i class="ico-bg">换购</i>
+			                                    #elseif($!item.pri.pactType == 4)
+			                                    <i class="ico-bg">特价</i>
+			                                    #elseif($!item.pri.pactType == 5)
+			                                    <i class="ico-bg">秒杀</i>
+			                                    #end
+		                                    </dt>
+		                                    #else
+		                                    #if($!item.gType==1 || $!item.gType==2)
+							           	    <dt>
+							           	    <i class="ico-bg">新品</i>
+							           	    </dt>
+							           	    #end
+							           	    #if($!item.gType == 3 || $!item.gType == 5)
+							           	    <dt>
+							           	    <i class="ico-bg">专销</i>
+							           	    </dt>
+							           	    #end
+							           	    
+		                                    #end
+		                                    <dd>
+			                                <a href="http://$!{wwwHostAndPort}/item/$!{item.obiGId}.html" target="_blank">
+                                            $!item.obiName
+                                            </a>
+		                                    </dd>
+                                    	</dl>
+                                    </td>
+                                    <td>$!item.obiManufacture</td>
+                                    <td>$!item.obiBatch</td>
+                                    <td>$!item.obiLicenseNumber</td>
+                                    <td>$!item.obiSpecifications</td>
+                                    <td>$!item.obiUnit</td>
+                                    <td>
+                                    #if($!item.obiPrice != $!item.odPrePrice)
+			                        <span style="text-decoration:line-through;">$!utils.priceFormart($!{item.odPrePrice})</span><br/>
+								    <p style="font-size:12px; color:#ef0c4a;">$!utils.priceFormart($!{item.obiPrice})</p>
+						            #else      
+						            $!utils.priceFormart($!{item.obiPrice})
+						            #end
+                                    </td>
+                                    <td>
+                                    #if($!item.sendNumber)
+                                    #if($!item.sendNumber == 0)
+                                                                                                           未发货
+                                    #else
+                                    $!{item.sendNumber}
+                                    #end
+                                    #end
+                                    </td>
+                                    <td>$!item.backNumber</td>
+                                    <td>$!item.subtotal</td>
+                                </tr>
+                               <!-- 促销信息开始 -->
+						       #if($!item.pri.policy && $!item.pri.policy!='' && $!item.pri.pactType!=2)
+						       <tr style="font-size:12px;">
+						       <td colspan="14" style="text-align:left;background:white;color:#ef0c4a;">
+						          <span style="padding-right:22px;padding-left:98px;color:#ef0c4a;">$!{item.pri.policy}</span>
+						       </td>
+						       </tr>
+						       #end
+						       <!-- 促销信息结束 -->
+						       
+                                #end
+                            #end
+                            
+                               #* 促销买赠信息开始 *#
+						       #if($!utils.notEmpty($!giftList))
+						       <tr style="font-size:12px;">
+						       <td colspan="14" style="text-align:left;background:white;color:#ef0c4a;">
+						          #foreach($item in $!giftList) 
+						          <span style="padding-right:22px;padding-left:57px;color:#ef0c4a;">$!{item.policy}</span>
+						          #set($giftWrapper = $!item.giftWrapper)
+						          #if($!utils.notEmpty($!giftWrapper.gift_img_list))
+						       	 	 赠品：
+						       	      #foreach($giftimg in $!giftWrapper.gift_img_list)
+						       	      <img data-src-ignore="$!utils.getNewImgDomain($!{giftimg})" class="img-tips-rc" 
+						       	      style="cursor:pointer;vertical-align: middle;" 
+						       	      src="$!utils.getNewImgDomain($!{giftimg})?imageView2/2/w/40" title="$!giftWrapper.gift_name$!{velocityCount}" />
+						       	      #end
+						       	      <br>
+						  	      #end
+						  	      #end
+						       </td>
+						       </tr>
+						       #end
+						       #* 促销买赠信息结束 *#
+						       
+						   </tbody>
+                        </table>
+                        <dl class="order_ms fl" style="width:auto;">
+                           <dt class="fl">退货状态：</dt>
+                            <dd class="fl">
+                            ##退货状态
+                            #if($!orderBack.obStatus == 0)  
+				                            未确认
+				            #elseif($!orderBack.obStatus == 1)  
+				                            已确认
+				            #elseif($!orderBack.obStatus == 2)  
+				                            已驳回
+				            #else  
+				              $!orderBack.obStatus  
+				            #end
+                            </dd>
+                            <dt class="fl">订单退货时间：</dt>
+                            <dd class="fl">$utils.formatDate($!orderBack.obAddTime,"yyyy-MM-dd HH:mm:ss")</dd> 
+                            <dt class="fl">订单退货原因：</dt>
+                            <dd class="fl">
+                             #if($!orderBack.obNote=="")
+                                                                                       未收货
+                             #else
+                             $!orderBack.obNote                                                    
+                             #end
+                            </dd>
+                        </dl>
+                        <dl class="fr" style="margin-top:35px; text-align:center;">
+                        	<dd class="fr total_m" style="color: #ff0101;">退货金额合计：¥$!orderBack.total<br><span style="font-size:16px;">(优惠金额:¥$!backDiscount;商品金额:¥$!backPrice)</span></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+    
+  </body>
+</html>

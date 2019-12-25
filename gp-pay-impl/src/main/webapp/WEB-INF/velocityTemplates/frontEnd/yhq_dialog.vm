@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>弹窗 - 我的医药网</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}" />
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+
+                <div class="user-dialog-ctn">
+                    <div class="udc-info">
+                        <img src="../image/hm/icon_hm_04.png" alt="">是否确认结束发放？
+                    </div>
+                    <div class="udc-text">
+                        结束后，<i class="h">不可操作“发放”并且不再提供前台领取</i>，但不影响已领取的优惠券使用。
+                    </div>
+                </div>
+
+                <div class="user-dialog-ctn">
+                    <div class="udc-info">
+                        <img src="../image/hm/icon_hm_04.png" alt="">是否确认结束发放？
+                    </div>
+                    <div class="udc-text">
+                        结束后，<i class="h">不可操作“发放”</i>,但不影响已领取的优惠券使用。
+                    </div>
+                </div>
+
+                <div class="user-dialog-ctn">
+                    <div class="udc-info">
+                        <img src="../image/hm/icon_hm_03.png" alt="">优惠券创建成功，快去发放优惠券吧
+                    </div>
+                    <div class="udc-text tac">
+                        <i class="h">发放后客户才可获得优惠券哦~</i>
+                    </div>
+                </div>
+
+                <div class="user-dialog-ctn">
+                    <div class="udc-info">
+                        <img src="../image/hm/icon_hm_04.png" alt="">确认取消“前台领取”吗？
+                    </div>
+                    <div class="udc-text">
+                        取消后前台旗舰商城首页、进货单、商品详情<i class="h">不再提供领取优惠券入口。</i>
+                    </div>
+                </div>
+
+                <div class="user-dialog-ctn">
+                    <div class="udc-form">
+                        <span class="red">*</span>
+                        <span class="text">每个客户最多可领取：</span>
+                        <input class="input" type="text" placeholder="">
+                    </div>
+                </div>
+
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+
+    #parse("/common/footer.vm")
+
+
+
+#*脚本文件引入及页面交互逻辑代码区*#
+<script src="/front/js/rog-ui.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+<script src="/js/publish.js?v=$!{jscss_version}"></script>
+<script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+<script>
+
+    $(function(){
+
+    })
+
+</script>
+</body>
+
+</html>

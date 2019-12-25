@@ -1,0 +1,509 @@
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="title">
+                    <p>首页 &gt; 会员管理 &gt; 会员信息添加</p>
+                </div>
+                <div class="order_query order">
+                  <form action="" method="get" id="order_form">
+                        <ul>
+                            <li>
+                                <label>会员账号：</label>
+                                <input name="name" type="text" value="" class="w-txt w110">
+                            </li>
+                            <li>
+                                <label>企业名称：</label>
+                                   <input name="name" type="text" value="" class="w-txt w110">
+                            </li>
+                            <li>
+                                <label>企业注册号：</label>
+                                    <input name="name" type="text" value="" class="w-txt w110">
+                            </li>
+                            <li>
+                               <label>所属站点：</label>
+                                <div class="sltitem w160 z-index" id="cate">
+                                    <span class=""></span>
+                                    <ul style="display: none;">
+                                        <li data-value=""><a href="javascript:;">time</a></li>
+                                        <li data-value="1"><a href="javascript:;">start time</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                             <li>
+                                <label>企业编码：</label>
+                                    <input name="name" type="text" value="" class="w-txt w110">
+                            </li>
+                            <li>
+                                <label>注册邮箱：</label>
+                                    <input name="name" type="text" value="" class="w-txt w110">
+                            </li>
+                            <li>
+                               <label>显示状态：</label>
+                                <div class="isHIS">
+                                    <label>
+                                        <input type="radio" checked="checked" name="merchantAttrs" value="">启用</label>
+                                    <label>
+                                        <input type="radio" name="merchantAttrs" value="">停用</label>
+                            </div>
+                            </li>
+                             <li>
+                               <label>所属地区：</label>
+                                <div class="sltitem w160 z-index-t" id="cate">
+                                    <span class=""></span>
+                                    <ul style="display: none;">
+                                        <li data-value=""><a href="javascript:;">time</a></li>
+                                        <li data-value="1"><a href="javascript:;">start time</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                        </form>
+                   <div class="btn"><a href="javascript:;" class="btn_query">查询</a><a href="javascript:;" class="btn_query btn_export">重置</a></div>
+                   <div class="btn-box line"><a href="javascript:;" class="btn_refresh">刷新</a><a href="javascript:;" class="btn_add">添加</a><a href="javascript:;" class="btn_batchimport">批量导入</a><a href="javascript:;" class="btn_batchexport">批量导出</a></div>
+                </div>
+                   <div class="order_query order member">
+                    <form action="" method="get" id="order_form">
+                        <ul>
+                            <li>
+                                <label>会员账号<i>*</i>：</label>
+                                <input name="name" type="text" value="" class="w-txt">
+                            </li>
+                            <li>
+                                <label>企业名称<i>*</i>：</label>
+                                   <input name="name" type="text" value="" class="w-txt">
+                            </li>
+                            <li>
+                                <label>企业注册号：</label>
+                                    <input name="name" type="text" value="" class="w-txt">
+                            </li>
+                            <li>
+                                <label>联系方式<i>*</i>：</label>
+                                <input name="name" type="text" value="" class="w-txt">
+                            </li>
+                            <li>
+                               <label>邮箱：</label>
+                                <input name="name" type="text" value="" class="w-txt">
+                            </li>
+                             <li>
+                               <label>备注<i>*</i>：</label>
+                                <input name="name" type="text" value="" class="w-txt">
+                            </li>
+                            <li>
+                               <label>企业编码：</label>
+                               <input name="name" type="text" value="" class="w-txt">
+                            </li>
+                            <li>
+                               <label>企业内码：</label>
+                               <input name="name" type="text" value="" class="w-txt">
+                            </li>
+                             <li>
+                               <label>业务类型：</label>
+                                <div class="sltitem w348 z-index" id="cate">
+                                    <span class="">商品名称</span>
+                                    <ul style="display: none;">
+                                        <li data-value=""><a href="javascript:;">time</a></li>
+                                        <li data-value="1"><a href="javascript:;">start time</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                               <label>所属站点<i>*</i>：</label>
+                                <div class="sltitem w348 z-index-t" id="cate">
+                                    <span class="">商品名称</span>
+                                    <ul style="display: none;">
+                                        <li data-value=""><a href="javascript:;">time</a></li>
+                                        <li data-value="1"><a href="javascript:;">start time</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                               <label>账期形式：</label>
+                                <div class="sltitem w348 z-index-t" id="cate">
+                                    <span class="">商品名称</span>
+                                    <ul style="display: none;">
+                                        <li data-value=""><a href="javascript:;">time</a></li>
+                                        <li data-value="1"><a href="javascript:;">start time</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                               <label>信用额度<i>*</i>：</label>
+                                 <input name="name" type="text" value="" class="w-txt w160">
+                                 协议期限 账期：<input name="name" type="text" value="0" class="w-txt w37">天
+                            </li>
+                            <li>
+                               <label>审核结果：</label>
+                                <div class="sltitem w348 z-index-tr" id="cate">
+                                    <span class="">商品名称</span>
+                                    <ul style="display: none;">
+                                        <li data-value=""><a href="javascript:;">time</a></li>
+                                        <li data-value="1"><a href="javascript:;">start time</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                               <label>审核理由：</label>
+                                <input name="name" type="text" value="" class="w-txt w130">
+                            </li>
+                        </ul>
+                    </form>
+                        <h3 class="line">资质证明</h3>
+                        <!--上传图片-->
+                        <form action="" role="form" class="image-upload-box">
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>企业营业执照：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>药品经营许可证：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>组织机构代码证：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>税务登记证：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>执业许可证：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>医疗器械经营许可证：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>食品安全许可证：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>卫生许可证：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>GSP/GMP证书：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>身份证：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="cc">
+                                    <div class="img-box">
+                                        <h5>法人授权委托书：</h5>
+                                        <div class="img-file">
+                                            <input type="file">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                       <a href=""><i></i>查看范例</a>
+                                        <label>证照号码：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>证件有效期：</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <label>至</label>
+                                        <div class="control-item">
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-box">
+                            <table cellpadding="0" cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td rowspan="9">单体、连锁、诊所、医务室、等...</td>
+                                        <td rowspan="6">药品（...）</td>
+                                        <td>营业执照（必填）</td>
+                                        <td>认证时，必须完整填写企业营业执照上的经营范围，以便我们审核用，和商业审核资质用</td>
+                                    </tr>
+                                    <tr>
+                                        <td>营业执照（必填）</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>营业执照（必填）</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>组织机构代码证（必填）</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>营业执照（必填）</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>营业执照（必填）</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>器械</td>
+                                        <td>医疗器械经营许可证（必填）</td>
+                                        <td>注册认证时：需要填写可以经营的器械类型；</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="2">单体、连锁、
+诊所、医务室</td>
+                                        <td>营业执照（必填）</td>
+                                        <td rowspan="2">注册认证时，需要填写可以经营的器械类型；需要填写可以
+经营的器械类型；</td>
+                                    </tr>
+                                    <tr>
+                                        <td>营业执照（必填）</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <dl class="member-ms">
+                                <dt class="fl">主营业务：</dt>
+                                <dd class="fl"><input type="text" class="w-txt w326"></dd>
+                                <dt class="fl">联系地址<i>*</i>：</dt>
+                                <dd class="fl">
+                                    <div class="sltitem" id="cate">
+                                    <span class="">北京</span>
+                                    <ul style="display: none;">
+                                        <li data-value=""><a href="javascript:;">time</a></li>
+                                        <li data-value="1"><a href="javascript:;">start time</a></li>
+                                    </ul>
+                                    </div>
+                                     <div class="sltitem" id="cate">
+                                    <span class="">北京</span>
+                                    <ul style="display: none;">
+                                        <li data-value=""><a href="javascript:;">time</a></li>
+                                        <li data-value="1"><a href="javascript:;">start time</a></li>
+                                    </ul>
+                                    </div>
+                                     <div class="sltitem" id="cate">
+                                    <span class="">北京</span>
+                                    <ul style="display: none;">
+                                        <li data-value=""><a href="javascript:;">time</a></li>
+                                        <li data-value="1"><a href="javascript:;">start time</a></li>
+                                    </ul>
+                                    </div>
+                                </dd>
+                                <dt>详细地址<i>*</i>：</dt>
+                                <dd><input type="text" class="w-txt w326"></dd>
+                                <dt>启用中：</dt>
+                                <dd><input type="checkbox" class="check"> <span class="color">提示：至少上传一个资质证明，才能启用采购关系。</span></dd>
+                            </dl>
+                        </form>
+                    </div>   
+            </div>
+            <!-- 用户中心_主体内容_E -->

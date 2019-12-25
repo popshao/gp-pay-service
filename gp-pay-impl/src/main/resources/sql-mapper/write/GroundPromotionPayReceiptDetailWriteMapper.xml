@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.write.GroundPromotionPayReceiptDetailWriteDao">
+    <insert id="createGroundPromotionPayReceiptDetail" parameterType="com.mph.coreapi.gp.pay.entity.GroundPromotionPayReceiptDetail" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            insert into ground_promotion_pay_receipt_detail(
+                receipt_id,
+                income_id
+                )
+                VALUES
+                (
+                #{receiptId},
+                #{incomeId}
+                );
+        ]]>
+
+        <selectKey resultType="int" >
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+
+    <update id="updateGroundPromotionPayReceiptDetail">
+     update ground_promotion_pay_receipt_detail
+        <set>
+            receipt_id = #{receiptId},
+            income_id = #{incomeId}
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

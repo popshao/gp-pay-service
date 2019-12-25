@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销售中心 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+   
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+	#if($!userType == 2 && $!guideStatus == 1)
+		<style type="text/css">
+            .container{ position: relative;}
+            .hidebl{ display: none;  position: absolute;left:0; top:0; z-index:999;}
+            .mask_bl{position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: black; z-index: 998; opacity: 0.6;filter:alpha(opacity:60); display: none;}
+        </style>
+        <script type="application/javascript">
+//             $(function(){
+//                 showBl(1);
+//                 $(".clearBtn").on("click",function(){
+//                     $(".hidebl").hide();
+//                     $(".mask_bl").hide();
+//                     $("body").css({overflow:"auto"});
+//                     $('html, body, .container').animate({scrollTop:0}, 300);
+// 					//TODO:
+// 					changeGuideStatus();
+//                 })
+//             })
+    
+//             function showBl(idx){
+//                 var num=3;
+//                 var cname="sy"
+//                 var ht=0;
+//                 var lt=0;
+//                 if(idx==1) {
+//                     lt=-8;
+//                     ht=-2;
+//                 }
+//                 if(idx==2) {
+//                     ht=264;
+//                     lt=8;
+//                     $('html, body, .container').animate({scrollTop: $(document).height()}, 300);
+//                 }
+//                 if(idx==3) {
+//                     ht=100;lt=8;
+//                 }
+//                 var obj=$("#btn"+idx);
+//                 var x=obj.offset().left;
+//                 var y=obj.offset().top;
+//                 if(idx==1){
+//                     $(".mask_bl").css("height",($(".container").height()+$(".foot").outerHeight()+20)+"px").show();
+//                     $("body").css({overflow:"hidden"});
+//                     for(var i =0;i<num;i++){
+//                         var img=document.createElement("img");
+//                         img.src="/image/"+cname+(i+1)+".png";
+//                         $(img).addClass("hidebl bl_img_"+(i+1));
+//                         $("body").append(img);
+//                     }
+//                     var img=document.createElement("img");
+//                     img.src="/image/clear.png";
+//                     $(img).addClass("hidebl clearBtn");
+//                     $("body").append(img);
+//                 }
+//                 $(".hidebl").hide();
+//                 $(".bl_img_"+idx).css({"left":(x-lt)+"px",top:(y-ht)+"px"}).show(100);
+//                 if(idx==1){
+//                     //512 41
+//                     $(".clearBtn").css({"left":(x-lt+460)+"px",top:(y-ht+45)+"px"}).show(100);
+//                 }
+//                 if(idx==2){
+//                     //512 41
+//                     $(".clearBtn").css({"left":(x-lt+428)+"px",top:(y-ht+115)+"px"}).show(100);
+//                 }
+//                 if(idx==3){
+//                     //512 41
+//                     $(".clearBtn").css({"left":(x-lt+460)+"px",top:(y-ht+33)+"px"}).show(100);
+//                 }
+//                 if(idx==4){
+//                     //512 41
+//                     $(".clearBtn").css({"left":(x-lt+530)+"px",top:(y-ht+33)+"px"}).show(100);
+//                 }
+//                 if(idx<num){
+//                     $(".bl_img_"+idx).on("click",function(){
+//                         showBl(idx+1);
+//                     })
+//                 }else{
+//                     $(".bl_img_"+idx).on("click",function(){
+//                         $(".hidebl").hide();
+//                         $(".mask_bl").hide();
+//                         $("body").css({overflow:"auto"});
+//                         $('html, body, .container').animate({scrollTop:0}, 300);
+// 						//TODO:
+// 						changeGuideStatus();
+//                     })
+//                 }
+//             }
+        </script>
+	#elseif($!userType == 3 && $!guideStatus == 1)
+	<style type="text/css">
+        .container{ position: relative;}
+        .hidebl{ display: none;  position: absolute;left:0; top:0; z-index:998;}
+        .clearBtn{z-index: 999;}
+        .mask_bl{position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: black; z-index: 997; opacity: 0.6;filter:alpha(opacity:60); display: none;}
+    </style>
+    <script type="application/javascript">
+
+        $(function(){
+            showBl(1);
+            $(".clearBtn").on("click",function(){
+                $(".hidebl").hide();
+                $(".mask_bl").hide();
+                $("body").css({overflow:"auto"});
+                $('html, body, .container').animate({scrollTop:0}, 300);
+				//TODO:
+				changeGuideStatus();
+            })
+        })
+
+        function showBl(idx){
+            var num=3;
+            var cname="gy"
+            var ht=0;
+            var lt=0
+            if(idx==1) {
+                ht=52;lt=4;
+            }
+            if(idx==2) lt=6;
+            if(idx==3) {
+                ht=220;
+                lt=10;
+                $('html, body, .container').animate({scrollTop: $(document).height()}, 300);
+            }
+            var obj=$(".btn"+idx);
+            if(obj.length ==0 ){
+            	return false;
+            }
+			//console.log(obj);
+            var x=obj.offset().left;
+            var y=obj.offset().top;
+            if(idx==1){
+                $(".mask_bl").css("height",($(".container").height()+$(".foot").outerHeight()+20)+"px").show();
+                $("body").css({overflow:"hidden"});
+                for(var i =0;i<num;i++){
+                    var img=document.createElement("img");
+                    img.src="/image/"+cname+(i+1)+".png";
+                    $(img).addClass("hidebl bl_img_"+(i+1));
+                    $("body").append(img);
+                }
+                var img=document.createElement("img");
+                img.src="/image/clear.png";
+                $(img).addClass("hidebl clearBtn");
+                $("body").append(img);
+            }
+            $(".hidebl").hide();
+            $(".bl_img_"+idx).css({"left":(x-lt)+"px",top:(y-ht)+"px"}).show(100);
+            if(idx==1){
+                //512 41
+                $(".clearBtn").css({"left":(x-lt+510)+"px",top:(y-ht+35)+"px"}).show(100);
+            }
+            if(idx==2){
+                //512 41
+                $(".clearBtn").css({"left":(x-lt+428)+"px",top:(y-ht+90)+"px"}).show(100);
+            }
+            if(idx==3){
+                //512 41
+                $(".clearBtn").css({"left":(x-lt+488)+"px",top:(y-ht+38)+"px"}).show(100);
+            }
+            if(idx<num){
+                $(".bl_img_"+idx).on("click",function(){
+                    showBl(idx+1);
+                })
+            }else{
+                $(".bl_img_"+idx).on("click",function(){
+                    $(".hidebl").hide();
+                    $(".mask_bl").hide();
+                    $("body").css({overflow:"auto"});
+                    $('html, body, .container').animate({scrollTop:0}, 300);
+					//TODO:
+					changeGuideStatus();
+                })
+            }
+        }
+    </script>
+	#end
+	<script type="text/javascript">
+		$(function(){
+			$("#popUpMask").click(function(){
+		     	$("#popUpMask").hide();
+		     	$("#loadDiv").hide();
+		     });
+		     $("#loadDiv").click(function(){
+		     	$("#popUpMask").hide();
+		     	$("#loadDiv").hide();
+		     });
+		     $("#loadDiv>a").click(function(){
+		     	$("#popUpMask").hide();
+		     	$("#loadDiv").hide();
+		     });
+		     
+		     setTimeout(loadAd,500);
+		})
+	
+		function changeGuideStatus(){
+			$.ajax({
+                url: '/changeGuideStatus.html',
+                type:"post",
+                success: function(data) {
+                	
+				}
+        	});
+		}
+		
+		
+		function loadAd() {
+            var ad93 = "$!{ad93}";
+            if(ad93 != null  && ad93 != "" && ad93 != undefined) {
+                var imgPath = "$!utils.getNewImgDomain($!{ad93.aImgPath})";
+                var linkUrl = "$!utils.getAccessLinkUrl($!{ad93.aLinkUrl})";
+                return window.top.app.index.showImg(imgPath,'$!{ad93.aName}',null,function (img) {
+                    if(linkUrl) {
+                        $(img).on("click",function () {
+                            window.top.utils.open(linkUrl,"_blank");
+                        })
+                    }
+                });
+
+
+                if(linkUrl == "" || linkUrl == undefined){
+                    linkUrl == "javascript:void(0);";
+                }
+                //刷新首页弹出遮罩层广告
+                var closeBtn = document.getElementById("btn-close-r");
+                var maskLayer = document.getElementById("mask");
+                var Box = document.getElementById("box");
+                var top = ($(window).height() - $("#box").height())/4;
+                var left = ($(window).width() - $("#box").width())/2;
+                var scrollTop = $(document).scrollTop();
+                var scrollLeft = $(document).scrollLeft();
+                var href='';
+                if("javascript:void(0);" == linkUrl){
+                    href = '<a href="'+linkUrl+'"  onclick="return false;" style="position: absolute; margin: 49px 0 0 6px;display: inline-block;  width: 950px; height: 420px;"></a>';
+                }else{
+                    href = '<a href="'+linkUrl+'" target="_blank" style="position: absolute; margin: 49px 0 0 6px;display: inline-block;  width: 950px; height: 420px;"></a>';
+                }
+
+                var html = '<div id="mask" style="position: absolute; width: 100%; height:100%; left: 0px; top: 0px; background: url(/image/home_cover_bg.png) repeat scroll 0 0; _background: none;z-index: 9999999;"></div>'+
+                        '<div id="box" style="position: absolute; background: url('+imgPath+') no-repeat; top: 0; left: 50%; width: 950px; height: 420px; margin-left: -480px; z-index: 99999999;">'+
+                        '<a href="javascript:;" id="btn-close-r" style="position: absolute; margin: -32px 0 0 950px;display: inline-block;  width: 44px; height: 44px;"><img src="/image/btn-close-r.png"/></a>'+
+                        href +
+                        '</div>';
+                $("body").prepend(html);
+                if(!ie6){
+                    $("#mask").css("height",$(document).height());
+                    $("#mask").css("width",$(document).width());
+                    $("#mask").show();
+                }
+                $("#box").css({'top' : top + scrollTop, left : left + scrollLeft }).show();
+
+                $("#btn-close-r").click (function(){
+                    if(!ie6){
+                        $("#mask").hide();
+                    }
+                    $("#box").hide();
+                })
+                
+            }
+        }
+    </script>
+  </head>
+ 
+  <body>
+	<!--   	1：商业 2：工业  $!supplir.suType -->
+  	#if($!supplier.suType == 1 && $!guideStatus==1)
+  		<div class="dialog-guide-page-sy" id="loadDiv">
+    		<a class="fr btn-close" href="javascript:void(0);"></a>
+    	</div>
+    	<div class="mask" id="popUpMask" style="display: block;"></div>
+  	#elseif($!supplier.suType == 2 && $!guideStatus==1)
+		<div class="dialog-guide-page-gy" id="loadDiv">
+    		<a class="fr btn-close" href="javascript:void(0);"></a>
+    	</div>	
+    	<div class="mask" id="popUpMask" style="display: block;"></div>
+  	#end
+  	
+    <div class="container" id="ctxBoxFixed" style="display: none">
+		<div class="mask_bl"></div>
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+			<!--销售中心首页内容 -->
+			#parse("common/right_sales_content.vm")
+        </div>
+      </div>
+    </div>
+
+    <script>
+        if(top.window == window){
+            location.replace("/index.html");
+        }else{
+            document.getElementById("ctxBoxFixed").style.display = "block";
+        }
+    </script>
+
+    #parse("/common/footer.vm")
+</body>
+</html>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.read.GroundPromotionAchievementReadDao">
+
+    <resultMap id="BaseResultMap" type="com.mph.coreapi.gp.pay.entity.GroundPromotionAchievement">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="user_id" jdbcType="INTEGER" property="userId" />
+        <result column="user_province_id" jdbcType="INTEGER" property="userProvinceId" />
+        <result column="month_display" jdbcType="VARCHAR" property="monthDisplay" />
+        <result column="amount" jdbcType="DECIMAL" property="amount" />
+        <result column="quatity" jdbcType="DECIMAL" property="quatity" />
+        <result column="order_in_province" jdbcType="INTEGER" property="orderInProvince" />
+        <result column="order_change" jdbcType="INTEGER" property="orderChange" />
+        <result column="type" jdbcType="BIT" property="type" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, user_id, user_province_id, month_display, amount, quatity, order_in_province,
+    order_change, type, create_time, update_time,user_name
+    </sql>
+
+    <select id="findAllList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ground_promotion_achievement
+        where 1=1
+        order by id desc
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ground_promotion_achievement
+        where id = #{id}
+    </select>
+
+
+    <sql id="whereByParamSql">
+        <if test="type != null">
+            and type = #{type}
+        </if>
+    </sql>
+
+    <select id="countByParam" resultType="java.lang.Integer">
+        select
+        count(1)
+        from ground_promotion_achievement
+        where 1=1
+        <include refid="whereByParamSql"></include>
+    </select>
+
+    <select id="getByParam" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ground_promotion_achievement
+        where 1=1
+        <include refid="whereByParamSql"></include>
+        <choose>
+            <when test="order != null and sort != null">
+                ORDER BY ${order} ${sort}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="start != null">
+            LIMIT #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="getNowGroundProList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ground_promotion_achievement
+        where 1=1
+        AND month_display = DATE_FORMAT(#{date},'%Y%m');
+    </select>
+
+    <select id="getBeforeGroundProList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ground_promotion_achievement
+        where 1=1
+        AND PERIOD_DIFF(DATE_FORMAT(NOW(),'%Y%m'),month_display) =1
+    </select>
+
+    <select id="getByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ground_promotion_achievement
+        where 1=1
+        <if test="type != null">
+          and type = #{type}
+        </if>
+        <if test="userId != null">
+          and user_id = #{userId}
+        </if>
+        <if test="monthDisplay != null">
+          and month_display = #{monthDisplay}
+        </if>
+         ORDER BY month_display DESC
+    </select>
+
+    <select id="getByProvinceId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ground_promotion_achievement
+        where 1=1
+        <if test="type != null">
+            and type = #{type}
+        </if>
+        <if test="provinceId != null">
+            and user_province_id = #{provinceId}
+        </if>
+        <if test="startOrder != null and endOrder != null">
+            and order_in_province between #{startOrder} and #{endOrder}
+        </if>
+        ORDER BY order_in_province,id asc
+    </select>
+
+
+</mapper>

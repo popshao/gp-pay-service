@@ -1,0 +1,790 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>订单批量发货 - 我的医药网</title>
+	<!-- mypharma_公共资源 -->
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+	<!-- mypharma_样式 -->
+	<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/order_rc.css?v=$!{jscss_version}">
+	   
+	   <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script type="text/javascript" src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript">
+        
+        function showPromotion(o,valid,tit,txt,url){
+        	if(valid==1){
+        		$(o).append('<div class="cxbox"><a target="_blank" href="'+url+'">去抢购&gt;&gt;</a><h5>'+tit+'</h5><p>'+txt+'</p></div>');
+        	}else{
+        		$(o).append('<div class="cxbox"><h5>'+tit+'</h5><p>'+txt+'</p></div>');
+        	}
+        }
+        
+        function removePromotion(o){
+        	$(o).find('.cxbox').remove();
+        }
+
+        $(function(){
+
+            $(".rocky-click").on("focus",function () {
+                $(this).select();
+            })
+       	
+	       	$(".img-tips-rc").each(function(){
+	       		$(this).on("mouseenter",function(){
+	       			var _this = $(this);
+	       			layer.tips("<img style='max-width:450px;max-height:400px;' src='"+_this.attr("data-src-ignore")+"'>",_this,{
+	       				tips: [1, '#fff'],
+	       				time:9999999999999,
+	       				success:function(lay){
+	       					lay.find("img").on('load',function(){
+	       						var _w = $(this).width() + 20;
+	       						var _h = $(this).height() + 20;
+	       						lay.css({"width":_w+"px","height":_h+"px"})
+	       					})
+	       				}
+	       			})
+	       		}).on("mouseleave",function(){
+	       			layer.closeAll("tips");
+	       		})
+	       	})
+       	
+       })
+        
+    </script>
+    
+	<!--PNG格式图片兼容IE6解决方案 -->
+	<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="container">
+		#parse("common/header_top.vm") #parse("common/header.vm")
+		<div class="content">
+			<div class="wrap cc">
+				#parse("common/left_menu_sales.vm")
+				<div class="user_right fl">
+					<!-- 用户中心_主体内容_S -->
+					<div class="indmain">
+						<div class="path">
+							<p>
+								<a href="/sales/index.html" class="color">销售中心</a>&gt; 交易管理 &gt;
+								<a href="/sales/order/ddgl.html" class="color">销售订单</a>&gt; 订单批量发货
+							</p>
+						</div>
+						<div class="order_query">
+							<form action="" method="post" id="searchForm" name="searchForm">
+								<input type="hidden" name="pi" value="$!pi">
+								<ul>
+									<li><label>采购商：</label> <input name="oEName" type="text" value="$!oEName" class="w-txt w256"></li>
+									<li class="w630"><label>下单时间：</label> <input type="text" name="oAddTimeBegin" id="oAddTimeBegin" value="$!oAddTimeBegin" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'oAddTimeEnd'+'\\'+'\')}'})" class="w-txt w256">										<i class="slt_t">至</i> <input type="text" name="oAddTimeEnd" id="oAddTimeEnd" value="$!oAddTimeEnd" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'oAddTimeBegin'+'\\'+'\')}'})" class="w-txt w256">
+									</li>
+								</ul>
+								<div class="btn tac">
+									<a href="javascript:searchPager('/sales/order/manyddfh.html',false);" class="btn_query">查询</a>
+									<a href="javascript:searchPager('/sales/order/manyddfh.html',true);" class="btn_query btn_export btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+									<a href="javascript:sendAll();" class="btn_query btn_export long-btn">选中商品发货并驳回其他商品</a>
+								</div>
+                                <div class="btn">
+                                    <input type="checkbox" id="choosePageAll" class="pay-bank-check-box" name="chooseAll" onclick="selectAll(this,0)" />全选本页
+                                </div>
+							</form>
+						</div>
+					</div>
+					#if($!utils.notEmpty($!orderList)) #foreach($item in $orderList)
+					<div id=$item.oSellerId$item.oId>
+						<div class="order_ctn">
+							<div class="order_t">
+								<span>订单号：$!item.oSn
+								#* 菲加云订单图标加tips效果 *#
+					            #if ($!item.sourceCode == "saas" || $!item.sourceCode == "saas-cp")
+					            <i class="order-tips-fjy" data-tips-style="{color:'#000'}" data-tips="true" data-tips-title="此订单来源于菲加云"></i>
+					            #end
+					             #if($!item.orderType==5)
+			                      <i class="pre-sell-user-detail">[预售]</i>
+			                      #end
+								</span> 
+								<span>下单时间：$utils.formatDate($!item.oAddTime,"yyyy-MM-dd
+									HH:mm:ss")</span> <span>采购商：$!item.oEName</span> <span>收货地址：$!item.oProvince
+									$!item.oTown $!item.oArea $!item.oAddress</span> <span>收货人：$!item.oPeople</span>
+								<span>手机：$!item.oTel</span>
+							</div>
+
+							<div class="order-wl" data-oid="$!item.oId">
+								<div class="order_t order_table">
+									<input class="radio wl-radio" type="radio" id="radio_0$!{item.oId}" name="$!{item.oId}-wlName" checked="checked" value="1">
+									<label class="text" for="radio_0$!{item.oId}">自有物流配送</label>
+								</div>
+								<div class="order_t order_table">
+									<input class="radio wl-radio" type="radio" id="labelForRadio$!{item.oId}" name="$!{item.oId}-wlName" value="2">
+									<label class="text" for="labelForRadio$!{item.oId}">
+										<span class="fl">物流公司配送</span>
+										<input onfocus="$('#labelForRadio$!{item.oId}').trigger('click')" class="fl input input_l mr10 inp-onum" name="$!{item.oId}-logisticsNum" type="text" placeholder="请填写物流单号">
+									</label>
+									<div class="sltitem" id="slRocky">
+										<input type="hidden" class="hide-value" name="$!{item.oId}-logisticsComNum" />
+										<span><input class="inp-oname" disabled="disabled" name="$!{item.oId}-logisticsCom" style="width:100%; border:0 none;" type="text" placeholder="请选择物流公司"></span>
+										<ul class="hidden">
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="order-wl" >
+								  #if($item.isPartSend==1) 
+                                <span class="fr"  style="padding-right: 10px;"><font  color="red" >融资订单不允许驳回商品,详情请参考融资合同</font></span>
+                                  #end 
+							</div>
+
+							<div class="order_detail order_font">
+								<div class="table">
+									<table id="table" cellpadding="0" cellspacing="0">
+										<thead class="head">
+											<tr class="line">
+												<th><input type="checkbox" id="chooseAll" name="chooseAll" onclick="selectAll(this,$!item.oId)" /></th>
+												<th width="40"></th>
+												<th>商品名称</th>
+												<th>商品编码</th>
+												<th>生产厂家</th>
+												<th>批准文号</th>
+												<th>规格</th>
+												<th>单位</th>
+												<th>单价（元）</th>
+												<th>数量</th>
+												<th>发货数量</th>
+												<th>小计（元）</th>
+												<th>批次号</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody id="tbody">
+											#if($item.orderDetailList && $item.orderDetailList.size()!=0) #foreach($item_od in $item.orderDetailList)
+											<tr id="$!item_od.odId">
+												<td class="td-none"><input type="checkbox"  #if($item.isPartSend==1) disabled="disabled"  #end  name="choose" id="$!item_od.oId" value="$!item_od.odId" onclick="selectOne(this)" #if($!item.payPlatform==2)disabled="disabled" #end /></td>
+												<td class="td-none">$!velocityCount</td>
+												<td style="text-align:left;">
+		                                    	<dl>
+			                                   	    #if($!item_od.pri && $!item_od.pri.pactType != 0)
+			          	   	   						<dt style="cursor:pointer;" onmouseenter="showPromotion(this,'$!item_od.pri.isValid','$!item_od.pri.pactTitle','$!item_od.pri.rules','http://$!{suDomainPrefix}.mypharma.com/promotion/$!{item_od.odActivityId}.html');" onmouseleave="removePromotion(this)">
+					                                    #if($!item_od.pri.pactType == 1)
+					                                    <i class="ico-bg">满减 </i>
+					                                    #elseif($!item_od.pri.pactType == 2)
+					                                    <i class="ico-bg">买赠 </i>
+					                                    #elseif($!item_od.pri.pactType == 3)
+					                                    <i class="ico-bg">换购</i>
+					                                    #elseif($!item_od.pri.pactType == 4)
+					                                    <i class="ico-bg">特价</i>
+					                                    #elseif($!item_od.pri.pactType == 5)
+					                                    <i class="ico-bg">秒杀</i>
+					                                    #end
+				                                    </dt>
+				                                    #else
+				                                    #if($!item_od.gType==1 || $!item_od.gType==2)
+									           	    <dt>
+									           	    <i class="ico-bg">新品</i>
+									           	    </dt>
+									           	    #end
+									           	    #if($!item_od.gType == 3 || $!item_od.gType == 5)
+									           	    <dt>
+									           	    <i class="ico-bg">专销</i>
+									           	    </dt>
+									           	    #end
+									           	    
+				                                    #end
+				                                    <dd>
+					                                    <a class="a-link" href="http://$!{wwwHostAndPort}/item/$!{item_od.odGId}.html" target="_blank">
+					                                    $!item_od.odName
+					                                    </a>
+				                                    </dd>
+		                                    	</dl>
+                                                </td>
+												<td>$!item_od.odSn</td>
+												<td>$!item_od.odManufacture</td>
+												<td>$!item_od.odLicenseNumber</td>
+												<td>$!item_od.odSpecifications</td>
+												<td>$!item_od.odUnit</td>
+												<td>
+			                                    #if($!item_od.odPrice != $!item_od.odPrePrice)
+						                        <span style="text-decoration:line-through;">$!utils.priceFormart($!{item_od.odPrePrice})</span><br/>
+											    <p style="font-size:12px; color:#ef0c4a;">$!utils.priceFormart($!{item_od.odPrice})</p>
+									            #else      
+									            $!utils.priceFormart($!{item_od.odPrice})
+									            #end
+			                                    </td>
+												<td>$!item_od.odNumber</td>
+												<td>
+													<input type="text" class="txt rocky-click" style="width:60px;" name="osiNumber"  #if($item.isPartSend==1) disabled="disabled"  #end  value="$!item_od.odNumber" max="$!item_od.odNumber" onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" onkeyupFB="keyupNum(event,this);" onblur="validNumber(this);" data-tips="true" data-tips-title="请填写1~$!item_od.odNumber">
+												</td>
+												<td>$!item_od.odSubtotal</td>
+												<td><input type="text" class="txt" name="batch" maxlength="20" /></td>
+												<td><input type="hidden" class="txt" name="div_oid" maxlength="20" value="$!item.oId" /></td>
+											</tr>
+										   <!-- 促销信息开始 -->
+									       #if($!item_od.odActivity==3 && $!item_od.odActivityId!=0)
+									       #if($!item_od.pri.policy && $!item_od.pri.policy!='' && $!item_od.pri.pactType!=2)
+									       <tr style="font-size:12px;">
+									       <td colspan="14" style="text-align:left;background:white;color:#ef0c4a;">
+									          <span style="padding-right:22px;padding-left:98px;color:#ef0c4a;">$!{item_od.pri.policy}</span>
+									       </td>
+									       </tr>
+									       #end
+									       #end
+									       <!-- 促销信息结束 -->
+						       
+										   #end #end
+										   
+										   #* 促销买赠信息开始 *#
+									       #if($!utils.notEmpty($!item.giftList))
+									       <tr style="font-size:12px;">
+									       <td colspan="14" style="text-align:left;background:white;color:#ef0c4a;">
+									          #foreach($pro in $!item.giftList) 
+									          <span style="padding-right:22px;padding-left:57px;color:#ef0c4a;">$!{pro.policy}</span>
+									          #set($giftWrapper = $!pro.giftWrapper)
+									          #if($!utils.notEmpty($!giftWrapper.gift_img_list))
+									       	 	 赠品：
+									       	      #foreach($giftimg in $!giftWrapper.gift_img_list)
+									       	      <img data-src-ignore="$!utils.getNewImgDomain($!{giftimg})" class="img-tips-rc" 
+									       	      style="cursor:pointer;vertical-align: middle;" 
+									       	      src="$!utils.getNewImgDomain($!{giftimg})?imageView2/2/w/40" title="$!giftWrapper.gift_name$!{velocityCount}" />
+									       	      #end
+									       	      <br>
+									  	      #end
+									  	      #end
+									       </td>
+									       </tr>
+									       #end
+									       #* 促销买赠信息结束 *#
+									       
+										</tbody>
+									</table>
+									<div class="line_b">
+										<p>
+											发票号：<input type="text" class="txt" id="$!item.oId$!item.oSellerId" maxlength="20" name="osBill" /> 出库留言：
+											<input type="text" class="txt" id="deliveryNote_$!item.oId$!item.oSellerId" maxlength="200" name="deliveryNote" />
+											<a href="javascript:void(0);" onclick="send($!item.oId,$!item.oSellerId,this);" class="btn_ok ml6">选中商品发货</a>
+											#if($item.isPartSend!=1)
+											<a href="javascript:void(0);" onclick="rebut($!item.oId,$!item.oSellerId);" class="btn_ok ml3">驳回所有商品</a>
+											#end  
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					#end #end
+					<!--分页开始 -->
+					#if($!{pagerInfo}) #if($!{pagerTotal} > 0) #pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/order/ddgl.html") #end #end
+				</div>
+				<!-- 用户中心_主体内容_E -->
+			</div>
+		</div>
+	</div>
+	</div>
+	#parse("/common/footer.vm")
+	<!-- mypharma_脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+	<script type="text/javascript">
+		var _rcTimer = null,
+			_isClick = false;
+		$(function() {
+			setTimeout(function () {
+                initWlComponant();
+            },1000);
+		})
+
+		// 初始化物流控件
+		function initWlComponant() {
+
+			$(".order-wl").each(function() {
+				var _this = $(this);
+				var _selRadio = $(this).find("input.wl-radio"); //单选切换对象
+				var _fstInp = $(this).find(".inp-onum"); //物流单号输入框
+				var _scdInp = $(this).find(".inp-oname"); //物流名称输入下拉框
+				var _sltItem = $(this).find(".sltitem");
+				_selRadio.on("change", function() {
+					if ($(this).val() != 2) {
+						_scdInp.attr("disabled", "disabled");
+						_sltItem.find("ul").addClass("hidden");
+					} else {
+						_scdInp.removeAttr("disabled");
+						_sltItem.find("ul").removeClass("hidden");
+					}
+				})
+				_fstInp.on("input", function() {
+					var _that = $(this);
+					if (_rcTimer) clearTimeout(_rcTimer);
+					_rcTimer = setTimeout(function() {
+						rcGetData($.trim(_that.val()),_sltItem);
+					}, 300)
+				}).on("blur",function(){
+					if (_rcTimer) clearTimeout(_rcTimer);
+				})
+				_scdInp.on("keyup", function() {
+					var _text = $.trim($(this).val());
+					if (_text) {
+						var _dom = _sltItem.find("ul");
+						var _li = _dom.find("li");
+						var _arr = new Array();
+						_dom.find("li").each(function(j, e) {
+								var _t = $(this).text();
+								if (_t.indexOf(_text) > -1) {
+									$(this).show();
+								} else {
+									$(this).hide();
+								}
+							})
+							//$("#slRocky").trigger("click");
+					} else {
+						_sltItem.find("ul li").show();
+					}
+				})
+
+				rcGetData($.trim(_fstInp.val()),_sltItem);
+
+			})
+
+		}
+
+		//动态绑定下拉列表的点击事件
+		function bindEvt(_dom) {
+			var _p = _dom.parents(".order-wl");
+			_dom.find("li").each(function() {
+				$(this).unbind().on("click", function() {
+					var _v = $(this).attr("data-value");
+					var _t = $(this).text();
+					_p.find(".inp-oname").val(_t);
+					_p.find(".hide-value").val(_v);
+					_dom.find("ul").fadeOut();
+				})
+
+			})
+		}
+
+		//拉取物流公司列表
+		function rcGetData(num,_dom) {
+			if (!num) num = "";
+			_dom.find("ul").html("");
+			$.ajax({
+				url: "/orderLogistics/logisticsList.html",
+				data: {
+					number: num
+				},
+				success: function(res) {
+					if (res && res.data && res.data.length > 0) {
+						var _li = '<li data-value="{{mldCode}}"><a href="javascript:;">{{mldCompany}}</a></li>';
+						for (var i in res.data) {
+							var _data = res.data[i]
+							_dom.find("ul").append(_li.replace(/{{mldCode}}/g, _data.mldCode).replace(/{{mldCompany}}/g, _data.mldCompany));
+						}
+						bindEvt(_dom);
+					}
+				}
+			})
+		}
+
+		function selectAll(obj, oId) {
+			if (0 == oId) {
+				if ($(obj).prop("checked")) {
+					$(":checkbox").prop("checked", "checked");
+				} else {
+					$(":checkbox").removeAttr("checked");
+				}
+			}
+
+			if ($(obj).prop("checked")) {
+				$("input[id=" + oId + "]").prop("checked", true);
+			} else {
+				$("input[id=" + oId + "]").prop("checked", false);
+			}
+		}
+
+		function selectOne(obj) {
+		    var _p = $(obj).closest("tbody");
+			var trLen = _p.find("tr").length;
+			var checkboxLen = _p.find("input[type=checkbox]:checked").length;
+			if (trLen == checkboxLen) {
+                _p.closest("table").find("[name=chooseAll]").prop("checked", true);
+			} else {
+				_p.closest("table").find("[name=chooseAll]").prop("checked", false);
+			}
+		}
+
+		function alertDialog(i) {
+			top.ue.alert({
+				title: '提示',
+				content: "请填写第" + i + "行商品的批次号"
+			})
+		}
+
+		function send(oId, oSellerId,obj) {
+			var osbill_id = oId + "" + oSellerId;
+			var div_id = oSellerId + "" + oId;
+			if ($("input[type='checkbox']:checked").length == 0) {
+				top.ue.msg("请您先勾选要发货的商品");
+				return false;
+			}
+			var wlName=$("input[type=radio][name="+oId+"-wlName]:checked").val();
+            var logisticsNum=$("input[name="+oId+"-logisticsNum]").val();
+            var logisticsCom=$("input[name="+oId+"-logisticsCom]").val();
+            var logisticsComNum=$("input[name="+oId+"-logisticsComNum]").val();
+            
+			var id_array = new Array();
+			$('input[type="checkbox"]:checked:not([id=chooseAll])').each(function() {
+				id_array.push($(this).attr('id')); //向数组中添加元素
+			});
+
+			var idstr = id_array.join(','); //将数组元素连接起来以构建一个字符串
+
+			if (idstr.indexOf(oId) < 0) {
+				top.ue.msg("请您选择正确的发货记录");
+				return false;
+			}
+
+			var _checkNum = true;
+			$(obj).closest(".table").find("[name=osiNumber]").each(function () {
+                if($(this).val() == ""){
+                    _checkNum = false;
+                    $(this).trigger("mouseenter");
+				}
+            })
+			if(!_checkNum){
+			    top.layer.msg("发货数量不能为空");
+                return false;
+			}
+
+			top.ue.confirm({
+				title: '确认',
+				content: "您确认要发货吗？此订单未选中商品会自动驳回",
+				ok: function(idx) {
+				    top.ue.close(idx);
+					var array = [];
+					$("#table tbody tr").each(
+						function(i, item) {
+							var check = $(item).find("input[type='checkbox']");
+							if ($(check).prop("checked")) {
+								if ($(item).find(
+										"input[name='div_oid']").val() == oId) {
+									var send = {};
+									send.odId = $(check).val();
+									send.osiBatch = $(item).find(
+										"input[name='batch']").val();
+									send.oId = $(item).find(
+										"input[name='div_oid']").val();
+									send.osiNumber = $(item).find("input[name='osiNumber']").val();
+									array.push(send);
+								}
+							}
+						});
+					$.showLoad();
+					$.ajaxPost(
+						"/sales/order/ddfhSave.html", {
+							"wlName": wlName,
+	                    	"logisticsNum": logisticsNum,
+	                    	"logisticsCom": logisticsCom,
+	                    	"logisticsComNum": logisticsComNum,
+							"array": $.toJSON(array),
+							"oid": oId,
+							"suId": oSellerId,
+							"osBill": $("#" + osbill_id).val(),
+							"deliveryNote": $("#deliveryNote_" + osbill_id).val(),
+							"checkUpload":"666"
+						},
+						function(result) {
+							$.hideLoad();
+							if (result != "") {
+								var obj = eval("(" + result + ")");
+								if (obj.success) {
+                                    top.ue.msg("操作成功");
+									$("#" + div_id).hide();
+									return false;
+								} else {
+									top.ue.msg(obj.message);
+									return;
+								}
+							}
+						});
+				}
+			})
+		}
+
+		function rebut(oId, oSellerId) {
+			var osbill_id = oId + "" + oSellerId;
+			var div_id = oSellerId + "" + oId;
+			top.ue.confirm({
+				title: '确认',
+				content: "您确认要驳回此订单所有的商品吗？",
+				ok: function(idx) {
+				    top.ue.close(idx);
+					$.showLoad();
+					$.ajaxPost("/sales/order/ddbhSave.html", {
+								"oid": oId,
+								"suId": oSellerId,
+								"deliveryNote": $("#deliveryNote_" + osbill_id).val()
+							},
+							function(result) {
+								$.hideLoad();
+								if (result != "") {
+									var obj = eval("(" + result + ")");
+									if (1 == obj.data) {
+										top.ue.msg("操作成功",{},function () {
+                                            $("#" + div_id).hide();
+                                        });
+										return false;
+									} else if (0 == obj.data) {
+										top.ue.msg("订单已经改变，不能再次进行操作",{},function () {
+                                            $("#" + div_id).hide();
+                                        });
+									} else if (2 == obj.data) {
+										top.ue.msg("由于银行原因。订单驳回失败，请稍后再试");
+										return;
+									}
+								}
+							});
+				}
+			})
+		}
+
+		function sendAll() {
+			var objs = $("[name='osBill']");
+			var array_osBill = [];
+			for (var i = 0; i < objs.length; i++) {
+				var osBill = {};
+				osBill.oId = objs[i].id;
+				osBill.osBill = objs[i].value;
+				array_osBill.push(osBill);
+			}
+
+			var deliveryNotes = $("[name='deliveryNote']");
+			var array_deliveryNote = [];
+			for (var i = 0; i < deliveryNotes.length; i++) {
+				var deliveryNote = {};
+				deliveryNote.oId = deliveryNotes[i].id;
+				deliveryNote.deliveryNote = deliveryNotes[i].value;
+				array_deliveryNote.push(deliveryNote);
+			}
+
+			if ($("input[type='checkbox']:checked").length == 0) {
+				top.ue.msg("请您先勾选要发货的商品");
+				return;
+			}
+
+            var _checkNum = true;
+			$("[name=osiNumber]").each(function () {
+				if($(this).val() == ""){
+                    if($(this).closest("tr").find(":checkbox[name=choose]:checked") && $(this).closest("tr").find(":checkbox[name=choose]:checked").length > 0){
+                        $(this).trigger("mouseenter");
+                        _checkNum = false;
+					}
+                }
+            })
+            if(!_checkNum){
+                top.layer.msg("发货数量不能为空");
+                return false;
+            }
+
+			top.ue.confirm({
+				title: '确认',
+				content: "您确认要发货吗？订单未选中商品会自动驳回",
+				ok: function(idx,lay) {
+				    top.ue.close(idx);
+					var array = [];
+					$("#table tbody tr").each(
+						function(i, item) {
+							var check = $(item).find("input[type='checkbox']");
+							if ($(check).prop("checked")) {
+								var send = {};
+								send.odId = $(check).val();
+								send.osiBatch = $(item).find(
+									"input[name='batch']").val();
+								send.oId = $(item).find(
+									"input[name='div_oid']").val();
+								send.osiNumber = $(item).find("input[name='osiNumber']").val();
+								array.push(send);
+							}
+					});
+					
+					var logisticsType =[],logisticsNum = [],logisticsCom=[],logisticsComNum=[];
+					$(".wl-radio:checked").each(function(){
+						var _json = {};
+						_json.val = $(this).val();
+						_json.id = $(this).parents(".order-wl").attr("data-oid");
+						logisticsType.push(_json);
+					});
+					$(".inp-onum").each(function(){
+						var _json = {};
+						_json.val = $(this).val();
+						_json.id = $(this).parents(".order-wl").attr("data-oid");
+						logisticsNum.push(_json);
+					})
+					$(".inp-oname").each(function(){
+						var _json = {};
+						_json.val = $(this).val();
+						_json.id = $(this).parents(".order-wl").attr("data-oid");
+						logisticsCom.push(_json);
+					})
+					$(".hide-value").each(function(){
+						var _json = {};
+						_json.val = $(this).val();
+						_json.id = $(this).parents(".order-wl").attr("data-oid");
+						logisticsComNum.push(_json);
+					})
+					
+					top.ue.load();
+					$.ajaxPost(
+						"/sales/order/ddfhAllSave.html", {
+							"logisticsType": $.toJSON(logisticsType),
+							"logisticsNum": $.toJSON(logisticsNum),
+							"logisticsCom": $.toJSON(logisticsCom),
+							"logisticsComNum": $.toJSON(logisticsComNum),
+							"array": $.toJSON(array),
+							"type": 1,
+							"pi": "$!pi",
+							"osBill": $.toJSON(array_osBill),
+							"deliveryNote": $.toJSON(array_deliveryNote)
+						},
+						function(result) {
+							top.ue.closeLoad();
+							var obj = eval("(" + result + ")");
+							if (result != "") {
+								var msg = obj.message.replace(/\{/g, "").replace(/\}/g, "").replace(/\,/g, "");
+								top.ue.alert({
+									title: '操作信息列表',
+									content: msg,
+									area:["380px","auto"],
+									ok: function(idx,lay) {
+                                        top.ue.close(idx);
+                                    },
+									area:["450px","auto"],
+									end: function(idx,lay) {
+                                        top.utils.frameBackDel();
+										window.location.href = "/sales/order/manyddfh.html?pi=" + obj.data;
+										return false;
+									}
+								})
+
+							}
+						});
+				}
+			})
+		}
+
+		function keyupNum(event, obj) {
+			var keycode = event.keyCode;
+			if (keycode === 9) { // tab切换跳出
+				return false;
+			} else {
+				var max = $(obj).attr("max");
+				max = parseInt(max);
+
+				var number = $(obj).val().replace(/[^\d]/g, max);
+				if (number <= 0) {
+					number = 1;
+				}
+				if (number > max) {
+					number = max;
+				}
+				if (isNaN(parseInt(number))) {
+					number = max;
+				}
+				$(obj).val(number);
+			}
+		}
+
+		function rebutAll() {
+			var objs = $("[name='osBill']");
+			var array_osBill = [];
+			for (var i = 0; i < objs.length; i++) {
+				var osBill = {};
+				osBill.oId = objs[i].id;
+				osBill.osBill = objs[i].value;
+				array_osBill.push(osBill);
+			}
+
+			var deliveryNotes = $("[name='deliveryNote']");
+			var array_deliveryNote = [];
+			for (var i = 0; i < deliveryNotes.length; i++) {
+				var deliveryNote = {};
+				deliveryNote.oId = deliveryNotes[i].id;
+				deliveryNote.deliveryNote = deliveryNotes[i].value;
+				array_deliveryNote.push(deliveryNote);
+			}
+
+			if ($("input[type='checkbox']:checked").length == 0) {
+				top.ue.msg("请您先勾选要驳回的商品");
+				return;
+			}
+            top.ue.confirm({
+                title: '确认',
+                content: "您确认要驳回吗？订单未选中商品会自动发货",
+                width: 300,
+                okVal: "确定",
+                ok: function () {
+                    var array = [];
+                    $("#table tbody tr").each(
+                            function (i, item) {
+                                var check = $(item).find("input[type='checkbox']");
+                                if ($(check).prop("checked")) {
+                                    var send = {};
+                                    send.odId = $(check).val();
+                                    send.osiBatch = $(item).find(
+                                            "input[name='batch']").val();
+                                    send.oId = $(item).find(
+                                            "input[name='div_oid']").val();
+                                    array.push(send);
+                                }
+                            });
+                    $.showLoad();
+                    $.ajaxPost(
+                            "/sales/order/ddfhAllSave.html", {
+                                "array": $.toJSON(array),
+                                "type": 2,
+                                "pi": "$!pi",
+                                "osBill": $.toJSON(array_osBill),
+                                "deliveryNote": $.toJSON(array_deliveryNote)
+                            },
+                            function (result) {
+                                $.hideLoad();
+                                var obj = eval("(" + result + ")");
+                                if (result != "") {
+                                    var msg = obj.message.replace(/\=/g, "").replace(/\{/g, "").replace(/\}/g, "").replace(/\,/g, "");
+                                    top.ue.alert({
+                                        title: '操作信息列表',
+                                        content: msg,
+                                        ok: function (idx, lay) {
+                                            top.ue.close(idx);
+                                            top.utils.frameBackDel();
+                                            window.location.href = "/sales/order/manyddfh.html?pi=" + obj.data;
+                                            return false;
+                                        }
+                                    })
+
+                                }
+                            });
+                }
+            })
+		}
+	</script>
+</body>
+
+</html>

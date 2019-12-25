@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>快速贷协议</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css?v=$!{jscss_version}" rel="stylesheet">
+    <link href="css/style.css?v=$!{jscss_version}" rel="stylesheet">
+    <script src="js/respond.src.js?v=$!{jscss_version}"></script>
+    <!-- Respond.js proxy on external server -->
+    <link href="https://rawgithub.com/scottjehl/Respond/master/cross-domain/respond-proxy.html" id="respond-proxy" rel="respond-proxy" />
+    <script src="js/respond.proxy.js?v=$!{jscss_version}"></script>
+       
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js?v=$!{jscss_version}"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js?v=$!{jscss_version}"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="container" style="padding:0;">
+    <div class="row" style="margin:0;">
+        <div class="col-xs-12 col-sm-12 col-md-12 panel-title modal-body padding-top30">
+            《我的医药网信用付款协议》<br>
+
+            本协议是指符合相应条件并可以使用信用支付服务的医药网注册会员(以下简称“用户”)与北京融贯电子商务有限公司(以下简称为“我的医药网”)之间就用户购买我的医药网平台所展示的商品或所提供的服务,向贷款公司（即广州市金诺小额贷款有限责任公司，以下简称“金诺小贷”）申请专向贷款用以支付该商品或服务的相关事宜所签订的契约。请用户仔细阅读本服务协议，用户购选“同意《我的医药网信用付款协议》”点击“立即申请”按钮或“提交白条支付”按钮后，本协议即构成对双方有约束力的法律文件。<br>
+
+            经过用户及我的医药网友好协商，双方同意以下约定事宜：<br>
+
+            一、	用户授权我的医药网平台、北京融贯电子商务有限公司、或由该平台及该公司在用户使用我的医药网信用付款服务过程中及在追偿违约欠款时索取、留存和使用该等信息以及用户在我的医药网平台所提供的全部资料；授权我的医药网向协议的相关方（即金诺小贷）、为信用付款服务提供支付服务的第三方支付公司、为信用付款服务提供查询服务的第三方公司等，披露与用户相关的任何信息；授权医药网披露用户的相关信用信息，使用信用付款服务的订单信息。<br>
+            二、	用户已熟悉其与贷款公司（即金诺小贷）之间签订的《贷款合同》、《连带责任保证合同》、《提款申请书》等法律文书，并承诺按照约定履行其相应义务。<br>
+            三、	用户知悉：我的医药网信用付款服务是我的医药网向用户提供的采用向贷款公司（即金诺小贷）申请专向贷款用以支付所采购商品或所提供的服务的价款的功能，使用信用付款服务成功完成订单支付即同意贷款公司（即金诺小贷）依据用户与贷款公司之间的有关协议及提款凭证发放贷款，贷款公司向我的医药网的指定账户成功划付贷款，即视为贷款公司已完成贷款发放义务，即产生利息。用户与贷款公司（即金诺小贷）协商设定用户信用付款服务的账单日及到期还款日，并且承诺每期账单均在到期还款日前还清，如存在超过到期还款日未还清的部分资金视为违约，同意承担逾期利息及违约金。<br>
+            四、	用户在未违约情况下，使用我的医药网信用付款服务产生的与贷款公司（即金诺小贷）之间产生的本金及利息，由用户支付给贷款公司。<br>
+            五、	用户如有违约情况，每天按如下方式计算逾期利息及违约金，并及时归还本息、逾期利息、违约金及其他应付款项：<br>
+            逾期利息利率=贷款约定利率上浮50%；<br>
+            违约金以用户拖欠本息金额为基数，按照日万分之五计算。<br>
+            六、	用户使用我的医药网信用付款服务，通过我的医药网指定的第三方支付公司或其他双方约定的方式进行还款，如有违约，应将本息、逾期利息、违约金及其他应付款项一同支付给贷款公司（即金诺小贷）。<br>
+            七、	用户使用我的医药网信用付款服务过程中，如发生交易的退款，经过我的医药网及供应商确定无误后，退款资金将恢复用户的信用付款额度相应退款金额。如有已经发生的利息、逾期利息、违约金及其他应付款项由用户承担。<br>
+            八、	如用户的信用付款服务被暂停，则该用户的所有应还款项视为全部到期，并应由用户全部支付所产生的本息、逾期利息、违约金及其他应付款项。<br>
+            九、	用户接收本协议即表明确认知悉我的医药网制定的关于使用信用付款服务的所有规定，接受我的医药网制订的全部收费项目和条件，以及我的医药网公布的任何与信用付款服务有关的条款约束并遵守本协议及其后之修订版本。<br>
+            十、	本协议自签订之日起有限期为1年，协议到期后双方再协商续期事宜。<br>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js?v=$!{jscss_version}"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js?v=$!{jscss_version}"></script>
+#parse("common/common_script.vm")
+</body>
+</html>

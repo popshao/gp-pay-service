@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>帐号已被锁定_我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="stylesheet" type="text/css" href="/css/login_base.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/login.css?v=$!{jscss_version}" />
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+ 
+ #parse("common/header_top.vm")
+<div class="fn-wrap">
+		<div class="forbidden">
+			<h2 class="title">帐号已被锁定</h2>
+			<div class="msg">
+				<img height="119" width="117" src="/image/prompt_img.jpg">
+				<em>抱歉！您的帐号已被锁定，暂时无法登录！<br>
+如果您是新注册的用户，请确保您已通过注册邮箱激活账号；<br>
+如仍有问题，您可以联系我们的客服人员<a target="_blank" title="我的医药网(在线咨询)" href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&amp;key=XzkzODA3ODUyMV8yNTUzMDBfNDAwMDYwMzM1MV8yXw">寻求帮助</a>。</em>
+			</div>
+		</div>
+	</div>
+
+
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/js/public/jquery.cookie.js?v=$!{jscss_version}"></script>
+#parse("common/common_script.vm")
+<style type="text/css">
+.fn-wrap{width:1000px;margin:0px auto;}
+.fn-mod .crumb{font-size:14px;line-height:16px;color:#333;}
+.forbidden .title{height:36px;font:700 18px/36px "微软雅黑";padding-left:10px;background:url(/image/login/prompt_titlebg.jpg) repeat-x;  overflow:hidden;color:#278799;}
+.forbidden .msg{padding:140px 0;text-align:center;overflow:hidden;zoom:1;}
+.forbidden .msg img{display:inline-block;width:117px;height:119px;vertical-align:middle;}
+.forbidden .msg em{display:inline-block;width:330px;font:400 14px/30px "微软雅黑";padding:0 10px;vertical-align:middle;text-align:left;}
+.forbidden{border:1px solid #d2f2f7;color:#858585;}
+.forbidden a{color:#268697;}
+.forbidden a:hover{color:#29bfda;}
+</style>
+#parse("/common/footer.vm")
+</body>
+</html>

@@ -1,0 +1,76 @@
+##此页面是医药网 万家 通用头
+
+<!--万家页面通用底栏-->
+<div class="common_wanjia_footer">
+    <div class="r-bottom">
+        <div class="bot-top">
+            <div class="w1200">
+                <div class="bot-list-h">
+                    <ul>
+                        <li style="margin-left: 120px">
+                            <div class="blh-img fl">
+                                <img src="/image/index/icon-bot-1.jpg" alt="">
+                            </div>
+                            <div class="blh-text fl">
+                                <h3>正品保障</h3>
+                                <p>100%正品值得信赖</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="blh-img fl">
+                                <img src="/image/index/icon-bot-2.jpg" alt="">
+                            </div>
+                            <div class="blh-text fl">
+                                <h3>便捷付款</h3>
+                                <p>安心验货放心支付</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="blh-img fl">
+                                <img src="/image/index/icon-bot-3.jpg" alt="">
+                            </div>
+                            <div class="blh-text fl">
+                                <h3>万种药物</h3>
+                                <p>百万货品品类齐全</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="blh-img fl">
+                                <img src="/image/index/icon-bot-4.jpg" alt="">
+                            </div>
+                            <div class="blh-text fl">
+                                <h3>专业客服</h3>
+                                <p>优质服务急您所需</p>
+                            </div>
+                        </li>
+                        <li class="last">
+                            <div class="blh-img fl">
+                                <img src="/image/index/icon-bot-5.jpg" alt="">
+                            </div>
+                            <div class="blh-text fl">
+                                <h3>服务承诺</h3>
+                                <p>仅为合法资质企业服务</p>
+                            </div>
+                        </li>
+
+                        <div class="clear-fix"></div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="bot-more">
+            <div class="bot-frdlink">
+                <div class="w1020_wanjia">
+                    <div class="bot-line beian">
+                        <p>
+                            京ICP备07504877号-2 | <a target="_blank" href="http://app2.sfda.gov.cn/datasearchp/index1.do?tableId=33&tableName=TABLE33&tableView=%E4%BA%92%E8%81%94%E7%BD%91%E8%8D%AF%E5%93%81%E4%BA%A4%E6%98%93%E6%9C%8D%E5%8A%A1&Id=583">互联网药品交易服务资格证编号：国A20150007</a> | 经营许可证编号：京ICP证151141号 |
+                            互联网药品信息服务资格证编号：(京)-经营性-2012-0007 <br>
+                            Copyright©2004-2016 Mypharma.com 我的医药网 版权所有
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

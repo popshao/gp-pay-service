@@ -1,0 +1,381 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>采购管理-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content=""> 
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+           
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+      #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            	<div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a> &gt; 账户中心 &gt; 采购关系管理</p>
+                </div>
+                <div class="user_kh_tips mt10 cc">
+                	<i class="img fl"></i>
+                    <p class="text fl">温馨提醒：审核通过的采购关系需重新登录后生效。</p>
+                </div>
+                <div class="user_supplier_box mt10" id="cooperedClass">
+<!--                 	<a href="javascript:void(0);" #if($!status==0)class="a_select"#else class="a"#end type="hidden">所有供应商</a> -->
+                    <a href="javascript:void(0);" #if($!status==1)class="a_select"#else class="a"#end >已合作<span>$count.coopered</span></a>
+                    <a href="javascript:void(0);" #if($!status==2)class="a_select"#else class="a"#end >未合作<span>#set($No = ${count.total} - ${count.coopered}) $No</span></a>
+                    <input class="button fr" onclick="searchBySuName()" type="submit" id="keyBtn" value="">
+                    <input class="search fr" id="searchSuName" name="name" type="text" value="$!suName">
+                </div>
+                <form action="" method="post" id="searchForm" name="searchForm">
+                        <input type="hidden" name="pi" value="$!pi">
+						<input type="hidden" name="ps" value="10">
+						<input type="hidden" id="status" name="status" value="1">
+				</form>
+                <div class="order_detail mt10">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                  	<th width="250">供应商名称</th>
+                                    <th  width="70">商品数量</th>
+                                    <th  width="230">主营业务</th>
+                                    <th  width="80">合作状态</th>
+                                    #if($!status != 2)
+	                                    <th  width="160">结算方式</th>
+	                                    <th  width="90">退货周期(天)</th>
+                                    #end
+                                  	<th  width="180">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	#if(!$null.isNull($cooperationList) && $cooperationList.size()!=0)
+						            #foreach($item in $cooperationList)
+						            	<tr>
+		                                    <td class="td_a" title="$!item.suName">
+		                                    	<div style="width:250px; white-space:nowrap; overflow: hidden;text-overflow:ellipsis;">
+		                                    		#if (${item.suDomainPrefix})
+		                                    		<a href="$!{item.suUrl}"  target="_blank">$!item.suName</a>
+		                                    		#else	
+		                                    		$!item.suName
+		                                    		#end
+		                                    	</div>
+		                                    </td>
+		                                    <td>$!item.gCount</td>
+		                                    <td title="$!item.suMain">
+		                                    	<div style="width:250px; white-space:nowrap; overflow: hidden;text-overflow:ellipsis;">
+		                                    		$!item.suMain
+		                                    	</div>
+		                                    </td>
+		                                    #if($!item.mprStatus ==-1 && $!status == 2)
+		                                    	<td class="text_status" title="未通过理由：$!item.mprAuthReason">$!item.status</td>
+		                                    #else 
+												<td class="text_status">$!item.status</td>		                                    
+		                                    #end
+		                                    #if($!status != 2)
+		                                    	<td>$!item.settleStyle</td>
+		                                    	<td>$!item.smRejectedPeriod</td>
+		                                    #end
+		                                    <td>
+		                                    	
+		                                    	#if($!item.status == '已合作')
+		                                    	 <a href="javascript:void(0);" onclick="downLoad('$!item.suId');" style="width:70px;" class="btn-txt w40">下载资质</a><br/>
+		                                    		<a onclick="cooperationInfo('$!item.suId');"  style="width:70px;margin-top:5px;cursor: pointer" class="btn-txt w70" >合作详情</a><br/>
+		                                    	#elseif($!item.status == '已合作(过期)')
+		                                    		<a href="javascript:void(0);" onclick="downLoad('$!item.suId');" style="width:70px;" class="btn-txt w40">下载资质</a><br/>
+		                                    		<a onclick="cooperationInfo('$!item.suId');" style="width:70px;margin-top:5px;cursor: pointer" class="btn-txt w70">合作详情</a><br/>
+		                                    	#else
+		                                    		<a href="javascript:cooperationAdd('$!item.suId');" style="width:70px;" class="btn-txt w70">采购申请</a><br/>
+		                                    	#end
+		                                    	
+		                                    	#if ($!item.hypStatus == 1)
+		                                    	<a href="javascript:hypAudit('$!item.suId');" style="width:70px;margin-top:5px;" class="btn-txt w70" >激活帮你付</a>
+		                                    	#end
+		                                    </td>
+                                		</tr>
+						            #end
+						        #else
+						        <tr>
+						        	#if($!status != 2)
+										<td colspan="7">无相关数据！</td>
+									#else
+										<td colspan="5">无相关数据！</td>
+                                    #end
+						        </tr>
+					            #end
+                            </tbody>
+                        </table>
+                    <!--分页开始 -->
+					#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+					#pagerInfo($!pagerInfo,$!{pagerTotal},"/purchase/member/purchase.html")
+					#end #end	
+                  </div>
+                </div>
+            </div>
+            
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+        <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+	<script type="text/javascript">
+	  $(function(){
+		    $('#cooperedClass a').click(function(){
+		    	$.showLoad();
+		        var index=$(this).index();
+		        index1 = index + 1;
+	            window.location.href = "/purchase/member/purchase.html?status="+index1+"&suName=";
+                return false;
+		    }); 
+	  })
+	  
+	  function searchBySuName(){
+		  $.showLoad();
+		  var text = $('#cooperedClass a.a_select').text();
+		  var index=1;
+		  if(text.indexOf("未")>-1){
+			  index=2;
+		  }
+		  var suName = $("#searchSuName").val();
+		  window.location.href ="/purchase/member/purchase.html?status="+index+"&suName="+suName;
+		  return false;
+	  }
+	  function cooperationInfo(suId){
+
+          top.utils.openWithTab("hzxq", "合作详情", "/purchase/member/purchaseGroup.html?suId="+suId, {
+              fstBread: top.app.index.firstBread,
+              scdBread:{
+                  text:top.app.index.secondBread,
+                  url:location.href,
+                  prevBread: top.app.index.firstBread
+              },
+              thirdBread:"合作详情"
+          })
+	      return false;
+		  $.showLoad();
+		  window.location.href = "/purchase/member/purchaseGroup.html?suId="+suId;
+		  return false;
+	  }
+	  
+	 function checkZz(suId){
+		  var flag = 0;
+		  $.ajax({
+			  url: '/purchase/member/checkZz.html',
+	           data: {"suId":suId},
+	           type: 'POST',
+	           dataType: 'json',
+	           async: false,
+	           success: function(result) {
+	        	   if (result.data == true) {
+	        		   flag = 0;   
+	        	   }else{
+	        	   	   if(result.message=="1"){
+	        	   	   		flag=1;
+	        	   	   }else{
+	        		   		flag = 2;
+	        		   }
+	        	   }
+	           }
+		  });
+		  return flag;
+	  }
+	  
+	  function cooperationAdd(suId){
+		  $.showLoad();
+		  var eId = "$!eId";
+		  var userType = "$!userType";
+		  var currentSuId = "$!currentSuId";
+		  if(userType == "1"){
+	      	//如果用户类型是终端调用终端的检验方法
+			  $.ajax({
+					type : 'post',
+					url : '/purchase/member/checkEnterprise.html',
+					data : {
+						"eId" : eId
+					},
+					dataType : 'json',
+				  complete:function () {
+					  $.hideLoad();
+                  },
+					success : function(data) {
+						if (!data) {
+							//如果资质信息不全则跳转 资质认证页面
+								top.ue.alert({
+									title : '提示信息',
+									content : "请先完善企业信息",
+									ok : false,
+									cancelVal : "确定",
+									end : function() {
+										#if($!user)
+											#if($!user.userType == 2)
+                                                top.utils.openWithTab("qyrz","企业认证","/sales/account/enterprise_register.html",{fstBread:"账户中心"})
+											#else
+                                                top.utils.openWithTab("qyrz","企业认证","/purchase/account/enterprise_certified.html",{fstBread:"账户中心"})
+											#end
+										#end									}
+								})
+						} else {
+							//window.location.href = "/purchase/member/purchaseAdd.html?suId="+suId;
+                            top.utils.openWithTab("cgsq", "采购申请", "/purchase/member/purchaseAdd.html?suId="+suId, {
+                                fstBread: top.app.index.firstBread,
+                                scdBread:{
+                                    text:top.app.index.secondBread,
+                                    url:location.href,
+                                    prevBread: top.app.index.firstBread
+                                },
+                                thirdBread:"采购申请"
+                            })
+                            return false;
+						}
+					}
+				});
+		  }else if(userType == "2"){
+			//如果用户类型是商业调用商业的检验方法
+			  $.ajax({
+					type : 'post',
+					url : '/purchase/member/checkEnterpriseSy.html',
+					data : {
+						"eId" : eId,
+						"suId" : currentSuId
+					},
+					dataType : 'json',
+					success : function(data) {
+						if (!data) {
+							//如果资质信息不全则跳转 资质认证页面
+								top.ue.alert({
+									title : '提示信息',
+									content : "请先完善企业信息",
+									ok : false,
+									cancelVal : "确定",
+									end : function() {
+										#if($!user)
+											#if($!user.userType == 2)
+                                                top.utils.openWithTab("qyrz","企业认证","/sales/account/enterprise_register.html",{fstBread:"账户中心"})
+											#else
+                                                top.utils.openWithTab("qyrz","企业认证","/purchase/account/enterprise_certified.html",{fstBread:"账户中心"})
+											#end
+										#end										}
+								})
+						} else {
+							//window.location.href = "/purchase/member/purchaseAdd.html?suId="+suId;
+                            top.utils.openWithTab("cgsq", "采购申请", "/purchase/member/purchaseAdd.html?suId="+suId, {
+                                fstBread: top.app.index.firstBread,
+                                scdBread:{
+                                    text:top.app.index.secondBread,
+                                    url:location.href,
+                                    prevBread: top.app.index.firstBread
+                                },
+                                thirdBread:"采购申请"
+                            })
+							return false;
+						}
+					}
+				});
+		  }
+		  
+// 		  $.ajax({
+// 				type : 'post',
+// 				url : '/purchase/member/checkEnterprise.html',
+// 				data : {
+// 					"eId" : eId
+// 				},
+// 				dataType : 'json',
+// 				success : function(data) {
+// 					if (!data) {
+// 						//如果资质信息不全则跳转 资质认证页面
+// 						var userType = "$!userType";
+// 						if(userType == "1"){
+// 							//终端跳转企业认证页面
+// 							dialog({
+// 								title : '提示信息',
+// 								content : "请先完善企业信息！",
+// 								width : 300,
+// 								ok : false,
+// 								cancelVal : "确定",
+// 								cancel : function() {
+// 									location = "/purchase/account/enterprise_certified.html";
+// 								}
+// 							})
+// 						}else if(userType == "2"){
+// 							//商业跳转企业信息页面
+// 							dialog({
+// 								title : '提示信息',
+// 								content : "请先完善企业信息！",
+// 								width : 300,
+// 								ok : false,
+// 								cancelVal : "确定",
+// 								cancel : function() {
+// 									location = "/sales/account/enterprise_register.html";
+// 								}
+// 							})
+// 						}
+// 					} else {
+// 						window.location.href = "/purchase/member/purchaseAdd.html?suId="+suId;
+// 						return false;
+// 					}
+// 				}
+// 			});
+// 		  $.showLoad();
+// 		  window.location.href = "/purchase/member/purchaseAdd.html?suId="+suId;
+// 		  return false;
+	  }
+	  
+	  // “激活帮你付”按钮点击事件
+	  function hypAudit(suId){
+	  	window.location.href = "/purchase/member/hypAudit.html?suId=" + suId;
+	  	return false;
+	  }
+	  function downLoad(suId){
+	 	 var flag=checkZz(suId);
+		 if(flag==1){
+             top.ue.msg("一分钟之内只能下载一次");
+		 }else if(flag==0){
+             top.ue.msg("该企业没有资质，暂时不能下载");
+		 }else if(flag==2){
+		 	 window.location.href="/purchase/member/downLoadAllPic.html?suId="+suId+"";
+		 }
+	  }
+	</script>
+  </body>
+  
+</html>

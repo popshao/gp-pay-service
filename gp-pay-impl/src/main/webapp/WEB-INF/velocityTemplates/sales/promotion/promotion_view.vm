@@ -1,0 +1,557 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>$!utils.getPactType($!{paw.promotionActivity.pactType}) - 我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/promotion.css?v=$!{jscss_version}">
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog_show.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; <a class="color" href="/sales/promotion/main.html">促销管理</a> &gt;$!utils.getPactType($!{paw.promotionActivity.pactType})</p>
+                </div>
+                <h3 class="promotions_title">活动内容</h3>
+                <table class="promotion_table promotion_table_view" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td class="tar" width="100">活动类型：</td>
+                    <td width="auto">$!utils.getPactType($!{paw.promotionActivity.pactType})</td>
+                  </tr>
+                  <tr>
+                    <td class="tar">活动标题：</td>
+                    <td>$!{paw.promotionActivity.pactTitle}</td>
+                  </tr>
+                  <tr>
+                    <td class="tar">活动描述：</td>
+                    <td>$!utils.replace("#","，",$!{paw.promotionActivity.pactContent})</td>
+                  </tr>
+                  <tr>
+                    <td class="tar">活动时间：</td>
+                    <td>$utils.formatDate($!{paw.promotionActivity.pactStartTime},"yyyy.MM.dd HH:mm:ss") &nbsp;&nbsp;&nbsp;至&nbsp;&nbsp;&nbsp;  $utils.formatDate($!{paw.promotionActivity.pactEndTime},"yyyy.MM.dd HH:mm:ss")</td>
+                  </tr>
+                  <tr>
+                    <td class="tar">活动模板：</td>
+                    <td>
+                    	$!{paw.promotionActivityTemplate.tplTitle}
+                        <a href="javascript:showImage('$utils.getNewImgDomain($!{paw.promotionActivityTemplate.tplFullImg})');" class="view_img">查看效果图</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="tar">活动logo：</td>
+                    <td>
+                    #if($!{paw.promotionActivity.pactLogo} != "")
+                    	<img src="$utils.getNewImgDomain($!{paw.promotionActivity.pactLogo})" alt="" width="171" height="65"/>
+                    #end
+                    </td>
+                  </tr>
+               </table>
+               
+                #if($!{paw.promotionActivityRuleGroup.ruleGroupType} != "" && $!{paw.promotionActivity.pactType} != 5 && $!{paw.promotionActivity.pactType} != 4)
+                <h3 class="promotions_title">活动规则</h3>
+                <table class="promotion_table promotion_table_view" border="0" cellpadding="0" cellspacing="0">
+                  #if($!{paw.promotionActivity.pactType} != 3)
+                  <tr>
+                    <td class="tar" width="100">政策类型：</td>
+                    <td width="auto">#if($!{paw.promotionActivityRuleGroup.ruleGroupType} == "M")购买金额 #else 购买数量#end</td>
+                  </tr>
+                  #end
+                  <!-- <tr>
+                    <td class="tar">优惠类型：</td>
+                    <td>百分比</td>
+                  </tr> -->
+                  <tr>
+                    <td valign="top" class="tar"  width="100"></td>
+                    <td  width="auto">
+                    #if(!$null.isNull($!{paw.promotionActivityruleList}) && $!paw.promotionActivityruleList.size()!=0)
+                    	#if($!{paw.promotionActivity.pactType} == 2)
+
+	                    	#foreach($proList in $!paw.giftWrapperResponse)
+	                    	<p class="promotions_get cc">
+	                    		<span class="fl">$!{proList.ruleText}</span>
+	                    		#if($!{proList.giftWrapper.gift_img_list} && $!proList.giftWrapper.gift_img_list.size()>0)
+		                    		#foreach($giftImg in $!{proList.giftWrapper.gift_img_list})
+		                    		    <img src="$utils.getNewImgDomain($!giftImg)" class="fl" width="42" height="42">
+		                    		#end
+	                    		#end
+	                    	</p>	
+	                    	#end	                    	
+                    	#else
+	                    	#foreach($proList in $!paw.promotionActivityruleList)
+		                    	<p>$!{proList.ruleTitle}</p>
+	                    	#end
+                    	#end
+                    #end	
+                    </td>
+                  </tr>
+               </table>
+	               #if($!{paw.promotionActivity.pactType} == 1)
+		               <p class="promotions_tips">
+							提示：单笔订单购买活动商品满足条件，则每个活动商品单价优惠！<br>
+							例如：参与活动商品A、B,规则为单笔订单中活动商品总金额大于等于100元，则活动商品单价优惠1%；当单笔订单商品为 A、B、C、D、E，那么系统判断计算活动商品A+B的总金额是否大于等于100元，满足则A、B单价均优惠1%！
+		               </p>
+	               #elseif($!{paw.promotionActivity.pactType} == 2)
+	                   <p class="promotions_tips">
+		               		提示：单笔订单购买活动商品满足条件，则该客户可获得对应的赠品！<br>
+							例如：参与活动商品A、B,规则为单笔订单中活动商品总金额大于等于100元，赠送价值50元电子血压仪，200元，赠送100元购物券；当单笔订单商品为 A、B、C、D、E，那么系统判断计算活动商品A+B的总金额是否大于等于200元，则该客户可获得对应的赠品“赠送100元购物券”。
+		               </p>
+	               #elseif($!{paw.promotionActivity.pactType} == 3)
+	              	   <p class="promotions_tips">
+							提示：单笔订单非本活动的商品总额满足条件，则每个活动商品单价优惠！并且限制活动中购买数量，超出限定购买数量后，按照活动前原价购买。<br>
+							例如：参与活动商品A、B,规则为单笔订单中非本活动的商品总金额大于等于100元，则每个活动商品单价优惠！活动商品最多购买10盒！当单笔订单商品为 A、B、C、D、E， 那么系统判断计算非本活动商品C+D+E的总金额是否大于等于100元，满足则A、B单价均优惠1%！活动价最后购买10盒，超出部分按原价购买！
+					   </p>
+	               #elseif($!{paw.promotionActivity.pactType} == 4)
+	               
+	               #elseif($!{paw.promotionActivity.pactType} == 5)
+	               
+	               #end
+	               
+	               
+               #end
+               <h3 class="promotions_title">参与活动商品</h3>
+            #if($!{paw.promotionActivity.pactType} == 1)
+                <div class="order_detail">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                  <th>商品ID</th>
+                                    <th>商品名称</th>
+                                    <th>商品规格</th>
+                                    <th>零售价格（单位：元）</th>
+                                    <th>基价</th>
+                                    <th>生产厂家</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            #if($!{paw.promotionGoods} && $!paw.promotionGoods.size()>0)
+                            #foreach($goodsList in $!paw.promotionGoods)
+                                <tr>
+                                  <td>$!{goodsList.goods.gId}</td>
+                                    <td>$!{goodsList.goods.gName}</td>
+                                    <td>$!{goodsList.goods.gSpecifications}</td>
+                                    <td>
+	                                    #if($!{goodsList.goods.gPrice} && $!{goodsList.goods.gPrice}!="" && $!{goodsList.goods.gPrice}!=0) 
+	                                    	¥$!utils.doubleFormat($!{goodsList.goods.gPrice}) 
+	                                    #else 
+	                                                                                                                        暂无
+	                                    #end
+                                    </td>
+                                    <td>
+                                     	#if($!{goodsList.goods.gBasePrice} && $!{goodsList.goods.gBasePrice}!="" && $!{goodsList.goods.gBasePrice}!=0) 
+	                                    	¥$!utils.doubleFormat($!{goodsList.goods.gBasePrice}) 
+	                                    #else 
+	                                                                                                                        暂无
+	                                    #end
+                                    </td>
+                                    <td>$!{goodsList.goods.gManufacture}</td>
+                                </tr>
+                            #end  
+                            #else
+                           		 <tr width="100%"><td colspan="5">暂无数据</td></tr>
+                            #end   
+                            </tbody>
+                        </table>
+                  </div>
+               </div>
+               
+            #elseif($!{paw.promotionActivity.pactType} == 2)
+                  <div class="order_detail">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                  <th>商品名称</th>
+                                    <th>商品规格</th>
+                                    <th>生产厂家</th>
+                                    <th>是否拆零</th>
+                                    <th>基价</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            #if($!{paw.promotionGoods} && $!paw.promotionGoods.size()>0)
+                             #foreach($goodsList in $!paw.promotionGoods)
+                                <tr>
+                                  <td>$!{goodsList.goods.gName}</td>
+                                    <td>$!{goodsList.goods.gSpecifications}</td>
+                                    <td>$!{goodsList.goods.gManufacture}</td>
+                                    <td>#if($!{goodsList.goods.gCanSplit} == 0 || $!{goodsList.goods.gCanSplit} == "") 否 #else 是  #end</td>
+                                    <td>
+                                     	#if($!{goodsList.goods.gBasePrice} && $!{goodsList.goods.gBasePrice}!="" && $!{goodsList.goods.gBasePrice}!=0) 
+	                                    	¥$!utils.doubleFormat($!{goodsList.goods.gBasePrice}) 
+	                                    #else 
+	                                                                                                                        暂无
+	                                    #end
+                                    </td>
+                                </tr>
+                             #end 
+                            #else
+                           		 <tr width="100%"><td colspan="5">暂无数据</td></tr>
+                            #end 
+                            </tbody>
+                        </table>
+                  </div>
+               </div> 
+              
+            #elseif($!{paw.promotionActivity.pactType} == 3)
+               <div class="order_detail">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                  <th>商品名称</th>
+                                    <th>商品规格</th>
+                                    <th>生产厂家</th>
+                                    <th>是否拆零</th>
+                                    <th>基价</th>
+                                    <th>客户限购数量</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                             #if($!{paw.promotionGoods} && $!paw.promotionGoods.size()>0)
+                           		 #foreach($goodsList in $!paw.promotionGoods)
+                                <tr>
+                                  <td>$!{goodsList.goods.gName}</td>
+                                    <td>$!{goodsList.goods.gSpecifications}</td>
+                                    <td>$!{goodsList.goods.gManufacture}</td>
+                                    <td>#if($!{goodsList.goods.gCanSplit} == 0 || $!{goodsList.goods.gCanSplit} == "") 否 #else 是  #end</td>
+                                    <td>                                     	
+                                    	#if($!{goodsList.goods.gBasePrice} && $!{goodsList.goods.gBasePrice}!="" && $!{goodsList.goods.gBasePrice}!=0) 
+	                                    	¥$!utils.doubleFormat($!{goodsList.goods.gBasePrice}) 
+	                                    #else 
+	                                                                                                                        暂无
+	                                    #end
+	                                </td>
+                                    <td>
+                                    #if($!utils.toInt($!{goodsList.promotionGoods.limit_quantity}) == 0)
+                                                                                                                     未限制
+                                    #else
+                                       $!utils.toInt($!{goodsList.promotionGoods.limit_quantity})
+                                    #end
+                                    </td>
+                                </tr>
+                          	 #end 
+                            #else
+                           		 <tr width="100%"><td colspan="6">暂无数据</td></tr>
+                            #end  
+                            </tbody>
+                        </table>
+                  </div>
+               </div>  
+               
+             #elseif($!{paw.promotionActivity.pactType} == 4)
+               <div class="order_detail">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                  <th>商品名称/ 规格</th>
+                                    <th>生产厂家</th>
+                                    <th>基价</th>
+                                 #if($!{sctNameList} && $!sctNameList.size()>0)   
+                                    #foreach($sctList in $!{sctNameList})
+                                    <th>$!{sctList.sctName}</th>
+                                    #end
+                                 #end
+                                    <th>客户限购数量</th>
+                                    <th>特价原因</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            #if($!{paw.promotionGoods} && $!paw.promotionGoods.size()>0)
+                           	 #foreach($goodsList in $!paw.promotionGoods)
+                                <tr>
+                                    <td>$!{goodsList.goods.gName}/$!{goodsList.goods.gSpecifications}</td>
+                                    <td>$!{goodsList.goods.gManufacture}</td>
+                                    <td>
+                                    	 #if($!{goodsList.goods.gBasePrice} && $!{goodsList.goods.gBasePrice}!="" && $!{goodsList.goods.gBasePrice}!=0) 
+		                                    	¥$!utils.doubleFormat($!{goodsList.goods.gBasePrice}) 
+		                                    #else 
+		                                                                                                                        暂无
+		                                    #end 
+                                    </td>
+                                   #if($!{sctNameList} && $!sctNameList.size()>0) 
+                                    #set($sctMap = $!goodsList.promotionGoods)  
+                                    #foreach($sctList in $!{sctNameList})
+                                    <td>
+	                                    #if($!{goodsList.promotionGoods} && $!goodsList.promotionGoods.size()>0)
+			                               #if($!sctMap.get($!utils.toString($!sctList.sctId)) && $!sctMap.get($!utils.toString($!sctList.sctId))!="")
+			                               <span class="prompt">
+		                                      ¥$!utils.doubleFormat($!sctMap.get($!utils.toString($!sctList.sctId)))
+		                                    </span>
+		                                   #end     	   
+	                                    #end 
+	                                </td>
+	                                #end
+	                               #end
+                                    <td>
+                                    #if($!utils.toInt($!{goodsList.promotionGoods.policyNum}) == 0)
+                                                                                                                     未限制
+                                    #else
+                                       $!utils.toInt($!{goodsList.promotionGoods.policyNum})
+                                    #end
+                                    </td>
+                                    <td>$!{goodsList.promotionGoods.policyNote}</td>
+                                </tr>
+                         	#end 
+                           #else
+                           	#set($aa = $!sctNameList.size() + 3)
+                           <tr width="100%"><td colspan="$!aa">暂无数据</td></tr>
+                           #end      
+                            </tbody>
+                        </table>
+                  </div>
+               </div>              
+             #elseif($!{paw.promotionActivity.pactType} == 5)
+               <div class="order_detail">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                  <th>商品ID</th>
+                                    <th>商品编码</th>
+                                    <th>商品名称</th>
+                                    <th>商品规格</th>
+                                    <th>生产厂家</th>
+                                    <th>是否拆零</th>
+                                    <th>基价</th>
+                                    <th>政策价格（单位：元）</th>
+                                    <th>客户限购数量</th>
+                                    <th>活动库存数量</th>
+                                    <th>备注</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            #if($!{paw.promotionGoods} && $!paw.promotionGoods.size()>0)
+                               #foreach($goodsList in $!paw.promotionGoods)
+                                <tr>
+                                  <td>$!{goodsList.goods.gId}</td>
+                                    <td>$!{goodsList.goods.gSn}</td>
+                                    <td>$!{goodsList.goods.gName}</td>
+                                    <td>$!{goodsList.goods.gSpecifications}</td>
+                                    <td>$!{goodsList.goods.gManufacture}</td>
+                                    <td>#if($!{goodsList.goods.gCanSplit} == 0 || $!{goodsList.goods.gCanSplit} == "") 否 #else 是  #end</td>
+                                    <td>
+                                     	#if($!{goodsList.goods.gBasePrice} && $!{goodsList.goods.gBasePrice}!="" && $!{goodsList.goods.gBasePrice}!=0) 
+	                                    	¥$!utils.doubleFormat($!{goodsList.goods.gBasePrice}) 
+	                                    #else 
+	                                                                                                                        暂无
+	                                    #end
+                                    </td>
+                                    <td><span class="prompt">¥$!utils.doubleFormat($!{goodsList.promotionGoods.policyPrice})</span></td>
+                                    <td>
+	                                    #if($!utils.toInt($!{goodsList.promotionGoods.policyNum}) == 0)
+	                                                                                                                     未限制
+	                                    #else
+	                                       $!utils.toInt($!{goodsList.promotionGoods.policyNum})
+	                                    #end
+                                    </td>
+                                    <td>
+                                        #if($!utils.toInt($!{goodsList.promotionGoods.goodsNum}) == 0)
+	                                                                                                                     未限制
+	                                    #else
+	                                       $!utils.toInt($!{goodsList.promotionGoods.goodsNum})
+	                                    #end
+                                    </td>
+                                    <td>$!{goodsList.promotionGoods.policyNote}</td>
+                                </tr>
+                               #end 
+                          #else
+                           <tr width="100%"><td colspan="10">暂无数据</td></tr>
+                           #end  
+                            </tbody>
+                        </table>
+                  </div>
+               </div>                
+             #end
+             
+             #if(!($!{paw.membersInfo} && $!paw.membersInfo.size()>0) 
+             	&& !($!{paw.shopCustomerTypeList} && $!paw.shopCustomerTypeList.size()>0)
+             	&& !($!{paw.supplierRegionList} && $!paw.supplierRegionList.size()>0)
+             	)
+			 #else
+			 	<h3 class="promotions_title">指定参与客户</h3>
+			 #end
+             
+
+              	#if($!{paw.membersInfo} && $!paw.membersInfo.size()>0)
+		               <div class="promotions_list">
+		               		<ul class="cc">
+               		 #foreach($membersList in $!paw.membersInfo)
+                        <li>
+                            <div class="customer-item"><b></b>$!{membersList.eName}</div>
+                        </li>
+                     #end 
+                       </ul>
+                #else
+                	#if($!{paw.shopCustomerTypeList} && $!paw.shopCustomerTypeList.size()>0)
+	          		       <div class="promotions_ctn">业务分组</div>
+			               <div class="promotions_list">
+			               		<ul class="cc">
+	               		 #foreach($shopCustomer in $!paw.shopCustomerTypeList)
+	                        <li>
+	                            <div class="customer-item"><b></b>$!{shopCustomer.sctName}</div>
+	                        </li>
+	                     #end 
+	                       </ul>
+	                #end
+	                
+	                #if($!{paw.supplierRegionList} && $!paw.supplierRegionList.size()>0)
+	          		       <div class="promotions_ctn">区域分组</div>
+			               <div class="promotions_list">
+			               		<ul class="cc">
+	               		 #foreach($supplierRegion in $!paw.supplierRegionList)
+	                        <li>
+	                            <div class="customer-item"><b></b>$!{supplierRegion.regionName}</div>
+	                        </li>
+	                     #end 
+	                       </ul>
+	                #end
+                #end 
+
+     
+               </div>
+           #if($!{paw.promotionActivityPublishList} && $!paw.promotionActivityPublishList.size()>0)
+              <h3 class="promotions_title">活动展示入口</h3>
+              #foreach($proImg in $!paw.promotionActivityPublishList)
+               <table class="promotion_table promotion_table_view mt20" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                  	<td></td>
+                    <td>
+                    	<label class="text" for="checkbox_01">优惠活动页面广告位置</label>
+                    	#if($proImg.publishPosition == 3 ||$proImg.publishPosition == 1)
+                          <a href="javascript:showBannerImg();" class="view_img">查看效果图</a>
+                        #else
+                          <a href="javascript:showSmImg();" class="view_img">查看效果图</a>
+                        #end
+                    </td>
+                    <td rowspan="4" align="center">
+                    #if($proImg.publishPosition == 3 ||$proImg.publishPosition == 1)
+                       <img src="$utils.getNewImgDomain($!{paw.promotionActivityTemplate.tplBannerImg})" width="600" height="150">
+                    #else
+                       #if($!{proImg.publishCustomImg} && $!{proImg.publishCustomImg} != "")
+                       <img src="$utils.getNewImgDomain($!{proImg.publishCustomImg})" width="232" height="150">
+                       #else
+                       <img src="$utils.getNewImgDomain($!{paw.promotionActivityTemplate.tplSmallImg})" width="232" height="150">
+                       #end
+                    #end
+                    </td>
+                  </tr>
+                  #if($!{proImg.publishPosition} == 2)
+                       #if($!{proImg.publishCustomImg} && $!{proImg.publishCustomImg} != "")
+                       <tr>
+	                    <td width="10"></td>
+	                    <td class="td_title" width="290">活动标题：</td>
+	                   </tr>
+	                   <tr>
+	                    <td></td>
+	                    <td>活动描述：</td>
+	                   </tr>
+                       #else
+                       <tr>
+	                    <td width="10"></td>
+	                    <td class="td_title" width="290">活动标题：$!{proImg.publishTitle}</td>
+	                   </tr>
+	                   <tr>
+	                    <td></td>
+	                    <td>活动描述：$!utils.replace("#","，",$!{proImg.publishSubTitle})</td>
+	                   </tr>
+                       #end
+                  #else
+                  <tr>
+                    <td width="10"></td>
+                    <td class="td_title" width="290">活动标题：$!{proImg.publishTitle}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>活动描述：$!utils.replace("#","，",$!{proImg.publishSubTitle})</td>
+                  </tr>
+                  #end
+                  <tr>
+                    <td></td>
+                    <td>排序：$!{proImg.publishOrderby}</td>
+                  </tr>
+               </table>
+              #end 
+          #end     
+               <div class="promotions_btn">
+                   #*<a href="javascript:history.go(-1)" class="btn_text">返回</a>*#
+               </div> 
+          </div>
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    #if($!{protionActPubBanner})
+    <input type="hidden" id="bigImg" value='$!utils.getBannerHtml($!{protionActPubBanner},$!{paw.promotionActivityTemplate},$!{paw.promotionActivity},$!{paw.promotionActivityTemplate.tplBannerImgDiv},1)'/>
+    #end
+    #if($!{protionActSmBanner})
+    <input type="hidden" id="smImg" value='$!utils.getBannerHtml($!{protionActSmBanner},$!{paw.promotionActivityTemplate},$!{paw.promotionActivity},$!{paw.promotionActivityTemplate.tplSmallImgDiv},2)'/>   
+    #end
+        #parse("common/footer.vm")
+    <script type="text/javascript">
+		$(function(){
+			$("body tbody tr").unbind("mouseover");
+		})
+		
+	 	//查看范例图片
+		function showImage(img) {
+				var content = '<img src="'+img+'" width="300px;"/>';
+            top.utils.showImg(img);
+		}
+	 	
+	 	function showBannerImg(){
+	 		var cont = $("#bigImg").val();
+	 		dialog({
+				title: "查看图片",
+				content: cont,
+				ok: false,
+				cancel: false,
+				esc: true
+			});
+	 	}
+	 	
+	 	function showSmImg(){
+	 		var cont = $("#smImg").val();
+	 		dialog({
+				title: "查看图片",
+				content: cont,
+				padding:"40px 70px",
+				ok: false,
+				cancel: false,
+				esc: true
+			});
+	 	}
+    </script>
+  </body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit" />
+    <title>登录 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+       
+    <link rel="stylesheet" type="text/css" href="/css/login_base.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/login.css?v=$!{jscss_version}" />	<script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+        if(top!=window){
+            top.location.href = location.href;
+        }
+    </script>
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+  <!--顶部通栏-->
+<div class="head">
+	<div class="topbox">
+		<div class="wrap">
+				<p class="welcome fl">您好，欢迎来到我的医药网！
+				<a href="/register.html" target="_blank" class="register">注册</a> 
+				<a href="/login.html" class="login">登录</a>  
+				</p>	
+						
+                 <div class="top_nav fr">
+                    <div class="dot">
+                       <span class="tel">400-060-3351</span>
+                    </div>                
+                    <div class="dot">
+                        <a href="http://$!{wwwHostAndPort}">医药网首页</a>
+                     </div>
+                </div>	
+		</div>
+	</div>
+	<div class="headbar">
+		<div class="fn-wrap fn-clear">
+			<h1 class="logo">
+				<a href="http://$!{wwwHostAndPort}" target="_parent">我的医药网</a>
+			</h1>
+
+			<div class="logo logo-login">
+		        <a title="用户登录" href="/login.html">用户登录</a>
+		    </div>
+			<div class="tel">客服电话：400-060-3351</div>
+		</div>
+	</div>	    	
+</div>
+<input type="hidden" id="uuidCodeFix" value="$!{uuidCode}">
+<div class="login-bg">
+	<div class="login-wrap">
+		
+		<div class="login" id="pwd_login" style="height:355px;">
+            <div class="login-box">
+                <p class="login-title"><span>领先的医药大健康供应链与营销服务平台</span></p>
+                <div class="login-content">
+                 
+                        <form action="" method="post" id="mphLogin">
+                            <div class="item">
+                            	<label class="label_username fl"></label>
+                                <input class="ipt username" id="username" name="username" type="text" value="" tabindex="1" autocomplete="on" />
+                                <label class="placeholder" for="username">手机/邮箱/用户名</label>
+                                <!--  <span class="del_1" id="clearInput"></span>-->
+                            </div>
+                            <div class="item">
+                            	<label class="label_password fl"></label>
+                                <input class="ipt password" id="password" name="password" type="password" value="" tabindex="2" />
+                                <label class="placeholder" for="password">密码</label>
+                            </div>
+                            <input type="hidden" value="0" id="v_code"/>
+                            <div class="item" style="display:none;" id="v_code_div">                                
+                                <label>验证码：</label>
+                                <input type="text" class="input-mini" id="s_code" name="s_code" tabindex="3"></input>
+                                <img id="code_img" onclick="change_captcha(this)" src="/loginRandom.html" width="64" height="28" title="点击可更换验证码" alt="点击可更换验证码" style="cursor:pointer;vertical-align:middle;"/>&nbsp;&nbsp;
+                            </div>
+                            <div class="item">
+                                <a class="ar gray" href="/backPassword.html"> | 忘记密码？</a>
+                                <a class="ar" href="/register.html">免费注册</a>
+                               
+                            </div>
+                            <div class="item">
+                                <button type="submit" id="mphSubmit" class="submit">登&#12288;录</button>
+                               <!-- <button type="submit" id="mphSubmit" class="submit" onclick="javascript:submitForm();">登&#12288;录</button> --> 
+                                <input type="hidden" name="return_uri" id="return_uri" value="$!{return_uri}" />
+                                <input type="hidden" name="login_return_uri" id="login_return_uri" value="$!{login_return_uri}" />
+                                <input type="hidden" name="client_display" id="client_display" value="$!{client_display}" />
+                                <input type="hidden" name="app_id" id="app_id" value="$!{app_id}" />
+                                <input type="hidden" name="state" id="state" value="$!{state}" />
+                                <input type="hidden" name="scope" id="scope" value="$!{scope}" />
+                                <input type="hidden" name="$!{rand_param}" id="rand_param" value="1" />
+                            </div>
+                        </form>
+                        <div class="line"><img src="/image/ico_line.jpg" alt=""/></div>
+                     <!--   <div class="item">
+                            <ul>
+                                
+                                    <li class="dot"><a href="#" target="_blank">测试测试</a></li>
+                                    <li class="dot"><a href="#" target="_blank">测试测试</a></li>
+                                    <li class="dot"><a href="#" target="_blank">测试测试</a></li>
+                                
+                            </ul>
+                        </div>-->
+                        <div class="tips-text">APP扫一扫，马上登录</div>
+                        <div class="btn_ewm" title="扫码登录即将推出"></div>
+                </div>
+                
+            </div>
+		</div>
+		
+		<div class="login" id="ewm_login" style="display: none; height:355px;">
+            <div class="login-box">
+                <p class="login-title"><span>领先的医药大健康供应链与营销服务平台</span></p>
+                <div class="login-content">
+                	<p class="text">打开APP，扫一扫马上登录</p>
+                     <div>
+						<div class="qrCode" id="qrCode"></div>
+						<div class="qrCode_timeout" style="display: none;"><img src="/image/img_04.jpg" alt="二维码已失效，请刷新" title="二维码已失效，请刷新"/></div>
+						<div class="showcode" id="showcode">
+							<input type="hidden" value="0" id="cl"/>
+							<div class="send1" style="display:none; color: #000;cursor:auto;">已失效 ？
+								<span id="send1" style="cursor: pointer; color:#0091a3;">刷新二维码</span>
+							</div>
+							<!-- <span class="send1_sx" id="send1" style="color:#9b9b9b; cursor: pointer;"></span> -->
+						</div>
+					</div>
+					<div class="tips-text">使用账号密码登录</div>
+                	<div class="btn_pwd" title="扫码登录即将推出"></div>
+                </div>
+                
+            </div>
+		</div>
+		
+		<div class="login-tips" id="loginTips"></div>
+	</div>
+</div>
+
+
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/js/public/jquery.cookie.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/js/login.js?v=$!{jscss_version}"></script>
+<script src="/js/public/browser.js?v=$!{jscss_version}"></script>
+<script src="/js/public/excanvas.js?v=$!{jscss_version}"></script>
+<script src="/js/public/qrcode.js?v=$!{jscss_version}"></script>
+<script src="/js/public/login_qrcode.js?v=$!{jscss_version}"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+#parse("common/common_script.vm")
+<script type="text/javascript">
+$(".password").focus(function(){
+	var fail_login = $!{fail_login};
+	var is_big = $!{login_time};
+	
+	if(fail_login >= 3){
+		if(is_big < 300){
+			$("#v_code").val("1");
+			$("#v_code_div").show();
+	    }
+		
+	}
+});
+$(function(){
+	var fail_login = $!{fail_login};
+	var is_big = $!{login_time};
+	
+	if(fail_login >= 3){
+		if(is_big < 300){
+			$("#v_code").val("1");
+			$("#v_code_div").show();
+	    }
+		
+	}
+	
+	//设置背景图片：如果是从康盟跳转，则优先显示康盟供应商背景图，其次显示活动背景图
+	#if($!{kmwPic} && $!{kmwPic} != "")
+        var bgImg = "$!{downloadUrl}/" + '$!{kmwPic}';
+        $(".login-bg").css("background","url(" + bgImg + ") no-repeat center");
+	#else
+		#if($!topAd)
+            var aimgPath = '$!{topAd.aImgPath}';
+            var bgImg = "$!{downloadUrl}/" + aimgPath;
+            $(".login-bg").css("background-image","url("+bgImg+")");
+		#end
+	#end
+
+	// 未登录情况下，访问“快速贷”申请管理界面被强制跳转到登陆页面标志
+	#if ($!scode == "quickLoan")
+		dialog({
+			drug:false,
+        	content:"请登录到我的医药网申请“闪贷”"
+        }).reset();
+	#end
+})
+
+</script>
+
+#parse("/common/footer.vm")
+</body>
+</html>

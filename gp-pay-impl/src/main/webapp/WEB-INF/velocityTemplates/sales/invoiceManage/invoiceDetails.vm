@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 发票详情</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+
+</head>
+<body>
+
+<!--页面主体 -->
+     <div class="c-box">
+
+        <div class="user-kp-title cc">
+            <span class="ukt-title">发票信息</span>
+            <div class="ukt-btn">
+                <a href="javascript:void(0)" onclick='downInvoice(event)' class="user-btn-r fr ml10">下载发票</a>
+                <a href="javascript:void(0)" class="user-btn-b user-btn-b-114 fr ml10" onclick='againInvoice(event)'>重新开票</a>
+                <a href="javascript:void(0)" class="user-btn-n user-btn-n-114 fr ml10" onclick='shareInvoice(event)'>转发</a>
+                <a  href="javascript:void(0)" onclick='lookInvoice()' class="user-btn-n user-btn-n-114 fr">查看发票</a>
+            </div>
+        </div>
+
+
+        <div  id='detailBox'></div>
+        
+        
+        <script  type="text/html"  id='detailTpl'>
+        {{# if(d && !d.error && d.datas){ }}
+        {{# var d = d.datas; }}
+            <div class="user-search-box mt20 user-search-invoice-box">
+                <ul class="usb-wrap cc">
+                    <li class="usb-item">
+                        <span class="s-tit s-tit-left">发票代码：</span>
+                        <span class="s-tit s-tit-right">{{top.utils.notNull(d.code,'--')}}</span>
+                    </li>
+                    <li class="usb-item">
+                        <span class="s-tit s-tit-left">发票号码：</span>
+                        <span class="s-tit s-tit-right">{{top.utils.notNull(d.number,'--')}}</span>
+                    </li>
+                    <li class="usb-item">
+                        <span class="s-tit s-tit-left">发票联：</span>
+                        <span class="s-tit s-tit-right"><i class="user-t-red">{{top.utils.notNull(d.invoiceGroup,'--')}}</i><a href="javascript:void(0)" class="user-btn-n user-btn-n-view ml10"   onclick="gotoDetail('lsfp','/sales/invoice/historyInvoice.html?groupNo={{d.groupNo}}','查看指定发票联')">查看所有</a></span>
+                    </li>
+                    <li class="usb-item">
+                        <span class="s-tit s-tit-left">开票日期：</span>
+                        <span class="s-tit s-tit-right">{{top.utils.dateFmt(d.createTime)}}</span>
+                    </li>
+                    <li class="usb-item">
+                        <span class="s-tit s-tit-left">开票单位：</span>
+                        <span class="s-tit s-tit-right" title="{{top.utils.notNull(d.suName)}}">{{top.utils.notNull(d.suName,'--')}}</span>
+                    </li>
+                    <li class="usb-item">
+                        <span class="s-tit s-tit-left">购买方：</span>
+                        <span class="s-tit s-tit-right">{{top.utils.notNull(d.buyerName,'--')}}</span>
+                    </li>
+                    <li class="usb-item">
+                        <span class="s-tit s-tit-left">纳税人识别号：</span>
+                        <span class="s-tit s-tit-right">{{top.utils.notNull(d.buyerIdentifyNumber,'--')}}</span>
+                    </li>
+                    <li class="usb-item">
+                        <span class="s-tit s-tit-left">发票金额：</span>
+                        <span class="s-tit s-tit-right">{{top.utils.notNullPrice(d.amount)}}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="user-form user-sheet-box invoice-table mt20">
+                <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>订单编号</th>
+                        <th>订单金额</th>
+                        <th>优惠金额</th>
+                 	    <th>发货商品金额</th>
+                        <th>实收金额</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{# if(d.invoiceOrderVos && d.invoiceOrderVos.length){ }}
+                        {{# $.each(d.invoiceOrderVos,function(index,item){ var item = item; var $index = index }}
+                        <tr>
+                            <td>{{top.utils.notNull(item.osn,'--')}}</td>
+                            <td>{{top.utils.notNullPrice(item.oprice,'--')}}</td>
+                            <td>{{top.utils.notNullPrice(item.vprice,'--')}}</td>
+                            <td>{{top.utils.notNullPrice(item.sendPrice,'--')}}</td>
+                            <td>
+                                {{# if(item.recivePrice == -1){ }}
+                                    尚未收货
+                                {{# }else{ }}
+                                    {{top.utils.notNullPrice(item.recivePrice,'--')}}
+                                {{# } }}
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" class="user-link"  onclick="gotoDetail('ckdd','/sales/order/ddxq.html?oId={{item.oid}}','查看订单')">查看</a>
+                            </td>
+                        </tr>
+                        {{# }); }}
+
+                        {{# }else{ }}
+                        <tr><td colspan="6">暂无数据</td></tr>
+                        {{# } }}
+                    </tbody>
+                </table>
+            </div>
+
+        {{#  }}
+        {{# } }}
+        </script>
+
+    </div>
+
+
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>
+<script>
+
+    var invoiceId= getUrlParam("invoiceId");  // 
+    var layer,laypage,laytpl,subData = {};
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage','laytpl'],function () {
+        layer = layui.layer,laypage = layui.laypage,laytpl = layui.laytpl;
+        $(function(){
+            $('body').addClass('user-has-js');
+            top.utils.ajax({
+               url: '/invoice/getInvoiceDetail',
+               data:{invoiceId:invoiceId,userType:2},
+               success:function (data,res) {
+                    if(res && res.code == 0 && res.data){
+                        $("#detailBox").html(laytpl($("#detailTpl").html()).render({datas:res.data}));
+                        subData = res.data;
+                    }else{
+                    	top.ue.msg(res.message||'发票已失效',{},function(){
+                    		top.utils.closeExitsTab(top.utils.getActTab().dom);
+                    	});
+                    }
+               },
+               error:function(res) {
+            	   top.ue.msg(res.message||'发票已失效',{},function(){
+               		top.utils.closeExitsTab(top.utils.getActTab().dom);
+               	});
+               }
+            })
+
+        });
+
+
+    })
+
+    /*查看*/
+    function lookInvoice() {
+        if(!subData.invoicePdfUrl) {
+            top.layer.msg('发票信息不存在');
+            return;
+        }
+        top.utils.open(subData.invoicePdfUrl,'_blank');
+    }
+
+    /*下载*/
+    function downInvoice() {
+        if(!subData.id) {
+            top.layer.msg('发票信息不存在');
+            return;
+        }
+        top.utils.open('/invoice/download?id='+subData.id,'_self');
+    }
+
+    function againInvoice() {
+        if(!subData.groupNo) {
+            top.layer.msg('发票信息不存在');
+            return;
+        }
+        top.rui.dynamic({
+            title:"重新开票",
+            skin:"new_dialog_ui",
+            content:'<div class="user-dialog-ctn" style="width:auto;"><h3 class="udc-info tac b">确定重开此订单发票？</h3><p class="udc-text tac pb30" style="color:#FF4C4C;">重开后，原有已开发票不会作废，需要您在报税时与税务机关说明。</p></div>',
+            area:['600px'],
+            scroller:false,
+            yes: function (idx, lay) {
+                $.ajax({
+                    url: "/sales/order/invoiceAgian",
+                    data: {groupNo: subData.groupNo},
+                    type: 'get',
+                    success: function (res) {
+                        if (res.code != 0) {
+                            top.layer.msg(res.message);
+                        }
+                        else {
+                            var oId = res.data;
+                            top.utils.iframeLoad();
+                            top.utils.closeTopTab(null,true,function(){
+                                top.utils.openWithTab(top.utils.getRandom(), '开票', '/sales/invoice/openInvoice.html?repick=1&oId='+oId, {fstBread:'发票'});
+                            })
+
+                            return;
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+    /*转发 分享*/
+    function  shareInvoice() {
+        if(!subData.id) {
+            top.layer.msg('发票信息不存在');
+            return;
+        }
+
+        var q = JSON.stringify(subData) || "" , path;
+
+        if(!q)
+            return;
+        if(window.localStorage){
+           localStorage.removeItem('data_q');
+
+           localStorage.setItem('data_q',q);
+           
+           var _ss = localStorage.getItem('data_q');
+           if(_ss){
+               q = JSON.parse(_ss)
+               path = '/sales/invoice/transInvoice.html';
+               
+           }else{//无缓存，
+             path = '/sales/invoice/transInvoice.html?q='+q;
+           }
+        }else{
+             path = '/sales/invoice/transInvoice.html?q='+q;
+        }
+
+        
+
+        
+        top.utils.iframeLoad();
+        top.utils.openWithTab(top.utils.getRandom(), "转发", path, {fstBread:'发票'});
+        return false;
+    }
+    
+</script>
+
+</body>
+</html>

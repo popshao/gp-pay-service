@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>销售统计 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content=""/>
+	<meta name="description" content=""/>
+	<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="scripts/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm") #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 我的销售单 &gt; 销售统计</p>
+                </div>
+                
+              <h3 class="entire_single_title cc">
+                	<span class="name fl">$!oEName</span>
+                    <span class="text fl">订单明细</span>
+              </h3>
+                <form action="salesStatisticsDetail.html" method="post" id="searchForm">
+					<input type="hidden" name="pi" value="$!pi" />
+					<input type="hidden" name="oEId" value="$!oEId" />
+					<input type="hidden" name="oSellerId" value="$!oSellerId" />
+					<input type="hidden" name="oEName" value="$!oEName" />
+				</form>
+                
+                <div class="order_detail">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                  <th>下单时间</th>
+                                  <th>订单号</th>
+                                    <th>订单状态</th>
+                                    <th>订单总金额</th>
+                                    <th>发货总金额</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                #if(!$null.isNull($orderReportBeans) && $orderReportBeans.size()!=0) 
+	                            	#foreach($item in $orderReportBeans)
+			                            <tr>
+			                                <td>$utils.formatDate($!item.o_add_time,"yyyy-MM-dd HH:mm:ss")</td>
+			                                <td>
+			                                	<a class="purchaser_n" href="/sales/order/ddxq.html?oId=$!item.o_id">$!item.o_sn</a>
+			                                </td>
+<!-- 			                                #if($!item.o_status == -100)  -->
+<!-- 			                                <td>已删除</td> -->
+<!-- 			                                #elseif($!item.o_status == -90) -->
+<!-- 			                                <td>已废弃</td> -->
+<!-- 			                                #elseif($!item.o_status == -21) -->
+<!-- 			                                <td>买家取消</td> -->
+<!-- 			                                #elseif($!item.o_status == -10) -->
+<!-- 			                                <td>买家驳回</td> -->
+<!-- 			                                #elseif($!item.o_status == 0) -->
+<!-- 			                                <td>待审核</td> -->
+<!-- 			                                #elseif($!item.o_status == 10) -->
+<!-- 			                                <td>已审核</td> -->
+<!-- 			                                #elseif($!item.o_status == 30) -->
+<!-- 			                                <td>已同步到ERP</td> -->
+<!-- 			                                #elseif($!item.o_status == 90) -->
+<!-- 			                                <td>卖家已发货</td> -->
+<!-- 			                                #elseif($!item.o_status == 100) -->
+<!-- 			                                <td>买家已签收</td> -->
+<!-- 			                                #end -->
+											#if($!item.o_status == -90)  
+						                    	<td>已取消</td>  
+						            		#elseif($!item.o_status == -21 || $!item.o_status == -22)  
+						                        <td>买家已取消</td>  
+						           			#elseif($!item.o_status == -10)  
+						                        <td>已驳回</td>
+						           			#elseif($!item.o_status == 0)  
+						                        <td>待审核</td>
+						            		#elseif($!item.o_status == 10)  
+						                        <td>未发货</td>    	
+						            		#elseif($!item.o_status == 30)  
+						                        <td>未发货</td>    	
+						            		#elseif($!item.o_status == 90)  
+						                        <td>已发货</td>   
+						            		#elseif($!item.o_status == 100)  
+						                        <td>买家已签收</td>    	
+						            		#end  
+			                                <td>$!item.o_total_price</td>
+			                                <td>
+			                                	#if($utils.isEmpty($!item.totalSendPrice))
+			                                		0.00
+			                                	#else
+			                                		$!item.totalSendPrice
+			                                	#end
+			                                </td>
+			                            </tr>
+	                               	#end
+	                            #else
+									<tr>
+										<td colspan="10">无相关数据 </td>
+									</tr>
+								#end
+                            </tbody>
+                        </table>
+                        <!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/order/salesStatisticsDetail.html")
+								#end #end
+						<!--分页结束 -->
+                    </div>
+              </div>
+
+          </div>
+
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    </div>
+            #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script>
+		$(function(){
+			$('.order_list .tabnav li').click(function(){
+				var index=$(this).index();
+				$(this).addClass('on').siblings().removeClass('on');
+				$('.tab>div').hide().eq(index).show();
+			}); 
+		})
+    </script>
+    
+  </body>
+</html>

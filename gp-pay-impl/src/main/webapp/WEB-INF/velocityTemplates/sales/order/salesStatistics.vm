@@ -1,0 +1,424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>销售统计 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content=""/>
+	<meta name="description" content=""/>
+	<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" /> 
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="scripts/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+        #parse("common/header_top.vm") #parse("common/header.vm")
+	      <div class="content">
+	        <div class="wrap cc">
+	          #parse("common/left_menu_sales.vm")
+	          <div class="user_right fl">
+	            <!-- 用户中心_主体内容_S -->
+	            <div class="indmain">
+	                <div class="path">
+	                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 我的销售单 &gt; 销售统计</p>
+	                </div>
+	                
+	                <div class="order_query order">
+	                	<form action="salesStatistics.html" method="post" id="searchForm">
+	                	<input type="hidden" name="pi" value="$!pi" />
+	                	<input type="hidden" name="initQuick" id="initQuick"/>
+	                    <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+	                      <tr>
+	                        <td class="tar" width="80">采购商：</td>
+	                        <td width="130"><input id="oEName" name="oEName" class="input" type="text" value="$!oEName"/></td>
+	                        <td class="tar" width="80">下单日期：</td>
+	                        <td class="td_date_l" width="180">
+	                        	<input type="text" id="startTime" class="w-txt w130" name="startTime" value="$!startTime" onblur="javascript:$.sltitem.select('quick','9');" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'endTime\')}'})" />
+	                        </td>
+	                        <td class="td_date_l" width="180">
+	                        	<input type="text" id="endTime" class="w-txt w130" name="endTime" value="$!endTime" onblur="javascript:$.sltitem.select('quick','9');" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'startTime\')}'})" />
+	                        </td>
+	                        <td class="td_sort" width="auto">
+	                        	<div class="sltitem w160 z-index" id="cate">
+										<span class=""></span>
+										<ul style="display: none;">
+											<li data-value="1">
+												<a href="javascript:;">昨天</a>
+											</li> 
+											<li data-value="2">
+												<a href="javascript:;">本周</a>
+											</li> 
+											<li data-value="3">
+												<a href="javascript:;">上周</a>
+											</li> 
+											<li data-value="4">
+												<a href="javascript:;">本月</a>
+											</li> 
+											<li data-value="5">
+												<a href="javascript:;">上月</a>
+											</li> 
+											<li data-value="9">
+												<a href="javascript:;">自定义</a>
+											</li> 
+										</ul>										
+										<input type="hidden" value="" name="quick" id="quick"/>
+								</div>
+	                        </td>
+	                      </tr>
+	                   </table>
+	                   </form>
+	                   <div class="btn">
+	                       <a href="javascript:searchPager('/sales/order/salesStatistics.html',false);" class="btn_query">查询</a>
+	                   </div>               
+	                </div>
+	                
+	                <h3 class="entire_single_title cc">
+	                    <span class="title fl">统计</span>
+	                </h3>
+	                
+	                <div class="order_detail">
+	                    <div class="table">
+	                        <table cellpadding="0" cellspacing="0">
+	                            <thead class="head">
+	                                <tr class="line">
+	                                  <th>采购商数量</th>
+	                                    <th>订单数</th>
+	                                    <th>发货订单数</th>
+	                                    <th>未发货订单数</th>
+	                                    <th>取消订单数</th>
+	                                    <th>驳回订单数</th>
+	                                    <th>总金额</th>
+	                                    <th>发货金额 </th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                                <tr>
+	                                  <td>$!orderReportBean.purchaserCount</td>
+	                                    <td>$!orderReportBean.orderCount</td>
+	                                    <td>$!orderReportBean.isSendCount</td>
+	                                    <td>$!orderReportBean.noSendCount</td>
+	                                    <td>$!orderReportBean.cancelCount</td>
+	                                    <td>$!orderReportBean.rejectCount</td>
+	                                    <td>
+	                                    	#if($utils.isEmpty($!orderReportBean.totalPrice))
+			                                	0.00
+			                                #else
+			                                	$!orderReportBean.totalPrice
+			                               	#end
+	                                    </td>
+	                                    <td>
+	                                    	#if($utils.isEmpty($!orderReportBean.totalSendPrice))
+			                                	0.00
+			                                #else
+			                                	$!orderReportBean.totalSendPrice
+			                               	#end
+	                                    </td>
+	                                </tr>
+	                            </tbody>
+	                        </table>
+	                    </div>
+	              </div>
+	              
+	              <h3 class="entire_single_title cc">
+	                    <span class="title fl">采购商统计</span>
+	              </h3>
+	                
+	                <div class="order_detail">
+	                    <div class="table">
+	                        <table cellpadding="0" cellspacing="0">
+	                            <thead class="head">
+	                                <tr class="line">
+	                                  <th>采购商</th>
+	                                    <th>订单数</th>
+	                                    <th>发货订单数</th>
+	                                    <th>未发货订单数</th>
+	                                    <th>订单总金额</th>
+	                                    <th>发货总金额</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                            	#if(!$null.isNull($orderReportBeans) && $orderReportBeans.size()!=0) 
+	                            		#foreach($item in $orderReportBeans)
+			                                <tr>
+			                                  <td><a class="purchaser_n" href="salesStatisticsDetail.html?oEId=$!item.o_e_id&oEName=$!item.o_e_name">$!item.o_e_name</a></td>
+			                                    <td>$!item.orderCount</td>
+			                                    <td>$!item.isSendCount</td>
+			                                    <td>$!item.noSendCount</td>
+			                                    <td>
+			                                    	#if($utils.isEmpty($!item.totalPrice))
+			                                			0.00
+			                                		#else
+			                                			$!item.totalPrice
+			                               			#end
+			                                    </td>
+			                                    <td>
+			                                    	#if($utils.isEmpty($!item.totalSendPrice))
+			                                			0.00
+			                                		#else
+			                                			$!item.totalSendPrice
+			                               			#end
+			                                    </td>
+			                                </tr>
+	                                	#end
+	                                #else
+										<tr>
+											<td colspan="10">无相关数据 </td>
+										</tr>
+									#end
+	                            </tbody>
+	                        </table>
+	                        <!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/order/salesStatistics.html")
+								#end #end
+							<!--分页结束 -->
+	                    </div>
+	              </div>
+	
+	          </div>
+	
+	          <!-- 用户中心_主体内容_E -->
+	        </div>
+	      </div>
+	    </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script>
+		$(function(){
+			$('.order_list .tabnav li').click(function(){
+				var index=$(this).index();
+				$(this).addClass('on').siblings().removeClass('on');
+				$('.tab>div').hide().eq(index).show();
+			}); 
+			
+			//快捷选择时间框初始化赋值
+			$.sltitem.select("quick","$!initQuick");
+// 			var initQuick = "$!initQuick";
+// 			$("#initQuick").val(initQuick);
+			
+			$("#quick").change(function(){
+				$("#initQuick").val($("#quick").val());
+				if($("#quick").val() ==1){//昨天
+					var date = new Date(new Date().getTime() - 1 * 24 * 60 * 60 * 1000);
+					var monthStr = "";
+					var dateStr = "";
+					if(date.getMonth() < 9){
+						monthStr = "-0" + (date.getMonth()+1);
+					}else{
+						monthStr = "-" + date.getMonth()+1;
+					}
+					if(date.getDate() < 10){
+						dateStr = "-0" + date.getDate();
+					}else{
+						dateStr = "-" + date.getDate();
+					}
+					var time = date.getFullYear() + monthStr + dateStr;
+// 					var time = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+					$("#startTime").val(time);
+					$("#endTime").val(time);
+				}else if($("#quick").val() == 2){//本周
+					var currentDate = new Date();
+					var week=currentDate.getDay();
+					var month=currentDate.getDate();
+					var millisecond=1000*60*60*24;
+					var minusDay=week!=0?week-1:6;
+					//周一
+					var monday=new Date(currentDate.getTime()-(minusDay*millisecond));
+					//周日
+					var sunday=new Date(monday.getTime()+(6*millisecond));
+					var mondayMonth = "";
+					var sundayMonth = ""
+					var mondayDate = "";
+					var sundayDate = "";
+					if(monday.getMonth() < 9){//月份从0开始
+						mondayMonth = "-0" + (monday.getMonth()+1);
+					}else{
+						mondayMonth = "-" + (monday.getMonth()+1);
+					}
+					if(sunday.getMonth() < 9){//月份从0开始
+						sundayMonth = "-0" + (sunday.getMonth()+1);
+					}else{
+						sundayMonth = "-" + (sunday.getMonth()+1);
+					}
+					if(monday.getDate() < 10){//日从1开始
+						mondayDate = "-0" + monday.getDate();
+					}else{
+						mondayDate = "-" + (monday.getDate());
+					}
+					if(sunday.getDate() < 10){//日从1开始
+						sundayDate = "-0" + sunday.getDate();
+					}else{
+						sundayDate = "-" + sunday.getDate();
+					}
+					var startTime = monday.getFullYear() + mondayMonth + mondayDate;
+					var endTtime = sunday.getFullYear() + sundayMonth + sundayDate;
+// 					var startTime = monday.getFullYear()+"-"+(monday.getMonth()+1)+"-"+monday.getDate();
+// 					var endTtime = sunday.getFullYear()+"-"+(sunday.getMonth()+1)+"-"+sunday.getDate();
+					$("#startTime").val(startTime);
+					$("#endTime").val(endTtime);
+				}else if($("#quick").val() == 3){//上周
+					var currentDate = new Date();
+					var week=currentDate.getDay();
+					var month=currentDate.getDate();
+					var millisecond=1000*60*60*24;
+					var minusDay=week!=0?week-1:6;
+					//上周一
+					var monday=new Date(currentDate.getTime()-(minusDay*millisecond)-7*millisecond);
+					//上周日
+					var sunday=new Date(monday.getTime()+(6*millisecond));
+					var mondayMonth = "";
+					var sundayMonth = ""
+					var mondayDate = "";
+					var sundayDate = "";
+					if(monday.getMonth() < 9){//月份从0开始
+						mondayMonth = "-0" + (monday.getMonth()+1);
+					}else{
+						mondayMonth = "-" + (monday.getMonth()+1);
+					}
+					if(sunday.getMonth() < 9){//月份从0开始
+						sundayMonth = "-0" + (sunday.getMonth()+1);
+					}else{
+						sundayMonth = "-" + (sunday.getMonth()+1);
+					}
+					if(monday.getDate() < 10){//日从1开始
+						mondayDate = "-0" + monday.getDate();
+					}else{
+						mondayDate = "-" + (monday.getDate());
+					}
+					if(sunday.getDate() < 10){//日从1开始
+						sundayDate = "-0" + sunday.getDate();
+					}else{
+						sundayDate = "-" + sunday.getDate();
+					}
+					var startTime = monday.getFullYear() + mondayMonth + mondayDate;
+					var endTtime = sunday.getFullYear() + sundayMonth + sundayDate;
+// 					var startTime = monday.getFullYear()+"-"+(monday.getMonth()+1)+"-"+monday.getDate();
+// 					var endTtime = sunday.getFullYear()+"-"+(sunday.getMonth()+1)+"-"+sunday.getDate();
+					$("#startTime").val(startTime);
+					$("#endTime").val(endTtime);
+				}else if($("#quick").val() == 4){//本月
+					var currentDate= new Date();
+					var currentMonth=currentDate.getMonth();
+					var currentYear=currentDate.getFullYear();
+					//本月第一天
+					var firstDay=new Date(currentYear,currentMonth,1);
+					if(currentMonth==11){
+					    currentYear++;
+					    currentMonth=0;//就为
+					}else{
+					    //否则只是月份增加,以便求的下一月的第一天
+					    currentMonth++;
+					}
+					var millisecond=1000*60*60*24;
+					var nextMonthDayOne=new Date(currentYear,currentMonth,1);
+					var lastDay=new Date(nextMonthDayOne.getTime()-millisecond);
+					var firstDayMonth = "";
+					var lastDayMonth = ""
+					var firstDayDate = "";
+					var lastDayDate = "";
+					if(firstDay.getMonth() < 9){//月份从0开始
+						firstDayMonth = "-0" + (firstDay.getMonth()+1);
+					}else{
+						firstDayMonth = "-" + (firstDay.getMonth()+1);
+					}
+					if(lastDay.getMonth() < 9){//月份从0开始
+						lastDayMonth = "-0" + (lastDay.getMonth()+1);
+					}else{
+						lastDayMonth = "-" + (lastDay.getMonth()+1);
+					}
+					if(firstDay.getDate() < 10){//日从1开始
+						firstDayDate = "-0" + firstDay.getDate();
+					}else{
+						firstDayDate = "-" + (firstDay.getDate());
+					}
+					if(lastDay.getDate() < 10){//日从1开始
+						lastDayDate = "-0" + lastDay.getDate();
+					}else{
+						lastDayDate = "-" + lastDay.getDate();
+					}
+					var startTime = firstDay.getFullYear() + firstDayMonth + firstDayDate;
+					var endTtime = lastDay.getFullYear() + lastDayMonth + lastDayDate;
+// 					var startTime = firstDay.getFullYear()+"-"+(firstDay.getMonth()+1)+"-"+firstDay.getDate();
+// 					var endTtime = lastDay.getFullYear()+"-"+(lastDay.getMonth()+1)+"-"+lastDay.getDate();
+					$("#startTime").val(startTime);
+					$("#endTime").val(endTtime);
+				}else if($("#quick").val() == 5){//上月
+					var currentDate= new Date();//当前时间
+					var currentMonth=currentDate.getMonth();//当前月
+					var currentYear=currentDate.getFullYear();//当前年
+					var currentFirstDay = new Date(currentYear,currentMonth,1);
+					//本月第一天
+					if(currentMonth==0){//如果为1月
+					    currentYear--;
+					    currentMonth=11;//上个月为11（12月）
+					}else{
+					    //否则只是月份增加,以便求的下一月的第一天
+					    currentMonth--;
+					}
+					//上个月第一天
+					var firstDay = new Date(currentYear,currentMonth,1);
+					//上个月最后一天
+					var millisecond=1000*60*60*24;
+					var lastDay = new Date(currentFirstDay.getTime()-millisecond);
+					var firstDayMonth = "";
+					var lastDayMonth = ""
+					var firstDayDate = "";
+					var lastDayDate = "";
+					if(firstDay.getMonth() < 9){//月份从0开始
+						firstDayMonth = "-0" + (firstDay.getMonth()+1);
+					}else{
+						firstDayMonth = "-" + (firstDay.getMonth()+1);
+					}
+					if(lastDay.getMonth() < 9){//月份从0开始
+						lastDayMonth = "-0" + (lastDay.getMonth()+1);
+					}else{
+						lastDayMonth = "-" + (lastDay.getMonth()+1);
+					}
+					if(firstDay.getDate() < 10){//日从1开始
+						firstDayDate = "-0" + firstDay.getDate();
+					}else{
+						firstDayDate = "-" + (firstDay.getDate());
+					}
+					if(lastDay.getDate() < 10){//日从1开始
+						lastDayDate = "-0" + lastDay.getDate();
+					}else{
+						lastDayDate = "-" + lastDay.getDate();
+					}
+					var startTime = firstDay.getFullYear() + firstDayMonth + firstDayDate;
+					var endTtime = lastDay.getFullYear() + lastDayMonth + lastDayDate;
+// 					var startTime = firstDay.getFullYear()+"-"+(firstDay.getMonth()+1)+"-"+firstDay.getDate();
+// 					var endTtime = lastDay.getFullYear()+"-"+(lastDay.getMonth()+1)+"-"+lastDay.getDate();
+					$("#startTime").val(startTime);
+					$("#endTime").val(endTtime);
+				}
+			});
+		})
+		
+    </script>
+    
+  </body>
+</html>

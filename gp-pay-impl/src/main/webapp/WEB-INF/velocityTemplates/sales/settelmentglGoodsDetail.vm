@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>已买到的药品-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">销售中心</a>&gt; 交易管理 &gt;  <a href="/sales/jsdgl.html" class="color">结算单管理</a>&gt;  商品详细</p>
+                </div>
+                <div class="tab">
+                <div class="order_detail yh">        
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th></th>
+                                    <th>商品名称</th>
+                                    <th>订单号</th>
+                                    <th>结算状态</th>
+                                    <th>商品生产厂家</th>
+                                    <th>批准文号</th>
+                                    <th>商品规格</th>
+                                    <th>商品单位</th>
+                                    <th>卖家发货数量</th>
+                                    <th>退货数量</th>
+                                    <th>分摊优惠卷(元)</th>
+                                    <th>商品单价(元)</th>
+                                    <th>小计(元)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+							#if(!$null.isNull($settlementGoodsList) && $settlementGoodsList.size()!=0)
+                            #foreach($item in $settlementGoodsList)
+                            #set($pageOrder = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+                               <tr>
+                                    <td>$!pageOrder</td>
+                                    <td>	
+          								$!item.odName 
+								    </td>
+                                    <td>
+                                   		$!item.oSn 
+                                    </td>
+                                    <td>
+                                    #if($!item.accounts_status ==50)  
+						                           已结算
+						            #else
+						                            待结算
+						           #end 
+								    </td>
+                                    <td>$!item.odManufacture</td>
+                                    <td>$!item.odLicenseNumber</td>
+									<td>$!item.odSpecifications</td>
+									<td>$!item.odUnit</td>
+									<td>$!item.odSendNumber
+									</td>
+                                    <td>$!item.backNumber</td>
+                                    <td>$!item.vouchersPrice</td>
+                                    <td>$!item.odPrice</td>
+                                    <td>$!item.odSubtotal</td>
+                                </tr>
+                                #end
+                                #else
+		                           <tr>
+		                             <td colspan="11">无相关数据！</td>
+		                           </tr>
+                                #end
+						     </tbody>
+                         </table>
+                         <!--分页开始 -->
+							#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+							#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/jsdglGoodsDetail.html")
+							#end #end
+                      </div>
+                </div>
+                    <!--未发货-->
+                <!--未收货-->
+                <!--已完成-->
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+    
+    $(function(){
+    	 $.sltitem.select("orderType", "$!orderType");
+    })
+    </script>
+  </body>
+</html>

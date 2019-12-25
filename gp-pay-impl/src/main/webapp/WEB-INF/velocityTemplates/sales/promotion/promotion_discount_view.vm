@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>我的医药网 - 首页热销管理</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+      <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+      <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+      <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+      <link rel="stylesheet" type="text/css" href="/css/promotion.css?v=$!{jscss_version}">
+
+      <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}">
+      <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}">
+      <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}">
+       
+    <script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            
+            <div class="indmain c-box">
+				#set($activity = $!{pactData.activity})
+                #set($ruleGroup = $!{pactData.ruleGroup})
+                #set($ruleList = $!{pactData.ruleList})
+                #set($goodsList = $!{pactData.goodsList})
+                #set($region = $!{pactData.region})
+                <div class="user-path">销售中心 &gt; 销价管理 &gt; <a href="/sales/promotion/list.html">促销管理</a> &gt; <i class="up-h">$!{pactName}</i></div>
+
+                <div class="user-cxgl-table">
+
+                    <table class="order_table mt10" border="0" cellpadding="0" cellspacing="0">
+                        <input type="hidden" id="pactType" name="pactType" value="$!{pactType}"/>
+                        <input type="hidden" name="pactStartTime" id="pactStartTime" value="$utils.formatDate($!{activity.pactStartTime},'yyyy-MM-dd HH:mm:ss')"/>
+                        <input type="hidden" name="pactEndTime" id="pactEndTime" value="$utils.formatDate($!{activity.pactEndTime},'yyyy-MM-dd HH:mm:ss')"/>
+                        <tr>
+                            <td class="tar" width="102"><span class="red">*</span><b>促销类型：</b></td>
+                            <td width="auto">$!{pactName}</td>
+                        </tr>
+                        <tr>
+                            <td class="tar" width="102"><span class="red">*</span><b>促销标题：</b></td>
+                            #if(${activity.pactAppTypeText}!="")
+                            <td width="auto">$!{activity.pactTitle}<span style="color:#e35c5c">(限$!{activity.pactAppTypeText})</span></td>
+                            #else
+                            <td width="auto">$!{activity.pactTitle}</td>
+                            #end
+                        </tr>
+                        <tr>
+                            <td class="tar" valign="top"><span class="red">*</span><b>促销描述：</b></td>
+                            <td>$!{activity.pactContent}</td>
+                        </tr>
+                        <tr>
+                            <td class="tar"><span class="red">*</span><b>有&nbsp;&nbsp;效&nbsp;&nbsp;期：</b></td>
+                            <td>
+                                <span class="fl">$utils.formatDate($!{activity.pactStartTime},'yyyy-MM-dd HH:mm:ss')</span>
+                                <i class="to">至</i>
+                                <span class="fl">$utils.formatDate($!{activity.pactEndTime},'yyyy-MM-dd HH:mm:ss')</span>
+                                <div class="fl ml10" id="timeDhm">
+                                    活动时长：
+                                    <span id="time_d"></span>天
+                                    <span id="time_h"></span>时
+                                    <span id="time_m"></span>分
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tar"><span class="red">*</span><b>优惠类型：</b></td>
+                            <td>
+                                  <div class="sltitem sltitem-193">
+                                       #if($!{ruleGroup.ruleGroupType}=='M')
+			                           	<span>购买金额</span>
+			                           #else
+			                           	<span>购买数量</span>
+			                           #end
+                                  </div>
+                                  <div class="fl ml10">
+                                      <span class="fl"><b>促销力度：</b></span>
+                                      #if(${ruleList.get(0).solution} == "P")
+			                          <label class="text">按%百分比优惠</label>
+			                          #else
+			                          <label class="text">按金额优惠</label>
+			                          #end
+                                  </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tar"></td>
+                            <td>
+	                            #if($ruleList && $ruleList.size() > 0)
+	                              #foreach($rule in $ruleList)
+	                              <div class="promotions_ctn cc" name="ruleInfo">
+	                                  <input type="hidden" name="id" id="rule_$!{rule.id}" value="$!{rule.id}"/>
+	                                  #if($!{ruleGroup.ruleGroupType} == "M")
+	                                  <span class="span">本活动商品总金额满</span>
+	                                  <span class="span">$utils.formatDouble("$!{rule.conditionsValue}")</span>
+	                                  <span class="span">元，</span>
+	                                  <span class="span">该商品单价优惠 </span>
+	                                  #else
+	                                  <span class="span">本活动的商品总数量满</span>
+	                                  <span class="span">$utils.formatDouble("$!{rule.conditionsValue}")</span>
+	                                  <span class="span">，</span>
+	                                  <span class="span">该商品单价优惠 </span>
+	                                  #end
+	                                  
+	                                  #if($!{rule.solution} == "P")
+	                                  <span class="span">$utils.formatDouble("$!{rule.solutionValue}")</span>
+	                                  <span class="span">%</span>
+	                                  #else
+	                                  <span class="span">$utils.formatDouble("$!{rule.solutionValue}")</span>
+	                                  <span class="span">元</span>
+	                                  #end
+	                              </div>
+	                              #end
+	                          	#end
+                            </td>
+                        </tr>
+                        #if($!{activity.pactMemberStatus} == 0)
+                        <tr>
+                            <td class="tar" valign="top"><span class="red">*</span><b>选择客户：</b></td>
+                            <td>全部客户参与活动</td>
+                        </tr>
+                        #elseif($!{activity.pactMemberStatus} == 1)
+                        <tr>
+                            <td class="tar" valign="top"><span class="red">*</span><b>选择客户：</b></td>
+                            <td>
+								<div class="t-view">部分客户参与活动<span id="customerCount" class="count">共选择2家客户</span></div>
+                                <div class="user-cxgl-detail mt10">
+
+                                    <div class="order_detail">
+
+                                        <div class="user-form" id="customerList">
+                                            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                                <thead>
+                                                <tr>
+                                                	<th width="35">序号</th>
+                                                    <th width="130">企业ID</th>
+                                                    <th width="130">企业编码</th>
+                                                    <th width="130">企业名称</th>
+                                                    <th>企业地址</th>
+                                                    <th>业务分组</th>
+                                                    <th>区域分组</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                #if($!memberList && $!memberList.size() > 0)
+                                                #foreach($!member in $!memberList)
+                                                	<div>
+	                                                <tr>
+	                                                	<td>$!velocityCount</td>
+		                                                <td>$!{member.eId}</td>
+		                                                <td>$!{member.smCode}</td> 
+		                                                <td>$!{member.smName}</td>
+		                                                <td>$!{member.smAddress}</td>
+		                                                <td>$!{member.sctName}</td>
+		                                                <td>$!{member.regionName}</td>
+	                                            	</tr>
+	                                            	</div>
+                                                #end
+                                                #end
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+							</td>
+                        </tr>
+                        #else
+                        <tr>
+                            <td class="tar" valign="top"><span class="red">*</span><b>选择客户：</b></td>
+                            <td>
+                                <div class="t-view">部分客户参与活动<span  class="count">$!typeAndRegionText</span></div>
+                                <div class="user-cxgl-detail">
+
+                                    <div class="order_detail">
+
+                                        <div class="toogle-wrap">
+                                            <div class="tab-box">
+                                                <div class="tab-con">
+
+                                                    #if($!selectedListType && ${selectedListType.size()}>0)
+                                                    <div class="type-box cc">
+                                                        <dl>
+                                                            <dt class="type-t">业务分组</dt>
+                                                            #foreach($!type in $!selectedListType)
+                                                          	<dd>
+                                                            <div class="customer-item">
+                                                                 <b></b>$!{type.shopCustomerType.sctName}（<span>$!{type.bizCount}</span>）
+                                                            </div>
+                                                          	</dd>
+                                                          	#end
+                                                        </dl>
+                                                    </div>
+                                                    #end
+                                                    #if($!selectedListRegion && ${selectedListRegion.size()}>0)
+                                                    <div class="type-box cc">
+                                                        <dl>
+                                                            <dt class="type-t">区域分组</dt>
+                                                            #foreach($!region in $!selectedListRegion)
+                                                              <dd>
+	                                                              <div class="customer-item" id="reg_$!{region.supplierRegion.regionId}">
+	                                                                 <b></b>$!{region.supplierRegion.regionName}（<span>$!{region.bizCount}</span>）
+	                                                              </div>
+                                                              </dd>
+                                                            #end
+                                                        </dl>
+                                                    </div>
+													#end
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                        #end
+                        <tr>
+                            <td class="tar" valign="top"><span class="red">*</span><b>选择商品：</b></td>
+                            <td>
+                                <div class="t-view"><span class="count" id="goodsCount">共选择12件商品</span></div>
+                                <div class="user-cxgl-detail mt10">
+
+                                    <div class="order_detail">
+
+                                        <div class="user-form">
+                                            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                                <thead>
+                                                <tr>
+                                                	<th width="35">序号</th>
+                                                    <th width="130">商品ID</th>
+                                                    <th width="130">商品名称</th>
+                                                    <th width="130">商品规格</th>
+                                                    <th width="130">生产厂家</th>
+                                                    <th>是否拆零</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="goodsList">
+                                                  #if($!goodsList && $!goodsList.size() > 0)
+                                                      #foreach($!goods in $!goodsList)
+                                                         <tr>
+                                                         	<td>$!velocityCount</td>
+                                                            <td>$!{goods.gId}</td>
+                                                            <td>$!{goods.gName}</td>
+                                                            <td>$!{goods.gSpecifications}</td>
+                                                            <td>$!{goods.gManufacture}</td>
+                                                            <td>$!{goods.gCanSplitText}</td>
+                                                         </tr>
+                                                      #end
+                                                  #end
+                                                  <!-- 商品显示区域 -->
+                                                  </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog_show.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/promotion/promotionActivityContext.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+    <script>
+		$(function(){
+		   	// showTime();
+		   	// countGroupCustomer();
+		});
+		
+		
+    </script>
+    
+  </body>
+</html>

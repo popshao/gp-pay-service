@@ -1,0 +1,782 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>客户信息审核 - 我的医药网</title>
+
+<!-- mypharma_公共资源 -->
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+
+<!-- mypharma_样式 -->
+<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+   
+<!--PNG格式图片兼容IE6解决方案 -->
+<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+
+</head>
+
+<body>
+	<div class="container">
+		#parse("common/header_top.vm") #parse("common/header.vm")
+		<div class="content">
+			<div class="wrap cc">
+				#parse("common/left_menu_sales.vm")
+				<div class="user_right fl">
+					<!-- 用户中心_主体内容_S -->
+					<div class="indmain">
+						<div class="path">
+							<p>
+								<a class="color" href="/sales/index.html">销售中心</a> &gt; 客户信息管理
+								&gt; 客户信息审核
+							</p>
+						</div>
+						<div class="order_query order member">
+							<form method="post" id="order_form">
+								<div class="image-upload-box error-ms">
+									<ul>
+										<h3 class="line">客户信息</h3>
+										<li><label>客户账号：</label>
+											$!{memberPurchaseRelationsWrapper.member.mName} <input
+											id="mName" name="mName" type="hidden"
+											value="$!{memberPurchaseRelationsWrapper.member.mName}"
+											class="w-txt" /></li>
+										<li><label id="shopCustomerMessage">业务分组<i>*</i>：</label>
+											<div class="sltitem w348" id="" style="z-index:11;">
+												<span class="">请选择</span>
+												<ul style="display: none;">
+													#foreach($shopCustomerType in
+													$!{memberPurchaseRelationsWrapper.shopCustomerTypes})
+													<li
+														data-value="$!{shopCustomerType.sctId},$!{shopCustomerType.sctPriceField},$!{shopCustomerType.sctNumberField}"><a
+														href="javascript:;">$!{shopCustomerType.sctName}</a></li> #end
+												</ul>
+												<input type="hidden" value="" name="sctId" id="sctId" />
+											</div></li>
+										<li><label>申请供应商：</label>
+											$!{memberPurchaseRelationsWrapper.supplier.suName} <input
+											id="suName" name="suName" type="hidden"
+											value="$!{memberPurchaseRelationsWrapper.supplier.suName}"
+											class="w-txt" /></li>
+										<li><label>区域分组：</label>
+											<div class="sltitem w348 z-index" id="">
+												<span class="">请选择</span>
+												<ul style="display: none;">
+													#foreach($supplierRegion in
+													$!{memberPurchaseRelationsWrapper.supplierRegions})
+													<li data-value="$!{supplierRegion.regionId}"><a
+														href="javascript:;">$!{supplierRegion.regionName}</a></li> #end
+												</ul>
+												<input id="regionId" name="regionId" type="hidden" value="" />
+											</div></li>
+										<li><label>企业名称：</label>
+											$!{memberPurchaseRelationsWrapper.enterprise.eName}<input
+											id="eName" name="eName" type="hidden"
+											value="$!{memberPurchaseRelationsWrapper.enterprise.eName}"
+											class="w-txt" /></li>
+										<li><label>企业注册号：</label>$!{memberPurchaseRelationsWrapper.enterprise.eLicenseNo}
+											<input id="eLicenseNo" name="eLicenseNo" type="hidden"
+											value="$!{memberPurchaseRelationsWrapper.enterprise.eLicenseNo}"
+											class="w-txt" /></li>
+<!-- 										<li><label>会员联系方式：</label> -->
+<!-- 											$!{memberPurchaseRelationsWrapper.member.mTel}<input id="mTel" -->
+<!-- 											name="mTel" type="hidden" -->
+<!-- 											value="$!{memberPurchaseRelationsWrapper.member.mTel}" -->
+<!-- 											class="w-txt" /></li> -->
+
+											<li><label>企业联系人手机号码：</label>$!{memberPurchaseRelationsWrapper.enterprise.eMobile}
+ 											<input id="eMobile" name="eMobile" type="hidden"
+ 											value="$!{memberPurchaseRelationsWrapper.enterprise.eMobile}"
+ 											class="w-txt" /></li>
+										<li><label>审核结果：</label>
+                                            <input class="radio" type="radio" name="mprStatus" id="radio_03" value="1" checked="true"/>
+                                            <label class="text" for="radio_03">通过</label>
+                                            <input class="radio" type="radio" name="mprStatus" id="radio_04" value="-1"/>
+                                            <label class="text" for="radio_04">不通过</label>
+											</li>
+<!-- 										<li><label>会员邮箱：</label>$!{memberPurchaseRelationsWrapper.member.mEmail} -->
+<!-- 											<input id="mEmail" name="mEmail" type="hidden" -->
+<!-- 											value="$!{memberPurchaseRelationsWrapper.member.mEmail}" -->
+<!-- 											class="w-txt w130" /></li> -->
+										<li><label>企业联系人固定电话：</label>$!{memberPurchaseRelationsWrapper.enterprise.eTel}
+ 											<input id="eTel" name="eTel" type="hidden"
+ 											value="$!{memberPurchaseRelationsWrapper.enterprise.eTel}"
+ 											class="w-txt" /></li>
+										<li><label id="authReaonMessage">审核理由：</label> <input
+											id="mprAuthReason" name="mprAuthReason" type="text" value=""
+											class="w-txt w130" /></li>
+										<li><label>经营区域<i class="order-tips" data-tips="true" data-tips-title="
+											经营区域设置：<br>
+											区域内：经营区域为“区域内”的客户可购买内外销类型为“内销、不限”的商品<br>
+											区域外：经营区域为“区域外”的客户可购买内外销类型为“外销、不限”的商品
+											"></i>：</label>
+											<div class="sltitem w348 z-index-tr" id="">
+												<span class="">区域内</span>
+												<ul style="display: none;">
+													<li data-value="1"><a href="javascript:;">区域内</a></li>
+													<li data-value="2"><a href="javascript:;">区域外</a></li>
+												</ul>
+												<input id="mprArea" name="mprArea" type="hidden" value="1" />
+											</div></li>
+										<li><label>企业编码：</label> <input id="smCode" name="smCode"
+											type="text" value="" class="w-txt" /></li>
+										<li><label>企业内码：</label> <input id="smInternalCode"
+											name="smInternalCode" type="text" value="" class="w-txt" /></li>
+										<li></li>
+										<!-- 2016.5.25 张青伟修改支付方式为多选-->
+										<li class="one" id="pay_select">
+											<label>支付方式<i>*</i>：</label>
+											<div class="fl">
+												#if($!status == 10)
+												   	<input type="checkbox" class="pay-bank-check-box" id="pay1" name="smManyPayMethod" value="1" />&nbsp;在线支付--买家先付款卖家再发货，货款由第三方银行管理，买家确认收货后，结算货款给卖家，确保买卖双方的交易安全。<a  target="_blank" href="http://$!{wwwHostAndPort}/service/financial/yfb"><span  style="color:rgb(0, 0, 255)"><u>了解更多</u></span></a>；<br/>
+												  	<input type="checkbox" class="pay-bank-check-box" id="pay2" name="smManyPayMethod" value="2" />&nbsp;账期付款--在MPH下完订单，在双方约定的账期到期前通过平台支付货款；
+												  	信用额度：<input class="w112" name="smCreditLimit" id="smCreditLimit" type="text" value="$!utils.subInt($!{supplierMember.smCreditLimit})" readonly="readonly"/>
+												  	账期：<input class="w112" name="smAccountPeriod" id="smAccountPeriod" type="text" value="$!{supplierMember.smAccountPeriod}" readonly="readonly"/>天<br/>
+												#end
+												    <input type="checkbox" class="pay-bank-check-box" id="pay3" name="smManyPayMethod" value="3" />&nbsp;线下付款--在MPH下订单，不通过平台支付货款，双方线下结算；
+											</div>
+										</li>
+<!-- 										<li> -->
+<!-- 											<div id="pay_ctn_date" div style="display:none"> -->
+<!-- 												<label style="padding-right:8px">信用额度：</label><input name="smCreditLimit" id="smCreditLimit" type="text" value="$!utils.priceFormart($!supplierMember.smCreditLimit)" class="w-txt w70" />  -->
+<!-- 												<label style="padding-right:12px; width:auto;"><input id="checkSmAccountPeriod" onclick="checkSmAccountPeriod1();" type="checkbox" class="check-box" />协议期限</label> <label style="width:auto;padding-right:8px;">账期：</label><input name="smAccountPeriod" id="smAccountPeriod" type="text" readOnly="true" value="$!{supplierMember.smAccountPeriod}" class="w-txt w37" />天 -->
+<!-- 											</div> -->
+<!-- 										</li> -->
+<!-- 										<li class="pay_box" id="pay_box"> -->
+<!-- 										#if($!status == 10) -->
+<!-- 											<p class="pay_ctn" id="pay_desc1"> -->
+<!-- 												在线支付--买家先付款卖家再发货，货款由第三方银行管理，买家确认收货后，结算货款给卖家，确保买卖双方的交易安全。<a target="_blank"  href="http://$!{wwwHostAndPort}/service/financial/yfb"><span  style="color:rgb(0, 0, 255)"><u>了解更多</u></span></a>； -->
+<!-- 											</p> -->
+<!-- 											<p class="pay_ctn" id="pay_desc2"> -->
+<!-- 												账期付款--在MPH下完订单，在双方约定的账期到期前通过平台支付货款； -->
+<!-- 											</p> -->
+<!-- 										#end -->
+<!-- 											<p class="pay_ctn" id="pay_desc3"> -->
+<!-- 												线下付款--在MPH下订单，不通过平台支付货款，双方线下结算； -->
+<!-- 											</p> -->
+<!-- 										</li> -->
+<!-- 										<li><label>退货周期：</label> <input name="smRejectedPeriod" -->
+<!-- 											type="text" id="smRejectedPeriod" value="" class="w-txt w37" />天</li> -->
+									</ul>
+								</div>
+							</form>
+							<h3 class="line clear">资质证明
+								 <a href="javascript:void(0);" onclick="downLoadPic($!{memberPurchaseRelationsWrapper.enterprise.eId})" class="btn_download">下载资质</a>
+							</h3>
+							<!--上传图片-->
+							<div class="image-upload-box">
+								#foreach($bizEnterprisePic in $!{bizEnterprisePics})
+								<div class="box">
+										#if($!{bizEnterprisePic.imgUrl})	
+											<a onclick="downLoadSingle($!{bizEnterprisePic.epId})" class="btn_download">下载资质</a>
+										#end 
+									<div class="cc">
+										<div class="img-box">
+											#if($!{bizEnterprisePic.imgUrl})
+												<h5>
+												<a title="查看大图" href="javascript:showBIgImage($!{bizEnterprisePic.epType});" style="color:#0f93ce;">$!{bizEnterprisePic.epName}：</a>
+												</h5>
+											#else
+												<h5>$!{bizEnterprisePic.epName}：</h5>
+											#end
+											<div class="img-preview">
+												#if("$!{bizEnterprisePic.epPic}"!="") 
+												<img id="showPic$!{bizEnterprisePic.epType}" src="$!{bizEnterprisePic.imgUrl}" width="139" height="139" /> 
+												#else 
+												<img src="../../image/ico_01.jpg" width="139" height="139" />
+												#end
+											</div>
+										</div>
+										<div class="form-group">
+											<div>
+													#if($!{bizEnterprisePic.imgUrl})
+														<a href="javascript:showBIgImage($!{bizEnterprisePic.epType});"><i></i>查看大图</a>
+													#end
+													<a href="javascript:showImage($!{bizEnterprisePic.epType});"><i></i>查看范例</a>
+											</div>
+											#if($!bizEnterprisePic.epType != 8 && $!bizEnterprisePic.epType != 9 && $!bizEnterprisePic.epType != 10)
+												<label>证照号码：</label>
+												<div class="control-item">
+													<input type="text" class="form-control" value="$!{bizEnterprisePic.epNo}" placeholder="" name="epNo$!{bizEnterprisePic.epType}" />
+												</div>
+												<label>证件有效期：</label>
+												<div class="control-item">
+													<input type="text" id="epStartTime$!{bizEnterprisePic.epType}" value="$utils.formatDate($!{bizEnterprisePic.epStartTime},'yyyy-MM-dd')" name="epStartTime$!{bizEnterprisePic.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'epEndTime$!{bizEnterprisePic.epType}\')}'})"/>
+												</div>
+												<label>至</label>
+												<div class="control-item">
+													<input type="text" id="epEndTime$!{bizEnterprisePic.epType}" value="$utils.formatDate($!{bizEnterprisePic.epEndTime},'yyyy-MM-dd')" name="epEndTime$!{bizEnterprisePic.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'epStartTime$!{bizEnterprisePic.epType}\')}'})"/>
+												</div>
+											#end 
+										</div>
+									</div>
+								</div>
+								#end
+								<div class="tips">
+									<h3 class="line">经营范围</h3>
+								</div>
+								<div class="order_query order manage">
+									<ul>
+										<li class="manage-item cc"><label class="text-l">全局经营期限
+										</label> <input class="input fl" id="all_beginTime"
+											name="all_beginTime" type="text"
+											onchange="selectAllStarttime();"
+											onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'all_endTime\')}'})" />
+											<i class="slt_t">至</i> <input class="input fl"
+											id="all_endTime" name="all_endTime" type="text"
+											onchange="selectAllEndtime();"
+											onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'all_beginTime\')}'})" />
+										</li> 
+										#foreach($shopPurview in $shopPurviewMap.entrySet())
+										<li class="manage-item">
+											<div class="manage-top">
+												<input type="checkbox" class="check"
+													onclick="checkAll(this)" />$!utils.subStr($!{shopPurview.key})
+											</div> 
+											#foreach($item in $!{shopPurview.value})
+												#set($checked = "unchecked")
+												#foreach($shopPurview in $!{applicationShopPurviews})
+	                               	  					#if($!{item.spId} == $!{shopPurview.spId})
+	                               	  						#set($checked = "checked")
+	                               	  					#end
+												#end
+											<div class="manage-con" name=purDiv>
+												<input id="${item.spId}" title="${item.spName}" name="selck" #if($!checked=="checked")checked="checked"#end
+													type="checkbox" class="check fl" /> <label
+													class="text-l w-text mr10">${item.spName} 经营期限 </label> <input class="input fl" id="${item.spId}_beginTime" name="${item.spId}_beginTime" type="text" other_name="1"
+													onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'${item.spId}_endTime\')}'})" />
+												<i class="slt_t">至</i> <input class="input fl" other_name="2" id="${item.spId}_endTime" name="${item.spId}_endTime" type="text"
+													onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'${item.spId}_beginTime\')}'})" />
+											</div> 
+											#end
+										</li> 
+										#end
+									</ul>
+								</div>
+								<div class="btn tac">
+									<a href="javascript:toSave();" class="btn-save">保存</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 用户中心_主体内容_E -->
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("common/footer.vm")
+
+	<!-- mypharma_脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+	<script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/validate-methods.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+	#parse("common/common_script.vm")
+	<script>
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+            handler:function (btn) {
+                location.href = document.referrer;
+            }
+        })
+		$(function() {
+			$("#pay2").click(function(){
+				var va = $("#pay2")[0].checked;
+				if(!va){
+					$("#smCreditLimit").val("");
+					$("#smAccountPeriod").val("");
+					$("#smCreditLimit").attr("readonly","readonly");
+					$("#smAccountPeriod").attr("readonly","readonly");
+				}else{
+					$("#smCreditLimit").removeAttr("readonly");
+					$("#smAccountPeriod").removeAttr("readonly");
+				}
+			});
+			
+			
+		    <!-- 绑定事件要写在被绑定对象的后面 -->
+// 		    $("#pay2").bind("click", function(event) { $("#pay_ctn_date").toggle();$("#pay_desc2").toggle()});
+// 		    $("#pay1").bind("click", function(event) { $("#pay_desc1").toggle()});
+// 		    $("#pay3").bind("click", function(event) { $("#pay_desc3").toggle()});
+		    
+			//支付方式多选CheckBook渲染
+		    var smManyPayMet = "$!{supplierMember.smManyPayMethod}";
+			if(smManyPayMet.indexOf("1")>-1){
+				$(":checkbox[value='1']").prop("checked",true); 
+//	 			$("#pay_desc1").show();
+			}
+			if(smManyPayMet.indexOf("2")>-1){
+				$(":checkbox[value='2']").prop("checked",true); 
+				$("#smCreditLimit").removeAttr("readonly");
+				$("#smAccountPeriod").removeAttr("readonly");
+//	 			$("#pay_desc2").show();
+//	 			 $("#pay_ctn_date").show();
+			}
+			if(smManyPayMet.indexOf("3")>-1){
+				$(":checkbox[value='3']").prop("checked",true); 
+			}
+			
+			//校验
+			$("#order_form").validate(
+							{
+								submitHandler : save, //如果验证通过的回调函数
+								ignore: '',
+								rules : {
+// 									smCreditLimit : {
+// 										smCreditLimitCheck: true
+// 									},
+// 									smAccountPeriod : {
+// 										smAccountPeriodCheck: true
+// 									},
+// 									smRejectedPeriod : {
+// 										smRejectedPeriodCheck: true
+// 									}
+								},
+				              errorPlacement: function(error, element) {
+				                   error.appendTo(element.parent());
+				               }
+			});
+			
+			//检查账期
+			jQuery.validator.addMethod("smAccountPeriodCheck", function(value, element) {
+				if(value == ""){
+					return true;
+				}else{
+					var aint=parseInt(value);
+					return aint>=0 && (aint+"")==value && aint<=365;   
+				}
+			  }, "请输入0到365整数");   
+			//检验信用额度
+			jQuery.validator.addMethod("smCreditLimitCheck", function(value, element) {
+				if(value == ""){
+					return true;
+				}else{
+					var aint=parseInt(value);
+					return aint>=0 && (aint+"")==value ;   
+				}
+			  }, "请输入0或正整数");    
+			//退货周期
+			jQuery.validator.addMethod("smRejectedPeriodCheck", function(value, element) {
+				if(value == ""){
+					return true;
+				}else{
+					var aint=parseInt(value);
+					return aint>0 && (aint+"")==value ;   
+				}
+			  }, "请输入正整数"); 
+			
+			//支付方式绑定点击事件
+			$("#pay_select ul>li").click(function(){
+				var index = $("#pay_select ul>li").index(this);
+				$("#pay_box>p").hide().eq(index).show();
+				if(index==1){
+					$("#pay_ctn_2").show();
+				}else{
+					$("#pay_ctn_2").hide();
+				}
+			});
+			
+			//支付方式默认为先下支付-线下支付（货到付款）
+			$("#default").show();
+			
+// 			$.sltitem.setNull("regionId");
+
+		/*	$("#mprStatus").prev("ul").find("li").click(
+					function() {
+						var index = $("#mprStatus").prev("ul").find("li")
+								.index($(this));
+						if (index == 0) {
+							$("#shopCustomerMessage").html("业务分组<i>*</i>：");
+							$("#authReaonMessage").html("审核理由：");
+						} else {
+							$("#shopCustomerMessage").html("业务分组：");
+							$("#authReaonMessage").html("审核理由<i>*</i>：");
+						}
+					});*/
+		})
+
+		function checkAll(obj) {
+			var f = obj.checked;
+			$(obj).parents(".manage-item").find("input[name='selck']:checkbox")
+					.each(function() {
+						$(this)[0].checked = f;
+					});
+		}
+
+		function selectAllStarttime() {
+			var starttime = $("#all_beginTime").val();
+			$("div[name=purDiv]").each(function(i, item) {
+				if ($(item).find("input[type='checkbox']")[0].checked == true) {
+					$(item).find("input[other_name='1']").val(starttime);
+				}
+			});
+		}
+
+		function selectAllEndtime() {
+			var endtime = $("#all_endTime").val();
+			$("div[name=purDiv]").each(function(i, item) {
+				if ($(item).find("input[type='checkbox']")[0].checked == true) {
+					$(item).find("input[other_name='2']").val(endtime);
+				}
+			});
+		}
+
+		function back() {
+			window.location.href = "/sales/member/member_check.html";
+		}
+		
+		function toSave(){
+			$("#order_form").submit();
+		}
+		
+		function save() {
+			var status = "$!status";
+			if(status === "10"){
+				//检查账期和信用额度
+				var va = $("#pay2")[0].checked;
+				if(va){
+					var smAccountPeriod = $("#smAccountPeriod").val();
+					var smCreditLimit = $("#smCreditLimit").val();
+					if(smAccountPeriod == ""){
+						top.ue.msg( "账期不能为空");
+						return false;
+					}
+					if(smCreditLimit == ""){
+						top.ue.msg("信用额度不能为空");
+						return false;
+					}
+					if(!(smAccountPeriod >= 0 && (smAccountPeriod+"").indexOf(".") == -1)){
+						top.ue.msg("账期必须为大于等于0的正整数");
+						return false;
+					}
+					if(!(smCreditLimit >= 0 && (smCreditLimit+"").indexOf(".") == -1)){
+						top.ue.msg("信用额度必须为大于等于0的正整数");
+						return false;
+					}
+				}
+			}
+			
+			
+			//审核结果
+			var mprStatus = $("input[name='mprStatus']:checked").val();
+			//经营区域
+			var mprArea = $("#mprArea").val();
+			//业务分组
+			var array = $("#sctId").val().split(",");
+			var sctId = array[0];
+			//价格字段
+			var price = array[1];
+			//库存字段
+			var number = array[2];
+			//企业编码 
+			var smCode = $("#smCode").val();
+			//企业内码
+			var smInternalCode = $("#smInternalCode").val();
+			//区域
+			var regionId = $("#regionId").val();
+			//部门
+			var depId = $("#depId").val();
+			//销售分组
+			var sgId = $("#sgId").val();
+			//账期
+			var smAccountPeriod = $("#smAccountPeriod").val();
+			//信用额度
+			var smCreditLimit = $("#smCreditLimit").val();
+			//退货周期
+			var smRejectedPeriod = $("#smRejectedPeriod").val();
+			var chk_value =[];
+			$('input[name="smManyPayMethod"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			var smManyPayMethod=chk_value.join(',');
+			//采购申请ID
+			var mprId = "$!{memberPurchaseRelationsWrapper.memberPurchaseRelations.mprId}";
+			//企业名称
+			var smName = '$!{memberPurchaseRelationsWrapper.enterprise.eName}';
+			//企业注册号
+			var eLicenseNo = $('#eLicenseNo').val();
+			//供应商Id
+			var suId = "$!{memberPurchaseRelationsWrapper.supplier.suId}";
+			//供应商名称
+			var suName = "$!{memberPurchaseRelationsWrapper.supplier.suName}";
+			//联系方式
+			var mTel = "$!{memberPurchaseRelationsWrapper.member.mTel}";
+			//会员Id
+			var mId = "$!{memberPurchaseRelationsWrapper.member.mId}";
+			//企业Id
+			var eId = "$!{memberPurchaseRelationsWrapper.enterprise.eId}";
+			//uId
+			var uid = "$!{memberPurchaseRelationsWrapper.member.uid}";
+			
+			var mprAddTime = "$utils.formatDate($!memberPurchaseRelationsWrapper.memberPurchaseRelations.mprAddTime,"yyyy-MM-dd HH:mm:ss")";
+			
+			var purs = "";
+			var purviews = new Array;
+
+			//定义封装实体类
+			var memberPurchaseRelations = {};
+			var supplierMember = {};
+			supplierMember.smManyPayMethod = smManyPayMethod;
+			memberPurchaseRelations.mprId = mprId;
+			memberPurchaseRelations.mprStatus = mprStatus;
+			memberPurchaseRelations.mId = mId;
+			memberPurchaseRelations.suId = suId;
+			memberPurchaseRelations.mTel = mTel;
+			memberPurchaseRelations.suName = suName;
+			memberPurchaseRelations.mprAddTime = mprAddTime;
+
+			supplierMember.suId = suId;
+			supplierMember.mId = mId;
+			supplierMember.eId = eId;
+			supplierMember.uid = uid;
+			supplierMember.smName = smName;
+			supplierMember.smLicenseNo = eLicenseNo;
+			supplierMember.smArea = mprArea;
+			supplierMember.smCustomerType = sctId;
+			supplierMember.smPriceField = price;
+			supplierMember.smInventoryField = number;
+			supplierMember.smCode = smCode;
+			supplierMember.smInternalCode = smInternalCode;
+			supplierMember.depId = depId;
+			supplierMember.sgId = sgId;
+			supplierMember.regionId = regionId;
+			supplierMember.smAccountPeriod = smAccountPeriod;
+			supplierMember.smCreditLimit = smCreditLimit;
+			supplierMember.smRejectedPeriod = smRejectedPeriod;
+
+
+			if (mprStatus == 1) {
+				//检查业务分组为必填
+				if (array == "") {
+					top.ue.msg("请选择业务分组");
+					return;
+				}
+				
+				//检查业务分组为必填
+				if (!$("input[name='smManyPayMethod']").is(':checked')) {
+					top.ue.msg("请选择支付方式");
+					return;
+				}
+
+				//审核通过
+				var flag = false;
+				$("input[name^='selck']").each(function(i, o) {
+					if (flag) {
+						return;
+					}
+					if (o.checked) {
+						var beginTime = $('#' + o.id + "_beginTime").val();
+						if (!beginTime) {
+							dialog({
+								title : '提示信息',
+								content : "请选择【" + o.title + "】经营期限开始时间",
+								width : 300,
+								ok : false,
+								cancelVal : "确定",
+								cancel : function() {
+									return false;
+								}
+							})
+							flag = true;
+							return;
+						}
+						var endTime = $('#' + o.id + "_endTime").val();
+						if (!endTime) {
+							dialog({
+								title : '提示信息',
+								content : "请选择【" + o.title + "】经营期限结束时间",
+								width : 300,
+								ok : false,
+								cancelVal : "确定",
+								cancel : function() {
+									return false;
+								}
+							})
+							flag = true;
+							return;
+						}
+						flag = false;
+						if (purs != "") {
+							purs += ",";
+						}
+						purs += o.id;
+						var purobj = {
+							spId : o.id,
+							mId : mId,
+							smpStartTime : beginTime,
+							smpEndTime : endTime
+						};
+						purviews.push(purobj);
+					}
+				});
+				if (flag) {
+					return;
+				}
+
+				if (purs == "") {
+					dialog({
+						title : '提示信息',
+						content : "请选择采购权限",
+						width : 300,
+						ok : false,
+						cancelVal : "确定",
+						cancel : function() {
+							return false;
+						}
+					})
+					return;
+				}
+
+// 				supplierMember.smPurview = purs;
+			} else if (mprStatus == -1) {
+				//审核不通过
+				var mprAuthReason = $("#mprAuthReason").val();
+				if (!jQuery.trim(mprAuthReason)) {
+					dialog({
+						title : '提示信息',
+						content : "请填写审核理由",
+						width : 300,
+						ok : false,
+						cancelVal : "确定",
+						cancel : function() {
+							return false;
+						}
+					})
+					return;
+				}
+				if (mprAuthReason.length > 2500) {
+					dialog({
+						title : '提示信息',
+						content : "审核理由不能超过2500个字符",
+						width : 300,
+						ok : false,
+						cancelVal : "确定",
+						cancel : function() {
+							return false;
+						}
+					})
+					return;
+				}
+				memberPurchaseRelations.mprAuthReason = mprAuthReason;
+			}
+
+			var memberPurchaseRelationsParam = $
+					.toJSON(memberPurchaseRelations);
+			var supplierMemberParam = $.toJSON(supplierMember);
+			var purviewsParam = $.toJSON(purviews);
+
+			$.ajax({
+						url : '/sales/member/memberPurchaseRelations_save.html',
+						data : {
+							"memberPurchaseRelations" : memberPurchaseRelationsParam,
+							"supplierMember" : supplierMemberParam,
+							"purviews" : purviewsParam
+						},
+						type : 'POST',
+						dataType : 'json',
+						success : function(result) {
+							if (result) {
+								top.ue.alert({
+									title : '提示信息',
+									content : "审核保存成功",
+									end : function() {
+                                        top.utils.frameBackDel();
+										window.location.href = "/sales/member/member_check.html?$!utils.getJJm($!{jm})";
+									}
+								})
+							} else {
+								dialog({
+									title : "提示信息",
+									content : "审核保存失败",
+									width : 300
+								});
+							}
+						}
+					});
+		}
+		
+		//查看范例图片
+		function showImage(img) {
+				var imgUrl ="/image/zizhi/img"+img+".jpg";
+				var content = '<img src="'+imgUrl+'" height="400px;" width="750px;"/>';
+            top.utils.showImg(imgUrl);
+		}
+		
+		//查看大图
+		function showBIgImage(img){
+	// 		var str = "#saImgPath" + img;
+	// 		var url = $(str).val();
+	// 		url = "http://img1.mypharma.com/" + url + ".jpg"; 
+			var str = "#showPic" + img;
+			var url = $(str).attr("src");
+			var picurl = "/sales/member/supplierMember_open.html?picurl=" + encodeURIComponent(url);
+			window.open(picurl);
+		}
+		
+		// 协议期限
+		function checkSmAccountPeriod1(){
+			if($("#checkSmAccountPeriod")[0].checked == true){
+				$("#smAccountPeriod").attr("readOnly",false);
+			}else{
+				$("#smAccountPeriod").attr("readOnly",true);
+			}
+		}
+		
+		function checkZz(eId){
+				  var flag = 0;
+				  $.ajax({
+					  url: '/sales/member/checkZz.html',
+			           data: {"eId":eId},
+			           type: 'POST',
+			           dataType: 'json',
+			           async: false,
+			           success: function(result) {
+			           
+			        	   if (result.data == true) {
+			        		   flag = 0;   
+			        	   }else{
+			        	   	   if(result.message=="1"){
+			        	   	   		flag=1;
+			        	   	   }else{
+			        		   		flag = 2;
+			        		   }
+			        	   }
+			           }
+				  });
+				  return flag;
+			  }
+	 	function downLoadPic(smId){
+		 	 var flag=checkZz(smId);
+		 	 
+			 if(flag==1){
+                 top.ue.msg("一分钟之内只能下载一次");
+			 }else if(flag==0){
+                 top.ue.msg("该企业没有资质，暂时不能下载");
+			 }else if(flag==2){
+			 	 window.location.href="/sales/member/downLoadAllPic.html?eId="+smId+"";
+			 }			 
+		  }
+		function downLoadSingle(epId){
+			top.utils.open("/sales/member/downLoadSinglePic.html?epId="+epId);
+		}
+	</script>
+</body>
+
+</html>

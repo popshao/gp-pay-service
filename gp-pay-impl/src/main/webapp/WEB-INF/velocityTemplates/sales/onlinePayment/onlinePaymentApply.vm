@@ -1,0 +1,519 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>申请开通在线支付 - 我的医药网</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+	   
+	<script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>
+    <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/validate-methods.js?v=$!{jscss_version}" type="text/javascript"></script>	
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>	
+    <!-- 脚本 -->
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/public.js?v=$!{jscss_version}"></script>
+	
+    <link rel="stylesheet" href="/js/autocomplete/jquery-ui.min.css?v=$!{jscss_version}">
+  	<script src="/js/autocomplete/jquery-ui.min.js?v=$!{jscss_version}"></script>
+  	 <script src="/js/placeholder.min.js?v=$!{jscss_version}"></script>
+  	#parse("common/common_script.vm")
+    <script type="text/javascript">
+
+	
+	//支付银行联想输入方法
+	function onLoadStation() {  
+        $("#bankNameTemp").autocomplete({  
+            source:function(request,response){  
+                $.ajax({  
+                    type:"POST",  
+                    url:"/sales/onlinePayment/onlinePayBankCodeQuery.html",  
+                    dataType : "json",  
+                    cache : false,  
+                    async : false,  
+                    data : {  
+                        "bankName" : encodeURI($("#bankNameTemp").val())  
+                    },  
+                    success : function(json) {  
+                        var data = eval(json);//json数组  
+                        response($.map(data,function(item){  
+                            var name = item.name;  
+                            var id = item.id;  
+                            return {  
+                                label:item.id+'--'+ item.name,//下拉框显示值  
+                                value:item.name,//选中后，填充到下拉框的值  
+                                id:item.id//选中后，填充到id里面的值  
+                            }  
+                        }));  
+                    }  
+                });  
+            },  
+            delay: 500,//延迟500ms便于输入  
+            select : function(event, ui) {  
+                $("#payBankId1").val(ui.item.id);  
+                $("#bankName").val(ui.item.value);  
+                $("#bankNameTemp").hide();  
+            }  
+        });  
+    } 
+	
+	//object:加载对象    value:默认值  lpId:上级id
+	function findLocation(object,lpId,value){
+		var id = 0;
+		$.ajax({
+            url: '/location/provincialCity',
+            data: {lpid: lpId},
+            type:"post",
+            async:false,
+            success: function(data) {
+				var locationD = data.data;
+				var jObject = $(object);
+				if(locationD!=''){
+					jObject.show();
+                    jObject.empty();
+                    var opts ;
+                    $.each(locationD,function(index,item){  
+                    	if(index == 0){
+                    		id=item.lid;
+                    	}
+                    	if(item.lid==value && value!=""){
+                    		id = value;
+                    		var opt ='<option selected value="'+item.lid+'">'+item.lname+'</option>'; 
+                    		opts += opt;
+                    	}else{
+                    		var opt ='<option value="'+item.lid+'">'+item.lname+'</option>'; 
+                    		opts += opt;
+                    	}
+                    });  
+                    jObject.html(opts);
+                    if(locationD.length == 0) {
+                    	jObject.hide();
+                    }
+                    return id;
+                }else{  
+                	locationD = '';  
+                	jObject.hide();
+                }
+            }
+        });
+		return id;
+	}
+	
+	function editSave(){
+    	if($("#accountName").val() == ""){
+    		dialog({
+				title : "提示信息",
+				content : "请填写公司名称",
+				width : 300
+			});
+    		return false;
+    	}
+    	/* 开户银行改为银行字段中进行填写，故无需在进行判断
+		if($("#bankName").val() == ""){
+			dialog({
+				title : "提示信息",
+				content : "请填写开户银行！",
+				width : 300
+			});
+    		return false;
+    	}
+    	 */
+		if($("#cardNo").val() == ""){
+			dialog({
+				title : "提示信息",
+				content : "请填写账号",
+				width : 300
+			});
+    		return false;
+		}
+		if($("#bankId").val() == ""||$("#bankCode").val() == ""){
+			dialog({
+				title : "提示信息",
+				content : "请选择开户银行",
+				width : 300
+			});
+    		return false;
+		}
+		if($("#bankDetailName").val() == ""){
+			dialog({
+				title : "提示信息",
+				content : "请选择详细开户银行",
+				width : 300
+			});
+    		return false;
+		}
+    	if($("#agree")[0].checked == false){
+    		dialog({
+				title : "提示信息",
+				content : "必须同意《“我的医药网”平台交易协议》",
+				width : 350
+			});
+    		return false;
+    	}
+    	//序列化表单
+		var accountCard = $("#editForm").serializeJson(); 
+		$.ajax({
+			type : 'post',
+			url : '/sales/onlinePayment/onlinePaymentApply_editSave.html',
+			data : {
+				"accountCard" : $.toJSON(accountCard)
+			},
+			dataType : 'json',
+			success : function(data) {
+				if (data) {
+					dialog({
+						title : '提示信息',
+						content : "保存成功",
+						width : 300,
+						ok : false,
+						cancelVal : "确定",
+						cancel : function() {
+							location = "/sales/onlinePayment/onlinePaymentApply.html";
+						}
+					})
+				} else {
+					dialog({
+						title : "提示信息",
+						content : "保存失败",
+						width : 300
+					});
+				}
+			}
+		});
+    }
+    
+    function submit_audit(){
+    	if($("#accountName").val() == ""){
+    		dialog({
+				title : "提示信息",
+				content : "请填写公司名称",
+				width : 300
+			});
+    		return false;
+    	}
+		if($("#bankName").val() == ""){
+			dialog({
+				title : "提示信息",
+				content : "请填写开户银行",
+				width : 300
+			});
+    		return false;
+    	}
+		if($("#cardNo").val() == ""){
+			dialog({
+				title : "提示信息",
+				content : "请填写账号",
+				width : 300
+			});
+    		return false;
+		}
+		if($("#bankId").val() == ""||$("#bankCode").val() == ""){
+			dialog({
+				title : "提示信息",
+				content : "请选择银行",
+				width : 300
+			});
+    		return false;
+		}
+		if($("#epPic").val() == ""){
+			dialog({
+				title : "提示信息",
+				content : "请上传开户许可证",
+				width : 300
+			});
+    		return false;
+		}
+    	if($("#agree")[0].checked == false){
+    		dialog({
+				title : "提示信息",
+				content : "必须同意《“我的医药网”平台交易协议》",
+				width : 350
+			});
+    		return false;
+    	}
+    	var accountCard = $("#editForm").serializeJson(); 
+    	$.ajax({
+			type : 'post',
+			url : '/sales/onlinePayment/onlinePaymentApply_submitApply.html',
+			data : {
+				"accountCard" : $.toJSON(accountCard)
+			},
+			dataType : 'json',
+			success : function(data) {
+				if (data) {
+					dialog({
+						title : '提示信息',
+						content : "提交申请成功，审核人员在30分钟以内审核完毕，敬请期待",
+						width : 300,
+						ok : false,
+						cancelVal : "确定",
+						cancel : function() {
+							location = "/sales/onlinePayment/onlinePaymentApply.html";
+						}
+					})
+				} else {
+					dialog({
+						title : "提示信息",
+						content : "提交申请失败",
+						width : 300
+					});
+				}
+			}
+		});
+    }
+    </script>
+        <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+ 
+  <body>
+    <div class="container">
+    	#parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 财务模块 &gt; 申请开通在线支付</p>
+                </div>
+            </div>
+            
+            <div class="dialog_box mt20">
+              <dl class="dialog_ctn">
+               <dd style="width:700px;">
+                 <div class="dialog_sheet"> 
+                 <form id="editForm" name="editForm" method="post">
+                   <input name="acId" id="acId" type="hidden" value="$!{accountCard.acId}"/>
+                   <table width="100%" class="online-box" style="width:660px;" type="text">
+                          <tr>
+                            <td class="tar">公司名称<i style="color:red">*</i>：</td>
+                            <td>
+                            	<input name="accountName" id="accountName" type="text" value="$!{accountCard.accountName}"/>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="tar">账号<i style="color:red">*</i>：</td>
+                            <td>
+                            	<input name="cardNo" id="cardNo" type="text" value="$!{accountCard.cardNo}"/>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="tar">开户地<i style="color:red">*</i>：</td>
+                            <td>
+                            	<select class="select_bank_area mr5" id="province" name="province">
+                            		<option value ="">选择省</option>
+                            	</select>
+			                 	<select class="select_bank_area mr5" id="town" name="town">
+			                 		<option value ="">选择市</option>
+			                 	</select>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="tar">开户银行<i style="color:red">*</i>：</td>
+                            <td>
+                            	<input type="hidden" id="payBankId1" name="payBankId1" value="$!{accountCard.payBankId1}">   
+                            	<input type="text" id="bankName" name="bankName" value="$!{accountCard.bankName}" placeholder="点击查询支持银行" readonly="readonly"/>
+                            	<i style="color:#ece7e3">——</i>
+                            	<input name="bankDetailName" id="bankDetailName" type="text" value="$!{accountCard.bankDetailName}" placeholder=" XX 分行 XX 支行"/><br>
+                            	<input type="text" id="bankNameTemp" name="bankNameTemp" style="display:none" placeholder="输入查询关键字" />
+                            </td>
+                          </tr>
+                          <tr>
+						  	<td>
+						  	</td>
+						  	<td>
+						  		<span class="text" style="color:#797979"><font size="2px">示例：招商银行—北京分行上地支行<br>如果您在下拉列表中查询不到收款银行，请咨询客服。</font></span></a></span>
+						  	</td>
+						  </tr>
+                         <tr>
+                            <td class="tar">开户许可证<i style="color:red">#if($!{accountCard.epPic}=="")*#end</i>：</td>
+                            <td>
+                               	<div class="image-upload-box ">
+                                	<div class="img-box">
+	                                   <div class="img-file" id="uploadOpenAccountPic">
+	                                   #if($!{accountCard.epPic}!="")
+	                                       <img id="showPic" src="$!{accountCard.imgUrl}" height="139px;" width="139px;"/>
+	                                   #else
+		                           		   <img id="showPic" height="139px;" width="139px;"/>
+		                           	   #end
+	                                       <input type="hidden" id="epPic" name="epPic" value="$!{accountCard.epPic}">
+	                                       <input type="hidden" id="bucket_key" name="bucket_key" value="$!{accountCard.bucket_key}"/>
+		                                   <input type="hidden" id="imageInfo" name="imageInfo"/>
+	                                    </div>
+                                	</div>
+                              	</div>
+                           </td>
+                          </tr>
+                          #if ($!{exist} == 1)
+                          <tr>
+                            <td class="tar">审核状态：</td>
+                            <td>
+                            	#if ($!{accountCard.status} == 10)
+    								审核通过&nbsp;&nbsp;<font color="red">恭喜您收款账户已开通,若有疑问请联系客服</font>
+								#elseif ($!{accountCard.status} == -1)
+    								审核不通过($!{accountCard.refuseReason})
+								#elseif ($!{accountCard.status} == 0)
+    								已保存
+    							#elseif ($!{accountCard.status} == 1)
+    								已提交审核
+								#end   
+                            </td>
+                          </tr>
+                          #end
+                          #if ($!{accountCard.status} != 10 && $!{accountCard.status} != 1)
+						  <tr>
+						  	<td>
+						  	</td>
+						  	<td>
+						  	#if($!{accountCard.acId}!="")
+						  		<input class="checkbox" id="agree" type="checkbox" checked="checked"/>
+						  	#else
+		                         <input class="checkbox" id="agree" type="checkbox"/>
+		                    #end
+						  		<span class="text">我同意：遵守<a href="http://cms.mypharma.com/info/299" target="_blank"><span  style="color:rgb(0, 0, 255)"><u>《“我的医药网”平台交易协议》</u></span></a></span>
+						  		<br>款项将寄往此账号，请填写正确的账号信息，填写后客服将进行审核
+						  	</td>
+						  </tr>
+						  #else
+						  <tr>
+						  	<td>
+						  	</td>
+						  	<td>
+						  		<span class="text">于$!date.format('yyyy年M月d日',$!{accountCard.createTime}) 同意：遵守<a href="http://cms.mypharma.com/info/299" target="_blank"><span  style="color:rgb(0, 0, 255)"><u>《“我的医药网”平台交易协议》</u></span></a></span>
+						  	</td>
+						  </tr>						  	
+						  #end	                          	
+                      </table>
+                      <div class="dialog_btn">
+                      	#if ($!{accountCard.status} != 10 && $!{accountCard.status} != 1)
+		                <a href="javascript:void(0);" onclick="submit_audit()" class="btn">提交</a>
+		                #end
+		              </div>
+                     </form>
+                 </div>
+               </dd>
+              </dl>
+              
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+    <script type="text/javascript">
+    $('input, textarea').placeholder();
+		//省市区级联
+		$(function(){
+			$("#bankName").click(function(){
+				$("#bankNameTemp").show();
+				$("#bankNameTemp").val("");
+				$("input[name=bankNameTemp]").focus();
+			});
+			
+			$('#bankNameTemp').blur(function (){
+				$("#bankNameTemp").hide();
+			});
+			
+			$("#province").change(function(){
+				var provinceId = $(this).val();
+				$("#town option").remove();
+				if(provinceId != 0 && provinceId!=null && provinceId!=undefined)
+				findLocation($("#town"),provinceId,"");
+				var townId = $("#town").val();
+				$("#area option").remove();
+				if(townId != 0 && townId!=null && townId!=undefined)
+				findLocation($("#area"),townId,"");
+			});
+			var provinceId=$!{accountCard.province};
+			if(provinceId==0){
+				provinceId = findLocation($("#province"),0,"");
+			}else{
+			   	provinceId = findLocation($("#province"),0,provinceId);
+			}
+			if(provinceId != 0 && provinceId!=null && provinceId!=undefined){
+				var townId = $!{accountCard.town};
+				if(townId==0){
+					townId = findLocation($("#town"),provinceId,"");
+				}else{
+					townId = findLocation($("#town"),provinceId,townId);
+				}
+			}
+			onLoadStation();
+			
+			var status = "$!{accountCard.status}";
+			if(status != 1 && status != 10){
+				uploadPic();
+			}
+		});
+		
+		   function uploadPic(){
+			   var uploadPic = $("#uploadOpenAccountPic");
+		        new AjaxUpload(uploadPic,{
+		            action: "/cdn/imageInfo_upload.html?type=1",
+		            name: 'file_path',
+		            responseType:"json",
+		            onSubmit : function(file, ext){
+		            	if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+		                    ext_str = ext;
+		                } else {
+		                	top.ue.msg("非图片文件格式,请重传");
+		                    return false;
+		                }
+		                $.showLoad();
+		            },
+		            onComplete: function(file, result){
+		            	if (result.success == false) {
+		            		if(result.message == "outofsize"){
+		            			top.ue.msg("文件过大，无法上传");
+		            		}else if(result.message == "error"){
+                                top.ue.msg("文件过大，无法上传");
+		            		}
+		            		return false;
+		            		
+		            	}else{
+		            		$("#epPic").val(result.data.id);//response返回的是mogoDB记录id
+		                	$('#showPic').attr("src",result.data.picUrl.replace("&amp;","&"));
+		                	$("#bucket_key").val(result.data.id);
+		                	$("#imageInfo").val($.toJSON(result.data.imageInfo));
+		            	}
+		                $.hideLoad();
+		            }
+		        });
+		   }
+	</script>
+  </body>
+</html>

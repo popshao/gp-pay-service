@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+        					http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5" metadata-complete="true" >
+
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>user.root</param-value>
+	</context-param>
+
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+    <filter>
+        <filter-name>MemcachedSessionFilter</filter-name>
+        <filter-class>com.rogrand.user.web.session.MemcachedSessionFilter</filter-class>
+        <init-param>
+            <param-name>sessionId</param-name>
+            <param-value>sid</param-value>
+        </init-param>
+        <init-param>
+            <param-name>cookieDomain</param-name>
+            <param-value></param-value>
+        </init-param>
+        <init-param>
+            <param-name>cookiePath</param-name>
+            <param-value>/</param-value>
+        </init-param>
+    </filter>
+
+	<filter>
+		<filter-name>authenticationFilter</filter-name>
+		<filter-class>com.rogrand.user.web.filter.AuthenticationFilter</filter-class>
+		<init-param>
+			<param-name>excludes</param-name>
+			<!-- 多个url之间的分隔符，可以使用：, ; |  支持正则表达式 -->
+			<param-value>/front/*;/h5/*;/ajax/*;/favicon.ico;/register/*;/register.html;/backPassword/*;/backPassword.html;/login;/login.html;/loginRandom.html;/login/*;/logout.html;/logout;/location/provincialCity;/image/*;/js/*;/css/*;/fonts/*;/pay/notify.html;/pay/confirm/notify.html;/pay/reconfirm/notify.html;/loginMini.html;/noResource.html;/order/orderIsCanPay.html;/quickLoan/index.html;/monitor/heartbeat.htm;/monitor/ping.do;/ip.html;/userInfos/intlLogin;/purchase/sendModtifyMobileCodeCrossAjaxForH5.html;/userInfos/saasLogin;/flow/fetch*;/recharge/check.html;/recharge/checkSubmit;/sales/biz/getSiteByUser.html;/recharge/submit;/recharge/getRechargeCouponInfo;/recharge/getRechargeMoneyList;/recharge/getRechargeAndSectionListByCgaCodes;</param-value>
+		</init-param>
+	</filter>
+	
+
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+    <filter-mapping>
+        <filter-name>MemcachedSessionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+	<filter-mapping>
+		<filter-name>authenticationFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>resposeStatusFilter</filter-name>
+		<filter-class>com.rogrand.user.web.interceptor.ResposeStatusFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>resposeStatusFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	<listener>  
+  	    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
+	</listener>  
+	<context-param>  
+    	<param-name>contextConfigLocation</param-name>  
+   		<param-value>classpath:spring-config/applicationContext.xml</param-value>
+	</context-param>  
+
+	<servlet>
+		<servlet-name>user.mypharma.com</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring-config/urlhandler.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>user.mypharma.com</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- add by shijun.gong	添加logstash日志搜集过滤 -->
+	<filter>
+		<filter-name>mdcFilter</filter-name>
+		<filter-class>com.rograndec.ops.logs.LogstashFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>mdcFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<welcome-file-list>
+		<welcome-file>/index.html</welcome-file>
+	</welcome-file-list>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error.html</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error.html</location>
+	</error-page>
+
+	<error-page>
+		<error-code>503</error-code>
+		<location>/error.html</location>
+	</error-page>
+
+	<error-page>
+		<error-code>405</error-code>
+		<location>/error.html</location>
+	</error-page>
+
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/error.html</location>
+	</error-page>
+
+</web-app>

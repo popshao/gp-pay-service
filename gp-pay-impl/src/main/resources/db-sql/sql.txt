@@ -1,0 +1,139 @@
+create table ground_promotion_income_detail (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表主键',
+  user_id int(11) unsigned NOT NULL default 0 comment '地推人员的id',
+  user_job_type tinyint(1) not null default 0 comment '1：全职 2：兼职',
+  item_name varchar(200) NOT NULL DEFAULT '' COMMENT '开通会员的企业名称，专区商品商品名称，活跃企业名称，下线姓名',
+  type tinyint(1) not null default 0 comment '收益类型： 1 会员推广 2 专区商品 3 菲加云 4 注册拉新',
+  associate_type tinyint(1) not null default 0 comment '0 非下线推广 1 下线推广',
+  create_time datetime NOT NULL DEFAULT now() comment '',
+  update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '',
+  amount decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '提成额度',
+  pay_status tinyint(1) not null default 0 comment '0 待发放（待提现） 1 提现中 2 已发放或提现成功',
+  link_identity varchar(255) NOT NULL DEFAULT '' COMMENT '所关联的内容如goodId，企业号，菲加云标识等，用于辅助追溯来源',
+  PRIMARY KEY (id)
+) COMMENT='地推收入明细表';
+
+alter table ground_promotion_income_detail add column (
+  type_detail tinyint(1) not null default 0 comment '收益类型细分： 1 会员推广(SVIP) 2 专区商品 3 菲加云 4 注册拉新 5 会员推广(VIP)',
+  user_province_id int(11) unsigned NOT NULL default 0 comment '地推人员的所属省份id',
+  remark varchar(512) NOT NULL DEFAULT '' COMMENT '描述',
+  sale_amount decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '推销额度',
+  sale_num int(11) unsigned NOT NULL default 0 comment '推销数量',
+  display_sn varchar(64) NOT NULL default '' comment '订单sn等',
+  oper_user_id int(11) unsigned NOT NULL default 0 comment '工作执行人员id, associate_type 为1 时会与user_id不同，为下线id',
+  oper_user_name varchar(64) NOT NULL default '' comment '工作执行人员名字',
+  pic_url varchar(128) NOT NULL default '' comment '图片url, 专区商品的url, 其他',
+  due_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT 'vip/svip过期时间'
+);
+
+
+create table ground_promotion_bank_info (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表主键',
+  user_id int(11) unsigned NOT NULL default 0 comment '地推人员的id',
+  identity_card_no varchar(64) NOT NULL DEFAULT '' COMMENT '持卡人身份证号',
+  bank_card_no varchar(64) NOT NULL DEFAULT '' COMMENT '银行卡号',
+  bank_name varchar(64) NOT NULL DEFAULT '' COMMENT '开户行',
+  bank_code varchar(16) NOT NULL DEFAULT '' COMMENT '银行编号',
+  branch_name varchar(128) NOT NULL DEFAULT '' COMMENT '支行名称',
+  province_code varchar(16)  NOT NULL DEFAULT '' COMMENT '省编号',
+  city_code varchar(16)  NOT NULL DEFAULT '' COMMENT '市编号',
+  deleted tinyint(1) not null default 0 comment '0 未删除 1已删除',
+  create_time datetime NOT NULL DEFAULT now() comment '',
+  update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '',
+  PRIMARY KEY (id)
+)COMMENT='银行卡信息表';
+
+create table ground_promotion_pay_receipt (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表主键',
+  receipt_sn varchar(64) NOT NULL DEFAULT '' COMMENT '支付单号',
+  user_id int(11) unsigned NOT NULL default 0 comment '地推人员的id',
+  total_amount decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '提现金额',
+  tax_amount decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '税费金额',
+  final_amount decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '税后金额',
+  status tinyint(1) not null default 0 comment '0 待转账 1 转账成功 2 转账申请中 3 （财务）转账已发起，等待结果中 4 转账失败 5 转账驳回',
+  audit_user_name varchar(64) NOT NULL DEFAULT '' COMMENT '驳回或转账操作人',
+  create_time datetime NOT NULL DEFAULT now() comment '',
+  update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '',
+  PRIMARY KEY (id)
+)COMMENT='地推支付单据表';
+
+CREATE TABLE `ground_promotion_pay_receipt_detail` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表主键',
+  `receipt_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '单据表id',
+  `income_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '收入表id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) COMMENT='地推支付单据表明细';
+
+create table ground_promotion_commission_config (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表主键',
+  scope_type tinyint(1) not null default 0 comment '提成设置范围类型： 1 省区 2 个人 3 分组',
+  link_id int(11) NOT NULL default 0 comment '关联的作用对象id 如provinceId, userId, groupId等',
+  link_name varchar(64) NOT NULL default 0 comment '关联的作用对象id 如provinceName, userName, groupName等',
+  good_id int(11) unsigned NOT NULL default 0 comment '商品id',
+  business_type tinyint(1) not null default 0 comment '业务类型： 1 会员推广 2 专区商品 3 菲加云 4 注册拉新',
+  compute_type tinyint(1) NOT NULL DEFAULT '0' COMMENT '计算方式 1 金额百分比 2 固定金额',
+  percent_val decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '提成百分比，compute_type 为1有效，没有除过100，如9.1%，此处记录9.1',
+  fix_val decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '提成固定金融，compute_type 为2有效，固定金额',
+  compute_type_lead tinyint(1) NOT NULL DEFAULT '0' COMMENT '兼职上线提成计算方式 0 没设置选项 1 金额百分比 2 固定金额',
+  percent_val_lead decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '提成百分比，compute_type_lead 为1有效，没有除过100，如9.1%，此处记录9.1',
+  fix_val_lead decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '提成固定金融，compute_type_lead 为2有效，固定金额',
+  deleted tinyint(1) not null default 0 comment '删除状态： 0 未删除 1 已删除',
+  create_time datetime NOT NULL DEFAULT now() comment '',
+  update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '',
+  PRIMARY KEY (id)
+)COMMENT='地推提成设置';
+
+create table ground_promotion_pay_config (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表主键',
+  type tinyint(1) not null default 0 comment '提现全局配置 1 提现起始金额',
+  val decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '提现金额',
+  pay_description varchar(8192) not null default '' comment '提现说明',
+  create_time datetime NOT NULL DEFAULT now() comment '',
+  update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '',
+  PRIMARY KEY (id)
+)COMMENT='地推提现全局配置表';
+
+
+CREATE TABLE `ground_promotion_achievement` (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '表主键',
+  user_id int(11) unsigned NOT NULL default 0 comment '地推人员的id',
+  user_name varchar(32) NOT NULL DEFAULT '' COMMENT '地推人员的姓名',
+  user_province_id int(11) unsigned NOT NULL default 0 comment '地推人员的所属省份id',
+  month_display varchar(32) NOT NULL DEFAULT '' COMMENT '统计成果的月份：201805',
+  amount decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '完成金额',
+  quatity decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '完成数量',
+  order_in_province int(11) unsigned NOT NULL default 0 comment '当月排名',
+  order_change int(11) NOT NULL default 0 comment '相比上月排名变化',
+  type tinyint(1) not null default 0 comment '收益类型： 1 会员推广 2 专区商品 3 菲加云 4 注册拉新',
+  create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  update_time datetime NOT NULL DEFAULT '1970-01-01 00:00:00' COMMENT '',
+  PRIMARY KEY (`id`)
+) COMMENT='地推月度成果统计表';
+
+CREATE TABLE `ground_promotion_pay_log` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `bill_id` varchar(100) DEFAULT NULL COMMENT '单据号',
+  `payment_no` varchar(100) DEFAULT NULL COMMENT '支付交易流水号',
+  `request_data` text COMMENT '请求数据',
+  `response_data` text COMMENT '响应数据',
+  `remark` varchar(50) DEFAULT NULL COMMENT '说明',
+  `request_time` datetime DEFAULT NULL,
+  `response_time` datetime DEFAULT NULL,
+  `status_des` varchar(50) DEFAULT NULL COMMENT '订单状态说明',
+  `status` tinyint(4) DEFAULT '0' COMMENT '0 待确认 1 成功 2 处理中 -1失败',
+  `pay_type` tinyint(4) unsigned DEFAULT '0' COMMENT '1支付2退款3结算4结算查询',
+  `amount` varchar(10) DEFAULT NULL COMMENT '支付金额',
+  PRIMARY KEY (`id`)
+);
+
+insert into `task_schedule_job`(`create_time`,`update_time`,`job_name`,`job_group`,`job_status`,`cron_expression`,`description`,`bean_class`,`is_concurrent`,`spring_id`,`method_name`)
+values ('2018-06-11 17:01:41','2018-06-11 17:01:41','dituiTransferConfirmTask','dituiTransferConfirmTask','1','0 30 7,12,19,23 * * ? *','dituiTransferConfirmTask','',0,'yibaoTransactionModel','dituiPayTriggerConfirm');
+
+insert into `task_schedule_job`(`create_time`,`update_time`,`job_name`,`job_group`,`job_status`,`cron_expression`,`description`,`bean_class`,`is_concurrent`,`spring_id`,`method_name`)
+values ('2018-06-11 17:01:41','2018-06-11 17:01:41','addAchieveOrderTask','addAchieveOrderTask','1','0 0 1 1 * ? *','addAchieveOrderTask','',0,'groundPromotionOrderService','saveGroundPromotionAchievement');
+
+insert into `task_schedule_job`(`create_time`,`update_time`,`job_name`,`job_group`,`job_status`,`cron_expression`,`description`,`bean_class`,`is_concurrent`,`spring_id`,`method_name`)
+values ('2018-06-11 17:01:41','2018-06-11 17:01:41','updateAchieveOrderTask','updateAchieveOrderTask','1','0 0 2 1 * ? *','updateAchieveOrderTask','',0,'groundPromotionOrderService','updateGroundPromotionAchievement');
+
+alter table ground_promotion_income_detail add unique key(display_sn, associate_type,link_identity);

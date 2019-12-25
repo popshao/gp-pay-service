@@ -1,0 +1,630 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>账户充值</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/js/select2/select2.min.css?v=$!{jscss_version}"/>
+
+    <!-- CSS -->
+    <style type="text/css">
+        /*
+        Author:Le.Cheng
+        Development by:Rogrand
+        Development Date:2017-08-21
+        CSS Name:user_dialog.css
+        */
+
+        /*
+        ===================
+        账户余额-弹窗
+        ===================
+        */
+        .user-dialog-ctn {
+            width: 490px;
+        }
+        .user-dialog-ctn .udc-cz-box {
+            padding: 20px 50px;
+        }
+        .user-dialog-ctn .udc-cz-box ul {
+            display: block;
+        }
+        .user-dialog-ctn .udc-cz-box li {
+            float: left;
+            margin: 5px;
+            width: 118px;
+            height: 30px;
+            line-height: 30px;
+            color: #333;
+            text-align: center;
+            background: #ffffff;
+            border: 1px solid #DBDEE4;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+        .user-dialog-ctn .udc-cz-box li:hover {
+            border: 1px solid #0E92CE;
+        }
+        .user-dialog-ctn .udc-cz-box li.on {
+            border: 1px solid #0E92CE;
+        }
+        .user-dialog-ctn .udc-form {
+            padding: 10px 0;
+        }
+        .user-dialog-ctn .udc-form .input {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 0 10px;
+            width: 178px;
+            height: 28px;
+            line-height: 28px;
+            background: #FFFFFF;
+            border: 1px solid #DBDEE4;
+        }
+        .user-dialog-ctn .udc-form .input-error {
+            border: 1px solid #E35B5B;
+        }
+        .user-dialog-ctn .udc-form .desc {
+            font-size: 12px;
+            color: #333333;
+        }
+        .user-dialog-ctn .udc-form .error {
+            color: #E35B5B;
+        }
+        .user-dialog-ctn .udc-text {
+            padding: 0 50px;
+            font-size: 16px;
+            color: #333;
+        }
+        .user-dialog-ctn .udc-text .ps {
+            font-style: normal;
+            font-size: 18px;
+            color: #E35B5B;
+        }
+
+        .user-dialog-ctn .udc-sub{
+            width:100%;
+            height:100px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .user-dialog-ctn .udc-sub .btn {
+            display: inline-block;
+            width: 130px;
+            height: 32px;
+            margin: auto;
+            line-height: 32px;
+            color: #fff;
+            text-align: center;
+            background: #0E92CE;
+            opacity: 1;
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        select{
+            border:none
+            outline:none;
+            appearance:none;
+            -moz-appearance:none;
+            -webkit-appearance:none;
+        }
+        .coupon-reharge{
+
+        }
+        img.icon{
+            position: absolute;
+            right: 7px;
+            top:0;
+        }
+    </style>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.SuperSlide.js"></script>
+    #parse("common/common_script.vm")
+    <script src="/js/select2/select2.min.js"></script>
+</head>
+<body>
+<input type="hidden" id="gid" value="$!goods.gId" />
+<input type="hidden" id="gprice" value="$!goods.price" />
+<!--页面主体 -->
+<div class="c-box">
+
+</div>
+
+<div class="user-dialog-ctn" style="width: 500px;">
+	#*<p style='color:#e35b5b;padding:0 40px;line-height:24px;'>为了确保您的资金安全和利益，余额目前仅能用于下单采购，且充值成功后不支持提现。</p>*#
+    <div class="udc-cz-box">
+        <ul class="cc">
+            <li data-val="20">2000元</li>
+            <li data-val="30">3000元</li>
+            <li data-val="50">5000元</li>
+            <li data-val="100">10000元</li>
+            <li data-val="200">20000元</li>
+            <li data-val="500">50000元</li>
+            <li data-val="1000">100000元</li>
+            <li data-val="2000">200000元</li>
+            <li data-val="5000">500000元</li>
+        </ul>
+        <div class="udc-form" >
+            其他<input class="input" type="text" placeholder=""><span class="desc" data-msg="请输入100的倍数"></span>
+        </div>
+    </div>
+
+    <div class="udc-text">充值金额：<i class="ps">¥0</i>元</div>
+
+    <div class="coupon-reharge cp-hide" style="padding: 0 39px; margin-top:18px; display: none">
+        <div style="border-top: 1px solid #d8d8d8; padding-top: 20px; line-height:17px;">
+            <p class="fl" style="font-size: 14px; color: #333;">目前您在: <b style="font-size:16px; font-weight:700;" id="siteBox"></b></p>
+            <img class="fl" src="/image/icon-pos.png" alt="" style="margin-left:5px; width: 16px; height: 16px;">
+            <span class="fr" style="color: #666666 ">站点错误？<a class="clickIndex" style="color: #0E92CE; font-size:14px;" target="_blank" href="http://$!{wwwHostAndPort}">切换站点></a></span>
+            <div style="clear: both;"></div>
+        </div>
+        <div style="margin-top:15px;">
+            <p ><span style="style="font-size: 14px; color: #333"" class="fl">充值可获得以下优惠券，请选择您想获得的优惠券</span>  </p>
+            <div style="clear: both;"></div>
+        </div>
+        <div style="margin-top:15px;">
+            <select style="width: 100%; outline: none;" name="couponList" id="coupList">
+                <option value="">请选择</option>
+            </select>
+        </div>
+    </div>
+
+#*#if($shanxi_show_site == 1)
+    <div style="padding: 0 39px; margin-top:18px;" class="coupon-sx">
+        <div style="border-top: 1px solid #d8d8d8; padding-top: 20px; line-height:17px;">
+            <p class="fl" style="font-size: 14px; color: #333;">目前您在: <b style="font-size:16px; font-weight:700;">山西站</b></p>
+            <img class="fl" src="/image/icon-pos.png" alt="" style="margin-left:5px; width: 16px; height: 16px;">
+            <div style="clear: both;"></div>
+        </div>
+        <div style="margin-top:15px;">
+            <p ><span style="style="font-size: 14px; color: #333"" class="fl">正在进行充值返券活动，请进入活动页充值获取优惠券</span>  <a class="clickIndex fr" style="color: #0E92CE; font-size:12px;" target="_blank" href="http://act.mypharma.com/activity/s/598.html">获取优惠券>></a></p>
+            <div style="clear: both;"></div>
+        </div>
+##        <div style="margin-top:15px;">
+##            优惠券：<select name="couponList" id="coupList">
+##                <option value="">请选择</option>
+##            </select>
+##        </div>
+    </div>
+#end*#
+
+    #*#if($!siteId == 3) ## siteId 3 湖北
+        <div style="padding: 0 39px; margin-top:18px;" class="coupon-sx">
+            <div style="border-top: 1px solid #d8d8d8; padding-top: 20px; line-height:17px;">
+                <p class="fl" style="font-size: 14px; color: #333;">目前您在: <b style="font-size:16px; font-weight:700;">湖北站</b></p>
+                <img class="fl" src="/image/icon-pos.png" alt="" style="margin-left:5px; width: 16px; height: 16px;">
+                <div style="clear: both;"></div>
+            </div>
+            <div style="margin-top:15px;">
+                <p ><span style="style="font-size: 14px; color: #333"" class="fl">正在进行充值返券活动，请进入活动页充值获取优惠券</span>  <a class="clickIndex fr" style="color: #0E92CE; font-size:12px;" target="_blank" id="site-link-3" href="http://act.mypharma.com/activity/s/599.html" data-test="http://act.test.wdyy.com.cn/activity/s/510.html">获取优惠券>></a></p>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+    #end
+
+    #if($!siteId == 12) ## siteId 12 天津
+        <div style="padding: 0 39px; margin-top:18px;" class="coupon-sx">
+            <div style="border-top: 1px solid #d8d8d8; padding-top: 20px; line-height:17px;">
+                <p class="fl" style="font-size: 14px; color: #333;">目前您在: <b style="font-size:16px; font-weight:700;">天津站</b></p>
+                <img class="fl" src="/image/icon-pos.png" alt="" style="margin-left:5px; width: 16px; height: 16px;">
+                <div style="clear: both;"></div>
+            </div>
+            <div style="margin-top:15px;">
+                <p ><span style="style="font-size: 14px; color: #333"" class="fl">正在进行充值返券活动，请进入活动页充值获取优惠券</span>  <a class="clickIndex fr" style="color: #0E92CE; font-size:12px;" target="_blank" id="site-link-12" href="http://act.mypharma.com/activity/s/610.html" data-test="http://act.test.wdyy.com.cn/activity/s/511.html">获取优惠券>></a></p>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+    #end*#
+
+    <div class="udc-sub">
+        <div class="btn">马上充值</div>
+    </div>
+
+    <div style="color: #666; margin-top:-60px;">
+        <p style="color:#e35b5b;padding:0 40px;line-height:24px; text-align: center;">为了确保您的资金安全和利益，余额目前仅能用于下单采购，且充值成功后不支持提现。</p>
+    </div>
+
+    <div style="color: #666;display: none;" class="cp-hide1">
+        <p>您将获得的优惠券是：</p>
+        <div class="cp-list" style="max-height: 60px; overflow-y: scroll">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/html" id="coupListTpl">
+     {{if data.length > 1 }}<option value="">请选择</option>{{/if}}
+    ## <option value="">请选择</option>
+    {{each data as cp idx}}
+     {{if data.length == 1 &&  cp.disabled }}<option value="">请选择</option>{{/if}}
+    <option value="{{cp.id}}" {{if cp.disabled}}disabled{{/if}}>{{cp.text}}</option>
+    {{/each}}
+</script>
+<script type="text/html" id="coupListTextTpl">
+    {{each data as d}}
+    <p>{{d.vouchersActivity.mvaName}} {{d.vouchersActivity.rull}}</p>
+    {{/each}}
+</script>
+<!-- 脚本 -->
+<script src="/js/jquery.SuperSlide.js"></script>
+<script type="text/javascript" src="/h5/res/js/template.js?v=$!{jscss_version}"></script>
+<script>
+    var gid = #if($!goods.gId) $!goods.gId #else 0 #end;
+    var gprice =  #if($!goods.gPrice) $!goods.gPrice #else 0 #end;
+    var site = null ,mvaCodesTmp = {}, mvaCodes = [],totalData;
+    $(function(){
+        //充值金额-选中效果
+        $(".udc-cz-box li").click(function(){
+            if($(this).hasClass("on")){
+                $(this).removeClass("on");
+            }else{
+                $(this).siblings().removeClass("on");
+                $(this).addClass("on");
+            }
+            calTotalMoneyFun();
+        });
+
+        $(".udc-form .desc").html($(".udc-form .desc").attr("data-msg"));
+        $(".udc-form .input").on('keyup',function(e){
+            if($(this).val() != "" && (isNaN(parseInt($(this).val())) || parseInt($(this).val()) <= 0 || parseInt($(this).val())%gprice > 0 || parseInt($(this).val()) != parseFloat($(this).val()))){
+                $(this).addClass("input-error");
+                $(this).parent().find(".desc").addClass("error");
+            }else{
+                $(this).removeClass("input-error");
+                $(this).parent().find(".desc").removeClass("error");
+                calTotalMoneyFun();
+            }
+        });
+
+       #* #if($!siteId == 3 || $!siteId == 12 )
+            if(location.href.indexOf(".test.wdyy.") > -1){
+                $("#site-link-$!siteId").attr("href",$("#site-link-$!siteId").data("test"));
+            }
+        #end *#
+
+        $(".udc-sub .btn").unbind("click").on("click",function(){
+            #*#if($!siteId == 3 || $!siteId == 12 ) ## 3 湖北  12 天津
+                top.utils.open($("#site-link-$!siteId").attr("href"),"_blank");
+                return false;
+            #end*#
+
+            ## #if($shanxi_show_site == 1)
+            ##    top.utils.open("http://act.mypharma.com/activity/s/598.html","_blank");
+            ## #else
+            calTotalMoneyFun(true);
+            //判断金额是否符合要求
+            if($(".udc-form .input-error").val() != undefined){
+                return;
+            }
+            if(!getTotalCountFun()){
+                top.ue.msg("充值金额不能为0");
+                return false;
+            }
+
+            if(totalData && totalData.length && mvaCodesTmp  && mvaCodes.length == 0 ){
+                var _has = false;
+                $.each(mvaCodesTmp,function (i,e) {
+                    if(e.able){
+                        _has = true;
+                    }
+                });
+                if(_has){
+                    top.ue.msg("请选您需要的优惠券");
+                    return false;
+                }
+            }
+
+            /*if(totalData && totalData.length > 1 && mvaCodesTmp && mvaCodes.length == 0){//有可用优惠券的情况下，必须选择优惠券
+                var _has = true , hasPar = false,_a = true;
+                $.each(mvaCodesTmp,function (i,e) {
+                    hasPar = true;
+                    var _bs = true;
+                    $.each(e,function (j,k) {
+                        if(!k.vouchersActivity.remainNum){
+                            _bs = false;
+                        }
+                    })
+                    if(_bs){
+                        _has = false;
+                    }
+                });
+
+                if(!_has && hasPar){
+                    top.ue.msg("请选您需要的优惠券");
+                    return false;
+                }
+            }
+            if(totalData && totalData.length == 1 && mvaCodes.length == 0){
+                var _d = totalData[0].couponRechargeVouchers;
+                var _has1 = true;
+                $.each(_d,function (j,k) {
+                    if(!k.vouchersActivity.remainNum){
+                        _has1 = false;
+                    }
+                })
+                if(_has1){
+                    top.ue.msg("请选您需要的优惠券");
+                    return false;
+                }
+            }*/
+
+
+        ##提交下单请求
+            $.ajax({
+                type : 'post',
+                url : '/recharge/submit',
+                cache:false,
+                data : {
+                    count : getTotalCountFun(),
+                    siteId:site.siteId,
+                    crsId:$("#coupList").val(),
+                    mvaCodes:mvaCodes.join(","),
+                    platform:1
+                },
+                dataType : 'json',
+                async : false,
+                success : function(data) {
+                    if(data.code == 0){
+                    ##进入支付页面
+                        /*var payForm = document.createElement("form");
+                        $(payForm).attr("method","POST");
+                        $(payForm).attr("target","_blank");
+                        $(payForm).attr("action","http://$!{wwwHostAndPort}/walletOrder.html");
+                        $(payForm).html("<input type='hidden' name='sn' value='"+data.data+"'>");
+                        $("body").append(payForm);
+                        payForm.submit();*/
+
+                        top.utils.open('http://$!{wwwHostAndPort}/walletOrder.html?sn='+data.data,'_blank');
+                        top.ue.close(top.layer.getFrameIndex(window.name));
+                    }else{
+                        top.ue.msg(data.message?data.message:"服务器错误，充值失败");
+                    }
+                },
+                error:function () {
+                    top.ue.msg("服务器错误，充值失败");
+                }
+            });
+
+           ## #end
+
+
+        });
+
+        setTimeout(function () {
+            getSite();
+            $("#coupList").select2({
+                tags: "true",
+                allowClear: false,
+                minimumResultsForSearch: -1,
+                language: "zh-CN",
+            }).on("select2:open",function () {
+                var count = getTotalCountFun();
+                if(!count){
+                    top.ue.msg("请您选择充值金额");
+                    $('#coupList').select2('close');
+                    return false;
+                }
+            }).on("select2:select",function () {
+                mvaCodes = [];
+                var v = $(this).val();
+                if(v){
+                    $(".cp-list").html(template('coupListTextTpl',{data:mvaCodesTmp[v].cps})).closest('.cp-hide1').show();
+                    $.each(mvaCodesTmp[v].cps,function (i,e) {
+                        mvaCodes.push(e.vouchersActivity.mvaCode)
+                    })
+                }else{
+                    $(".cp-list").html("").closest('.cp-hide1').hide();
+                }
+
+            });
+        },50);
+
+
+
+    });
+
+    function getSite() {
+        top.ue.load();
+        $.ajax({
+            url:'/sales/biz/getSiteByUser.html',
+            data:{userId:$!user.uid, platform:1},
+            complete:function () {
+                top.ue.closeLoad();
+            },
+            success:function (res) {
+                if(res && res.data){
+                    site = res.data;
+                    $("#siteBox").text(site.siteName+"站");
+                    getCouponValid();
+                }else{
+                    top.ue.msg("服务器错误，获取数据失败");
+                }
+            },error:function () {
+                top.ue.msg("服务器错误，获取数据失败");
+            }
+        })
+
+    }
+
+    function getCouponValid() {
+        var _vs = [];
+        $(".udc-cz-box li").each(function () {
+            _vs.push($(this).data("val"));
+        })
+        top.ue.load();
+        $.ajax({
+            url : '/recharge/getRechargeMoneyList',
+            dataType:"jsonp",
+            data : {
+                counts : _vs.join(","),
+                siteId:site.siteId,
+                userId:$!user.uid,
+                platform:1
+            },
+            complete:function () {
+                top.ue.closeLoad();
+            },
+            success : function(data) {
+                if(data.code == 0){
+                    $.each(data.data,function (i,e) {
+                        if(e.hasCoupon){
+                            $("[data-val="+e.count+"]").append("<img width='28' src='/image/icon-fq-pc.png' class='icon' >");
+                        }
+                    })
+                }else{
+                    top.ue.msg(data.message?data.message:"服务器错误");
+                }
+            },
+            error:function () {
+                top.ue.msg("服务器错误");
+            }
+        });
+    }
+
+    function getCpList() {
+        if(!site || !site.siteId){
+            top.ue.msg("服务器错误，获取数据失败");
+            return false;
+        }
+        top.ue.load();
+        mvaCodesTmp = {},mvaCodes = [];
+        $.ajax({
+            url:"/recharge/getRechargeCouponInfo",
+            data:{
+                count:getTotalCountFun(),
+                siteId:site.siteId,
+                userId:$!user.uid,
+                platform:1
+            },
+            complete:function () {
+                top.ue.closeLoad();
+            },
+            success:function (data,params) {
+                if(data && data.code == 0 && data.data && data.data.length){
+                    showSiteCp(1);
+                    var _data =[];
+                    totalData = data.data;
+                    $.each(data.data,function (i,e) {
+                        var _opt ={
+                            id:e.crsId,
+                            text:e.crsName,
+                            disabled:false
+                        }
+                        $(".cp-list").html("");
+                        var cp = e.couponRechargeVouchers || [];
+                        mvaCodesTmp[_opt.id+""] = {
+                            able:true,
+                            cps:cp
+                        };
+                        if(e.isReceiveOver != 0){
+                            _opt.disabled = true;
+                            _opt.text += "（"+e.receiveOverDesc+"）";
+                            mvaCodesTmp[_opt.id+""].able = false;
+                        }
+                        $.each(cp,function (j,n) {
+                            /*if(!n.vouchersActivity.remainNum){
+                                _opt.disabled = true;
+                                if(_opt.text.indexOf('已领光') < 0) _opt.text += "（已领光）";
+                            }*/
+                            if(data.data.length == 1 && !_opt.disabled){
+                                mvaCodes.push(n.vouchersActivity.mvaCode)
+                            }
+                        })
+                        if(data.data.length == 1 && !_opt.disabled){ $(".cp-list").html(template('coupListTextTpl',{data:mvaCodesTmp[_opt.id+""].cps})).closest('.cp-hide1').show();}
+                        _data.push(_opt);
+                    })
+                    $("#coupList").html(template('coupListTpl',{data:_data})).select2();
+                }else{
+                    showSiteCp(0);
+                    $("#coupList").html(template('coupListTpl',{data:[]})).select2();
+                }
+                //if(data.message) top.ue.msg(data.message);
+            },
+            error:function () {
+                showSiteCp(0);
+                $("#coupList").html(template('coupListTpl',{data:[]})).select2();
+            }
+        })
+    }
+
+    function showSiteCp(flag) {
+        var _h = "450px";
+        if(flag){
+            $(".cp-hide").show();
+            _h = "650px";
+        }else{
+            $(".cp-hide,.cp-hide1").hide();
+            $(".cp-list").html("");
+        }
+        var _t = ( $(top.window).height() - parseInt(_h) )/2 + "px";
+        top.layer.style(top.app.SiteIdx, {height:_h,top:_t});
+        $("#layui-layer"+top.app.SiteIdx+" .layui-layer-content",top.document).css("max-height",($(top.window).height() - 120)+"px");
+    }
+
+    function checkOtherExist(){
+        return !isNaN(parseInt($(".udc-form input").val())) && parseInt($(".udc-form input").val()) >= 0;
+    }
+
+    ## 获取其他金额对应的商品数量（根据第一个商品的金额进行计算。总商品数量=otherMoney／第一个商品单价）
+    function getOtherGidNumberFun(){
+        if(checkOtherExist()){
+            return (parseInt($(".udc-form input").val())/gprice);
+        }
+        return 0;
+    }
+
+    ## 计算总金额
+    function calTotalMoneyFun(flag){
+        var totalMoney = 0;
+        $(".udc-cz-box li.on").each(function(i){
+            totalMoney += parseInt($(this).attr("data-val")) * gprice;
+        });
+
+        if(checkOtherExist()){
+            totalMoney += parseInt($(".udc-form input").val());
+        }
+        $(".udc-text .ps").html("¥"+totalMoney);
+        if(!flag) getCpList();
+        return totalMoney;
+    }
+
+    ##获取总商品数，选中的数量+其他金额换算出来的数量
+    function getTotalCountFun(){
+        var totalCount = 0;
+        $(".udc-cz-box li.on").each(function(i){
+            totalCount += parseInt($(this).attr("data-val"));
+        });
+
+        if(checkOtherExist()){
+            totalCount += getOtherGidNumberFun();
+        }
+        return totalCount;
+    }
+
+</script>
+
+</body>
+</html>

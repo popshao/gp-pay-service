@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>我的医药网 - 添加订单关联单品政策</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/promotion.css?v=$!{jscss_version}">
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; <a class="color" href="/sales/price/preferentialPolicy_main.html">订单关联单品政策</a></p>
+                </div>
+                	
+                    <h3 class="entire_single_title">
+                        <span class="title">第一步  添加政策信息</span>
+                    </h3>
+                    
+                    <table class="promotion_table" border="0" cellpadding="0" cellspacing="0">
+                    <input type="hidden" name="ppId" id="ppId"/>
+                      <tr>
+                        <td class="tar" width="79">生效日期：</td>
+                        <td class="td_type" width="180">
+                        <input type="text" name="ppStartTime" id="ppStartTime" class="input"  readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'%y-%M-%d'})"/>
+                        </td>
+                        <td class="tar" width="75">失效日期：</td>
+                        <td class="td_type" width="auto">
+                        <input type="text" name="ppEndTime" id="ppEndTime" class="input"  readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'%y-%M-%d'})"/>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                    <div class="promotions_ctn cc" id="promotion_rule_group">
+	                    <div class="promotions_ctn cc" name="promotion_rule">
+	                    	<span class="span">订单总额满</span>
+	                        <input class="input" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="ppTNum" maxlength="9"/>
+	                        <span class="span">元参与商品单价优惠</span>
+	                        <input class="input" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="ppYNum" maxlength="9"/>
+	                        <span class="span">%</span>
+	                    </div>
+	                    <div class="promotions_ctn cc promotions_ctn_add" style="display: none" id="promotion_rule_template">
+	                        <span class="span">满</span>
+	                        <input class="input" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="ppTNum" maxlength="9"/>
+	                        <span class="span">元参与品种单价优惠</span>
+	                        <input class="input" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="ppYNum" maxlength="9"/>
+	                        <span class="span">%</span>
+	                        <a href="javascript:;" class="btn_del">删除</a>
+	                    </div>
+                    </div>
+                    <div class="promotions_ctn cc">
+                        	<a href="javascript:;" style="margin-top: 5px;" onclick="policyObj.addPolicy();" class="btn">添加阶梯政策</a>
+                    </div>
+                    <h3 class="entire_single_title">
+                        <span class="title">第二步  添加商品</span>
+                    </h3>
+                    
+                    <div class="order_detail">
+                        <div class="table">
+                        <input type="hidden" id="selectedGoodsId" name="selectedGoodsId"/>
+                            <table cellpadding="0" cellspacing="0">
+                                <thead class="head">
+                                    <tr class="line">
+                                      <th>商品名称</th>
+                                        <th>商品规格</th>
+                                        <th>生产厂家</th>
+                                        <th>基价</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="goodsList">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="btn">
+                           <a href="javascript:policyObj.addGoods();" class="btn_text">+添加商品</a>
+                        </div>
+                      </div>
+                      
+                      <h3 class="entire_single_title cc">
+                        <span class="title fl">第三步  选择客户</span>
+                        <span class="text fl">*若不指定客户，系统默认全部有采购权限客户可参与该活动。</span>
+                      </h3>
+                      
+                      <div class="order_detail">
+                          <div class="toogle-wrap entire_single_toogle mt10" id="promotion_member">
+                            <div class="mt">
+                              <ul class="tab-mt">
+                                    <li class="coupon-tab-item curr">按单个客户设定</li>
+                                    <li class="coupon-tab-item">按分组进行设定</li>
+                              </ul>
+                            </div>
+                            <div class="tab-box">
+                            <input type="hidden" id="selectedEnterpriseId" name="selectedEnterpriseId"/>
+                                <div class="tab-con" style="display: block;">
+                                    <ul id="customerList">
+                                        <li><a href="javascript:void(0);" class="add_pro" id="sel-a" onclick="addCusteomer();">+ 添加客户</a></li>
+                                  </ul>
+                                </div>
+                                
+                                <div class="tab-con" style="display: none;">
+                                    <div class="type-box cc" id="sct_ids">
+                                        <dl>
+                                            <dt class="type-t">业务分组</dt>
+                                            #if($!listType && $!listType.size()>0)
+	                                            #foreach($type in $!listType)
+		                                            <dd>
+					                              	<div class="customer-item" id="sct_$!{type.shopCustomerType.sctId}">
+					                              	<b></b>$!{type.shopCustomerType.sctName}(<span id="count_1_$!{type.shopCustomerType.sctId}">$!{type.bizCount}</span>)
+					                              	</div>
+					                              </dd>
+                                            	#end
+                                            #end
+                                        </dl>
+                                    </div>
+                                    <div class="type-box cc" id="regionIds">
+                                        <dl>
+                                            <dt class="type-t">区域分组</dt>
+                                            #if($!listRegion && $!listRegion.size()>0)
+	                                            #foreach($region in $!listRegion)
+					                            	<dd><div class="customer-item" id="reg_$!{region.supplierRegion.regionId}">
+					                            		<b></b>$!{region.supplierRegion.regionName}(<span id="count_2_$!{region.supplierRegion.regionId}">$!{region.bizCount}</span>)
+					                            	</div></dd>
+				                                #end
+			                                #end
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                      
+                      <div class="order_detail">
+                          <div class="btn tac">
+                            <a href="javascript:policyObj.savePolicyInfo();" class="btn_text">保存</a>
+                          </div>
+                      </div>
+                      
+              </div>
+          </div>
+
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("common/footer.vm")
+    <!-- 商品添加页面 -->
+    <div class="mask" id="popUpMaskQ"></div>
+    	<div class="dialog w460" id="popUpDIVQ" style="width:1200px;height:540px;">
+	      <div class="head"><span class="dialog-title">选择商品</span><a href="javascript:closePopUpDIV('popUpMaskQ','popUpDIVQ');" class="btn-close"></a></div>  
+	      <div class="con" id="content"></div>
+    </div>
+    
+	<!-- 企业添加页面 -->
+    <div class="mask" id="popUpMaskCustomer"></div>
+    <div class="dialog w460" id="popUpDIVCustomer" style="width:1000px;height:470px;">
+      <div class="head"><span class="dialog-title">选择客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');" class="btn-close"></a></div>  
+      <div class="con" id="contentEnterprise"></div>
+    </div>
+    
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/price/preferentialPolicy.js?v=$!{jscss_version}&t=1" type="text/javascript"></script>
+	<script src="/js/price/chooseGoodsHelper_add.js?v=$!{jscss_version}&t=1" type="text/javascript"></script>
+	<script src="/js/promotion/choose_enterprise.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+ 	<script type="text/javascript">
+
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+            handler:function (btn) {
+                location.href = document.referrer;
+            }
+        })
+
+      $(function(){
+    	  $('.tab-mt >li').click(function(){
+              var index = $(this).index();
+              $(this).addClass('curr').siblings().removeClass('curr');
+              $('.tab-box >div').hide().eq(index).show();
+              if(top && top.resizeFrame) top.resizeFrame();
+          })    
+          
+          $('.customer-item').hover(function(){
+   	        $(this).addClass('customer-item-hover');
+   	        },function(){
+   	            $(this).removeClass('customer-item-hover');
+           }); 
+          
+          $(".type-box dd").click(function(){
+              if($(this).find("div").hasClass("item-selected")){
+           	   $(this).find("div").removeClass("item-selected");
+              }else{
+           	   $(this).find("div").addClass("item-selected");
+              }
+          });
+      })
+      var wwwUrl = '$!{wwwHostAndPort}';
+      var userUrl = '$!{userHostAndPort}';
+     </script> 
+    
+  </body>
+</html>

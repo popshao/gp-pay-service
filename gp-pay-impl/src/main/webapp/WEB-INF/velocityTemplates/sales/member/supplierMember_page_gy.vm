@@ -1,0 +1,851 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>客户信息管理-我的医药网</title>
+
+<!-- mypharma_公共资源 -->
+<meta name="keywords" content=""/>
+<meta name="description" content=""/>
+<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+
+<!-- mypharma_样式 -->
+<link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}"/>
+<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+<link href="/js/select2/select2.min.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="/css/member-new.css?v=$!{jscss_version}"/>
+   
+<!--PNG格式图片兼容IE6解决方案 -->
+<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="container">
+		#parse("common/header_top.vm") #parse("common/header.vm")
+		<div class="content">
+			<div class="wrap cc">
+				#parse("common/left_menu_sales.vm")
+				<div class="user_right fl">
+					<!-- 用户中心_主体内容_S -->
+				 <div class="indmain member-new">
+
+                    <div class="mn-nav">
+                        <p class="fl">
+                            <a href="/sales/index.html" class="spc-blue">销售中心</a> &gt; <a href="javascript:void(0)">客户管理</a> &gt; <a
+                                href="javascript:void(0)">客户信息管理</a>
+                        </p>
+
+                        <div class="clear-fix"></div>
+                    </div>
+
+                    <div class="mn-form" style="padding:10px 0 20px 0;">
+                    <form action="member_info.html" method="post" id="searchForm">
+                       <input type="hidden" name="pi" value="$!pi">
+                       <input type="hidden" name="smStatus" value="$!smStatus">
+                       <input type="hidden" name="smIds" id="smIds" value="">
+                        <div class="mn-fline" style="margin-bottom: 0">
+                            <div class="mn-fcell mn-flong">
+                                <label for="">搜索关键字：</label>
+                                <input style="width: 80%!important;" type="text" class="mn-ftext mn-search" name="searckKey" value="$!searchKey"
+                                       placeholder="企业名称/企业注册号/企业编码/企业内码/企业联系人邮箱/企业联系人手机号/客户账号"/>
+                            </div>
+                            <div class="clear-fix"></div>
+                        </div>
+                        <div class="mn-fline" style="margin-bottom: 0">
+                            <div class="mn-fcell">
+                                <label for="">企业类型：</label>
+                                <select type="text" class="mn-ftext mn-select" name="eType" placeholder="请选择企业类型">
+                                			<option value="">全部</option>
+                                			<option value="1" #if($!eType == 1) selected="selected" #end>单体药房</option>
+                      						<option value="2" #if($!eType == 2) selected="selected" #end>连锁药店总店</option>
+                            				<option value="3" #if($!eType == 3) selected="selected" #end>连锁药店分店（直营店）</option>
+                            				<option value="4" #if($!eType == 4) selected="selected" #end>连锁加盟店</option>
+                            				<option value="5" #if($!eType == 5) selected="selected" #end>商业公司</option>
+                            				<option value="6" #if($!eType == 6) selected="selected" #end>医院</option>
+                            				<option value="7" #if($!eType == 7) selected="selected" #end>诊所</option>
+                                </select>
+                            </div>
+                            <div class="mn-fcell" style="margin-bottom: 0">
+                                <label for="">登录情况：</label>
+                                <select type="text" class="mn-ftext mn-select" placeholder="请选择登录情况" name="isLogin">
+                                <option value="">全部</option>
+                                            <option value="1" #if($!isLogin == 1) selected="selected" #end>已登录</option>
+                      						<option value="2" #if($!isLogin == 2) selected="selected" #end>未登录</option>
+                                </select>
+                            </div>
+                                                 <div class="mn-fcell">
+                                <label for="">资质状态：</label>
+                                <select type="text" class="mn-ftext mn-select" placeholder="请选择资质状态" name="picStatus">
+	                             	#if($!picStatus == 1)
+										<option value="">全部</option>
+										<option value="2">待完善</option>
+										<option value="1" selected="selected">已完善</option>
+									#elseif($!picStatus == 2)
+										<option value="" selected="selected">全部</option>
+										<option value="2" selected="selected">待完善</option>
+										<option value="1">已完善</option>
+									#else
+										<option value="" selected="selected">全部</option>
+										<option value="2">待完善</option>
+										<option value="1">已完善</option>
+									#end
+                                </select>
+                            <div class="clear-fix"></div>
+                        </div>
+                        <div class="mn-fline">
+       
+                            </div>
+                            <div class="mn-fcell">
+                                <label for="">客户下单情况：</label>
+                                <select type="text" class="mn-ftext mn-select" placeholder="请选择下单情况" name="isOrder">
+                                <option value="">全部</option>
+                                            <option value="1" #if($!isOrder == 1) selected="selected" #end>已下单</option>
+                      						<option value="2" #if($!isOrder == 2) selected="selected" #end>未下单</option>
+                                </select>
+                            </div>
+                            <div class="clear-fix"></div>
+                        </div>
+                        <div class="mn-fcell mn-btns" style="margin-top: 0">
+                            <a href="javascript:checkSmInternalCodeValue('/sales/member/member_info.html',false);" class="mn-btn btn-filled mn-mw40">查询</a>
+                            <a href="javascript:checkSmInternalCodeValue('/sales/member/member_info.html?smStatus=$!smStatus',true);" class="mn-btn btn-block"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+                        </div>
+                    </div>
+                    </form>
+                    <div class="mn-tbox">
+                        <div class="mn-tab" style="border-bottom: 2px solid #0f93ce;">
+                            <ul class="fl">
+                                <li id="cooperationYes"><a href="member_info.html?smStatus=1$!selectStr">合作中（$!cooperationYesNum家）</a></li>
+                                <li id="cooperationNo"><a href="member_info.html?smStatus=0$!selectStr">停止合作（$!cooperationNoNum家）</a></li>
+                            </ul>
+                            <div class="mn-btns fr" style="margin: 8px 16px 0 0;">
+                                <a href="/sales/member/supplierMember_add.html" class="mn-btn">+ 新增客户</a>
+                                <a href="javascript:void(0);" class="mn-btn" onclick="BatchModifyPay();">批量修改支付方式</a>
+                                <a id="uploadExcel" href="javascript:void(0);" class="mn-btn">批量导入</a>
+                                <a href="javascript:batchExport();" class="mn-btn">批量导出</a>
+                                <a href="javascript:download();" class="mn-btn" style="border: 0 none; margin-left:0;">下载导入模板</a>
+                            </div>
+							<div class="clear-fix"></div>
+                        </div>
+
+                        <div class="mn-tips" style="margin-bottom: 10px">
+                            <p class="fl"><span class="spc-pink">$!userNum</span>个采购客户，<span class="spc-pink">$!loginUserNum</span>个客户未登录，<span
+                                    class="spc-pink">$!orderNum</span>个客户下订单，<span class="spc-pink">$!orderNumOnline</span>个客户使用在线支付下单</p>
+                            #if($!flag == 1)
+								<p class="fr" style="margin-right: 20px;color: #333;">根据您的筛选条件，系统为您查询到<span class="spc-pink"> $!{pagerInfo.rowsCount} </span>条结果</p>
+							#end
+                        </div>
+
+                        <div class="mn-tctx">
+
+                            <div class="table-block show" style="margin-top: 0">
+                                <table cellpadding="0" width="100%">
+                                    <tr>
+                                        <th width="40"><input type="checkbox" name="" onclick="checkAll(this)"></th>
+                                        <th width="120">企业名称</br>
+                                            	联系人信息
+                                        </th>
+                                        <th>客户账号</th>
+                                        <th>企业类型</th>
+                                        <th width="50"><p>编码 </p><p>内码</p></th>
+                                        <th>支付方式</th>
+                                      	<th><p>历史下单记录 </p>
+                                            <p> 最后下单时间</p>
+                                        </th>
+                                        <th>最后登录时间</th>
+                                        <th>资质情况</th>
+                                        <th>操作</th>
+                                    </tr>
+                                     #if(!$null.isNull($supplierMemberList) && $supplierMemberList.size()!=0) 
+                                     #foreach($supplierMember in $supplierMemberList)
+                                    <tr>
+                                        <td><input name="mxx" type="checkbox" class="check" value="$!{supplierMember.smId}" data-check-eid="$!supplierMember.eId" data-check-suId="$!supplierMember.suId"></td>
+                                        <td>
+                                            <p>$!supplierMember.eName</p>
+                                            <p>$!supplierMember.eContactor</p>
+                                            <p>$!supplierMember.eMobile</p>
+                                            <p><span class="spc-pink">
+                                            #if($!supplierMember.smIsErp==1)
+	                                             #if($!supplierMember.acStatus == 1)
+	                                            	（已激活）
+	                                             #end
+	                                             #if($!supplierMember.acStatus == 2)
+	                                            	（已邀请未激活）
+	                                             #end
+                                        		 #if($!supplierMember.acStatus == 0&&!$!supplierMember.lastLoginTime&&$!supplierMember.acStatus != 1&&$!supplierMember.smStatus==1&&$!supplierMember.smIsErp==1&&$!supplierMember.verifyEmail!=1&&$!supplierMember.verifyPhone!=1)
+	                                             	未激活
+	                                             #end
+                                             #end
+                                            </span></p>
+                                        </td>
+                                        <td><p>$!supplierMember.mName</p></td>
+                                        <td><p>
+                                        #if($!supplierMember.eType == 1)
+                                       		 单体药房
+                                        #end
+                                        #if($!supplierMember.eType == 2)
+                                        	连锁药店总店
+                                        #end
+                                        #if($!supplierMember.eType == 3)
+                                        	连锁药店分店（直营店）
+                                        #end
+                                        #if($!supplierMember.eType == 4)
+                                        		连锁加盟店
+                                        #end
+                                        #if($!supplierMember.eType == 5)
+                                        	商业公司
+                                        #end
+                                        #if($!supplierMember.eType == 6)
+                                        		医院
+                                        #end
+                                        #if($!supplierMember.eType == 7)
+                                        		  诊所
+                                        #end
+                                        </p></td>
+                                        <td>
+                                            <p>$!supplierMember.smCode</p>
+                                            <p>$!supplierMember.smInternalCode</p>
+                                        </td>
+                                        <td>
+                                            <script>
+                                            if($!supplierMember.payMethod.indexOf("1")>-1){
+                                            	document.write("<p>在线支付</p>");
+                                            }
+                                            if($!supplierMember.payMethod.indexOf("2")>-1){
+                                            	#if($!supplierMember.smAccountPeriod)
+                                            	document.write("<p>账期付款<span class='spc-pink'>$!supplierMember.smAccountPeriod天  ¥$!utils.priceFormart($!supplierMember.smCreditLimit)</span> </p>");
+                                            	#else
+                                           		document.write("<p>账期付款</p>");
+                                           		#end
+                                            }
+                                            if($!supplierMember.payMethod.indexOf("3")>-1){
+                                            	document.write("<p>线下支付</p>");
+                                            }
+                                             if($!supplierMember.payMethod.indexOf("4")>-1){
+                                            	document.write("<p>药白条</p>");
+                                            }
+                                             if($!supplierMember.payMethod.indexOf("5")>-1){
+                                            	document.write("<p>帮你付</p>");
+                                            }
+                                             if($!supplierMember.payMethod.indexOf("6")>-1){
+                                            	document.write("<p>闪贷</p>");
+                                            }
+                                            if($!supplierMember.payMethod==0){
+                                               	document.write("<p>线下支付</p>");
+                                            }
+                                            </script>
+                                        </td>
+                                        <td>
+                                      	#if($!supplierMember.orderNum<=0)
+                                        		未下单
+                                        #else
+                                        	$!supplierMember.orderNum次<br>
+                                        	$utils.formatDate($!supplierMember.lastOrderTime,"yyyy-MM-dd HH:mm")
+                                        #end
+                                        </td>
+                                        <td><p>
+                                        #if(!$!supplierMember.lastLoginTime)
+                                        		未登录
+                                        #else
+                                        	$utils.formatDate($!supplierMember.lastLoginTime,"yyyy-MM-dd")
+                                        #end</p></td>
+                                        <td><p> 
+                                        #if($!supplierMember.picStatus == 1)
+                                        		已完善
+                                        #else
+                                        		待完善
+                                        #end</p></td>
+                                        <td class="mn-btns">
+                                            #if(!$!supplierMember.lastLoginTime&&$!supplierMember.acStatus != 1&&$!supplierMember.smStatus==1)
+                                        	<p><a  data-mobile="$!supplierMember.eMobile" data-eid="$!supplierMember.eId"  data-ename="$!supplierMember.eName" data-suId="$!supplierMember.suId" data-smId="$!supplierMember.smId" data-mId="$!supplierMember.mId" data-smCode="$!supplierMember.smCode" data-smInternalCode="$!supplierMember.smInternalCode" href="javascript:void(0)" class="mn-btns spc-blue btn-invation">邀请注册</a></p>
+                                            #end
+                                            <p><a href="/sales/member/supplierMember_edit.html?smId=$!{supplierMember.smId}&jm=$!utils.getJM($!utils.getCS($!request))" class="mn-btns spc-blue">修改</a></p>
+	                                      	 #if($!supplierMember.picStatus == 1)
+	                                        	<p><a href="javascript:void(0);" onclick="downLoadPic($!{supplierMember.smId})" class="mn-btns spc-blue">下载资质</a></p>
+	
+	                                        #else
+	                                        	<p style="color: grey; margin-right: 16px;">下载资质</p>
+                                            	<p> <a onclick="gotoDownZz('/sales/member/supplierMember_edit.html?smId=$!{supplierMember.smId}&jm=$!utils.getJM($!utils.getCS($!request))','#reqInfoBtn');" href="javascript:void(0);" class="mn-btns spc-blue">上传资质</a></p>
+	                                        #end
+                                        </td>
+                                    </tr>
+                                    #end
+                                    #end
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                             <!--分页开始 -->
+					#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+					#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/member/supplierMember_page.html")
+					#end #end
+					<!--分页结束 -->
+					<!-- 用户中心_主体内容_E -->
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("/common/footer.vm")
+	##弹窗组件TPL
+	##已经发过邀请
+	<script type="text/html" id="hasSendU">
+    <div class="mn-at-box">
+        <p>今日您已向 <span>{{d.lastSendMobile}}</span> 发送过 <span>2</span> 次邀请，同一天内最多发送 <span>2</span>次邀请；</p>
+        <p>企业名称：<span>{{d.eName}}</span></p>
+        <p>被邀请客户需要一定的时间完成激活注册，请您耐心待。</p>
+    </div>
+	</script>
+	
+	##已经发过邀请
+	<script type="text/html" id="hasSendM">
+    <div class="mn-at-box">
+        <p>今日您已向 <span>{{d.eName}}</span> 发送过 <span>2</span> 次邀请，同一天内最多发送 <span>2</span>次邀请；</p>
+        <p>邀请手机号码：<span>{{d.lastSendMobile}}</span></p>
+        <p>被邀请客户需要一定的时间完成激活注册，请您耐心待。</p>
+    </div>
+	</script>
+	
+	##邀请注册
+	<script type="text/html" id="inviteSend">
+    <div class="mn-at-box mn-inp-box">
+        <p>请输入并确认邀请注册企业的手机号码</p>
+        <p><input type="text" placeholder="请输入手机号" id="invPhone" value="{{d.eMobile}}"></p>
+		{{# if (d.sendNum4eid >0) { }}
+		<p style='font-size: 12px' class='tips'  >您已向该企业发送 <span>{{d.sendNum4eid}}</span>次邀请，上次邀请手机号码：<span>{{d.lastSendMobile}}</span>。</p>
+    	{{# } }}
+	</div>
+	</script>
+
+	<script type="text/html" id="payDlg">
+            <!--批量修改支付方式弹窗 -->
+            <div class="user-dialog-ctn" style="width: 700px;">
+                <div class="c-box">
+                    <div class="udc-title">您一共选中 <i class="t-blue" id="entCount">83</i> 家企业进行修改</div>
+                    <div class="user-form udc-form-box mt10">
+                        <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                            <tr class="t-even">
+                                <td width="40" valign="top">
+                                    <div class="user-custom-form fl ml10">
+                                        <fieldset class="checkboxes">
+                                            <label for="checkbox-01" class="label_check">
+                                                <input type="checkbox" value="3" id="checkbox-01" name="pay" />
+                                            </label>
+                                        </fieldset>
+                                    </div>
+                                </td>
+                                <td>
+                                    线下付款
+                                    <p class="t-gray">在MPH下订单，不通过平台支付货款，双方线下结算。</p>
+                                </td>
+                            </tr>
+                        #if($!status == 10)
+                            <tr>
+                                <td valign="top">
+                                    <div class="user-custom-form fl ml10">
+                                        <fieldset class="checkboxes">
+                                            <label for="checkbox-02" class="label_check">
+                                                <input type="checkbox" value="1" id="checkbox-02" name="pay" />
+                                            </label>
+                                        </fieldset>
+                                    </div>
+                                </td>
+                                <td>
+                                    在线支付
+                                    <p class="t-gray">买家先付款卖家再发货，货款由第三方银行管理，买家确认收货后，结算货款给卖家，确保买卖双方的交易安全。</p>
+                                </td>
+                            </tr>
+                            <tr class="t-even">
+                                <td valign="top">
+                                    <div class="user-custom-form fl ml10">
+                                        <fieldset class="checkboxes">
+                                            <label for="checkbox-03" class="label_check">
+                                                <input type="checkbox" value="2" id="checkbox-03" name="pay" />
+                                            </label>
+                                        </fieldset>
+                                    </div>
+                                </td>
+                                <td>
+                                    账期付款
+                                    <p class="t-gray">在MPH下完订单，在双方约定的账期到期前通过平台支付货款。</p>
+                                    <p class="t-gray mt5">信用额度<input class="input" type="text" id ="smCreditLimit" name="smCreditLimit" placeholder="">元</p>
+                                    <p class="t-gray mt5">账期时间<input class="input" type="text"  id ="smAccountPeriod" name="smAccountPeriod" placeholder="">天</p>
+                                    <p class="t-tips mt10">温馨提示：请谨慎操作，修改后账期及信用额度均以修改后为准。</p>
+                                </td>
+                            </tr>
+                        #end
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="udc-btn tac mt20">
+                        <a href="javascript:void(0)" class="btn" id="CloseBatchModifyPay">保存</a>
+                        <div class="b-tips mt20">点击“保存”后，您选中的企业均修改为新的支付方式</div>
+                    </div>
+                </div>
+            </div>
+	</script>
+
+	<!-- mypharma_脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script src="/js/layui/layui.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/select2/select2.min.js"></script>
+	<script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+	<script>
+        // 自定义radio&checkbox
+        $(function(){
+            $('body').addClass('user-has-js');
+            $('.label_check,.label_radio').click(function(){
+                setupLabel();
+            });
+            setupLabel();
+        });
+
+        function setupLabel(){
+            if($('.label_check input').length) {
+                $('.label_check').each(function(){
+                    $(this).removeClass('c_on');
+                });
+                $('.label_check input:checked').each(function(){
+                    $(this).parent('label').addClass('c_on');
+                });
+            }
+            if($('.label_radio input').length) {
+                $('.label_radio').each(function(){
+                    $(this).removeClass('r_on');
+                });
+                $('.label_radio input:checked').each(function(){
+                    $(this).parent('label').addClass('r_on');
+                });
+            }
+        }
+
+        function BatchModifyPay()
+        {
+            if($("input:checkbox[name='mxx']:checked").length==0){
+                top.ue.msg("请选择需要修改的客户记录");
+                return;
+            }
+            top.rui.dynamic({
+                title:"请选择支付方式",
+                area:['740px'],
+                btn:false,
+                data:{
+                    "entCount":1
+                },
+                content:$('#payDlg').html(),
+                success:function (lay,idx) {
+                    lay.find("#entCount").text($("input:checkbox[name='mxx']:checked").length);
+                    lay.find("#CloseBatchModifyPay").on("click",function () {
+                        var smIds = "";
+                        var payMethod = "";
+                        var eidS="";
+                        var smAccountPeriod="";
+                        var smCreditLimit="";
+                        var suId="";
+                        $("input:checkbox[name='mxx']:checked").each(function() {
+                            smIds += $(this).val() + ",";
+                            eidS += $(this).attr("data-check-eid") + ",";
+                            suId=$(this).attr("data-check-suId");
+                        });
+                        var flag=0;
+                        $("input:checkbox[name='pay']:checked",lay).each(function() {
+                            payMethod += $(this).val() + ",";
+                            if($(this).val()==2){
+                                smAccountPeriod =$("input[name='smAccountPeriod']",lay).attr("value");
+                                smCreditLimit =$("input[name='smCreditLimit']",lay).attr("value");
+                                if (smAccountPeriod==""||smCreditLimit==""){
+                                    flag=1;
+                                    return;
+                                }
+                                if(!(smAccountPeriod >= 0 && (smAccountPeriod+"").indexOf(".") == -1)){
+                                    flag=2;
+                                    return;
+                                }
+                                if(!(smCreditLimit >= 0 && (smCreditLimit+"").indexOf(".") == -1)){
+                                    flag=3;
+                                    return;
+                                }
+                            }
+                        });
+
+                        if(flag==1){
+                            top.ue.msg("请选择账期和额度");
+                            return;
+                        }
+                        if(flag==2){
+                            top.ue.msg("账期必须为大于等于0的正整数");
+                            return;
+                        }
+                        if(flag==3){
+                            top.ue.msg("信用额度必须为大于等于0的正整数");
+                            return;
+                        }
+                        var smIdArray=smIds.split(",");
+                        var payMethodArray=payMethod.split(",");
+                        if(payMethodArray.length==1){
+                            top.ue.msg("请选择需要修改的支付方式");
+                            return;
+                        }
+                        var eidArray=eidS.split(",");
+                        var payInfo =[];
+                        for (var i=0;i<smIdArray.length-1;i++){
+                            for(var j=0;j<payMethodArray.length-1;j++){
+                                var payItem = {
+                                    smId:smIdArray[i],
+                                    eid:eidArray[i],
+                                    suId:suId,
+                                    payMethod:payMethodArray[j],
+                                    smAccountPeriod:smAccountPeriod,
+                                    smCreditLimit:smCreditLimit,
+                                };
+                                payInfo.push(payItem);
+                            }
+                        }
+
+                        var payMethodVo = {};
+                        payMethodVo.list = payInfo;
+                        $.ajaxPost(
+                                "/sales/member/batchSavePayMethod", {
+                                    "payMethodStr": $.toJSON(payMethodVo)
+                                },function(result) {
+                                    top.ue.closeLoad();
+                                    var obj = eval("(" + result + ")");
+                                    if(obj.code==0){
+                                        top.layer.close(idx);
+                                        window.location.href = "/sales/member/member_info.html?$!{returnPageParam}";
+                                    }else{
+                                        top.ue.msg("批量修改支付方式失败");
+                                        return true;
+                                    }
+                                }
+                        );
+                    })
+
+                }
+            })
+        }
+
+
+
+	var smStatusStr=window.location.search;
+	if(smStatusStr.indexOf("smStatus=1")>0||smStatusStr.indexOf("smStatus")<0){
+		$("#cooperationNo").remove("active");
+		$("#cooperationYes").addClass("active");
+	}else{
+		$("#cooperationYes").remove("active");
+		$("#cooperationNo").addClass("active");
+	}
+	
+	layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp'],function () {
+        $(".mn-select").each(function () {
+            $(this).select2({
+                placeholder: $(this).attr("placeholder"),
+                tags: "true",
+                allowClear: false,
+                minimumResultsForSearch: -1,
+                language: "zh-CN",
+				width:180
+            });
+        })
+
+        var layAlert = layui.layApp.alert;
+        
+        $(".btn-invation").on("click",function(){
+        	var _eName = $(this).attr("data-eName");
+        	var _eMobile = $(this).attr("data-mobile");
+        	var _eId = $(this).attr("data-eId");
+        	var _smId = $(this).attr("data-smId");
+        	var _mId = $(this).attr("data-mId");
+        	var _suId = $(this).attr("data-suId");
+        	var _smCode = $(this).attr("data-smCode");
+        	var _smInternalCode= $(this).attr("data-smInternalCode");
+			$.ajaxPost(
+					"/sales/member/sendRecord.html", {
+						"eId": _eId,
+						"mId": _mId,
+						"mobile": _eMobile,
+						"smCode": _smCode,
+						"smInternalCode": _smInternalCode,
+						"smId":_smId
+					},function(result) {
+						var obj = eval("(" + result + ")");
+						if(obj.message=='1'){
+                            top.ue.msg("没有激活码");
+							return;
+						}
+						var tips="#inviteSend";
+						if(obj.data.sendNum4mobile>=2){
+							tips="#hasSendU";
+						}
+						if(obj.data.sendNum4eid>=2){
+							tips="#hasSendM";
+						}
+						if(_eMobile==''){
+							_eMobile=obj.data.lastSendMobile;
+						}
+						var sendNum4eid=obj.data.sendNum4eid;
+						var lastSendMobile=obj.data.lastSendMobile;
+			        	layAlert({
+				            tpl:tips,
+				            data:{
+				            	"eName":_eName,
+				            	"eMobile":_eMobile,
+				            	"eId":_eId,
+				            	"sendNum4eid":obj.data.sendNum4eid,
+				            	"lastSendMobile":obj.data.lastSendMobile
+				            },ok:function(values,idx,layer){
+				            	if(tips=="#inviteSend"){
+				            	if(values.invPhone==""){
+                                    top.ue.msg("请输入手机号码");
+				            	    return true;
+				            	}
+				            	var phone = /^1([38]\d|4[57]|5[0-35-9]|7[06-8]|8[89])\d{8}$/;
+				            	if(!phone.test(values.invPhone)){
+                                    top.ue.msg("手机号码格式错误，请重新输入");
+				            	    return true;
+				            	}
+				            	top.ue.load();
+				    			$.ajaxPost(
+				    					"/sales/member/sendSMS.html", {
+				    						"eId": _eId,
+				    						"eName":_eName,
+				    						"mId": _mId,
+				    						"mobile": values.invPhone,
+				    						"smId":_smId
+				    					},function(result) {
+				    					    top.ue.closeLoad();
+				    						var obj = eval("(" + result + ")");
+				    			        	if(obj.data==1){
+                                                top.ue.msg("发送成功");
+                                                top.utils.frameBackDel();
+				    			        		window.location.href = "/sales/member/member_info.html?$!{returnPageParam}";
+				    			        		return false;
+				    			        	}else if((obj.data==0)){
+				    				        	layAlert({
+				    					            tpl:"#hasSendU",
+				    					            data:{
+				    					            	"eName":obj.message,
+				    					            	"eMobile":values.invPhone,
+				    					            	"eId":_eId,
+				    					            	"sendNum4eid":sendNum4eid,
+				    					            	"lastSendMobile":values.invPhone
+				    					            },ok:function(values,idx,layer){
+				    			        				return false;
+				    					            }
+				    				        	}); 
+				    			        	}else{
+                                                top.ue.msg("没有激活码");
+				    			        		return true;
+				    			        	}
+				    			}); 
+				            }
+				            }
+				        });
+			}); 	
+        })
+        
+    })
+	
+		$(function() {
+			if ((navigator.userAgent.indexOf('MSIE') >= 0) 
+				    && (navigator.userAgent.indexOf('Opera') < 0)){
+			jQuery('[placeholder]').focus(function() {
+				  var input = jQuery(this);
+				  if (input.val() == input.attr('placeholder')) {
+				    input.val('');
+				    input.removeClass('placeholder');
+				  }
+				}).blur(function() {
+				  var input = jQuery(this);
+				  if (input.val() == '' || input.val() == input.attr('placeholder')) {
+				    input.addClass('placeholder');
+				    input.val(input.attr('placeholder'));
+				  }
+				}).blur().parents('form').submit(function() {
+				  jQuery(this).find('[placeholder]').each(function() {
+				    var input = jQuery(this);
+				    if (input.val() == input.attr('placeholder')) {
+				      input.val('');
+				    }
+				  })
+				});
+			}
+			$.sltitem.select("smCustomerType","$!{smCustomerType}");
+			$.sltitem.select("depId","$!{depId}");
+			$.sltitem.select("regionId","$!{regionId}");
+			$.sltitem.select("sgId","$!{sgId}");
+			
+			//是否为账期客户
+			var smAccountPeriod = "$!{smAccountPeriod}";
+			if(smAccountPeriod == "1"){
+				$("#sapCheck")[0].checked = true;
+			}
+			
+			renderUploader();
+		})
+		
+		function setSmAccountPeriod(){
+			if($("#sapCheck")[0].checked == true){
+				$("#smAccountPeriod").val("1");
+			}else{
+				$("#smAccountPeriod").val("");
+			}
+		}
+		
+		//checkbox全选
+		function checkAll(obj) {
+			var f = obj.checked;
+			$("input[name=mxx]").each(function() {
+						$(this)[0].checked = f;
+			});
+		}
+		
+		//批量导出
+		function batchExport(){
+			var smIds = "";
+			var count = 0;//勾选计数
+			$("input[name=mxx]").each(function() {
+				if($(this)[0].checked == true){
+					count = count + 1;
+					smIds = smIds + "," +  $(this).val();
+				}
+			});
+			if(count > 0){//如果有勾选就是勾选导出  
+				$("#smIds").val(smIds);
+				$("#searchForm").attr("action", "/sales/member/supplierMember_selectBatchExport.html");
+				$("#searchForm").submit();
+				$("#searchForm").attr("action", "member_info.html");
+			}else{//条件查询导出
+				$("#searchForm").attr("action", "/sales/member/supplierMember_batchExport.html");
+				$("#searchForm").submit();
+				$("#searchForm").attr("action", "member_info.html");
+			}
+		}
+		
+		function download(){
+			window.location.href = "/sales/member/supplierMember_downLoadTemplate.html";
+		}
+		
+		function renderUploader() {
+			var uploadPic = $("#uploadExcel");//图片上传点击按钮
+			var uper=new AjaxUpload(uploadPic, {
+				action : "/sales/member/supplierMember_uploadSave.html", //动作
+				name : 'file_path',//固定参数
+				data:{bbb:'abc'},
+				responseType:'text',//IE8不支持json type
+				onSubmit : function(file, ext) {
+					if (ext && /^(xls|xlsx)$/.test(ext)) {//过滤上传文件格式
+						ext_str = ext;
+					} else {
+                        top.ue.msg('非Excel文件格式,请重传');
+						return false;
+					}
+					$.showLoad();
+				},
+				onComplete : function(file, response) {
+                    $.hideLoad();
+					if (response == "outofsize") {
+                        top.ue.msg("文件过大，无法上传");
+					}
+					if (response == "error") {
+						top.ue.msg("文件上传失败，请重新上传");
+					} else {
+                        var _text = $("<div />").html(response).text();
+                        response = $.parseJSON(_text);
+						top.ue.alert({
+ 			                title: '提示信息',
+ 			                content: response.message,
+ 			                end: function() {
+ 			                    top.utils.frameBackDel();
+ 			                    location = "/sales/member/member_info.html";
+ 			                }
+ 			            });
+					}
+				}
+			});
+		}
+		
+		function checkZz(smId){
+			  var flag = 0;
+			  $.ajax({
+				  url: '/sales/member/checkZz.html',
+		           data: {"smId":smId},
+		           type: 'POST',
+		           dataType: 'json',
+		           async: false,
+		           success: function(result) {
+		           
+		        	   if (result.data == true) {
+		        		   flag = 0;   
+		        	   }else{
+		        	   	   if(result.message=="1"){
+		        	   	   		flag=1;
+		        	   	   }else{
+		        		   		flag = 2;
+		        		   }
+		        	   }
+		           }
+			  });
+			  return flag;
+		  }
+		
+		 function downLoadPic(smId){
+		 	 var flag=checkZz(smId);
+		 	 
+			 if(flag==1){
+                 top.ue.msg("一分钟之内只能下载一次");
+			 }else if(flag==0){
+                 top.ue.msg("该企业没有资质，暂时不能下载");
+			 }else if(flag==2){
+			 	 window.location.href="/sales/member/downLoadAllPic.html?smId="+smId+"";
+			 }			 
+		  }
+		 
+		 function checkSmInternalCodeValue(url,type){
+				var smInternalCodes = $("#smInternalCodes").val();
+				if(smInternalCodes == undefined){
+					searchPager(url,type);
+				}else{
+					smInternalCodes = smInternalCodes.replace("，",",").replace(/\s+/g,"");
+					$("#smInternalCodes").val(smInternalCodes);
+					if(smInternalCodes.split(",").length>200 && !type){
+						dialog({
+				            title: "提示信息",
+				            content: "Sorry,您每次最多可导入200个内码，您可以分多次导入客户。",
+				            width: 300
+				        });
+						return ;
+					}else if(url){
+						searchPager(url,type);	
+					}
+				}
+		}
+
+    function gotoDownZz(url,gotoDom) {
+        location.href = url;
+        top.frameLoadCb = function (frame) {
+            window.top.frameScroll.doScrollTop($(frame).find(gotoDom).offset().top,1);
+        }
+    }
+
+	</script>
+</body>
+
+</html>

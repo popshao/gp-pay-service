@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>我的医药网 - 添加角色</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+           
+    <!-- 样式 -->
+     <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a> &gt; 账户中心 &gt; 添加角色</p>
+                </div>
+              	<div class="order_detail">
+           		  <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td class="tar" width="90"><span class="red">*</span>角色名称：</td>
+                        <td width="290">
+                        	<input type="hidden" name="roleId" id="roleId" value=""/>
+                          <input class="input_l" type="text" name="roleName" id="roleName"/>
+                        </td>
+                        <td class="tar" width="90">角色说明</td>
+                        <td width="auto">
+                          <input class="input_l" type="text" name="roleRemark" id="roleRemark"/>
+                        </td>
+                      </tr>
+                  </table>
+                  <div class="table table_menu" id="resourceDiv">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                  <th class="tal" width="300">菜单权限：</th>
+                                  <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	   #if(!$null.isNull($listResource) && $listResource.size()!=0)		
+                            	   	 #foreach($app in $!listResource)
+		                                <tr>
+		                                  <td class="td_first"><input class="checkbox" type="checkbox" id="selectAll" onclick="checkAll(this,'checkedName_$!{app.app_id}')" value="0"><label class="text" for="checkbox_01">$!{app.app_name}</label></td>
+		                                  <td class="td_second">
+		                                  	<table cellpadding="0" cellspacing="0" id="1">
+		                                  	  #if(!$null.isNull($app.listPermResource) && $app.listPermResource.size()!=0)
+	                                           #foreach($resource in $!app.listPermResource)
+	                                            #if($!{resource.perm.permType}==0)
+	                                             #if($!{resource.perm.permCode}=='1' || $!{resource.perm.permCode}=='2' || $!{resource.perm.permCode}=='3'
+	                                             || $!{resource.perm.permCode}=='4' || $!{resource.perm.permCode}=='5' || $!{resource.perm.permCode}=='6'
+	                                             || $!{resource.perm.permCode}=='7' || $!{resource.perm.permCode}=='8' || $!{resource.perm.permCode}=='9'
+	                                             || $!{resource.perm.permCode}=='10' || $!{resource.perm.permCode}=='11' || $!{resource.perm.permCode}=='12'
+	                                             || $!{resource.perm.permCode}=='13' || $!{resource.perm.permCode}=='15' || $!{resource.perm.permCode}=='16' 
+	                                             || $!{resource.perm.permCode}=='17' || $!{resource.perm.appId}==8|| $!{resource.perm.permCode}=='PC-Blanace-Pay')
+			                                        <tr>
+			                                          <td width="50%"><input class="checkbox fl" type="checkbox" id="checkbox_${resource.perm.permId}" value="$!{resource.perm.permId}" name="checkedName_$!{app.app_id}" ><label class="text fl" for="checkbox_02">$!{resource.perm.PermName}</label></td>
+			                                          <td class="td_Third" width="50%">
+			                                          	<table cellpadding="0" cellspacing="0" id="2">
+				                                          	#if(!$null.isNull($resource.listResource) && $resource.listResource.size()>0)
+				                                          	  #foreach($child in $!resource.listResource)
+				                                                <tr>
+				                                                   #if($!{child.parentId}==251 or $!{child.parentId}==252)
+				                                                 	 <td><label class="text" for="checkbox_04" style="font-weight: bold;">$!{child.resourceName}</label></td>
+				                                                  #else
+				                                                  	<td><label class="text" for="checkbox_04">$!{child.resourceName}</label></td>
+				                                                  #end
+				                                                </tr>
+				                                               #end 
+				                                             #else
+					                                             <tr>
+					                                               	<td></td>
+					                                             </tr> 
+				                                             #end 
+				                                             
+			                                            </table>
+			                                          </td>
+			                                        </tr>
+			                                        #end
+			                                       #end 
+											     #end
+											     #else
+												     <tr>
+		                             			  	 <td width="50%"></td>
+		                             			  	 <td width="50%"></td>
+		                             			  	 </tr> 
+											     #end  
+	                             			  	                                       
+		                                    </table>
+		                                  </td>
+		                                </tr>
+		                             #end   
+	                                #end 	
+                            </tbody>
+                        </table>
+                  </div>
+                  
+                  <div class="table" id="resourceDiv">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                  <th class="tal">功能权限：</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+	                                <tr>
+	                                <td class="tal">
+	                                #if(!$null.isNull($listResource) && $listResource.size()!=0)
+	                                  #foreach($app in $!listResource)
+	                                 
+	                                   	 #foreach($resource in $!app.listPermResource) 
+		                                    #if($!{resource.perm.permType}==1)
+		                                  	<input class="checkbox" type="checkbox" id="checkbox_${resource.perm.permId}" value="$!{resource.perm.permId}" name="checkedNamesj" ><label class="text" for="checkbox_02">$!{resource.perm.PermName}</label>
+		                                   #end
+	                                  	 #end
+	                                  #end 
+	                                 #end 
+	                                 </td>
+	                                </tr>
+                            </tbody>
+                        </table>
+                  </div>
+                  
+                  
+                  <div class="btn">
+                       <a href="javascript:;" class="btn_text" onclick="addSave('checkedName')">保存</a>
+                  </div>
+                </div>
+            </div>
+            
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+   <script src="/js/publish.js?v=$!{jscss_version}"></script>
+   <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+   #parse("common/common_script.vm")
+   <script type="text/javascript">
+       /*设置框架返回按钮*/
+       top.utils.frameBack({
+           handler:function (btn) {
+               location.href = document.referrer;
+           }
+       })
+
+   var appInfo = [5,6,7,8]; 
+    function checkAll(obj, cName) {
+		var checkboxs = document.getElementsByName(cName);
+		for ( var i = 0; i < checkboxs.length; i += 1) {
+			checkboxs[i].checked = obj.checked;
+		}
+	}
+    
+    function addSave(cName){
+    	var roleName = $("#roleName").val();
+    	var roleRemark = $("#roleRemark").val();
+    	if(roleName == null || roleName ==""){
+            top.ue.msg("角色名称不能为空!");
+    		return;
+    	}
+    	var j = 0;
+    	var resourceIds = "";
+    	for(var q =0 ;q < appInfo.length; q++){
+    		var checkboxs = document.getElementsByName(cName+"_"+appInfo[q]);
+    		for ( var i = 0; i < checkboxs.length; i += 1) {
+    			if (checkboxs[i].checked == true) {
+    				resourceIds = resourceIds + "," + checkboxs[i].value;
+    				j++;
+    			}
+    		}
+    	}
+    	
+		var h = 0;
+		var checkboxs1 = document.getElementsByName("checkedNamesj");
+		for ( var a = 0; a < checkboxs1.length; a += 1) {
+			if (checkboxs1[a].checked == true) {
+				resourceIds = resourceIds + "," + checkboxs1[a].value;
+				h ++;
+			}
+		}
+		
+		if ((j == 0 || j == null) &&(h == 0 || h == null)){
+            top.ue.msg("请选择菜单");
+			return false;
+		}else{
+			resourceIds = resourceIds.substring(1, resourceIds.length);
+			$.ajax({
+				url : '/purchase/rg/role/addSave.html',
+				data : {
+					
+					"roleName" : roleName,
+					"roleRemark" : roleRemark,
+					"resourceIds" : resourceIds
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					if (result.data == true) {
+						top.ue.alert({
+							title : '提示信息',
+							content : "角色添加成功！",
+							end : function() {
+							    top.utils.frameBackDel();
+								window.location.href="/purchase/rg/role/main.html";
+							}
+						})
+
+					} else {
+						top.ue.msg("角色添加失败！");
+					}
+				}
+			});
+		}
+    }
+   </script>
+  </body>
+</html>

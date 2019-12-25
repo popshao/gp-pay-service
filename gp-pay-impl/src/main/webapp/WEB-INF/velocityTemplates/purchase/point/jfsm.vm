@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>买家商家成长值体系 - 积分说明</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico" />
+           
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/shake.css?v=$!{jscss_version}" />
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="scripts/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm") #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a> &gt; 药金币 &gt; 药金币说明</p>
+                </div>
+                
+                <div class="explain_title mt20">
+                	<h3 class="fl">什么是“我的医药网”药金币</h3>
+                </div>
+                <div class="explain_ctn">
+                    <span class="red">★</span>“我的医药网”药金币为会员在我的医药网（www.mypharma.com）的采购返点奖励，是“我的医药网”唯一指定的虚拟货币，不能兑现，不可转让。<br /><br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;·  可用药金币：可以使用的药金币；<br /><br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;·  药金币有效期：次年年底12月31日，统一清除上一年的全部药金币。<br /><br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;·   以上药金币规则由“我的医药网“制定并保留所有的解释权和修改权，实际规则以网站公布为准。
+                </div>
+                
+                <div class="explain_title mt20">
+                	<h3 class="fl">新人任务</h3>
+                </div>
+                <div class="explain_ctn">
+                    <ul class="explain_ul cc">
+                    
+                    	<li>
+                        	<div class="img fl">
+                            	<img class="" src="../../image/icon_integral_01.png" />
+                            </div>
+                            <div class="ctn fl">
+                            	<p class="top color01">登录<span class="text">+20</span></p>
+                            	<p class="mt10">
+                                    APP、PC 首次登陆后获得<br />
+                                    登录成功后发放
+                                </p>
+                            </div>
+                        </li>
+                        
+                        <li>
+                        	<div class="img fl">
+                            	<img class="" src="../../image/icon_integral_02.png" />
+                            </div>
+                            <div class="ctn fl">
+                            	<p class="top color02">企业认证<a class="text">+200</a></p>
+                            	<p class="mt10">
+                                    完善企业基本信息和资质信息获得<br />
+                                    审核通过后发放
+                                </p>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                </div>
+                
+                <div class="explain_title mt20">
+                	<h3 class="fl">日常任务</h3>
+                </div>
+                 <div class="explain_ctn">
+                    <ul class="explain_ul cc">
+                    
+                    	<li>
+                        	<div class="img fl">
+                            	<img class="shake shake-slow" src="../../image/icon_integral_03.png" onclick="toPurchasse();"/>
+                            </div>
+                            <div class="ctn fl">
+                            	<p class="top color03">采购下单
+                            		#if($!count2 > 0)
+                            		<span class="text">+15</span>
+                            		#else
+                            		<a class="link" href="http://$!{wwwHostAndPort}/goods/quickPurchase.html" target="_blank">去完成</a>
+                            		#end
+                            	</p>
+                            	<p class="mt10">
+                                    PC下单按金额阶梯获得，使用APP、在线支付翻倍<br />
+                                    以确认收货金额计算
+                                </p>
+                            </div>
+                        </li>
+                        
+                        <li>
+                        	<div class="img fl">
+                            	<img class="shake shake-slow" src="../../image/icon_integral_04.png" onclick="toPurchasse();"/>
+                            </div>
+                            <div class="ctn fl">
+                            	<p class="top color04">多商家采购下单
+                            		#if($!count1 > 0)
+                            		<span class="text">+30</span>
+                            		#else
+                            		<a class="link" href="http://$!{wwwHostAndPort}/goods/quickPurchase.html" target="_blank">去完成</a>
+                            		#end
+                            	</p>
+                            	<p class="mt10">
+                                    每日在不同商家采购，额外奖励<br />
+                                    确认收货后发放
+                                </p>
+                            </div>
+                        </li>
+                        
+                        <li>
+                        	<div class="img fl">
+                            	<img class="shake shake-slow" src="../../image/icon_integral_05.png" onclick="toPurchasse();"/>
+                            </div>
+                            <div class="ctn fl">
+                            	<p class="top color05">在线支付
+                            		#if($!count3 > 0)
+                            		<span class="text">+30</span>
+                            		#else
+                            		<a class="link" href="http://$!{wwwHostAndPort}/goods/quickPurchase.html" target="_blank">去完成</a>
+                            		#end
+                            	</p>
+                            	<p class="mt10">
+                                   使用在线支付下单， 可获得2倍药金币<br/>
+                                    确认收货后发放
+                                </p>
+                            </div>
+                        </li>
+                        
+                        <li>
+                        	<div class="img fl">
+                            	<img class="shake shake-slow" src="../../image/icon_integral_06.png" onclick="showQRCode();"/>
+                            </div>
+                            <div class="ctn fl">
+                            	<p class="top color06">APP下单
+                            		#if($!count4 > 0)
+                            		<span class="text">+15*n</span>
+                            		#else
+                            		<a class="link" href="javascript:showQRCode();">去完成</a>
+                            		#end
+                            	</p>
+                            	<p class="mt10">
+                                  使用APP下单，每笔订单可获得2倍药金币<br />
+                                     确认收货后发放
+                                </p>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                </div>
+                
+                 <div class="explain_title mt20">
+                	<h3 class="fl">升级任务</h3>
+                </div>
+                <div class="explain_ctn">
+                    <ul class="explain_ul cc">
+                    
+                        <li>
+                        	<div class="img fl">
+                            	<img class="shake shake-slow" src="../../image/icon_integral_07.png" />
+                            </div>
+                            <div class="ctn fl">
+                            	<p class="top color07">会员升级<a class="link" href="javascript:void(0);">去完成</a></p>
+                            	<p class="mt10">
+                                    系统自动升级后，额外奖励药金币，每个等级奖励不同<br />
+                                    升级后立即奖励
+                                </p>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                </div>
+          </div>
+          
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+    <script>
+    $(function() {
+		var signCount = "$!{signCount}";
+		var count = 0;
+		if(signCount > 10){
+			count = 10;
+		}else{
+			count = signCount;
+		}
+		var flag = $!{flag};
+		var con = "$!{con}";
+		if(flag){
+			if($!signCount > 0){
+				for (var i=0;i<count;i++)
+				{
+					$("#signDiv").append("<div class='item'></div>");
+				}
+			}
+		}else{
+			if(con == 'yes'){
+				for (var i=0;i<count;i++)
+				{
+					$("#signDiv").append("<div class='item'></div>");
+				}
+			}
+		}
+    })
+    
+    function sign(){
+    	$.ajax({
+			type : 'post',
+			url : '/purchase/point/signGetPoint.html', // url : '/purchase/point/sign.html'
+			data : {},
+			dataType : 'json',
+			success : function(data) {
+				if (data) {//签到成功
+					window.location.href="/purchase/point/jfsm.html";
+				} else {
+					return false;
+				}
+			}
+		});
+    }
+    
+    function showQRCode(){
+    	var imgUrl ="/image/img_21.jpg";
+		var content = '<img src="'+imgUrl+'" height="299px;" width="246px;"/>';
+		dialog({
+			title: "下载APP",
+			content: content,
+			ok: false,
+			cancel: false,
+			esc: true
+		});
+    }
+    
+    function toPurchasse(){
+    	var str = "$!{wwwHostAndPort}";
+    	top.utils.open("http://" + str + "/goods/quickPurchase.html");
+    	return false;
+    	//window.location.href = "http://" + str + "/goods/quickPurchase.html";
+    }
+    </script>
+    
+  </body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    #if($!{gType}==2)	
+    <title>专供控销 - 我的医药网</title>
+    #else
+	<title>销售控制 - 我的医药网</title>
+	#end
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+ 
+  <body>
+    <div class="container">
+    #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            	<div class="indmain">
+						<div class="path">
+						    #if($!{gType}==2)	
+								<p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理  &gt; 专供控销</p>
+							#else
+								<p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理  &gt; 销售控制</p>
+							#end
+						</div>
+						<div class="order_query">
+							<form action="/sales/sale_control/gy_xsgl.html" method="post" id="searchForm">
+								<input type="hidden" name="pi" id="pi" value="$!pi">
+								<input type="hidden" name="ps" value="10">
+								<ul>
+									<li class="li_four"><label>商品名称：</label> <input
+										class="input" name="gName" id="gName" type="text" value="$!{gName}"></li>
+									<li class="li_four"><label>批准文号：</label> <input
+										class="input" name="gLicenseNo" id="gLicenseNo"  type="text" value="$!{gLicenseNo}"></li>
+									 #if($!gType ==  2)
+									 	<li class="li_four"><label>生产厂家：</label> <input
+										 class="input" name="gManufacture" id="gManufacture" type="text" value="$!{gManufacture}"></li>
+									 #end  	
+								</ul>
+								<div class="btn" style="position:relative;">
+									<a href="javascript:searchPager('/sales/sale_control/gy_xsgl.html',false);" class="btn_query">查询</a> 
+									<a href="javascript:searchPager('/sales/sale_control/gy_xsgl.html',true);" class="btn-l">清空查询条件</a>
+									#if($!{gType}==2)	
+									<a href="/sales/sale_control/list_sale_control.html?resourceId=246" class="fr btn-l">专供控销申请审核($!{count})</a>
+									#end
+									#if($!{gType}==3)
+									<div class="fr user_cx_tips mt15">设置商品对应客户的价格，未设置的情况下，客户不可采购</div>
+									#end
+								</div>
+							</form>
+						</div>
+						<div class="order_detail">
+							<div class="table">
+								<table cellpadding="0" cellspacing="0">
+									<thead class="head">
+										<tr class="line">
+											<th class="thead_th_top">商品名称</th>
+											 #if($!gType ==  2)
+												<th class="thead_th_top">生产厂家</th>
+											 #end	
+											 <th class="thead_th_top" width="25%">专供客户组</th>
+											 <th class="thead_th_top" width="10%">指定部分客户</th>
+											<th class="thead_th_top" width="25%">销售控制策略
+												<ul class="table_header">
+													<li class="price"></li>
+													
+													<li class="quantity"></li>
+												</ul>
+											</th>
+											<th class="thead_th_top" width="90">操作</th>
+										</tr>
+									</thead>
+									<tbody>
+									   #if(!$null.isNull($saleList) && $saleList.size()!=0)	
+										#foreach($sale in $!saleList)
+											<tr style="background-color: rgb(255, 255, 255);">
+											<!-- a href="http://$!{wwwHostAndPort}/item/$!{sale.goods.gId}.html" target="_blank"></a> -->
+												<td>$!{sale.goods.gName}<br>$!{sale.goods.gSpecifications}</td>
+												 #if($!gType ==  2)	
+													<td>$!{sale.goods.gManufacture}</td>
+												 #end
+												<td colspan="4">
+													<table class="table_sales_control" border="0"
+														cellpadding="0" cellspacing="0">
+														#foreach($list in $!sale.list)
+														<tr>
+															<td  width="35%">
+																#if($!{list.supplierCustomerType})
+																	业务分组: $!{list.supplierCustomerType}<br>
+																#end
+																#if($!{list.regoinName})
+																	区域分组: $!{list.regoinName}<br>
+																#end
+															</td>
+												 			<td>
+												 				#if($!{list.eidCount})
+												 					单独指定$!{list.eidCount}个企业
+												 				#end
+												 			</td>
+												 			
+															<td>价格:$!{list.salePrice}</td>
+															<td>起购数量:$!{list.minNum}</td>
+															<td width="120"><a href="/sales/sale_control/sale_control_edit.html?gId=$!{sale.goods.gId}&scId=$!{list.scId}&pi=$!pi&gName=$!gName&gLicenseNo=$!gLicenseNo&gManufacture=$!gManufacture" class="btn-txt" style="width: 60px;">编辑策略</a><a
+																href="javascript:;" class="btn-delete" onclick="deleteSaleControl($!{list.scId})">删除</a></td>
+														</tr>
+														#end
+													</table>
+													<div class="table_new_policy">
+														<a href="/sales/sale_control/sale_control_edit.html?gId=$!{sale.goods.gId}&pi=$!pi&gName=$!gName&gLicenseNo=$!gLicenseNo&gManufacture=$!gManufacture" class="add" id="sel-a" style="margin-right: 20px">新增策略</a>
+													</div>
+												</td>
+											</tr>
+										#end
+									   #else
+										  <tr>
+										  #if($!gType ==  3)
+				                       		<td colspan="4">无相关数据！</td>
+				                       	  #else
+				                       	  <td colspan="5">无相关数据！</td>
+				                       	  #end	
+				                		 </tr>
+									   #end	
+									</tbody>
+								</table>
+								<!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} >1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/sale_control/gy_xsgl.html",$!{pagerQueryParam})
+								#end #end
+								<!--分页结束 -->
+								
+							</div>
+						</div>
+					</div>
+					
+					
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/pop_div.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+     <script src="/js/load.js?v=$!{jscss_version}"></script>
+     <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+     #parse("common/common_script.vm")
+    <script>
+    	function searchSale(){
+    		$("#searchForm").submit();
+    	}
+    	//重置方法
+		function reset(){
+			$("#gName").val('');
+			$("#gSpecifications").val('');
+			$("#gSn").val('');
+			$("#searchForm").submit();
+		}
+		
+    	
+    	
+    	//删除
+    	function deleteSaleControl(scId){
+    		var pi=$("#pi").val();
+    		var gName = $("#gName").val();
+    		var gLicenseNo = $("#gLicenseNo").val();
+    		var gManufacture = $("#gManufacture").val();
+    		top.ue.confirm({
+			    title: "提示信息",
+			    content: "你确定要删除该条记录吗？",
+			    ok: function() {
+			    	$.ajax({
+				           url: '/sales/sale_control/delete_sale_control.html',
+				           data: {"id":scId},
+				           type: 'POST',
+				           dataType: 'json',
+				           success: function(result) {
+				               if (result.data == true) {
+				            	   window.location.href="/sales/sale_control/gy_xsgl.html?pi="+pi+"&gName="+gName+"&gLicenseNo="+gLicenseNo+"&gManufacture="+gManufacture;
+				               } else {
+				                   dialog({
+				                       title: "提示信息",
+				                       content: "删除价格策略失败",
+				                       width: 300
+				                   });
+				             }
+				           }
+				        });
+			    }
+			}); 
+    		
+    		 
+    	}
+    </script>
+  </body>
+</html>

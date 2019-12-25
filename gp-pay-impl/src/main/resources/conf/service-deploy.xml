@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+        xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://code.alibabatech.com/schema/dubbo
+            http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <import resource="classpath:service-context.xml" />
+    
+    <!--定义了提供方应用信息，用于计算依赖关系；在 dubbo-admin 或 dubbo-monitor 会显示这个名字，方便辨识-->
+	<dubbo:application name="gp-pay-service-provider" owner="mph" organization="rograndec"/>
+    <dubbo:protocol name="dubbo" port="${prop.dubbo.protocol.port}"/>
+    <dubbo:provider threadpool="cached" protocol="dubbo" loadbalance="roundrobin" cluster="failfast" delay="-1" timeout="6000" retries="0" />
+    <dubbo:registry protocol="${prop.registry.protocol}" address="${prop.registry.address}" />
+
+    <dubbo:reference id="groundPromotionCommissionConfigService" interface="com.rogrand.coreapi.ditui.service.GroundPromotionCommissionConfigService" check="false" version="1.0" />
+    <dubbo:reference id="groundPromotionUserService" interface="com.rogrand.coreapi.ditui.service.GroundPromotionUserService" check="false" version="1.0" />
+    <dubbo:reference id="groundPromotionUserGroupService" interface="com.rogrand.coreapi.ditui.service.GroundPromotionUserGroupService" check="false" version="1.0"/>
+    <dubbo:reference id="groundPromotionGoodsService" interface="com.rogrand.coreapi.ditui.service.GroundPromotionGoodsService" check="false" version="1.0" />
+    <dubbo:reference id="mphOrderService" interface="com.mph.coreapi.order.order.service.MphOrderService" check="false" version="1.0" />
+    <dubbo:reference id="infoFromBIService" interface="com.rogrand.coreapi.ditui.service.InfoFromBIService" check="false" version="1.0" />
+    <dubbo:reference id="groundPromotionMessageService" interface="com.rogrand.coreapi.ditui.service.GroundPromotionMessageService" check="false" version="1.0" />
+    <dubbo:reference id="mphBizEnterpriseLevelService" interface="com.rogrand.coreapi.user.service.MphBizEnterpriseLevelService" check="false" version="1.0" />
+    <dubbo:reference id="bizEnterpriseVipLogService" interface="com.rogrand.coreapi.user.service.BizEnterpriseVipLogService" check="false" version="1.0" />
+    <dubbo:reference id="mphPicService" interface="com.rogrand.coreapi.user.service.MphPicService" check="false" version="1.0" />
+
+	<!-- <dubbo:monitor protocol="registry" /> -->
+	
+	<!-- 暴露service -->
+ 	<!--<dubbo:service ref="orderStatisItemService" interface="com.mph.coreapi.risk.service.OrderStatisItemService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>-->
+
+    <!--<dubbo:service ref="groundPromotionOrderService" interface="com.mph.coreapi.gp.pay.service.GroundPromotionOrderService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>-->
+    <dubbo:service ref="payLogService" interface="com.mph.coreapi.gp.pay.service.PayLogService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+    <dubbo:service ref="antService" interface="com.mph.coreapi.gp.pay.service.AntService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+    <dubbo:service ref="commonPersonnelService" interface="com.mph.coreapi.gp.pay.service.CommonPersonnelService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+    <dubbo:service ref="groundPromotionIncomeDetailService" interface="com.mph.coreapi.gp.pay.service.GroundPromotionIncomeDetailService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+    <dubbo:service ref="groundPromotionOrderService" interface="com.mph.coreapi.gp.pay.service.GroundPromotionOrderService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+    <dubbo:service ref="insideService" interface="com.mph.coreapi.gp.pay.service.InsideService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+    <dubbo:service ref="payLogService" interface="com.mph.coreapi.gp.pay.service.PayLogService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+
+    <dubbo:service ref="groundPromotionBankService" interface="com.mph.coreapi.gp.pay.service.business.GroundPromotionBankService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+    <dubbo:service ref="achievementService" interface="com.mph.coreapi.gp.pay.service.business.AchievementService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+
+    <dubbo:service ref="receiptTransferService" interface="com.mph.coreapi.gp.pay.service.business.ReceiptTransferService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+    <dubbo:service ref="vipIncomeImportService" interface=" com.mph.coreapi.gp.pay.service.VipIncomeImportService" delay="-1" timeout="6000" cluster="failfast"  version="1.0"/>
+    <!-- 开通在线支付 -->
+    <dubbo:service ref="accountCardService" interface="com.mph.coreapi.gp.pay.service.AccountCardService" delay="-1" timeout="6000" cluster="failfast" version="1.0"/>
+
+</beans>

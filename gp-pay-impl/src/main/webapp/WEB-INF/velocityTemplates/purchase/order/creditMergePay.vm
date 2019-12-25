@@ -1,0 +1,427 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>账期支付批量付款-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}" />
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 订单中心 &gt; <a href="/purchase/order/wddd.html" class="color">采购订单</a>&gt;  账期支付批量付款</p>
+                </div>
+                <div class="order_list">
+
+                <div class="tab">
+                <!--全部订单-->
+                       <!--未付款-->
+                       <div class="order_query" id="queryForm">
+							<form action="" method="post" id="searchForm" name="searchForm">
+								<input type="hidden" name="pi" value="$!pi">
+                                <input type="hidden" name="isAllChoice" value="" id="isAllChoice">
+                                <input type="hidden" name="selectedIds" value="" id="selectedIds">
+                                <input type="hidden" name="allIds" value="$!{allIds}" id="allIds">
+                                <div class="btn">
+                                    <a href="javascript:void(0);" class="btn_query" onclick="paySelected();" id="selButton" style="width:200px">选中批量支付0.00元</a>
+                                    <a href="javascript:void(0);" class="btn_query" onclick="payAll();" style="width:200px">全部批量支付$!{utils.priceFormart($!{totalAmount})}元</a>
+                                </div>
+							</form>
+						</div>
+						
+                <div class="order_detail yh order_font">        
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th><input type="checkbox" name="chooseAll"  id="chooseAll" name="chooseAll" onclick="selectAll(this);" style="height:auto"/></th>
+                                    <th width="25">全选</th>
+                                    <th width="200">订单号</th>
+                                    <th width="80">下单时间</th>
+                                    <th>供应商</th>
+                                    <th>订单状态</th>
+                                <!--      <th>付款方式</th>-->
+                                    <th>付款状态</th>
+                                    <th>订单金额(元)</th>
+                                    <th>实需付款金额(元)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+							#if(!$null.isNull($orderList) && $orderList.size()!=0)
+                            #foreach($item in $orderList)
+                            #set($pageOrder = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+                               <tr>
+                                   <td><input type="checkbox" name="choose" value="$!{item.oId}" data-amount="$!{item.payMoney}" onclick="chooseOrder(this)" style="height:auto"/></td>
+                                    <td>$!pageOrder</td>
+                                    <td>
+                                    #if($!item.orderType == 1)  
+		                               <span class="tg_order">
+		                               <a class="a-link" href="javascript:view($!item.oId);"><b>$!item.oSn</b>
+		                               #if ("$!item.deliveryNote" != "")
+		                               <img src="/image/msg.png" data-tips="$!item.deliveryNote" class="img-tips" width="20" height="20"/>
+		                               #end
+		                               </a>
+		                               </span>
+		                            #else
+		                               <a class="a-link" href="javascript:view($!item.oId);"><b>$!item.oSn</b>
+		                               #if ("$!item.deliveryNote" != "")
+		                               <img src="/image/msg.png" data-tips="$!item.deliveryNote" class="img-tips" width="20" height="20"/>
+		                               #end
+		                               </a>
+		                            #end 
+                                    </td>
+                                    <td>$utils.formatDate($!item.oAddTime,"yyyy-MM-dd HH:mm:ss")</td>
+                                    <td><a class="a-link" href="$!item.suUrl" target="_blank">$!item.oSellerName</a></td>
+                                    <td>
+                                    ##买家订单状态
+						            #if($!item.oStatus == -90)  
+						                            已取消  
+						            #elseif($!item.oStatus == -21 || $!item.oStatus == -22)  
+						                            已取消
+						            #elseif($!item.oStatus == -10)  
+						                            卖家驳回
+						            #elseif($!item.oStatus == 0)  
+						                            待审核
+						            #elseif($!item.oStatus == 10)  
+						                            卖家未发货
+						            #elseif($!item.oStatus == 30)  
+						                            卖家未发货
+						            #elseif($!item.oStatus == 90)  
+						                            卖家已发货
+		                            </br>
+		                            #if($!item.autoReceiptTips != "")
+                                        <img src="/image/msg.png" data-tips="$!item.autoReceiptTips" class="img-tips" width="20" height="20"/>
+								    #end
+						            #elseif($!item.oStatus == 100)  
+						                             已签收
+						            #else  
+						              $!item.oStatus  
+						            #end  
+                                    </td>
+                                    <td>
+                                    <!-- 买家订单支付状态 -->
+						            #if($!item.payStatus == 0)  
+						              --
+						            #elseif($!item.payStatus == 10)  
+						                                    未付款
+						            #elseif($!item.payStatus == 50)  
+						                                    已支付
+						            #else  
+						            #end  
+						            
+						            #if($!item.oPaymentMethod == 1)
+						            <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“在线支付”">在线支付</span>
+						            #elseif($!item.oPaymentMethod == 2)
+						            <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“账期付款”">账期付款</span>
+						            	#if($item.leftTime&&$item.payStatus==10&&$item.leftTime<=7&&$item.oStatus!=-100&&$item.oStatus!=-90&&$item.oStatus!=-21&&$item.oStatus!=-22&&$item.oStatus!=-10)
+								            <script>
+								            		var  leftTime=${item.leftTime};
+								            		var str="";
+								            		if(leftTime<0){
+								            			str="账期付款逾期将影响支付方式使用，请及时付款";
+								            		}else{
+								            			str="账期付款即将到期，请及时付款";
+								            		}
+												    var _img = '<img src="/image/msg.png" data-tips="'+str+'" class="img-tips" width="20" height="20"/>';
+												    document.writeln(_img)
+										    </script>
+										#end
+						            #elseif($!item.oPaymentMethod == 3)
+						            <span class="pay-txt blue" style="cursor:pointer;" title="该订单支付方式是“线下付款”">线下付款</span>
+						            #elseif($!item.oPaymentMethod == 4)
+						            <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“药白条”">
+						            #if($!item.fnName)
+						                                    药白条-$!item.fnName
+						            #else
+						                                    药白条
+						            #end
+						            </span>
+						            #elseif($!item.oPaymentMethod == 5)
+						            <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“帮你付”">
+						            #if($!item.fnName)
+						                                    帮你付-$!item.fnName
+						            #else
+						                                    帮你付
+						            #end
+						            </span>
+						            #elseif($!item.oPaymentMethod == 6)
+						            <span class="pay-txt" style="cursor:pointer;" title="该订单支付方式是“闪贷”">
+						            #if($!item.fnName)
+						                                    闪贷-$!item.fnName
+						            #else
+						                                    闪贷
+						            #end
+						            </span>
+						            #else  
+						            #end  
+                                    </td>
+                                   	<td>  
+                                   	#if($!item.orderType == 1)	  
+		                                    #if($!item.orderType == 1&&$!item.oStatus ==0)  
+	                                    	未确定
+	                                    #end
+	                                    #if($!item.orderType == 1&&$!item.oStatus>0)
+	                                        	$!utils.priceFormart($!{item.oTotalPrice})
+	                                    #end
+	                                    #if($!item.orderType == 1&&0>$!item.oStatus)
+	                                        #if(-10==$!item.oStatus)
+	                                        	$!utils.priceFormart($!{item.oTotalPrice})
+	                                        #else
+	                                        		--
+	                                    	#end
+	                                    #end
+                                 	#else
+                                 	$!utils.priceFormart($!{item.oTotalPrice})
+                                 	#end 
+                                 	#if($!item.sourceCode!="" && ($!item.sourceCode=="wdyy-app" || $!item.sourceCode=="wdzs-app"))
+                                 	<span class="pay-txt phone" style="cursor:pointer;" title="使用手机在我的医药网app采购的订单">手机订单</span>
+                                 	#end
+	                            	</td>
+
+                                    <td>
+                                        $!utils.priceFormart($!{item.payMoney})
+                                    </td>
+                                </tr>
+                                #end
+                                #else
+		                           <tr>
+		                             <td colspan="11">无相关数据！</td>
+		                           </tr>
+                                #end
+						     </tbody>
+                         </table>
+                         <!--分页开始 -->
+							#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+							#pagerInfo($!pagerInfo,$!{pagerTotal},"/purchase/order/wddd.html")
+							#end #end
+                      </div>
+                      <form id="operForm" name="operForm" method="post">
+                      <input type=hidden name="source" value="1"/>
+				      <input type=hidden name="oId" />
+				      <input type=hidden name="backUrl" value="/purchase/order/wddd.html"/>
+				      <input  type="hidden" name="returnPageParam" id="returnPageParam" value="$!{returnPageParam}"/>
+				      </form>
+				      <form id="payForm" action="" name="payForm" method="get" target="_blank">
+				    	<input  type="hidden" name="oIds" id="oIds"/>
+				      </form>
+
+                </div>
+                    <!--未发货-->
+                <!--未收货-->
+                <!--已完成-->
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("/common/footer.vm")
+
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script type="text/javascript" src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+    <script type="text/javascript">
+        var layer;
+        layui.config({
+            base: '/js/layui/extend/'
+        }).use(['layApp','layer','form'], function () {
+            layer = layui.layer;
+            var layApp = layui.layApp;
+            layApp.citySelect({
+                province: "#province",
+                city: "#city",
+                url: "/location/provincialCity",
+                place:true
+            })
+        })
+
+
+    $(function(){
+
+    	 //console.log(layer)
+    	 $(".img-tips").each(function(){
+    	 	var _this = $(this);
+    	 	_this.hover(function(){
+    	 		layer.tips(_this.attr("data-tips"),_this);
+    	 	},function(){
+    	 		layer.closeAll();
+    	 	})
+    	 })
+    })
+
+    function view(id){
+    	layer.load();
+    	$("#operForm").attr("target","_self");
+    	$("#operForm").find("input[name=oId]").val(id);
+    	$("#operForm").attr("action","/purchase/order/ddxq.html");
+    	$("#operForm").submit();
+    }
+
+    function paySelected(){
+        var selIds = $("#selectedIds").val();
+        if (selIds.length > 0){
+            $.ajaxPost("/purchase/order/payOrderVerify.html", {"oIds": selIds}, function(result){
+                if (result != "") {
+                    result = result.replace(new RegExp(/(")/g),'');
+                    if (result == '1'){
+                        //$("#payForm #oIds").val(selIds);
+                        //$("#payForm").attr("action", "http://$!{wwwHostAndPort}/orderGeneralPay.html");
+                        //$("#payForm").submit();
+
+                        // 新打开浏览器标签页方法，解决https到http跨协议问题
+                        var url = "http://$!{wwwHostAndPort}/orderGeneralPay.html?oIds=" + selIds;
+                        top.utils.open(url, "_blank");
+                    } else if (result == '2') {
+                        var a = dialog({
+                            title: '提示',
+                            content: "选择的订单支付状态变化，请重新选择再支付",
+                            width: 300,
+                            okVal: "确定",
+                            ok: function() {
+                                a.close();
+                                window.location.href = "/purchase/order/creditMergePay.html?status="+1;
+                            }
+                        })
+                    } else {
+
+                    }
+                }
+            });
+        } else {
+            //alert("请选择需要支付的订单再操作");
+            top.ue.msg("请选择需要支付的订单再操作");
+        }
+    }
+
+    function payAll(){
+        var allIds = $("#allIds").val();
+        if (allIds != null && allIds.length > 0){
+            $.ajaxPost("/purchase/order/payOrderVerify.html", {"oIds": allIds}, function(result){
+                if (result != "") {
+                    result =  result.replace(new RegExp(/(")/g),'');
+                    if (result == '1'){
+                        $("#payForm #oIds").val(allIds);
+                        $("#payForm").submit();
+                    } else if (result == '2') {
+                        var a = dialog({
+                            title: '提示',
+                            content: "选择的订单支付状态变化，请重新支付",
+                            width: 300,
+                            okVal: "确定",
+                            ok: function() {
+                                a.close();
+                                window.location.href = "/purchase/order/creditMergePay.html?status="+1;
+                            }
+                        })
+                    } else {
+
+                    }
+                }
+            });
+
+
+        }
+    }
+
+    function chooseOrder(obj){
+        if(!$(obj).prop("checked"))
+        {
+            $("#isAllChoice").val(false);
+            $("input[name='chooseAll']:checked").prop("checked",false);
+        }
+
+        resetSelMoney();
+        resetSelIds();
+    }
+
+    function selectAll(obj){
+        if($(obj).prop("checked")){
+            $("#isAllChoice").val(true);
+            $("#tbody").find("input[type=checkbox]").prop("checked",true);
+        }else{
+            $("#isAllChoice").val(false);
+            $("#tbody").find("input[type=checkbox]").prop("checked",false);
+        }
+
+        resetSelMoney();
+        resetSelIds();
+    }
+
+
+
+    function resetSelMoney(){
+        var selectedAmount = countSelSum();
+        // 选中批量支付0.00元
+        var txt = "选中批量支付" + selectedAmount.toFixed(2) + "元";
+        $("#selButton").html(txt);
+    }
+
+    function resetSelIds(){
+        //selectedIds
+        var ids = conjoinSelIds();
+        $("#selectedIds").val(ids);
+    }
+
+    function countSelSum() {
+        var currentAmount = 0.0;
+        $("input[name='choose']:checked").each(function () {
+            var amount = $(this).data("amount");
+            currentAmount += parseFloat(amount);
+        });
+        return currentAmount;
+    }
+
+    function conjoinSelIds() {
+        var idArray = new Array();
+        $("input[name='choose']:checked").each(function () {
+            var val = $(this).val();
+            idArray.push(val);
+        });
+        return idArray.join(",");
+    }
+
+    
+    function submitForm(i){
+    	layer.load();
+    	window.location.href = "/purchase/order/wddd.html?status="+i;
+		return false;
+    }
+    </script>
+  </body>
+</html>

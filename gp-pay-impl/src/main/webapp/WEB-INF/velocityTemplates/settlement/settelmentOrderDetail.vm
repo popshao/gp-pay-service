@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>已买到的药品-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}"/>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/sales/index.html" class="color">销售中心</a>&gt; 结算单管理 &gt; <a
+                                href="/sales/settelmentgl.html" class="color">订单结算单管理</a>&gt; 订单明细查看</p>
+                    </div>
+                    <div class="tab">
+
+                        <div class="order_query">
+                            <form action="" method="post" id="searchForm" name="searchForm">
+                                <input type="hidden" name="pi" value="$!pi">
+                                <input type="hidden" name="stId" value="$!stId">
+                                <h3 style="margin: 20px 0;">
+                                    <p class="fl" style="width: 33%;"><b>结算单号：</b>$!{settlement.stSn} </p>
+                                    <p class="last-cell fl" style="width: 33%;"><b>结算状态：</b>
+                                        #if($!settlement.stState == -1)
+                                            待结算
+                                        #elseif($!settlement.stState == 0)
+                                            <span style="cursor:pointer;"
+                                                  title="财务同学正在加紧结算中，工作日结算后到账时间以银行到账时间为准">待结算</span>
+                                        #elseif($!settlement.stState == 1)
+                                            已结算
+                                        #elseif($!settlement.stState == 2)
+                                            银行处理中
+                                        #else
+                                            $!settlement.stState
+                                        #end  </p>
+                                    <div class="clear"></div>
+                                </h3>
+                                <h3 style="margin: 20px 0">
+                                    <p class="fl" style="width: 33%;"><b>结算金额：</b>$!utils.priceFormart($!settlement.receiveAmount)</p>
+                                    <p class="fl" style="width: 33%;"><b>收款金额总计(元)：</b>$!utils.priceFormart($!settlement.stAmount)</p>
+                                    <p class="last-cell fl" style="width: 33%;"> <b>退款金额总计(元)：</b>$!utils.priceFormart($!settlement.refundAmount)</p>
+                                    <div class="clear"></div>
+                                </h3>
+                                <div class="btn">
+		                          #if($!backUrl=="")
+##		                    	<a href="javascript:window.history.back()" class="btn_query">返回</a>
+		                    #end
+		                     #if($!backUrl!="")
+		                    	<a href="$!{backUrl}?$!utils.getReuturnParam($!{returnPageParam})" class="btn_query">返回</a>
+		                    #end
+                     </div>
+                            </form>
+                        </div>
+                        <div class="order_detail yh">
+                            <div class="table">
+                                <table cellpadding="0" cellspacing="0">
+                                    <thead class="head">
+                                    <tr class="line">
+                                        <th></th>
+                                        <th>结算类型</th>
+                                        <th>单据类型</th>
+                                        <th>订单编号</th>
+                                        <th>下单时间</th>
+                                        <th>采购商名称</th>
+                                        <th>支付方式</th>
+                                        <th>单据金额(元)</th>
+                                        <th>佣金金额(元)</th>
+                                        <th>结算金额(元)</th>
+                                        <th>订单结算单号</th>
+                                        <th>订单结算单生成时间</th>
+                                        <th>订单结算单审核时间</th>
+                                        <th>开票员</th>
+                                        <th>开票员ID</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                        #if(!$null.isNull($settlementDetailList) && $settlementDetailList.size()!=0)
+                                            #foreach($item in $settlementDetailList)
+                                                #set($pageOrder = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+                                            <tr>
+                                                <td>$!pageOrder</td>
+                                                <td>
+                                                    #if($!item.stdType == 0)
+                                                        退款
+                                                    #elseif($!item.stdType == 1)
+                                                        收款
+                                                    #else
+                                                        $!item.stdType
+                                                    #end
+                                                </td>
+                                                <td>
+                                                    #if($!item.stdBillType == 0)
+                                                        退款单
+                                                    #elseif($!item.stdBillType == 1)
+                                                        收款单
+                                                    #else
+                                                        $!item.stdBillType
+                                                    #end
+                                                </td>
+                                                <td>$!item.stdBillSn</td>
+                                                <td>$utils.formatDate($!{item.oAddTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                                <td title="$!{item.stdBillBuyer}">
+                                                    #set($len = 15)
+                                                    #if($!item.stdBillBuyer.length() > $len)
+                                                        #set($str1 = $!item.stdBillBuyer.substring(0,$len))
+                                                        #set($str2 = $!item.stdBillBuyer.substring($len,$!item.stdBillBuyer.length()))
+                                                        $!{str1}<br/>$!{str2}
+                                                    #else $!{item.stdBillBuyer}
+                                                    #end
+                                                </td>
+                                                <td>
+                                                    #if($!item.payType == 1)
+                                                        中金
+                                                    #elseif($!item.payType == 2)
+                                                        民生
+                                                    #elseif($!item.payType == 3)
+                                                        支付宝
+                                                    #elseif($!item.payType == 4)
+                                                        易宝
+                                                    #elseif($!item.payType == 5)
+                                                        微信
+		                                             #elseif($!item.payType == 6)
+		                                            	浦发
+		                                             #elseif($!item.payType == 7)
+		                                            	闪贷
+		                                             #elseif($!item.payType == 8)
+		                                            	余额
+                                                    #else
+                                                        $!item.payType
+                                                    #end
+                                                </td>
+                                                <td>$!utils.priceFormart($!item.stdBillAmount)</td>
+                                                <td>
+                                                    #if($!item.stdBillType == 0)
+                                                        $!utils.priceFormart($!item.commission)
+                                                    #elseif($!item.stdBillType == 1)
+                                                        $!utils.priceFormart($!item.commission)
+                                                    #else
+                                                        $!utils.priceFormart($!item.commission)
+                                                    #end
+
+                                                </td>
+                                                <td>
+                                                    #set($balance=$item.stdBillAmount - $item.commission)
+                                                    #if($!item.stdBillType == 0)
+                                                    $!utils.priceFormart($!balance)
+                                                    #elseif($!item.stdBillType == 1)
+                                                        $!utils.priceFormart($!balance)
+                                                    #else
+                                                        $!utils.priceFormart($!ibalance)
+                                                    #end
+                                                </td>
+                                                <td>$!item.stSn</td>
+                                                <td>$utils.formatDate($!{item.stAddTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                                <td>$utils.formatDate($!{item.stAuditTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                                <td>$!{item.drawerName}</td>
+                                                <td>
+                                                    #if($!item.drawerId != 0)
+                                                    $!{item.drawerId}
+                                                #end</td>
+                                            </tr>
+                                            #end
+                                        #else
+                                        <tr>
+                                            <td colspan="11">无相关数据！</td>
+                                        </tr>
+                                        #end
+                                    </tbody>
+                                </table>
+                                <!--分页开始 -->
+                                #if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+                                    #pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/jsdglOrderDetail.html")
+                                #end #end
+                            </div>
+                        </div>
+                        <!--未发货-->
+                        <!--未收货-->
+                        <!--已完成-->
+                    </div>
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+    #parse("/common/footer.vm")
+
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+<script type="text/javascript">
+</script>
+</body>
+</html>

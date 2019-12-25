@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>买家商家成长值体系 - 成长值说明</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/shake.css?v=$!{jscss_version}">
+           
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="scripts/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm") #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心 </a>&gt; 我的成长值 &gt; <span class="color">成长值说明</span></p>
+                </div>
+                
+                <div class="explain_title mt20">
+                	<h3 class="fl">什么是成长值?</h3>
+                </div>
+                <div class="explain_ctn">
+                    ·  成长值是“我的医药网”会员通过购物、登录、升级所获得的。<a class="link" href="/purchase/growth/myGrowthValue.html">查看我的成长值</a><br /><br />
+                    ·  累积的成长值总额决定会员级别，成长值越高会员等级越高，享受到的会员特权越大。<a class="link" href="/purchase/growth/myGrowthValue.html">查看会员级别介绍</a><br /><br />
+                    ·  会员购物获取的成长值，可通过会员"成长值加成系数"加速。<a href="javascript:void(0);" class="link" onclick="top.frameScroll.doScrollTop($('#saber').offset().top,1)">查看加速系数介绍</a>
+                </div>
+
+                <div class="explain_title mt20">
+                    <h3 class="fl">新人任务</h3>
+                </div>
+                <div class="explain_ctn">
+                    <ul class="explain_ul cc">
+
+                        <li>
+                            <div class="img fl">
+                                <img class="" src="../../image/icon_integral_01.png">
+                            </div>
+                            <div class="ctn fl">
+                                <p class="top color01">登录<span class="text">+20</span></p>
+                                <p class="mt10">
+                                    APP、PC 首次登录后获得<br />
+                                    登录成功后发放
+                                </p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="img fl">
+                                <img class="" src="../../image/icon_integral_02.png">
+                            </div>
+                            <div class="ctn fl">
+                                <p class="top color02">企业认证<a class="text">+200</a></p>
+                                <p class="mt10">
+                                    完善企业基本信息和资质信息获得<br />
+                                    审核通过后发放
+                                </p>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="explain_title mt20">
+                    <h3 class="fl">日常任务</h3>
+                </div>
+                <div class="explain_ctn">
+                    <ul class="explain_ul cc">
+
+                        <li>
+                            <div class="img fl">
+                                <img class="shake shake-slow" src="../../image/icon_integral_03.png" onclick="toPurchasse();">
+                            </div>
+                            <div class="ctn fl">
+                                <p class="top color03">采购下单
+                                	#if($!count2 > 0)
+                            		<span class="text">+15</span>
+                            		#else
+                            		<a class="link" href="http://$!{wwwHostAndPort}/goods/quickPurchase.html">去完成</a>
+                            		#end
+                                </p>
+                                <p class="mt10">
+                                    PC下单按金额阶梯获得，使用APP、在线支付翻倍<br />
+                                    以确认收货金额计算
+                                </p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="img fl">
+                                <img class="shake shake-slow" src="../../image/icon_integral_04.png" onclick="toPurchasse();">
+                            </div>
+                            <div class="ctn fl">
+                                <p class="top color04">多商家采购下单
+                                	#if($!count1 > 1)
+                            		<span class="text">+30</span>
+                            		#else
+                            		<a class="link" href="http://$!{wwwHostAndPort}/goods/quickPurchase.html">去完成</a>
+                            		#end
+                                </p>
+                                <p class="mt10">
+                                    每日在不同商家采购，额外奖励<br />
+                                    确认收货后发放
+                                </p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="img fl">
+                                <img class="shake shake-slow" src="../../image/icon_integral_05.png" onclick="toPurchasse();">
+                            </div>
+                            <div class="ctn fl">
+                                <p class="top color05">在线支付
+                                	#if($!count3 > 0)
+                            		<span class="text">+30</span>
+                            		#else
+                            		<a class="link" href="http://$!{wwwHostAndPort}/goods/quickPurchase.html">去完成</a>
+                            		#end
+                                </p>
+                                <p class="mt10">
+                                    使用支付方式是在线支付每笔订单可<br />
+                                    额外获得20成长值，同一商家每日只赠送一次；
+                                </p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="img fl">
+                                <img class="shake shake-slow" src="../../image/icon_integral_06.png" onclick="showQRCode();">
+                            </div>
+                            <div class="ctn fl">
+                                <p class="top color06">APP下单
+                                	#if($!count4 > 0)
+                            		<span class="text">+15*n</span>
+                            		#else
+                            		<a class="link" href="javascript:showQRCode();">去完成</a>
+                            		#end
+                                </p>
+                                <p class="mt10">
+                                    使用APP下单，每笔订单可额外获得10成长值<br />
+                                    同一商家进行采购，每日只赠送1次
+                                </p>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="explain_title mt20">
+                    <h3 class="fl">升级任务</h3>
+                </div>
+                <div class="explain_ctn">
+                    <ul class="explain_ul cc">
+
+                        <li>
+                            <div class="img fl">
+                                <img class="shake shake-slow" src="../../image/icon_integral_07.png">
+                            </div>
+                            <div class="ctn fl">
+                                <p class="top color07">会员升级</p>
+                                <p class="mt10">
+                                    系统自动升级后，额外奖励成长值，每个等级奖励不同<br />
+                                    升级后立即奖励
+                                </p>
+                                <p>
+                                    <a class="link" href="/purchase/growth/myGrowthValue.html">查看成长值介绍</a>
+                                </p>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="explain_title mt20">
+                	<h3 class="fl">扣除成长值</h3>
+                </div>
+                <div class="explain_ctn">
+                    <ul class="explain_ul cc">
+                    
+                    	<li>
+                        	<div class="img fl">
+                            	<img class="shake shake-slow" src="../../image/icon_integral_09.png">
+                            </div>
+                            <div class="ctn fl">
+                            	<p>
+                                    会员级别有效期到期时会扣成长值
+                                </p>
+                                <p>
+                                    <a class="link" href="/purchase/growth/myGrowthValue.html">查看成长值介绍</a>
+                                </p>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                </div>
+                
+                <div class="explain_title mt20">
+                	<h3 class="fl">什么是成长值加成系数?</h3>
+                </div>
+                <div class="explain_ctn">
+                    ★ 成长值加成系数是根据您在我的医药网的购物行为评定的，由系统自动计算。
+                    <img src="../../image/img_18.jpg" id="saber">
+                </div>
+                                
+                <div class="integral_ps cc">
+                	<div class="integral_ps_title">注</div>
+                    <p>
+                       1、成长值加系只限于新注册用户，在35天内按照加系标准完成前3单予以赠送。<br />
+                       2、通过成长值加系获得额外奖励与订单奖励于确认收货后一并发放。<br />
+                       3、相应额度的采购成长值*成长值加系倍数=该笔订单获得的成长值。<br />
+                       4、如：您的订单确认收货时的金额为2000元，成长值加系倍数是1.2倍，那么您该笔订单的成长值是80*1.2=96。
+                    </p>
+                </div>
+                
+          </div>
+          
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("/common/footer.vm") 
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+    <script>
+    
+    function showQRCode(){
+    	var imgUrl ="/image/img_21.jpg";
+		var content = '<img src="'+imgUrl+'" height="299px;" width="246px;"/>';
+		dialog({
+			title: "下载APP",
+			content: content,
+			ok: false,
+			cancel: false,
+			esc: true
+		});
+    }
+    
+    function toPurchasse(){
+    	var str = "$!{wwwHostAndPort}";
+    	window.location.href = "http://" + str + "/goods/quickPurchase.html";
+    }
+    </script>
+    
+  </body>
+</html>

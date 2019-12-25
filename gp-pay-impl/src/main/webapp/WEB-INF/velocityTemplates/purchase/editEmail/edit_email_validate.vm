@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+            	#if($!{userInfos.email}=="")
+	    <title>绑定邮箱 - 我的医药网</title>
+	    #else
+	    <title>修改邮箱 - 我的医药网</title>
+	    #end
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+     <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}"/>
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+  	#parse("common/common_script.vm")
+    <script >
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+            render:true,
+            handler:function (btn) {
+                location.href = "/purchase/account/account_toEdit.html";
+            }
+        })
+    </script>
+  </head>
+  <body>
+  	<div class="container">
+      #parse("common/header_top.vm")
+      #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+        
+          #parse("common/left_menu_purchase.vm")
+          
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            
+            	<div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 账户中心 &gt;<a href="/purchase/account/account_toEdit.html" class="color">账号信息管理</a>&gt; #if($!{one}=="yes")
+												   绑定邮箱
+												    #else
+												    修改邮箱
+												    #end</p>
+                </div>
+
+	            
+	            <div class="order-zhsz-box">
+	
+	                <div class="order-zhsz-progress-bar">
+	                    <ul class="bar-ls cc">
+	                        <li class="bar-li current">
+	                            <i class="number">1</i>
+	                            <span class="text">验证身份</span>
+	                        </li>
+	                        <li class="bar-li current">
+	                            <i class="number">2</i>
+	                            <span class="text">#if($!{userInfos.email}=="")
+												   绑定邮箱
+												    #else
+												    修改邮箱
+		    				#end</span>
+	                        </li>
+	                        <li class="bar-li">
+	                            <i class="number">3</i>
+	                            <span class="text">完成</span>
+	                        </li>
+	                    </ul>
+	                </div>
+	
+	                <div class="order-zhsz-tips">
+	                    <img class="img" src="../../image/img_zhsz_02.png">
+	                    <p class="text-info ml10">
+	                        已发送绑定邮件至：$!{viewEmail}，邮件仅在12小时内有效，<br>
+	                        请尽快查看邮件完成绑定。<br><br>
+	                        若没有收到，您可以<a class="link ml10" href="javascript:void(0)">点击重发绑定邮件</a>
+	                    </p>
+	                </div>
+	
+	                <div class="order-zhsz-table">
+	
+	                    <table border="0" cellpadding="0" cellspacing="0">
+	                        <tr>
+	                            <td class="tar title" width="260"></td>
+	                            <td width="auto"><a href="" class="btn-b" target="_blank">进入邮箱验证</a></td>
+	                        </tr>
+	                    </table>
+	
+	                </div>
+	
+	            </div>
+    
+            </div>
+            <!-- 用户中心_主体内容_E -->
+	 	  </div>
+	 	  
+        </div>
+      </div>
+    </div>
+    
+    #parse("/common/footer.vm")
+      
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script>
+    //跳转到指定的邮箱登录页面
+    $(".btn-b").click(function () {
+       var uurl = gotoEmail("$!{sendEmail}");
+        if (uurl != "") {
+        	$(this).attr("href","http://"+uurl);
+        } else {
+            top.ue.msg("抱歉!未找到对应的邮箱登录地址，请自己登录邮箱查看邮件！");
+            return false;
+        }
+    });
+
+    //功能：根据用户输入的Email跳转到相应的电子邮箱首页
+    function gotoEmail($mail) {
+        $t = $mail.split('@')[1];
+        $t = $t.toLowerCase();
+        if ($t == '163.com') {
+            return 'mail.163.com';
+        } else if ($t == 'vip.163.com') {
+            return 'vip.163.com';
+        } else if ($t == '126.com') {
+            return 'mail.126.com';
+        } else if ($t == 'qq.com' || $t == 'vip.qq.com' || $t == 'foxmail.com') {
+            return 'mail.qq.com';
+        } else if ($t == 'gmail.com') {
+            return 'mail.google.com';
+        } else if ($t == 'sohu.com') {
+            return 'mail.sohu.com';
+        } else if ($t == 'tom.com') {
+            return 'mail.tom.com';
+        } else if ($t == 'vip.sina.com') {
+            return 'vip.sina.com';
+        } else if ($t == 'sina.com.cn' || $t == 'sina.com') {
+            return 'mail.sina.com.cn';
+        } else if ($t == 'tom.com') {
+            return 'mail.tom.com';
+        } else if ($t == 'yahoo.com.cn' || $t == 'yahoo.cn') {
+            return 'mail.cn.yahoo.com';
+        } else if ($t == 'tom.com') {
+            return 'mail.tom.com';
+        } else if ($t == 'yeah.net') {
+            return 'www.yeah.net';
+        } else if ($t == '21cn.com') {
+            return 'mail.21cn.com';
+        } else if ($t == 'hotmail.com') {
+            return 'www.hotmail.com';
+        } else if ($t == 'sogou.com') {
+            return 'mail.sogou.com';
+        } else if ($t == '188.com') {
+            return 'www.188.com';
+        } else if ($t == '139.com') {
+            return 'mail.10086.cn';
+        } else if ($t == '189.cn') {
+            return 'webmail15.189.cn/webmail';
+        } else if ($t == 'wo.com.cn') {
+            return 'mail.wo.com.cn/smsmail';
+        } else if ($t == '139.com') {
+            return 'mail.10086.cn';
+        } else {
+            return '';
+        }
+    };
+    
+    $(".link").click(function() {
+    	var email   ="$!{sendEmail}";
+    	var params = {
+    			email: email
+    		};	
+    		$.ajax({
+    			url: "/purchase/sendModtifyEmailForValidate.html",
+    			type: "post",
+    			dataType: "json",
+    			data: params,
+    			success: function(data) {
+    				if(data.success){
+    					if(data.data==null){
+							top.ue.msg("发送成功");
+    					}else{
+    						if (data.data.status == "1") {
+    							top.ue.msg("系统错误，请重试！");
+    						}
+    					}
+    				}
+    			}
+    		});
+    		return false;
+    	})
+    </script>
+    
+  </body>
+</html>

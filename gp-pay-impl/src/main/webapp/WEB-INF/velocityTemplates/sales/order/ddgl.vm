@@ -1,0 +1,1276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销售订单-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" href="/js/webupload/webuploader.css?v=1.13">
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/js/select2/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="/js/webupload/webuploader.css?v=$!{jscss_version}"/>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <input type="hidden" id="rowCount" value="$!pagerInfo.rowsCount"/>
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/sales/index.html" class="color">销售中心</a>&gt; 交易管理 &gt; 销售订单</p>
+                    </div>
+                    <div class="order_list order_promotions">
+                        <div class="tabnav">
+                            #if($!activity==1)
+                                <div class="order_query">
+                                    <div class="btn">
+                                        <a href="javascript:void(0);" class="btn_query btn_export btn-line fr"
+                                           onclick="takenAll()">全部提取</a>
+                                        <span class="fr" style="width:10px;">&nbsp;</span>
+                                        <a href="javascript:void(0);" class="btn_query btn_export btn-line fr"
+                                           onclick="takenChecked()">根据选择提取</a>
+                                        <span class="fr" style="width:10px;">&nbsp;</span>
+                                        <a href="javascript:exportByCondition();" class="btn_query btn_export btn-line fr"
+                                           title="点击导出当前查询条件下的订单信息">导出Excel</a>
+                                    </div>
+                                </div>
+                            #end
+                            #if($!activity==0)
+                                <div class="order_query">
+                                    <div class="btn">
+                                        #if($!sendflag)
+                                            <a href="javascript:bulkShipment();"
+                                               class="btn_query btn_export btn-line fr">批量发货</a>
+                                        #end
+                                        <span class="fr" style="width:10px;">&nbsp;</span>
+                                        <a href="javascript:exportByCondition();" class="btn_query btn_export btn-line fr"
+                                           title="点击导出当前查询条件下的订单信息">导出Excel</a>
+                                    </div>
+                                </div>
+                            #end
+                            <ul>
+                                <li data-value="1"  #if($!activity==0)class="on"#end><a
+                                        href="javascript:setActivityStatus(0);"><span>全部订单</span></a></li>
+                                #if($!suIsOrder2Erp!=1)
+                                    <li data-value="2" #if($!activity==1)class="on"#end><a
+                                            href="javascript:setActivityStatus(1);"><span>待提取订单</span></a></li>
+                                #end
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="order_query">
+                        <form action="" method="post" id="searchForm" name="searchForm">
+                            <input type="hidden" name="pi" value="$!pi">
+                            <ul>
+                                #if($!activity==0)
+                                    <li>
+                                        <label class="w70">订单状态&nbsp;</label>
+                                        <div class="sltitem sltitem-top w150">
+                                            <span class="w70">待发货</span>
+                                            <ul style="display: none;">
+                                                <li data-value="7"><a href="javascript:void(0);">全部</a></li>
+                                                <li data-value="1"><a href="javascript:void(0);">待审核</a></li>
+                                                <li data-value="2"><a href="javascript:void(0);">待发货</a></li>
+                                                <li data-value="3"><a href="javascript:void(0);">已发货</a></li>
+                                                <li data-value="6"><a href="javascript:void(0);">已驳回</a></li>
+                                                <li data-value="4"><a href="javascript:void(0);">买家已签收</a></li>
+                                                <li data-value="5"><a href="javascript:void(0);">已取消</a></li>
+                                            </ul>
+                                            <input type="hidden" name="status" id="status">
+                                        </div>
+                                        #*<select type="text" class="mn-ftext mn-select" name="status" placeholder="全部">
+                                            <option value="7" #if($!status == 7) selected="selected" #end>全部</option>
+                                            <option value="1" #if($!status == 1) selected="selected" #end>待审核</option>
+                                            <option value="2" #if($!status == 2) selected="selected" #end>待发货</option>
+                                            <option value="3" #if($!status == 3) selected="selected" #end>已发货</option>
+                                            <option value="6" #if($!status == 6) selected="selected" #end>已驳回</option>
+                                            <option value="4" #if($!status == 4) selected="selected" #end>买家已签收</option>
+                                            <option value="5" #if($!status == 5) selected="selected" #end>已取消</option>
+                                        </select>*#
+                                    </li>
+                                    <li>
+                                        <label class="w70">付款状态&nbsp;</label>
+                                        <div class="sltitem sltitem-top w150">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="20"><a href="javascript:void(0);">全部</a></li>
+                                                <li data-value="10"><a href="javascript:void(0);">未付款</a></li>
+                                                <li data-value="50"><a href="javascript:void(0);">已支付</a></li>
+                                            </ul>
+                                            <input type="hidden" name="payStatus" id="payStatus">
+                                        </div>
+                                        #*<select type="text" class="mn-ftext mn-select" name="payStatus" placeholder="全部">
+                                            <option value="20" #if($!payStatus == 20) selected="selected" #end>全部</option>
+                                            <option value="10" #if($!payStatus == 10) selected="selected" #end>未付款</option>
+                                            <option value="50" #if($!payStatus == 50) selected="selected" #end>已支付</option>
+                                        </select>*#
+                                    </li>
+                                    <li>
+                                        <label class="w70">结算状态&nbsp;</label>
+                                        <div class="sltitem sltitem-top w150">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                                <li data-value="10"><a href="javascript:void(0);">待结算</a></li>
+                                                <li data-value="50"><a href="javascript:void(0);">已结算</a></li>
+                                            </ul>
+                                            <input type="hidden" name="settelmentStatus" id="settelmentStatus">
+                                        </div>
+                                        #*<select type="text" class="mn-ftext mn-select" name="settelmentStatus" placeholder="全部">
+                                            <option value="0" #if($!settelmentStatus == 0) selected="selected" #end>全部</option>
+                                            <option value="10" #if($!settelmentStatus == 10) selected="selected" #end>待结算</option>
+                                            <option value="50" #if($!settelmentStatus == 50) selected="selected" #end>已结算</option>
+                                        </select>*#
+                                    </li>
+                                    <li>
+                                        <label class="w70">订单类型&nbsp;</label>
+                                        <div class="sltitem w150">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="-1"><a href="javascript:void(0);">全部</a></li>
+                                                <li data-value="0"><a href="javascript:void(0);">普通订单</a></li>
+                                                <li data-value="1"><a href="javascript:void(0);">团购订单</a></li>
+                                                <li data-value="5"><a href="javascript:void(0);">预售订单</a></li>
+                                            </ul>
+                                            <input type="hidden" name="orderType" id="orderType">
+                                        </div>
+                                        #*<select type="text" class="mn-ftext mn-select" name="orderType" placeholder="全部">
+                                            <option value="-1" #if($!orderType == -1) selected="selected" #end>全部</option>
+                                            <option value="0" #if($!orderType == 0) selected="selected" #end>普通订单</option>
+                                            <option value="1" #if($!orderType == 1) selected="selected" #end>团购订单</option>
+                                        </select>*#
+                                    </li>
+                                    <li>
+                                        <label class="w70">订单来源&nbsp;</label>
+                                        <div class="sltitem w150">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                                <li data-value="1"><a href="javascript:void(0);">我的医药PC</a></li>
+                                                <li data-value="2"><a href="javascript:void(0);">我的医药APP</a></li>
+##                                                <li data-value="3"><a href="javascript:void(0);">康康买药</a></li>
+                                                <li data-value="4"><a href="javascript:void(0);">菲加云</a></li>
+                                                <li data-value="5"><a href="javascript:void(0);">我的诊所</a></li>
+                                            </ul>
+                                            <input type="hidden" name="sourceCode" id="sourceCode">
+                                        </div>
+                                        #*<select type="text" class="mn-ftext mn-select" name="sourceCode" placeholder="全部">
+                                            <option value="0" #if($!sourceCode == 0) selected="selected" #end>全部</option>
+                                            <option value="1" #if($!sourceCode == 1) selected="selected" #end>PC订单</option>
+                                            <option value="2" #if($!sourceCode == 2) selected="selected" #end>手机订单</option>
+                                        </select>*#
+                                    </li>
+
+                                    <li>
+                                        <label class="w70">支付方式&nbsp;</label>
+                                        <div class="sltitem w150">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                                <li data-value="1"><a href="javascript:void(0);">在线支付</a></li>
+                                                <li data-value="2"><a href="javascript:void(0);">账期付款</a></li>
+                                                <li data-value="3"><a href="javascript:void(0);">线下付款</a></li>
+                                                <li data-value="4"><a href="javascript:void(0);">药白条</a></li>
+                                                <li data-value="5"><a href="javascript:void(0);">帮你付</a></li>
+                                                <li data-value="6"><a href="javascript:void(0);">闪贷</a></li>
+                                                <li data-value="7"><a href="javascript:void(0);">余额支付</a></li>
+                                            </ul>
+                                            <input type="hidden" name="payMethod" id="payMethod">
+                                        </div>
+                                        #*<select type="text" class="mn-ftext mn-select" name="payMethod" placeholder="全部">
+                                            <option value="0" #if($!payMethod == 0) selected="selected" #end>全部</option>
+                                            <option value="1" #if($!payMethod == 1) selected="selected" #end>在线支付</option>
+                                            <option value="2" #if($!payMethod == 2) selected="selected" #end>账期付款</option>
+                                            <option value="3" #if($!payMethod == 3) selected="selected" #end>线下付款</option>
+                                            <option value="4" #if($!payMethod == 4) selected="selected" #end>药白条</option>
+                                            <option value="5" #if($!payMethod == 5) selected="selected" #end>帮你付</option>
+                                            <option value="6" #if($!payMethod == 6) selected="selected" #end>闪贷</option>
+                                            <option value="7" #if($!payMethod == 7) selected="selected" #end>余额支付</option>
+                                        </select>*#
+                                    </li>
+                                    <li>
+                                        <label class="w70">业务分组&nbsp;</label>
+                                        <div class="sltitem w150">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                                #if($!customerTypeList && $!customerTypeList.size()!=0)
+                                                    #foreach($item in $customerTypeList)
+                                                        <li data-value="$!item.sctId"><a
+                                                                href="javascript:void(0);">$!item.sctName</a></li>
+                                                    #end
+                                                #end
+                                            </ul>
+                                            <input type="hidden" name="customerType" id="customerType">
+                                        </div>
+                                        #*<select type="text" class="mn-ftext mn-select" name="customerType" placeholder="全部">
+                                            <option value="0" #if($!customerType == 0) selected="selected" #end>全部</option>
+                                            #if($!customerTypeList && $!customerTypeList.size()!=0)
+                                                #foreach($item in $customerTypeList)
+                                                    <option value="$!item.sctId" #if($!customerType == $!item.sctId) selected="selected" #end>$!item.sctName</option>
+                                                #end
+                                            #end
+                                        </select>*#
+                                    </li>
+
+                                    <li>
+                                        <label class="w70">区域分组&nbsp;</label>
+                                        <div class="sltitem w150">
+                                            <span class=""></span>
+                                            <ul style="display: none;">
+                                                <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                                #if($!srList && $!srList.size()!=0)
+                                                    #foreach($item in $srList)
+                                                        <li data-value="$!item.regionId"><a
+                                                                href="javascript:void(0);">$!item.regionName</a></li>
+                                                    #end
+                                                #end
+                                            </ul>
+                                            <input type="hidden" name="regionId" id="regionId">
+                                        </div>
+                                        #*<select type="text" class="mn-ftext mn-select" name="regionId" placeholder="全部">
+                                            <option value="0" #if($!regionId == 0) selected="selected" #end>全部</option>
+                                            #if($!srList && $!srList.size()!=0)
+                                                #foreach($item in $srList)
+                                                    <option value="$!item.regionId" #if($!regionId == $!item.regionId) selected="selected" #end>$!item.regionName</option>
+                                                #end
+                                            #end
+                                        </select>*#
+                                    </li>
+                                    <li>
+                                        <label class="w70">促销名称&nbsp;</label>
+                                        <input type="hidden" class="hide-input" name="pactId" value="$!pactId">
+                                        <input autocomplete="off" data-multi="true"
+                                               data-url="/sales/promotion/findByName.html" name="pactTitle" type="text"
+                                               value="$!pactTitle" class="w-txt w-150">
+                                    </li>
+                                #end
+                                <li>
+                                    <label class="w70">订单号&nbsp;</label>
+                                    <input id="oSn" name="oSn" type="text" value="$!oSn" class="w-txt w-150">
+                                </li>
+                                <li>
+                                    <label class="w70">采购商&nbsp;</label>
+                                    <input id="oEName" name="oEName" type="text" value="$!oEName" class="w-txt w-150">
+                                </li>
+
+                                <li>
+                                    <label class="w70">下单时间&nbsp;</label>
+                                    <input type="text" name="oAddTimeBegin" id="oAddTimeBegin" value="$!oAddTimeBegin"
+                                           onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'oAddTimeEnd'+'\\'+'\')}'})"
+                                           class="w-txt w-150" style="width:120px;">
+                                    <i class="slt_t">至</i>
+                                    <input type="text" name="oAddTimeEnd" id="oAddTimeEnd" value="$!oAddTimeEnd"
+                                           onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'oAddTimeBegin'+'\\'+'\')}'})"
+                                           class="w-txt w-150" style="width:120px;">
+                                </li>
+                                #if($!activity==0)
+                                    <li>
+                                        <label class="w70">签收时间&nbsp;</label>
+                                        <input type="text" name="acceptTimeBegin" id="acceptTimeBegin"
+                                               value="$!acceptTimeBegin"
+                                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'acceptTimeEnd'+'\\'+'\')}'})"
+                                               class="w-txt w-150" style="width:120px;">
+                                        <i class="slt_t">至</i>
+                                        <input type="text" name="acceptTimeEnd" id="acceptTimeEnd"
+                                               value="$!acceptTimeEnd"
+                                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'acceptTimeBegin'+'\\'+'\')}'})"
+                                               class="w-txt w-150" style="width:120px;">
+                                    </li>
+                                #end
+                                <input type="hidden" name="activity" id="activity" value="$!activity">
+                            </ul>
+                            <div class="btn tac">
+                                <a href="javascript:searchPager('/sales/order/ddgl.html',false);"
+                                   class="btn_query">查询</a>
+                                <a href="javascript:searchPager('/sales/order/ddgl.html?activity=$!activity',true);"
+                                   class="btn_query btn_export btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+                                <!--   <a href="javascript:searchPager('/sales/order/ddgl.html',true);" class="btn_query btn_export mr7">导出EXCEL</a>-->
+                                #if($eType==8)
+                                    #if($orderContractTemplate)
+                                        <a href="javascript:void(0)"
+                                           onclick="deletetemp('$!orderContractTemplate.templateName')"
+                                           class="btn_query btn-gy fr">删除</a>
+                                        <a href="javascript:void(0)" class="btn_query btn-gy fr jzb-ht-btn mr7"
+                                           data-option="1" data-name="$!orderContractTemplate.templateName"> 修改</a>
+                                        <a href="javascript:void(0)"
+                                           onclick="downloadHT('$!orderContractTemplate.templateFileKey','$!orderContractTemplate.templateName')"
+                                           class="b-link fr">$!orderContractTemplate.templateName</a>
+                                    #end
+                                    #if(!$orderContractTemplate)
+                                        <p class="fr" style="line-height: 35px;">您可以根据业务情况选择上传销售合同模板，提供商业上传加盖公章的合同到每笔订单。<a
+                                                href="javascript:void(0)" class="btn_query btn-gy jzb-ht-btn fr">上传销售合同模板</a>
+                                        </p>
+                                    #end
+                                #end
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="order_list order_promotions">
+                        <div class="tab">
+                            <div class="order_detail yh order_font">
+                                <div class="table">
+                                    <table cellpadding="0" cellspacing="0">
+                                        <thead class="head">
+                                        <tr class="line">
+                                            <th width="45">#if($!activity==1)<span><input type="checkbox"
+                                                                                          name="checkall"
+                                                                                          style="width:15px;height:15px;"
+                                                                                          onclick="checkAll(this)">全选#end
+                                            </span></th>
+                                            <th width="240">订单号</th>
+                                            <th width="80">下单时间</th>
+                                            <th width="80">签收时间</th>
+                                            <th width="80">采购商</th>
+                                            <th>订单状态</th>
+                                            <!--     <th>付款方式</th>-->
+                                            <th>付款状态</th>
+                                            <th>结算状态</th>
+                                            <th>订单金额(元)</th>
+                                            <th width="130">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            #if(!$null.isNull($orderList) && $orderList.size()!=0)
+                                                #foreach($item in $orderList)
+                                                    #set($pageOrder = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+                                                <tr>
+                                                    #if($!activity==1)
+                                                        <td><input type="checkbox" name="oIds" value="$!item.oId"
+                                                                   style="width:15px;height:15px;">$!pageOrder</td>
+                                                    #else
+                                                        <td>$!pageOrder</td>
+                                                    #end
+                                                    <td class="tal">
+                                                        #if($!item.orderType==5)
+                                                            <i class="pre-sell">预售</i>
+                                                        #end
+                                                        #if($!item.orderType == 1)
+                                                            <span class="tg_order">
+				                               <a class="a-link"
+                                                  onclick="view($!item.oId);"><b>$!item.oSn</b></a>
+				                               </span>
+                                                        #* 订单备注图标加tips效果 *#
+                                                            #if ($!item.deliveryNote != "")
+                                                                <img src="/image/msg.png"
+                                                                     data-tips="$!item.deliveryNote" class="img-tips"
+                                                                     width="20" height="20"/>
+                                                            #end
+                                                        #else
+                                                            <a class="a-link" href="javascript:view($!item.oId);">
+                                                                <b>$!item.oSn</b>
+                                                            </a>
+                                                        #* 菲加云订单图标加tips效果 *#
+                                                            #if ($!item.sourceCode == "saas" || $!item.sourceCode ==
+                                                                "saas-cp")
+                                                                <i class="order-tips-fjy"
+                                                                   data-tips-style="{color:'#000'}" data-tips="true"
+                                                                   data-tips-title="此订单来源于菲加云"></i>
+                                                            #end
+                                                        #* 订单备注图标加tips效果 *#
+                                                            #if ($!item.deliveryNote != "")
+                                                                <i class="order-tips-msg"
+                                                                   data-tips-style="{color:'#000'}" data-tips="true"
+                                                                   data-tips-title="$!item.deliveryNote"></i>
+                                                            #end
+                                                        #end
+                                                    </td>
+                                                    <td>$utils.formatDate($!item.oAddTime,"yyyy-MM-dd HH:mm:ss")</td>
+                                                    <td>
+                                                        #if($!item.oStatus > 90)
+                                                            $utils.formatDate($!item.acceptTime,"yyyy-MM-dd HH:mm:ss")
+                                                        #else
+                                                            --
+                                                        #end
+                                                    </td>
+                                                    <td>$!item.oEName</td>
+                                                    <td>
+                                                    ##卖家订单状态
+                                                        #if($!item.oStatus == -90)
+                                                            已取消
+                                                        #elseif($!item.oStatus == -21 || $!item.oStatus == -22)
+                                                            已取消
+                                                        #elseif($!item.oStatus == -10)
+                                                            已驳回
+                                                        #elseif($!item.oStatus == 0)
+                                                            待审核
+                                                        #elseif($!item.oStatus == 10 || $!item.oStatus == 30)
+                                                        ## PM-12442 待发货列表未支付订单状态显示未支付，modified by xiaokang.zhu on 2017.11.8
+                                                            #if($!item.payStatus == 10)
+                                                                未付款
+                                                            #else
+                                                                待发货
+                                                            #end
+                                                        #elseif($!item.oStatus == 90)
+                                                            已发货
+                                                        #elseif($!item.oStatus == 100)
+                                                            买家已签收
+                                                        #else
+                                                            $!item.oStatus
+                                                        #end
+                                                        #if($!item.orderType==5&&$!item.oStatus <90&&$!item.oStatus >=0)
+                                                            <p class="pre-sell-user">$!item.pdSaleTimeStr</p>
+                                                        #end
+                                                    </td>
+                                                    <td>
+                                                        <!-- 卖家订单支付状态 -->
+                                                        #if($!item.payStatus == 0)
+                                                            --
+                                                        #elseif($!item.payStatus == 10)
+                                                            未付款
+                                                        #elseif($!item.payStatus == 50)
+                                                            已支付
+                                                        #else
+                                                            $!item.payStatus
+                                                        #end
+                                                        #if($!item.oPaymentMethod == 1)
+                                                            <span class="pay-txt" style="cursor:pointer;"
+                                                                  title="该订单支付方式是“在线支付”">在线支付</span>
+                                                        #elseif($!item.oPaymentMethod == 2)
+                                                            <span class="pay-txt" style="cursor:pointer;"
+                                                                  title="该订单支付方式是“账期付款”">账期付款</span>
+                                                        #elseif($!item.oPaymentMethod == 3)
+                                                            <span class="pay-txt blue" style="cursor:pointer;"
+                                                                  title="该订单支付方式是“线下付款”">线下付款</span>
+                                                        #elseif($!item.oPaymentMethod == 4)
+                                                            <span class="pay-txt" style="cursor:pointer;"
+                                                                  title="该订单支付方式是“药白条”">
+                                                                #if($!item.fnName)
+                                                                    药白条-$!item.fnName
+                                                                #else
+                                                                    药白条
+                                                                #end
+								            </span>
+                                                        #elseif($!item.oPaymentMethod == 5)
+                                                            <span class="pay-txt" style="cursor:pointer;"
+                                                                  title="该订单支付方式是“帮你付”">
+                                                                #if($!item.fnName)
+                                                                    帮你付-$!item.fnName
+                                                                #else
+                                                                    帮你付
+                                                                #end
+						                    </span>
+                                                        #elseif($!item.oPaymentMethod == 6)
+                                                            <span class="pay-txt" style="cursor:pointer;"
+                                                                  title="该订单支付方式是“闪贷”">
+                                                                #if($!item.fnName)
+                                                                    闪贷-$!item.fnName
+                                                                #else
+                                                                    闪贷
+                                                                #end
+						                    </span>
+                                                        #elseif($!item.oPaymentMethod == 7)
+                                                            <span class="pay-txt" style="cursor:pointer;"
+                                                                  title="该订单支付方式是“余额支付”">余额支付</span>
+                                                        #else
+                                                        #end
+                                                    </td>
+                                                    <td>
+                                                        <!-- 卖家订单结算状态 -->
+                                                        #if($!item.accountsStatus == 0)
+                                                            --
+                                                        #elseif($!item.accountsStatus == 10)
+                                                            待结算
+                                                        #elseif($!item.accountsStatus == 50)
+                                                            已结算
+                                                        #else
+                                                            $!item.accountsStatus
+                                                        #end
+                                                    </td>
+                                                    <td>
+                                                        #if($!item.orderType == 1)
+                                                            #if($!item.orderType == 1&&$!item.oStatus ==0)
+                                                                未确定
+                                                            #end
+                                                            #if($!item.orderType == 1&&$!item.oStatus>0)
+                                                                $!utils.priceFormart($!{item.oTotalPrice})
+                                                            #end
+                                                            #if($!item.orderType == 1&&0>$!item.oStatus)
+                                                                #if(-10==$!item.oStatus)
+                                                                    $!utils.priceFormart($!{item.oTotalPrice})
+                                                                #else
+                                                                    --
+                                                                #end
+                                                            #end
+                                                        #else
+                                                            $!utils.priceFormart($!{item.oTotalPrice})
+                                                        #end
+                                                        #if($!item.sourceCode!="" && ($!item.sourceCode=="wdyy-app" || $!item.sourceCode=="wdzs-app"))
+                                                            <span class="pay-txt phone" style="cursor:pointer;"
+                                                                  title="使用手机在我的医药网app采购的订单">手机订单</span>
+                                                        #end
+                                                    </td>
+                                                    <td>
+                                                        <a href="javascript:view($!item.oId);" class="btn-txt-n">查看</a>
+
+                                                        #if($!item.oPaymentMethod==5 && $!item.oStatus ==0)
+                                                            <a class=btn-txt-n style="width:70px;"
+                                                               href="javascript:confirm($!item.oId);">确认帮你付</a>
+                                                            <a class=btn-txt-n style="width:70px;"
+                                                               href="javascript:refuse($!item.oId);">拒绝帮你付</a>
+                                                        #end
+
+                                                        <!-- 线上支付（下单即付款） -->
+                                                        #if($!item.oPaymentMethod==1 || $!item.oPaymentMethod==4 || $!item.oPaymentMethod==6)
+                                                            #if($!item.payStatus==50)
+                                                                #if($!item.oStatus>=10 && $!item.oStatus<=30)
+
+                                                                    #if($!item.obStatus)
+                                                                    #else
+
+                                                                        #if($!item.orderType != 1&&$!item.oStatus >0)
+
+                                                                            #if($!sendflag)
+                                                                                <a href="javascript:send($!item.oId);"
+                                                                                   class="btn-txt-n">发货/驳回</a>
+                                                                            #end
+
+                                                                        #end
+
+                                                                    #end
+
+                                                                #end
+                                                            #end
+                                                        #else
+
+                                                            #if($!item.oStatus>=10 && $!item.oStatus<=30)
+                                                                #if($!item.obStatus)
+                                                                #else
+
+                                                                    #if($!sendflag)
+                                                                        <a href="javascript:send($!item.oId);"
+                                                                           class="btn-txt-n">发货/驳回</a>
+                                                                    #end
+
+                                                                #end
+                                                            #end
+
+                                                        #end
+
+                                                        #if($!item.obStatus == 0)
+                                                            <br><b>退货中</b>
+                                                        #end
+                                                        <a href="javascript:exportOrder($!item.oId);" class="btn-txt-n">导出</a>
+                                                        #if($!item.accountsStatus == 50 && $!item.payStatus == 50 && $!{item.oTotalPrice} >0)
+                                                            <a href="javascript:download($!item.oId);"
+                                                               class="btn-txt-n">下载回单</a>
+                                                        #end
+
+                                                        #if($!item.leaseDocument1 == 1)
+                                                            <a class="btn-txt-n" href="javascript:void(0);"
+                                                               onclick="showPeerModal('$!item.oId',1,0)">上传同行单</a>
+                                                        #end
+                                                        #if($!item.leaseDocument1 == 2)
+                                                            <a class="btn-txt-n" href="javascript:void(0);"
+                                                               onclick="showPeerModal('$!item.oId',1,1)">修改同行单</a>
+                                                        #end
+
+                                                        #if($eType==8)
+                                                            #if($item.orderContract)
+                                                                <a href="javascript:void(0)"
+                                                                   onclick="downloadHT('$!item.orderContract.contractFileKey','$!item.orderContract.contractFileName')"
+                                                                   class="btn-txt-l">下载销售合同</a>
+                                                            #end
+                                                            #if(!$item.orderContract)
+                                                                <a class="btn-txt-no">未上传销售合同</a>
+                                                            #end
+                                                        #end
+                                                        #if($item.pingAnYbtStatus==2)
+                                                            <a class="btn-txt-n" style="width: auto;" href="javascript:void(0);"onclick="submitPingAn('$!item.pingAnSellerUrl','$!item.pingAnSecret','$!item.pingAnAppid','$!item.oSn')">债权转让签章</a>
+                                                        #end
+                                                    </td>
+                                                </tr>
+                                                #end
+                                            <tr>
+                                                <td class="tar h30" colspan="11">
+                                                    小计(元)：<span class="w80 fr tal"
+                                                                style="width: 160px;">$!{price}</span><br/>
+                                                    总计(元)：<span class="w80 fr tal"
+                                                                style="width: 160px;">$!{countPrice}</span>
+                                                </td>
+                                            </tr>
+                                            #else
+                                            <tr>
+                                                <td colspan="11">无相关数据！</td>
+                                            </tr>
+                                            #end
+                                        </tbody>
+                                    </table>
+                                    <!--分页开始 -->
+                                    #if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+                                        #pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/order/ddgl.html")
+                                    #end #end
+                                </div>
+                                <form id="operForm" name="operForm" method="post">
+                                    <input type=hidden name="backUrl" value="/sales/order/ddgl.html"/>
+                                    <input type="hidden" name="returnPageParam" id="returnPageParam"
+                                           value="$!{returnPageParam}"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加修改页面 -->
+<div class="mask" id="popUpMask"></div>
+<div class="dialog w700" id="popUpDIV">
+    <div class="head"><span class="dialog-title">添加</span><a href="javascript:closePopUpDIV('popUpDIV','popUpMask');"
+                                                             class="btn-close"></a></div>
+    <div class="con">
+        <form id="exportForm" method="post">
+            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                <tr>
+                    <td class="table-tit">下单时间：</td>
+                    <td>
+                        <input type="text" name="startTime" id="startTime" class="txt" readonly="readonly"
+                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'endTime'+'\\'+'\')}'})"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table-tit">至：</td>
+                    <td><input type="text" name="endTime" id="endTime" class="txt" readonly="readonly"
+                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'startTime'+'\\'+'\')}'})"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn"><a href="javascript:exportByCondition();" class="btn-txt mr7">确定</a><a
+                    href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn-txt">关闭</a></div>
+        </form>
+    </div>
+</div>
+
+<form id="pingAnForm" method="post" target="_blank">
+    <input type="hidden" name="appsecret" id="appsecret"/>
+    <input type="hidden" name="appid" id="appid"/>
+    <input type="hidden" name="templateNo" id="templateNo" value="1"/>
+    <input type="hidden" name="orderNo" id="orderNo"/>
+</form>
+
+    #parse("common/footer.vm")
+
+#*同行单弹窗TPL*#
+<script type="text/html" id="txdModalTpl">
+    <div class="txd-modal">
+        <div class="txd-left fl">
+            <div class="txd-head">
+                    <span>
+                        {{# if(d.fileList && d.fileList.length){ }}
+                        {{# }else{ }}
+                             {{# if(d.type==1){ }}
+                            随货同行单
+                            {{# }else if(d.type==2){ }}
+                            签收单
+                            {{# }else if(d.type==3){ }}
+                            发票
+                            {{# } }}范例
+                        {{# } }}
+                    </span>
+            </div>
+            <div class="txd-ctx" style="padding: 0">
+                {{# if(d.fileList && d.fileList.length){ }}
+                    {{# for(var i=0;i < d.fileList.length ;i++){ var file=d.fileList[i]; }}
+                        {{# if(i==0){ }}
+                        <img src="$!{downloadUrl}/{{file.originalStoreKey}}" alt="" class="exp-img">
+                        {{# } }}
+                    {{# } }}
+                {{# }else{ }}
+                    <img src="/image/txd-{{d.type}}.jpg" alt="示例" class="exp-img">
+                {{# } }}
+            </div>
+        </div>
+        <div class="txd-right fr">
+            <div class="txd-head">
+                    <span>
+                        {{# if(d.type==1){ }}
+                        随货同行单
+                        {{# }else if(d.type==2){ }}
+                        签收单
+                        {{# }else if(d.type==3){ }}
+                        发票
+                        {{# } }}
+                    </span>
+                <img class="layer-close" src="/image/index/icons/icon-close-white.png" alt="关闭">
+            </div>
+            <div class="txd-ctx">
+                <div class="txd-upfile-box">
+                    <p class="txd-tips">请上传随货同行单原件照片或原件扫描件</p>
+                    <div class="txd-file-list">
+                        {{# if(d.fileList){ }}
+                        {{# for(var i=0;i < d.fileList.length;i++){ var file=d.fileList[i] }}
+                        <div class="txd-file">
+                            <div class="prev-box" data-fid="{{file.fileId}}" data-file='{{ JSON.stringify(file) }}'>
+                                <input type="hidden" name="fileName" value="{{file.fileName}}">
+                                <input type="hidden" name="originalStoreKey" value="{{file.originalStoreKey}}">
+                                <input type="hidden" name="remark" value="{{file.remark}}">
+                                <img class="btn-del" src="/image/icon-del-file.png" alt="删除">
+                                <img class="prev-img" src="$!{downloadUrl}/{{file.originalStoreKey}}"
+                                     data-big="$!{downloadUrl}/{{file.originalStoreKey}}">
+                            </div>
+                        </div>
+                        {{# } }}
+                        {{# } }}
+
+                        <div class="txd-file txd-file-add"></div>
+                    </div>
+                </div>
+                <div class="txd-btn-box">
+                    <div class="txd-btn-wrap">
+                        <p>格式要求JPG、JPEG、PNG、BMP格式，单张图片不大于2M</p>
+                        {{# if(d.edit){ }}
+                        <a href="javascript:void(0);" onclick="submitPeer('{{d.oid}}',{{d.type}},'{{d.remark}}',this)"
+                           class="txd-btn">重新提交审核</a>
+                        {{# }else { }}
+                        <a href="javascript:void(0);" onclick="submitPeer('{{d.oid}}',{{d.type}},'{{d.remark}}',this)"
+                           class="txd-btn">提交审核</a>
+                        {{# } }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</script>
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/layui/layui.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/select2/select2.min.js"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.nicescroll.min.js?v=$!{jscss_version}"></script>
+<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/webupload/webuploader.nolog.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/peerModal.js?v=$!{jscss_version}" type="text/javascript"></script>
+
+    #parse("common/common_script.vm")
+<script type="text/javascript">
+
+    function submitPingAn(url,secret,appid,orderNo) {
+        $("#pingAnForm").prop("action",url);
+        $("#appid").val(appid);
+        $("#appsecret").val(secret);
+        $("#orderNo").val(orderNo);
+        $("#pingAnForm").submit();
+    }
+
+    var layer, uploader1, layApp;
+    layui.config({
+        base: '/js/layui/extend/'
+    }).use(['layApp', 'layer', 'form', 'laytpl'], function () {
+        layer = layui.layer;
+        layApp = layui.layApp , laytpl = layui.laytpl;
+        layApp.citySelect({
+            province: "#province",
+            city: "#city",
+            url: "/location/provincialCity",
+            place: true
+        })
+
+        $(".mn-select").each(function () {
+            $(this).select2({
+                placeholder: $(this).attr("placeholder"),
+                tags: "true",
+                allowClear: false,
+                minimumResultsForSearch: -1,
+                language: "zh-CN",
+                width:120
+            });
+        })
+
+    })
+
+    function deletetemp(_name) {
+        top.ue.confirm({
+            content: '确认删除销售合同模板“' + _name + '”吗？',
+            ok: function () {
+                top.ue.load();
+                $.ajax({
+                    url: '/sales/order/deleteOrderContractTemplet.html',
+                    data: {},
+                    type: 'POST',
+                    dataType: 'json',
+                    complete:function(){
+                        top.ue.closeLoad();
+                    },
+                    success: function (data) {
+                        top.utils.iframeLoad();
+                        window.location.reload();
+                    }
+                });
+            }
+        });
+    }
+
+
+    $(function () {
+        $.sltitem.select("status", "$!status");
+        $.sltitem.select("payStatus", "$!payStatus");
+        $.sltitem.select("orderType", "$!orderType");
+        $.sltitem.select("settelmentStatus", "$!settelmentStatus");
+        $.sltitem.select("sourceCode", "$!sourceCode");
+        $.sltitem.select("payMethod", "$!payMethod");
+        $.sltitem.select("customerType", "$!customerType");
+        $.sltitem.select("regionId", "$!regionId");
+
+        initMutiSel();
+        initJZBHT($(".jzb-ht-btn"))
+    })
+
+    function initJZBHT(_this) {
+        var _edit = _this.attr("data-option");
+        var _name = _this.attr("data-name");
+
+        new AjaxUpload(_this, {
+            action: "/cdn/imageInfo_upload.html",
+            name: 'file_path',
+            responseType: "json",
+            onSubmit: function (file, ext) {
+                if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+                    ext_str = ext;
+                } else {
+                    top.ue.msg("非图片文件格式,请重传");
+                    return false;
+                }
+                top.ue.load();
+            },
+            onComplete: function (file, result) {
+                var response = result;
+                top.ue.closeAll("loading");
+                if (result.success == false) {
+                    if (result.message == "outofsize") {
+                        top.ue.msg("文件过大，无法上传");
+                    } else if (result.message == "error") {
+                        top.ue.msg("文件过大，无法上传");
+                    }
+                    return false;
+
+                } else {
+                    if (response && response.success) {
+                        var _file = response.data;
+                        if (_edit) {
+                            top.ue.confirm({
+                                content:'确认替换已有的销售合同模板“' + _name + '”?',
+                                ok:function () {
+                                    top.ue.load();
+                                    $.ajax({
+                                        url: '/sales/order/updateOrderContractTemplet.html',
+                                        data: {
+                                            "templateName": _file.imageInfo.original_name,
+                                            "templateFileKey": _file.imageInfo.bucket_key
+                                        },
+                                        type: 'POST',
+                                        dataType: 'json',
+                                        complete:function(){
+                                            top.ue.closeLoad();
+                                        },
+                                        success: function (data) {
+                                            window.location.reload();
+                                        }
+                                    });
+                                }
+                            })
+                        } else {
+                            top.ue.load();
+                            $.ajax({
+                                url: '/sales/order/insertOrderContractTemplet.html',
+                                data: {
+                                    "templateName": _file.imageInfo.original_name,
+                                    "templateFileKey": _file.imageInfo.bucket_key
+                                },
+                                type: 'POST',
+                                dataType: 'json',
+                                complete:function(){
+                                    top.ue.closeLoad();
+                                },
+                                success: function (data) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+
+                    } else {
+                        layer.tips("文件上传失败", _this);
+                    }
+                }
+            }
+        });
+
+    }
+
+    function initMutiSel() {
+        $("[data-multi]").each(function (i, e) {
+            var url = $(this).attr("data-url");
+            var _this = $(this);
+            if (url) {
+                $(this).on("keyup", bindEvtSel).on("focus", bindEvtSel).on("blur", function () {
+                    setTimeout(function () {
+                        _this.parent().find(".multi-box").fadeOut();
+                    }, 300)
+                })
+            }
+        })
+    }
+
+    function bindEvtSel(evt) {
+        var _this = $(evt.target);
+        var url = $(_this).attr("data-url");
+        var _text = $(_this).val();
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: {pactTitle: _text},
+            success: function (res) {
+                if (res.success && res.data && res.data.length > 0) {
+                    initTpl(res.data, _this);
+                } else {
+                    initTpl(null, _this);
+                }
+            }, error: function (err) {
+                initTpl(null, _this);
+            }
+        })
+    }
+
+    function initTpl(data, obj) {
+        if (!data) {
+            if ($(obj).parent().find(".multi-box").length != 0) {
+                $(obj).parent().find(".multi-box").fadeOut();
+                $(obj).parent().find(".multi-box").html("");
+            }
+            //$(obj).unbind("focus");
+            $(obj).parent().find(".hide-input").val("0");
+            return false;
+        }
+        if ($(obj).parent().find(".multi-box").length == 0) {
+            $(obj).parent().css("position", "relative");
+            var mbox = $("<div class='multi-box' />");
+            var _w = $(obj).outerWidth(true);
+            var _l = $(obj).position().left;
+            var _t = $(obj).position().top + $(obj).outerHeight(true);
+            mbox.css({"left": _l + "px", "top": _t + "px"});
+            $(obj).parent().append(mbox);
+        }
+        var _html = "";
+        for (var i = 0; i < data.length; i++) {
+            var _tmp = ""
+            _tmp = "<p id='tplList" + data[i].id + "' data-id='" + data[i].id + "' data-title='" + data[i].title + "'><span class='m-title'>" + data[i].title + "</span>"
+                    + "<span class='m-time'>" + data[i].startTime + "~" + data[i].endTime + "</span></p>";
+            _html += _tmp;
+        }
+        $(obj).parent().find(".multi-box").html(_html).append("<div style='clear:both'></div>").fadeIn();
+        //  $(obj).on("focus",function(){
+        //    $(obj).parent().find(".multi-box").show();
+        //  })
+        $(obj).parent().find(".multi-box p").on("click", function () {
+            $(obj).val($(this).attr("data-title"))
+            $(obj).parent().find(".hide-input").val($(this).attr("data-id"));
+            $(obj).parent().find(".multi-box").fadeOut();
+        })
+    }
+
+    function editItem() {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIV");
+
+        //显示弹出层与遮照层
+        showPopUpDIV(dialog, mask);
+        //设置弹出层标题
+        dialog.find('.dialog-title').text("导出Excel");
+        //清除错误信息
+        $(".error").parent().find("label").remove();
+    }
+
+    function exportOrder(value) {
+        window.location.href = "/excel/oneOrder.html?oId=" + value;
+    }
+
+    function exportByCondition() {
+        $("#searchForm").attr("action", "/order/exportByCondition.html");
+        $("#searchForm").submit();
+        $("#searchForm").attr("action", "");
+    }
+
+    function view(id) {
+        $.showLoad();
+        /*$("#operForm").append("<input type=hidden name=oId value="+id+" />");
+        $("#operForm").attr("action","/sales/order/ddxq.html");
+        $("#operForm").submit();*/
+        //top.utils.openWithTab('ddxq', '订单详情', '/sales/order/ddxq.html?oId=' + id, {fstBread: '销售订单'});
+        top.utils.openWithTab("ddxq", "订单详情", "/sales/order/ddxq.html?oId=" + id, {
+            fstBread: top.app.index.firstBread,
+            scdBread:{
+                text:top.app.index.secondBread,
+                url:location.href,
+                prevBread: top.app.index.firstBread
+            },
+            thirdBread:"订单详情"
+        })
+    }
+
+    function send(id) {
+        $.showLoad();
+        $.ajaxPost("/order/orderIsCanSend.html", {"oId": id}, function (result) {
+            $.hideLoad();
+            if (result != "") {
+                var obj = eval("(" + result + ")");
+                if (1 == obj.data) {
+                    $.showLoad();
+                    $("#operForm").append("<input type=hidden name=oId value=" + id + " />");
+                    $("#operForm").attr("action", "/sales/order/ddfh.html");
+                    $("#operForm").submit();
+                } else {
+                    top.ue.msg("订单状态已经发生改变，请刷新页面");
+                    $.showLoad();
+                    window.location.href = "/sales/order/ddgl.html?$!utils.getReuturnParam($!{returnPageParam})";
+                    return false;
+                }
+            }
+        });
+    }
+
+    function bulkShipment() {
+        /*$.showLoad();
+        window.location.href = "/sales/order/manyddfh.html";*/
+        top.utils.openWithTab("ddplfh", "批量发货", "/sales/order/manyddfh.html", {
+            fstBread: top.app.index.firstBread,
+            scdBread:{
+                text:top.app.index.secondBread,
+                url:location.href,
+                prevBread: top.app.index.firstBread
+            },
+            thirdBread:"批量发货"
+        })
+    }
+
+    //下载回单
+    function download(id) {
+        window.location.href = "/sales/order/downloadPayReceiptList.html?oId=" + id;
+        return false;
+    }
+
+
+    function confirm(oid) {
+        $.showLoad();
+        $.ajaxPost("/sales/order/bnfOper.html", {"oid": oid, "type": "1"}, function (result) {
+            $.hideLoad();
+            if (result != "") {
+                var obj = eval("(" + result + ")");
+                if (1 == obj.data) {
+                    $.showLoad();
+                    window.location.href = "/sales/order/ddgl.html?$!utils.getReuturnParam($!{returnPageParam})";
+                    return false;
+                } else {
+                    top.ue.msg("订单状态已经发生改变，请刷新页面", {}, function () {
+                        $.showLoad();
+                        window.location.href = "/sales/order/ddgl.html?$!utils.getReuturnParam($!{returnPageParam})";
+                    });
+                    return false;
+                }
+            }
+        });
+    }
+
+    function refuse(oid) {
+        top.ue.confirm({
+            title: '确认',
+            content: "确认拒绝此订单使用帮你付？",
+            ok: function (idx, lay) {
+                top.ue.close(idx);
+                $.showLoad();
+                $.ajaxPost("/sales/order/bnfOper.html", {"oid": oid, "type": "0"}, function (result) {
+                    $.hideLoad();
+                    if (result != "") {
+                        var obj = eval("(" + result + ")");
+                        if (1 == obj.data) {
+                            $.showLoad();
+                            window.location.href = "/sales/order/ddgl.html?$!{returnPageParam}";
+                            return false;
+                        } else {
+                            top.ue.msg("订单状态已经发生改变，请刷新页面");
+                            $.showLoad();
+                            window.location.href = "/sales/order/ddgl.html?$!utils.getReuturnParam($!{returnPageParam})";
+                            return false;
+                        }
+                    }
+                });
+            }
+        })
+    }
+
+    //设置活动是否进行中
+    function setActivityStatus(value) {
+        $("#activity").val(value);
+        //查询活信息
+        searchPager('/sales/order/ddgl.html', false);
+    }
+
+    function checkAll(obj) {
+        var isChecked = obj.checked;
+        $("input[name='oIds']").each(function () {
+            $(this).prop("checked", isChecked);
+        });
+    }
+
+    function takenChecked() {
+        var oIds = "";
+        $("input[name='oIds']").each(function () {
+            if ($(this).prop("checked")) {
+                oIds = oIds + $(this).val() + ","
+            }
+        });
+        if (oIds.length < 1) {
+            top.ue.msg("请选择需提取的订单，再操作");
+            return;
+        }
+        top.ue.confirm({
+            title: "系统提示",
+            content: "提取后采购商无法取消订单,是否确定提取?",
+            ok: function (idx, lay) {
+                top.ue.close(idx);
+                top.ue.load();
+                $.ajax({
+                    url: '/sales/order/takenCheckedOrder.html',
+                    data: {oIds: oIds},
+                    type: 'POST',
+                    dataType: 'json',
+                    complete: function () {
+                        top.ue.closeLoad();
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            top.ue.alert({
+                                title: "提醒",
+                                content: "提取成功",
+                                end: function () {
+                                    window.location.href = "/sales/order/ddgl.html?$!utils.getReuturnParam($!{returnPageParam})";
+                                }
+                            });
+                        } else {
+                            top.ue.alert({
+                                title: "警告",
+                                content: "订单状态发生变更，请刷新后再操作",
+                                end: function () {
+                                    window.location.href = "/sales/order/ddgl.html?$!utils.getReuturnParam($!{returnPageParam})";
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    //下载合同
+    function downloadHT(key, name) {
+        window.location.href = "/order/downloadHT.html?key=" + key + "&name=" + name;
+        return false;
+    }
+
+    function takenAll() {
+        if ($("#rowCount").val() < 1) {
+            top.ue.alert({
+                title: "警告",
+                content: "无待提取订单数据，请确认后再操作",
+                ok: function (idx, lay) {
+                    top.ue.close(idx);
+                    window.location.href = "/sales/order/ddgl.html?$!utils.getReuturnParam($!{returnPageParam})";
+                }
+            });
+            return;
+        }
+        top.ue.confirm({
+            title: "系统提示",
+            content: "提取后采购商无法取消订单,是否确定提取?",
+            ok: function (idx, lay) {
+                top.ue.close(idx);
+                top.ue.load();
+                $.ajax({
+                    url: '/sales/order/takenAllOrder.html',
+                    data: {
+                        rowCount: $("#rowCount").val(),
+                        oAddTimeEnd: $("#oAddTimeEnd").val(),
+                        oAddTimeBegin: $("#oAddTimeBegin").val(),
+                        oEName: $("#oEName").val(),
+                        oSn: $("#oSn").val(),
+                        activity: 1
+                    },
+                    type: 'POST',
+                    dataType: 'json',
+                    complete: function () {
+                        top.ue.closeLoad();
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            top.ue.alert({
+                                title: "提醒",
+                                content: "提取成功",
+                                width: 300,
+                                ok: function (idx, lay) {
+                                    top.ue.close(idx);
+                                    window.location.href = "/sales/order/ddgl.html?$!utils.getReuturnParam($!{returnPageParam})";
+                                }
+                            });
+                        } else {
+                            top.ue.alert({
+                                title: "警告",
+                                content: "订单状态发生变更，请刷新后再操作",
+                                ok: function (idx, lay) {
+                                    top.ue.close(idx);
+                                    window.location.href = "/sales/order/ddgl.html?$!utils.getReuturnParam($!{returnPageParam})";
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+</script>
+
+</body>
+
+</html>

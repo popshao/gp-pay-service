@@ -1,0 +1,597 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>优惠券结算管理-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+   
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/sales/index.html" class="color">销售中心</a>&gt; 财务模块 &gt; 随机立减结算管理</p>
+                    </div>
+                    <div class="order_query">
+                        <form action="" method="post" id="searchForm" name="searchForm">
+                            <input type="hidden" name="pi" value="$!pi">
+                            <ul>
+                                <li>
+                                    <label class="w70">结算单号&nbsp;</label>
+                                    <input name="settlementId" id="settlementId" type="text" value="$!settlementId" class="w-txt w-150">
+                                </li>
+                                <li>
+                                    <label>结算状态&nbsp;</label>
+                                    <div class="sltitem sltitem-top w150">
+                                        <span class="">全部</span>
+                                        <ul style="display: none;">
+                                            <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                            <li data-value="2"><a href="javascript:void(0);">待结算</a></li>
+                                            <li data-value="1"><a href="javascript:void(0);">已结算</a></li>
+                                            <li data-value="3"><a href="javascript:void(0);">银行处理中</a></li>
+                                        </ul>
+                                        <input type="hidden" name="settlementStatus" id="settlementStatus">
+                                    </div>
+                                </li>
+                                <li>
+                                    <label class="w70">生成时间&nbsp;</label>
+                                    <input type="text" name="oAddTimeBegin" id="oAddTimeBegin" value="$!oAddTimeBegin" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'oAddTimeEnd'+'\\'+'\')}'})" class="w-txt w-150">
+                                    <i class="slt_t">至</i>
+                                    <input type="text" name="oAddTimeEnd" id="oAddTimeEnd" value="$!oAddTimeEnd" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'oAddTimeBegin'+'\\'+'\')}'})" class="w-txt w-150">
+                                </li>
+                                <li>
+                                    <label class="w70">审核时间&nbsp;</label>
+                                    <input type="text" name="settlementTimeBegin" id="settlementTimeBegin" value="$!settlementTimeBegin" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'settlementTimeEnd'+'\\'+'\')}'})" class="w-txt w-150">
+                                    <i class="slt_t">至</i>
+                                    <input type="text" name="settlementTimeEnd" id="settlementTimeEnd" value="$!settlementTimeEnd" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'settlementTimeBegin'+'\\'+'\')}'})" class="w-txt w-150">
+                                </li>
+								<li>
+                                    <label class="w70">订单号&nbsp;</label>
+                                    <input name="osn" id="osn" type="text" value="$!osn"
+                                           class="w-txt w-150">
+                                </li>
+                            </ul>
+                            <div class="btn tac">
+                                <a href="javascript:searchPager('/sales/settlement/promotionSettlement.html',false);" class="btn_query">查询</a>
+                                <a href="javascript:searchPager('/sales/settlement/promotionSettlement.html',true);" class="btn_query btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+                            </div>
+                            <div class="btn">
+                                <a href="javascript:editPromotionSettleTime();" class="btn_query btn-line mr7">导出结算单</a>
+                                <a href="javascript:exportOrdersBatch();" class="btn_query btn-line mr7">导出订单明细</a>
+                                <a href="javascript:exportGoodsBatch();" class="btn_query btn-line mr7">导出商品明细</a>
+                                <a href="javascript:ediInvoiceNo();" class="btn_query btn-line mr7">申请结算</a>
+                                <!--   <a href="javascript:searchPager('/sales/order/ddgl.html',true);" class="btn_query btn_export mr7">导出EXCEL</a>-->
+                            </div>
+                        </form>
+                    </div>
+                    <div class="order_detail yh order_font">
+                        <div class="table">
+                            <table cellpadding="0" cellspacing="0">
+                                <thead class="head">
+                                <tr class="line">
+                                    <th width="50"><input type="checkbox" id="checkAll" name="checkAll" onclick="selAll(this,0)" style="height: auto"/>全选</th>
+                                    <th width="200">结算单号</th>
+                                    <th width="200">结算发票号</th>
+                                    <th width="80">结算状态</th>
+                                    <th width="80">结算单总额</th>
+                                    <th width="200">生成时间</th>
+                                    <th width="200">审核时间</th>
+                                    <th width="150">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    #if(!$null.isNull($settleList) && $settleList.size()!=0)
+                                        #foreach($item in $settleList)
+                                            #set($pageOrder = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+                                        <tr>
+                                            <td>
+                                                #if($!item.pStState != 1)
+                                                    <input type="checkbox"  name="checkItem" onclick="selSingle(this)" data-amount="$!item.amount" value="$!item.pStId"/>
+                                                #end
+                                                #if($!item.pStState == 1)
+                                                    <input type="checkbox"  name="checkItem" data-amount="$!item.amount" value="$!item.pStId" disabled/>
+                                                #end
+                                            </td>
+                                            <td>$!item.pStSn</td>
+                                            <td>$!item.pStInvoiceNum</td>
+                                            <td>
+                                                #if($!item.pStState == 0)
+                                                    <span style="cursor:pointer;" title="财务同学正在加紧结算中，工作日结算后到账时间以银行到账时间为准">待结算</span>
+                                                #end
+                                                #if($!item.pStState == 1)
+                                                    已结算
+                                                #end
+                                                #if($!item.pStState == -1)
+                                                    银行处理中
+                                                #end
+                                                #if($!item.pStState == 2)
+                                                    银行处理中
+                                                #end
+                                                #if($!item.pStState == -2)
+                                                    银行处理中
+                                                #end
+                                            </td>
+
+                                            <td>$!item.amount</td>
+                                            <td>
+                                                $utils.formatDate($!item.addTime,"yyyy-MM-dd")
+                                            </td>
+                                            <td>
+                                                #if($!item.auditTime)
+                                                    $utils.formatDate($!item.auditTime,"yyyy-MM-dd")
+                                                #end
+                                                #if(!$!item.auditTime)
+                                                    --
+                                                #end
+                                            </td>
+                                            <td>
+                                                <a href="javascript:viewOrders($!item.pStId);" class="btn-txt-n">导出订单</a>
+                                                <a href="javascript:viewGoods($!item.pStId);" class="btn-txt-n">导出商品</a>
+                                            </td>
+                                        </tr>
+                                        #end
+                                    <tr>
+                                        <td class="tar h30" colspan="11">
+                                            小计(元)：<span class="w80 fr tal" id="selectedCount">0.00</span><br/>
+                                            总计(元)：<span class="w80 fr tal">$!{totalCountPrice}</span>
+                                        </td>
+                                    </tr>
+                                    #else
+                                    <tr>
+                                        <td colspan="11">无查询结果，请重新查询后再申请结算</td>
+                                    </tr>
+                                    #end
+                                </tbody>
+                            </table>
+                            <!--分页开始 -->
+                            #if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+                                #pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/order/ddgl.html")
+                            #end #end
+                        </div>
+                        <form id="operForm" name="operForm" method="post">
+                            <input type=hidden name="backUrl" value="/sales/order/ddgl.html"/>
+                            <input  type="hidden" name="returnPageParam" id="returnPageParam" value="$!{returnPageParam}"/>
+                        </form>
+
+                        <form id="operFormSettle" name="operFormSettle" method="post">
+                            <input type=hidden name="backUrl" value="/sales/order/ddgl.html"/>
+                            <input  type="hidden" name="returnPageParam" id="returnPageParam" value="$!{returnPageParam}"/>
+                        </form>
+                    </div>
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mask" id="popUpMask"></div>
+<div class="dialog w700" id="popUpDIV">
+    <div class="head"><span class="dialog-title">添加</span><a href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn-close"></a></div>
+    <div class="con">
+        <form id="exportForm" method="post">
+            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                <tr>
+                    <td class="table-tit">生成时间：</td>
+                    <td>
+                        <input type="text" name="startTime" id="startTime" class="txt" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'endTime'+'\\'+'\')}'})" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table-tit">至：</td>
+                    <td><input type="text" name="endTime" id="endTime" class="txt" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'startTime'+'\\'+'\')}'})" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn"><a href="javascript:exportByPromotionSettleTime();" class="btn-txt mr7">确定</a><a href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn-txt" >关闭</a></div>
+        </form>
+    </div>
+</div>
+
+<div class="dialog w700" id="popUpDIVGoods">
+    <div class="head"><span class="dialog-title">添加</span><a href="javascript:closePopUpDIV('popUpDIVGoods','popUpMask');" class="btn-close"></a></div>
+    <div class="con">
+        <form id="exportFormGoods" method="post" action="/settlement/promotionSettlement/exportGoodsByCondition.html">
+            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                <tr>
+                    <td class="table-tit">生成时间：</td>
+                    <td>
+                        <input type="text" name="startTime" id="goodsStartTime" class="txt" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'goodsEndTime'+'\\'+'\')}'})" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table-tit">至：</td>
+                    <td><input type="text" name="endTime" id="goodsEndTime" class="txt" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'goodsStartTime'+'\\'+'\')}'})" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn"><a href="javascript:exportGoodsByCondition(3);" class="btn-txt mr7">确定</a><a href="javascript:closePopUpDIV('popUpDIVGoods','popUpMask');" class="btn-txt" >关闭</a></div>
+        </form>
+    </div>
+</div>
+
+<div class="dialog w700" id="popUpDIVOrders">
+    <div class="head"><span class="dialog-title">添加</span><a href="javascript:closePopUpDIV('popUpDIVOrders','popUpMask');" class="btn-close"></a></div>
+    <div class="con">
+        <form id="exportFormOrders" method="post">
+            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                <tr>
+                    <td class="table-tit">生成时间：</td>
+                    <td>
+                        <input type="text" name="startTime" id="ordersStartTime" class="txt" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'ordersEndTime'+'\\'+'\')}'})" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table-tit">至：</td>
+                    <td><input type="text" name="endTime" id="ordersEndTime" class="txt" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'ordersStartTime'+'\\'+'\')}'})" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn"><a href="javascript:exportOrdersByCondition(3);" class="btn-txt mr7">确定</a><a href="javascript:closePopUpDIV('popUpDIVOrders','popUpMask');" class="btn-txt" >关闭</a></div>
+        </form>
+    </div>
+</div>
+    #parse("common/footer.vm")
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+#parse("common/common_script.vm")
+<script type="text/javascript">
+    function selSingle(obj) {
+        if ($(obj).is(":checked")){
+            if ($("input[name='checkItem']").not(':disabled').not(":checked").size() == 0){
+                $("#checkAll").prop("checked", true);
+            }
+        } else {
+            if ($("#checkAll").is(':checked')){
+                $("#checkAll").prop("checked", false);
+            }
+        }
+
+        updateSelStatis(selStatisCal());
+    }
+
+    function selAll(obj) {
+        if($("#checkAll").is(":checked")){
+            $("input[name='checkItem']").not(':disabled').prop("checked", true);
+            updateSelStatis(selStatisCal());
+        } else {
+            $("input[name='checkItem']").not(':disabled').prop("checked", false);
+            updateSelStatis(0);
+        }
+    }
+
+    function selStatisCal() {
+        var val = 0;
+        $("input[name='checkItem']:checked").each(function () {
+            val += parseFloat($(this).data("amount"));
+        });
+
+        return val;
+    }
+
+    function updateSelStatis(val) {
+        $("#selectedCount").empty();
+        $("#selectedCount").html(val.toFixed(2));
+    }
+
+    function constructConditionQueryStr() {
+        var settlementId=$("#settlementId").val();
+        var settelmentStatus = $("#settlementStatus").val();
+        var tmp = '';
+        if (settlementId != '' || settelmentStatus != ''){
+            tmp += "?";
+            if (settlementId != ''){
+                tmp += "settlementId=";
+                tmp += settlementId;
+            }
+
+            if (settelmentStatus != ''){
+                if (tmp != "?"){
+                    tmp += "&";
+                }
+
+                tmp += "settelmentStatus=";
+                tmp += settelmentStatus;
+            }
+        }
+
+        return tmp;
+    }
+
+    function viewGoods(id){
+        $("#operFormSettle").attr("action","/settlement/promotionSettlement/exportGoodsByCondition.html?pStId="+id);
+        $("#operFormSettle").submit();
+    }
+    function viewOrders(id,payType){
+        $("#operFormSettle").attr("action","/settlement/promotionSettlement/exportOrdersByCondition.html?pStId="+id);
+        $("#operFormSettle").submit();
+    }
+
+    $(function(){
+        $.sltitem.select("settlementStatus", "$!settlementStatus");
+    })
+
+    function exportGoodsBatch() {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIVGoods");
+
+        /*//显示弹出层与遮照层
+        showPopUpDIV(dialog,mask);
+        //设置弹出层标题
+        dialog.find('.dialog-title').text("导出Excel");
+        //清除错误信息
+        $(".error").parent().find("label").remove();*/
+        top.rui.dynamic({
+            title: "导出商品明细",
+            content: dialog.html(),
+            skin: "dialog-old dialog-old-no-title",
+            area: ["700px"],
+            success: function (lay, idx) {
+                $(".error", lay).parent().find("label").remove();
+                top.rui.initTools(lay);
+            },
+            yes: function (idx, lay) {
+                exportGoodsByCondition(3,idx, lay)
+            }
+        })
+    }
+
+    function exportOrdersBatch() {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIVOrders");
+
+        /*//显示弹出层与遮照层
+        showPopUpDIV(dialog,mask);
+        //设置弹出层标题
+        dialog.find('.dialog-title').text("导出Excel");
+        //清除错误信息
+        $(".error").parent().find("label").remove();*/
+        top.rui.dynamic({
+            title: "导出订单明细",
+            content: dialog.html(),
+            skin: "dialog-old dialog-old-no-title",
+            area: ["700px"],
+            success: function (lay, idx) {
+                $(".error", lay).parent().find("label").remove();
+                top.rui.initTools(lay);
+            },
+            yes: function (idx, lay) {
+                exportOrdersByCondition(3,idx, lay)
+            }
+        })
+    }
+
+    function exportOrder(value){
+        window.location.href="/excel/oneOrder.html?oId="+value;
+    }
+
+    function exportGoodsByCondition(n,idx,lay){
+        if($("#goodsStartTime",lay).val()=="" || $("#goodsEndTime",lay).val()=="" ){
+            top.ue.msg("请选择导出商品的起止时间");
+            return;
+        }else{
+            var tmp = constructConditionQueryStr();
+            $("#exportFormGoods",lay).attr("action", "/settlement/promotionSettlement/exportGoodsByCondition.html" + tmp);
+            $("#exportFormGoods",lay).submit();
+            top.ue.close(idx);
+        }
+    }
+
+    function exportOrdersByCondition(n,idx,lay){
+        if($("#ordersStartTime",lay).val()=="" || $("#ordersEndTime",lay).val()=="" ){
+            top.ue.msg("请选择导出商品的起止时间");
+            return;
+        }else{
+            var tmp = constructConditionQueryStr();
+            $("#exportFormOrders",lay).attr("action", "/settlement/promotionSettlement/exportOrdersByCondition.html" + tmp);
+            $("#exportFormOrders",lay).submit();
+            top.ue.close(idx);
+        }
+    }
+
+    function view(id){
+        $.showLoad();
+        $("#operForm").append("<input type=hidden name=oId value="+id+" />");
+        $("#operForm").attr("action","/sales/order/ddxq.html");
+        $("#operForm").submit();
+    }
+    //导出优惠券结算单
+    function editPromotionSettleTime() {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIV");
+        /*//显示弹出层与遮照层
+        showPopUpDIV(dialog,mask);
+        //设置弹出层标题
+        dialog.find('.dialog-title').text("导出结算单");
+        //清除错误信息
+        $(".error").parent().find("label").remove();*/
+        top.rui.dynamic({
+            title: "导出结算单",
+            content: dialog.html(),
+            skin: "dialog-old dialog-old-no-title",
+            area: ["700px"],
+            success: function (lay, idx) {
+                $(".error", lay).parent().find("label").remove();
+                top.rui.initTools(lay);
+            },
+            yes: function (idx, lay) {
+                exportByPromotionSettleTime(idx, lay)
+            }
+        })
+    }
+    function exportByPromotionSettleTime(idx,lay){
+        var start;
+        var end;
+        start=$("#startTime",lay).val();
+        end=$("#endTime",lay).val();
+        if(start=="" ||end =="" ){
+            top.ue.msg("请选择导出结算单的起止时间");
+            return;
+        }
+        //form 提交
+        var tmp = constructConditionQueryStr();
+        $("#exportForm",lay).attr("action", "/settlement/promotionSettlement/exportByPromotionSettleTime.html" + tmp);
+        $("#exportForm",lay).submit();
+        top.ue.close(idx);
+    }
+
+    function editItemGoods() {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIVGoods");
+        //显示弹出层与遮照层
+        showPopUpDIV(dialog,mask);
+        //设置弹出层标题
+        dialog.find('.dialog-title').text("导出商品明细");
+        //清除错误信息
+        $(".error").parent().find("label").remove();
+    }
+
+    //---------------
+    function send(id){
+        $.showLoad();
+        $.ajaxPost("/order/orderIsCanSend.html", {"oId":id}, function(result) {
+            $.hideLoad();
+            if (result != "") {
+                var obj=eval("("+result+")");
+                if(1 == obj.data){
+                    $.showLoad();
+                    $("#operForm").append("<input type=hidden name=oId value="+id+" />");
+                    $("#operForm").attr("action","/sales/order/ddfh.html");
+                    $("#operForm").submit();
+                }else{
+                    top.ue.msg("订单状态已经发生改变，请刷新页面！");
+                    $.showLoad();
+                    window.location.href = "/sales/order/ddgl.html";
+                    return false;
+                }
+            }
+        });
+    }
+
+    //下载回单
+    function download(id){
+        window.location.href="/sales/order/downloadPayReceiptList.html?oId="+id;
+        return false;
+    }
+    var content = "";
+    content += '<div class="dialog_box"><dl class="dialog_ctn"><dd style="border:medium none;">';
+    content += '<div class="dialog_sheet"><table width="100%"><tr>';
+    content += '<td class="tar" width="90">发票号<span style="color:#f50000">*</span>：</span></td>';
+    content += '<td style="text-align:left"><input class="input" name="invoice_no" type="text" value=""/></td>';
+    content += '</tr><tr><td class="tar tdtop">快递公司：</td>';
+    content += '<td style="text-align:left"><input class="input" name="logistics_company" type="text" value=""/></td>';
+    content += '</tr><tr><td class="tar">快递单号：</td>';
+    content += '<td style="text-align:left"><input class="input" name="logistics_no" type="text" value=""/></td>';
+    content += '</tr></table></div></dd></dl>';
+    content += '</div>';
+    //修改
+    function ediInvoiceNo(){
+        if($("input[type='checkbox']:checked").length==0){
+            top.ue.msg("请选择要结算的单据，再进行申请结算");
+            return;
+        }
+
+        var array=[];
+
+        var checkBoxed= $("input[type='checkbox']:checked");
+        //alert(checkBoxed.length);
+        for(var i=0;i<checkBoxed.length;i++){
+            var mcs_id = checkBoxed[i].value;
+            //alert("mcs_id"+mcs_id);
+            array.push(mcs_id);
+        }
+
+        /**
+
+         var array=[];
+         array.push(1);
+         array.push(2);
+         */
+        //数组转化字符串
+        var pStIds=array.join(",");
+        var content2 = content;
+        top.ue.confirm({
+            title: "申请结算",
+            content: content2,
+            width: 550,
+            ok: function() {
+                var invoice_no     = $('input[name="invoice_no"]',top.document).val(),
+                        logistics_company       = $('input[name="logistics_company"]',top.document).val(),
+                        logistics_no = $('input[name="logistics_no"]',top.document).val();
+                if($.trim(invoice_no) == ""){
+                    top.layer.msg("发票号码不能为空！");
+                    return false;
+                }
+                $.showLoad();
+                $.ajax({
+                    url: '/settlement/promotionSettlement/update_invoice.html',
+                    data: {pStIds:pStIds,invoice_no: invoice_no, logistics_company: logistics_company, logistics_no: logistics_no},
+                    type: 'POST',
+                    dataType: 'json',
+                    complete:function () {
+                        $.hideLoad();
+                    },
+                    success: function(data) {
+                        if (data.success) {
+                            top.ue.alert({
+                                title: "申请结算",
+                                content: "申请结算信息成功",
+                                end: function() {
+                                    window.location.reload(true);
+                                },
+                                okVal: "确定"
+                            });
+                        }
+                    }
+                });
+            },
+            okVal: "保存",
+            cancel: true
+        });
+    }
+
+</script>
+
+</body>
+
+</html>

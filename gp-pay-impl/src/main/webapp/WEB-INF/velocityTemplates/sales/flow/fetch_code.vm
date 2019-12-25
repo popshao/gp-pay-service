@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>查询流向&nbsp; - &nbsp;
+        #if(!$null.isNull($title))
+            $!{title}
+        #end
+    </title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/hm.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/hm-code.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+</head>
+
+<body class="hm-code-body">
+<div class="hm-tqm-box">
+    <div class="htb-header">
+        #if(!$null.isNull($title))
+            $!{title}
+        #end
+    </div>
+    <div class="htb-ctn">
+        <form id = "form" action="" method="post">
+            <input type="hidden" id="tqKey" name="tqKey" value="$!{tqKey}"/>
+            <div class="htb-c-form cc">
+                <input class="input fl" id="tqFetchCode" name="tqFetchCode" type="text" placeholder="请输入提取码">
+                <a href="javascript:void(0));" onclick="validForm();" class="btn fl">提取文件</a>
+            </div>
+            <div class="htb-c-error hide">已停用，请2小时后再试</div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/jquery-1.9.1.min.js?version=201612090950" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js" type="text/javascript"></script>
+<script src="/js/layui/layui.js"></script>
+<script type="text/javascript" src="/js/layui/new-ui.js"></script>
+
+<script>
+
+    var laytpl, viewModal,layer,laypage;
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(["layer", "laytpl","laypage"], function () {
+        laytpl = layui.laytpl, laypage = layui.laypage, layer = layui.layer;
+    });
+    function validForm() {
+        $(".htb-c-error").addClass("hide")
+        var tqKey = $("#tqKey").val();
+        var tqFetchCode = $("#tqFetchCode").val();
+        if(tqFetchCode == ''){
+            $(".htb-c-error").removeClass("hide").text("请输入提取码");
+            return;
+        }
+        $.ajax({
+            url: '/sales/flow/fetch.html',
+            data: {"tqKey":tqKey,"tqFetchCode":tqFetchCode},
+            type:"post",
+            complete:function () {
+                layer.closeAll("loading");
+            },
+            success: function(data) {
+                if(data.data == 1){
+                    $(".htb-c-error").removeClass("hide").text("已停用，请2小时后再试");
+                }
+                if(data.data == 2){
+                    $(".htb-c-error").removeClass("hide").text("提取码输入错误");
+                }
+                if(data.data == 3){
+                    $("#form").attr("action", "/sales/flow/fetch/filePage.html");
+                    $("#form").submit();
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+#if($!user && $!{user.appId} == 10)
+	##此页面是医药网 万家 通用尾
+	#parse("common/common_wanjia_footer.vm")
+#elseif($!utils.isRequestFromSaas($!request))
+    <!-- Saas请求访问页面，不显示底部 -->
+#else
+<div class="foot mt20">
+	<div class="fn-wrap">
+		<div class="aboutus">
+				<a href="http://cms.mypharma.com/info/453" target="_blank" rel="nofollow">关于我们</a> 
+        		<a href="http://cms.mypharma.com/info/454" target="_blank" rel="nofollow">联系我们</a> 
+        		<a href="http://cms.mypharma.com/info/455" target="_blank" rel="nofollow">法律声明</a> 
+        		<a href="http://cms.mypharma.com/info/456" target="_blank" rel="nofollow">隐私声明</a> 
+        		<a href="http://cms.mypharma.com/info/457" target="_blank" rel="nofollow">服务协议</a> 
+        		<a href="http://cms.mypharma.com/info/459" target="_blank" rel="nofollow">合作伙伴</a> 
+        		<a href="http://cms.mypharma.com/node/116" target="_blank" rel="nofollow">帮助中心</a>
+        		<a href="http://$!{wwwHostAndPort}/help/about/sitemap" target="_blank" rel="nofollow">网站地图</a>
+		</div>
+	</div>
+	<div class="copy">
+		<p>京ICP备07504877号-2 | 互联网药品交易服务资格证编号：国A20150007 | 经营许可证编号：京ICP证151141号 | 互联网药品信息服务资格证编号：(京)-经营性-2012-0007</p>
+		<p>Copyright©2004-2016 Mypharma.com 我的医药网 版权所有</p>
+	</div>
+</div>
+#end
+<!-- Piwik -->
+<script type="text/javascript">
+
+    (function() {
+        setTimeout(function () {
+            var _paq = _paq || [];
+                #if($!user)_paq.push(['setUserId', '$!{user.mid}']);#end
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            _paq.push(['enableHeartBeatTimer']);
+
+            var u="//analysis.rograndec.com/";
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', 1]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('link')[0];
+            g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+
+            var _hmt = _hmt || [];
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?09a532859b0c07de8a7a04c58829cfb1";
+            var s = document.getElementsByTagName("link")[0];
+            s.parentNode.insertBefore(hm, s);
+        },3000)
+    })();
+
+</script>
+<noscript><p><img src="//analysis.rograndec.com/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
+<!-- End Piwik Code -->
+<!--baidu -->

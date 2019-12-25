@@ -1,0 +1,1027 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>添加客户-商业客户信息管理-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link href="/js/select2/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="/css/member-new.css?v=$!{jscss_version}"/>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain member-new" style="margin-top: 0">
+
+                    <div class="mn-nav">
+                        <p class="fl">
+                            <a href="javascript:void(0)">销售中心</a> &gt; <a href="javascript:void(0)">客户管理</a> &gt; <a
+                                href="#" class="spc-blue">客户信息添加</a>
+                        </p>
+                        <div class="clear-fix"></div>
+                    </div>
+
+                    <form id="submitForm"  method="post" action="/sales/member/supplierMember_addSave.html">
+                    #*基础信息*#
+                        <div class="mn-field-box">
+                            <div class="mn-field">
+                                <div class="mn-fhead"><h3>基础信息</h3></div>
+                                <div class="mn-fctx">
+                                    <div class="mn-subtitle">账号信息</div>
+                                    <div class="mn-form">
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell mn-flong">
+                                                <label for=""><span>＊</span>客户账号：</label>
+                                                <input name="mName" id="mName" type="text" class="mn-ftext" datatype="*" ajaxurl="/sales/member/supplierMember_validateUsername.html"
+                                                       style="width: 320px"/>
+                                                <span class="spc-pink" style="font-weight:bold; margin-left:20px;">您添加的客户账号登录密码默认为：8888888 ，建议客户及时修改默认密码</span>
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell">
+                                                <label for=""><span>＊</span>企业名称：</label>
+                                                <input id="eName" name="eName" type="text" class="mn-ftext " datatype="*">
+                                            </div>
+                                            <div class="mn-fcell">
+                                                <label for=""><span>＊</span>区域分组：</label>
+                                                <select class="mn-ftext mn-select layui-select" placeholder="请选择" placeholder="" name="regionId" datatype="select" nullmsg="请选择此项">
+                                                    #foreach($supplierRegion in $!{supplierRegions})
+                                                        <option value="$!{supplierRegion.regionId}">$!{supplierRegion.regionName}</option>
+                                                    #end
+                                                </select>
+                                            </div>
+                                            <div class="mn-fcell">
+                                                <label for=""><span>＊</span>企业类型：</label>
+                                                <select class="mn-ftext mn-select" placeholder="请选择" id="eType"
+                                                        name="eType" datatype="select" nullmsg="请选择企业类型">
+                                                    <option value="1">单体药房</option>
+                                                    <option value="2">连锁药店总店</option>
+                                                    <option value="3">连锁药店分店（直营店）</option>
+                                                    <option value="4">连锁加盟店</option>
+                                                    <option value="5">商业公司</option>
+                                                    <option value="6">医院</option>
+                                                    <option value="7">诊所</option>
+                                                </select>
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell">
+                                                <label for=""><span>＊</span>企业注册号：</label>
+                                                <input name="eLicenseNo" id="eLicenseNo" type="text" class="mn-ftext " datatype="*" ajaxurl="/sales/member/supplierMember_validateEnterPrise.html">
+                                            </div>
+                                            <div class="mn-fcell">
+                                                <label for=""><span>＊</span>业务类型：</label>
+                                                <select class="mn-ftext mn-select" placeholder="请选择"
+                                                        name="smCustomerType" id="smCustomerType" datatype="select" nullmsg="请选择业务类型">
+                                                    #foreach($shopCustomerType in $!shopCustomerTypes)
+                                                        <option value="$!{shopCustomerType.sctId},$!{shopCustomerType.sctPriceField},$!{shopCustomerType.sctNumberField}">$!{shopCustomerType.sctName}</option>
+                                                    #end
+                                                </select>
+                                            </div>
+                                            <div class="mn-fcell">
+                                                <label for=""><span>＊</span>经营区域：</label>
+                                                <select class="mn-ftext mn-select" placeholder="请选择" id="smArea"
+                                                        name="smArea" datatype="select" nullmsg="请选择经营区域">
+                                                    <option value="1">区域内</option>
+                                                    <option value="2">区域外</option>
+                                                </select>
+                                                <span class="data-tips"
+                                                      data-tips-style="{'line-height':'1.5','background':'white','font-size':'12px','color':'#f6ac19'}"
+                                                      data-tips="true" data-tips-title="经营区域设置：<br>
+                                                                                    区域内：经营区域为“区域内”的<br>
+                                                                                    客户可购买内外销类型为“内销、<br>
+                                                                                    不限”的商品<br>
+                                                                                    区域外：经营区域为“区域外”的<br>
+                                                                                    客户可购买内外销类型为“外销、<br>
+                                                                                    不限”的商品"></span>
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell">
+                                                <label for=""><span>＊</span>企业联系人：</label>
+                                                <input type="text" class="mn-ftext " id="eContactor" name="eContactor" datatype="*" >
+                                            </div>
+                                            <div class="mn-fcell">
+                                                <label for="">手机号码：</label>
+                                                <input id="eMobile" name="eMobile" type="text" class="mn-ftext ">
+                                            </div>
+                                            <div class="mn-fcell">
+                                                <label for="">固定号码：</label>
+                                                <input id="eTel" name="eTel" type="text" class="mn-ftext ">
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell">
+                                                <label for="">企业编码：</label>
+                                                <input id="smCode" name="smCode" type="text" class="mn-ftext ">
+                                            </div>
+                                            <div class="mn-fcell">
+                                                <label for="">企业内码：</label>
+                                                <input id="smInternalCode" name="smInternalCode" type="text"
+                                                       class="mn-ftext ">
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell mn-pro-sel">
+                                                <label for=""><span>＊</span>企业所属区域：</label>
+                                                <select class="mn-ftext mn-select" id="province"
+                                                        placeholder="请选择省份" datatype="select" nullmsg="请选择省份"></select>
+                                            </div>
+                                            <div class="mn-fcell mn-city-sel">
+                                                <select class="mn-ftext mn-select" id="city"
+                                                        placeholder="请选择市县" datatype="select" nullmsg="请选择市县"></select>
+                                            </div>
+                                            <div class="mn-fcell mn-str-sel">
+                                                <select class="mn-ftext mn-select" id="dist"
+                                                        placeholder="请选择区域" datatype="select" nullmsg="请选择区域"></select>
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell mn-flong">
+                                                <label for="">详细地址：</label>
+                                                <input id="eAddress" name="eAddress" type="text" class="mn-slong"/>
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell mn-flong">
+                                                <label for="" style="float:left;">主营业务：</label>
+                                                <textarea name="smMain" id="smMain" rows="10" cols="10"
+                                                          class="mn-slong mn-farea"></textarea>
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        #*经营范围*#
+                            <div class="mn-field">
+                                <div class="mn-fhead"><h3>经营范围</h3></div>
+                                <div class="mn-fctx">
+                                    <div class="mn-subtitle">当前采购状态</div>
+                                    <div class="mn-form">
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell mn-flong">
+                                                <div class="mn-fc-cell">
+                                                <span class="mn-radio on">
+                                                    <input checked name="defname" type="radio" id="radio1">
+                                                </span>
+                                                    <label class="auto-width" for="radio1">允许采购授权目录药品</label>
+                                                </div>
+
+                                                <div class="mn-fc-cell">
+                                                <span class="mn-radio">
+                                                    <input name="defname" type="radio" id="radio2">
+                                                </span>
+                                                    <label class="auto-width" for="radio2">禁止采购所有药品</label>
+                                                </div>
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell mn-flong">
+                                                <label>全局经营期限：</label>
+                                                <input id="dateJYS" data-date="{endElem:'#dateJYE'}" type="text"
+                                                       readonly
+                                                       class="mn-datetime">
+                                                <span class="mn-dt-line">—</span>
+                                                <input id="dateJYE" data-date="{startElem:'#dateJYS'}" type="text"
+                                                       readonly
+                                                       class="mn-datetime">
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                        <div class="mn-fline">
+                                            <div class="mn-fcell mn-flong">
+                                                <div class="mn-fc-cell">
+                                                    <div class="has-child-multi">
+                                                        <span class="mn-chbox">
+                                                            <input name="check1" type="checkbox" id="check1">
+                                                         </span>
+                                                        <label class="auto-width" for="check1">普通药品</label>
+                                                    </div>
+                                                    <div class="mn-fc-cell mn-indent child-multi">
+                                                        <div class="mn-fcell mn-flong">
+                                                            <span class="mn-chbox">
+                                                                <input name="check1" type="checkbox" id="check2">
+                                                             </span>
+                                                            <label class="auto-width" for="check2">普通药品经营期限</label>
+                                                            <input id="datePTS" data-date="{endElem:'#datePTE'}"
+                                                                   type="text"
+                                                                   readonly
+                                                                   class="mn-datetime">
+                                                            <span class="mn-dt-line">—</span>
+                                                            <input id="datePTE" data-date="{startElem:'#datePTS'}"
+                                                                   type="text" readonly
+                                                                   class="mn-datetime">
+                                                        </div>
+                                                        <div class="mn-fcell mn-flong">
+                                                            <span class="mn-chbox">
+                                                                <input name="check1" type="checkbox" id="check3">
+                                                             </span>
+                                                            <label class="auto-width" for="check3">普通药品经营期限</label>
+                                                            <input id="datePTS" data-date="{endElem:'#datePTE'}"
+                                                                   type="text"
+                                                                   readonly
+                                                                   class="mn-datetime">
+                                                            <span class="mn-dt-line">—</span>
+                                                            <input id="datePTE" data-date="{startElem:'#datePTS'}"
+                                                                   type="text" readonly
+                                                                   class="mn-datetime">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        #*支付方式*#
+                            <div class="mn-field">
+                                <div class="mn-fhead"><h3>支付方式</h3></div>
+                                <div class="mn-fctx">
+                                    #if($!status == 10)
+                                        <div class="mn-fline mt20">
+                                            <span class="mn-chbox on">
+                                                <input checked type="checkbox" id="pay1" name="smManyPayMethod"
+                                                       value="1">
+                                             </span>
+                                            <label class="auto-width" for="pay1">在线支付--买家先付款卖家再发货，货款由第三方银行管理，买家确认收货后，结算货款给卖家，确保买卖双方的交易安全。<a
+                                                    target="_blank"
+                                                    href="http://$!{wwwHostAndPort}/service/financial/yfb"><span
+                                                    style="color:rgb(0, 0, 255)"><u>了解更多</u></span></a></label>
+                                        </div>
+                                        <div class="mn-fline mt20">
+                                            <span class="mn-chbox has-child-switch">
+                                                <input type="checkbox" id="pay2" name="smManyPayMethod"
+                                                       value="2">
+                                             </span>
+                                            <label class="auto-width child-switch"
+                                                   for="pay2">账期付款--在MPH下完订单，在双方约定的账期到期前通过平台支付货款；
+                                                <span class="pos_bot">
+                                                    信用额度：<input class="w112" name="smCreditLimit" id="smCreditLimit"
+                                                                type="text" value="" readonly="readonly" datatype="xyed" sucmsg=" " errormsg="信用额度必须为大于等于0的正整数" nullmsg="信用额度不能为空" />
+                                                </span>
+                                                <span class="pos_bot pos_bot1">
+                                                    账期：<input class="w112" name="smAccountPeriod" id="smAccountPeriod"
+                                                              type="text" value="" readonly="readonly" datatype="xyed" sucmsg=" " errormsg="账期必须为大于等于0的正整数" nullmsg="账期不能为空"/>天
+                                                </span>
+                                            </label>
+                                        </div>
+                                    #end
+                                    <div class="mn-fline mt20">
+                                    <span class="mn-chbox ">
+                                                        <input name="smManyPayMethod" type="checkbox" id="pay3"
+                                                               value="3">
+                                                     </span>
+                                        <label class="auto-width"
+                                               for="pay3">线下付款--在MPH下订单，不通过平台支付货款，双方线下结算</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        #*资质信息*#
+                            <div class="mn-field">
+                                <div class="mn-fhead"><h3>资质信息</h3></div>
+                                <div class="mn-fctx image-upload-box">
+                                    <div id="reqInfoBtnInfo">
+                                        <div class="box" style="" id="box1">
+                                            <div class="cc">
+                                                <div class="img-box">
+                                                    <h5>企业营业执照<i>(必填项)</i>：</h5>
+                                                    <input type="hidden" value="1" name="epType1">
+                                                    <div class="img-file hover" id="uploadPic1">
+                                                        <img id="showPic1" height="139px;" width="139px;">
+                                                        <input type="hidden" id="saImgPath1" name="epPic1">
+                                                        <input type="hidden" id="bucket_key1" name="bucket_key1">
+                                                        <input type="hidden" id="imageInfo1" name="imageInfo1">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <a href="javascript:showImage(1);"><i></i>查看范例</a>
+                                                    </div>
+                                                    <label>证照号码：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" class="form-control" placeholder=""
+                                                               id="epNo1" name="epNo1">
+                                                    </div>
+                                                    <label>证件有效期：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epStartTime1" name="epStartTime1"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{endElem:'#epEndTime1'}">
+                                                    </div>
+                                                    <label>至</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epEndTime1" name="epEndTime1"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{startElem:'#epStartTime1'}">
+                                                    </div>
+                                                </div>
+                                                <div class="ctn-box" id="typeShow" style="display:none;">
+                                                    如为盈利性机构，请上传营业执照
+                                                </div>
+                                            </div>
+
+
+                                            <div class="info-box">
+                                                注意事项：<br>
+                                                1.企业名称需要与营业执照名称保持一致<br>
+                                                2.三证合一的企业请在证照号码处填写“全国统一社会信用代码”<br>
+                                                3.证照起止日期为必填，若为长期终止时间可不填
+                                            </div>
+                                        </div>
+                                        <div class="box" style="" id="box2">
+                                            <div class="cc">
+                                                <div class="img-box">
+                                                    <h5>药品经营（生产）许可证<i>(必填项)</i>：</h5>
+                                                    <input type="hidden" value="2" name="epType2">
+                                                    <div class="img-file " id="uploadPic2">
+                                                        <img id="showPic2" height="139px;" width="139px;">
+                                                        <input type="hidden" id="saImgPath2" name="epPic2">
+                                                        <input type="hidden" id="bucket_key2" name="bucket_key2">
+                                                        <input type="hidden" id="imageInfo2" name="imageInfo2">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <a href="javascript:showImage(2);"><i></i>查看范例</a>
+                                                    </div>
+                                                    <label>证照号码：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" class="form-control" placeholder=""
+                                                               id="epNo2" name="epNo2">
+                                                    </div>
+                                                    <label>证件有效期：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epStartTime2" name="epStartTime2"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{endElem:'#epEndTime2'}">
+                                                    </div>
+                                                    <label>至</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epEndTime2" name="epEndTime2"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{startElem:'#epStartTime2'}">
+                                                    </div>
+                                                </div>
+                                                <div class="ctn-box" id="typeShow" style="display:none;">
+                                                    如为盈利性机构，请上传营业执照
+                                                </div>
+                                            </div>
+
+
+                                            <div class="info-box">
+                                                注意事项：<br>
+                                                1.证号必须清晰可见<br>
+                                                2.仓库地址默认为收货地址<br>
+                                                3.有效期务必清晰可见并在有效期内
+                                            </div>
+                                        </div>
+                                        <div class="box" id="box3">
+                                            <div class="cc">
+                                                <div class="img-box">
+                                                    <h5>GSP证书<i>(必填项)</i>：</h5>
+                                                    <input type="hidden" value="3" name="epType3">
+                                                    <div class="img-file" id="uploadPic3">
+                                                        <img id="showPic3" height="139px;" width="139px;">
+                                                        <input type="hidden" id="saImgPath3" name="epPic3">
+                                                        <input type="hidden" id="bucket_key3" name="bucket_key3">
+                                                        <input type="hidden" id="imageInfo3" name="imageInfo3">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <a href="javascript:showImage(3);"><i></i>查看范例</a>
+                                                    </div>
+                                                    <label>证照号码：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" class="form-control" placeholder=""
+                                                               id="epNo3" name="epNo3">
+                                                    </div>
+                                                    <label>证件有效期：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epStartTime3" name="epStartTime3"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{endElem:'#epEndTime3'}">
+                                                    </div>
+                                                    <label>至</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epEndTime3" name="epEndTime3"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{startElem:'#epStartTime3'}">
+                                                    </div>
+                                                </div>
+                                                <div class="ctn-box" id="typeShow" style="display:none;">
+                                                    如为盈利性机构，请上传营业执照
+                                                </div>
+                                            </div>
+
+
+                                            <div class="info-box">
+                                                注意事项：<br>
+                                                1.认证地址务必保持与收货地址一致<br>
+                                                2.有效期必须清晰可见并且必须在有效期内
+                                            </div>
+                                        </div>
+                                        <div class="box" style="" id="box13">
+                                            <div class="cc">
+                                                <div class="img-box">
+                                                    <h5>医疗机构执业许可证<i>(必填项)</i>：</h5>
+                                                    <input type="hidden" value="13" name="epType13">
+                                                    <div class="img-file" id="uploadPic13">
+                                                        <img id="showPic13" height="139px;" width="139px;">
+                                                        <input type="hidden" id="saImgPath13" name="epPic13">
+                                                        <input type="hidden" id="bucket_key13" name="bucket_key13">
+                                                        <input type="hidden" id="imageInfo13" name="imageInfo13">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <a href="javascript:showImage(13);"><i></i>查看范例</a>
+                                                    </div>
+                                                    <label>证照号码：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" class="form-control" placeholder=""
+                                                               id="epNo13" name="epNo13">
+                                                    </div>
+                                                    <label>证件有效期：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epStartTime13" name="epStartTime13"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{endElem:'#epEndTime13'}">
+                                                    </div>
+                                                    <label>至</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epEndTime13" name="epEndTime13"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{startElem:'#epStartTime13'}">
+                                                    </div>
+                                                </div>
+                                                <div class="ctn-box" id="typeShow" style="display:none;">
+                                                    如为盈利性机构，请上传营业执照
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="box" style="" id="box8">
+                                            <div class="cc">
+                                                <div class="img-box">
+                                                    <h5>法人身份证：</h5>
+                                                    <input type="hidden" value="8" name="epType8">
+                                                    <div class="img-file " id="uploadPic8">
+                                                        <img id="showPic8" height="139px;" width="139px;">
+                                                        <input type="hidden" id="saImgPath8" name="epPic8">
+                                                        <input type="hidden" id="bucket_key8" name="bucket_key8">
+                                                        <input type="hidden" id="imageInfo8" name="imageInfo8">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <a href="javascript:showImage(8);"><i></i>查看范例</a>
+                                                    </div>
+                                                </div>
+                                                <div class="ctn-box" id="typeShow" style="display:none;">
+                                                    如为盈利性机构，请上传营业执照
+                                                </div>
+                                            </div>
+
+                                            <div class="ctn-box">与法人授权委托书2选1必填</div>
+
+
+                                            <div class="info-box">
+                                                注意事项：<br>
+                                                1.身份证需包含正反两面<br>
+                                                2.身份证须在有效期内
+                                            </div>
+                                        </div>
+                                        <div class="box" id="box9">
+                                            <div class="cc">
+                                                <div class="img-box">
+                                                    <h5>法人授权委托书：</h5>
+                                                    <input type="hidden" value="9" name="epType9">
+                                                    <div class="img-file" id="uploadPic9">
+                                                        <img id="showPic9" height="139px;" width="139px;">
+                                                        <input type="hidden" id="saImgPath9" name="epPic9">
+                                                        <input type="hidden" id="bucket_key9" name="bucket_key9">
+                                                        <input type="hidden" id="imageInfo9" name="imageInfo9">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <a href="javascript:showImage(9);"><i></i>查看范例</a>
+                                                    </div>
+                                                </div>
+                                                <div class="ctn-box" id="typeShow" style="display:none;">
+                                                    如为盈利性机构，请上传营业执照
+                                                </div>
+                                            </div>
+
+
+                                            <div class="ctn-box">与法人身份证2选1必填</div>
+
+                                            <div class="info-box">
+                                                注意事项：<br>
+                                                1.受委托人的姓名与身份证号须清晰可见<br>
+                                                2.需注明授权有效期<br>
+                                                3.需法定代表人签字盖章
+                                            </div>
+                                        </div>
+                                        <div class="box" style="" id="box4">
+                                            <div class="cc">
+                                                <div class="img-box">
+                                                    <h5>组织机构代码证：</h5>
+                                                    <input type="hidden" value="4" name="epType4">
+                                                    <div class="img-file" id="uploadPic4">
+                                                        <img id="showPic4" height="139px;" width="139px;">
+                                                        <input type="hidden" id="saImgPath4" name="epPic4">
+                                                        <input type="hidden" id="bucket_key4" name="bucket_key4">
+                                                        <input type="hidden" id="imageInfo4" name="imageInfo4">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <a href="javascript:showImage(4);"><i></i>查看范例</a>
+                                                    </div>
+                                                    <label>证照号码：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" class="form-control" placeholder=""
+                                                               id="epNo4" name="epNo4">
+                                                    </div>
+                                                    <label>证件有效期：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epStartTime4" name="epStartTime4"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{endElem:'#epEndTime4'}">
+                                                    </div>
+                                                    <label>至</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epEndTime4" name="epEndTime4"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{startElem:'#epStartTime4'}">
+                                                    </div>
+                                                </div>
+                                                <div class="ctn-box" id="typeShow" style="display:none;">
+                                                    如为盈利性机构，请上传营业执照
+                                                </div>
+                                            </div>
+                                            <span style="color: red;">非三证合一,此项为必填</span>
+
+
+                                        </div>
+                                        <div class="box" style="" id="box5">
+                                            <div class="cc">
+                                                <div class="img-box">
+                                                    <h5>税务登记证：</h5>
+                                                    <input type="hidden" value="5" name="epType5">
+                                                    <div class="img-file" id="uploadPic5">
+                                                        <img id="showPic5" height="139px;" width="139px;">
+                                                        <input type="hidden" id="saImgPath5" name="epPic5">
+                                                        <input type="hidden" id="bucket_key5" name="bucket_key5">
+                                                        <input type="hidden" id="imageInfo5" name="imageInfo5">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <a href="javascript:showImage(5);"><i></i>查看范例</a>
+                                                    </div>
+                                                    <label>证照号码：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" class="form-control" placeholder=""
+                                                               id="epNo5" name="epNo5">
+                                                    </div>
+                                                    <label>证件有效期：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epStartTime5" name="epStartTime5"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{endElem:'#epEndTime5'}">
+                                                    </div>
+                                                    <label>至</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epEndTime5" name="epEndTime5"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{startElem:'#epStartTime5'}">
+                                                    </div>
+                                                </div>
+                                                <div class="ctn-box" id="typeShow" style="display:none;">
+                                                    如为盈利性机构，请上传营业执照
+                                                </div>
+                                            </div>
+                                            <span style="color: red;">非三证合一,此项为必填</span>
+
+
+                                        </div>
+                                        <div class="box" id="box6">
+                                            <div class="cc">
+                                                <div class="img-box">
+                                                    <h5>医疗器械经营许可证：</h5>
+                                                    <input type="hidden" value="6" name="epType6">
+                                                    <div class="img-file" id="uploadPic6">
+                                                        <img id="showPic6" height="139px;" width="139px;">
+                                                        <input type="hidden" id="saImgPath6" name="epPic6">
+                                                        <input type="hidden" id="bucket_key6" name="bucket_key6">
+                                                        <input type="hidden" id="imageInfo6" name="imageInfo6">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <a href="javascript:showImage(6);"><i></i>查看范例</a>
+                                                    </div>
+                                                    <label>证照号码：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" class="form-control" placeholder=""
+                                                               id="epNo6" name="epNo6">
+                                                    </div>
+                                                    <label>证件有效期：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epStartTime6" name="epStartTime6"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{endElem:'#epEndTime6'}">
+                                                    </div>
+                                                    <label>至</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epEndTime6" name="epEndTime6"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{startElem:'#epStartTime6'}">
+                                                    </div>
+                                                </div>
+                                                <div class="ctn-box" id="typeShow" style="display:none;">
+                                                    如为盈利性机构，请上传营业执照
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="box" style="" id="box7">
+                                            <div class="cc">
+                                                <div class="img-box">
+                                                    <h5>食品流通许可证：</h5>
+                                                    <input type="hidden" value="7" name="epType7">
+                                                    <div class="img-file" id="uploadPic7">
+                                                        <img id="showPic7" height="139px;" width="139px;">
+                                                        <input type="hidden" id="saImgPath7" name="epPic7">
+                                                        <input type="hidden" id="bucket_key7" name="bucket_key7">
+                                                        <input type="hidden" id="imageInfo7" name="imageInfo7">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div>
+                                                        <a href="javascript:showImage(7);"><i></i>查看范例</a>
+                                                    </div>
+                                                    <label>证照号码：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" class="form-control" placeholder=""
+                                                               id="epNo7" name="epNo7">
+                                                    </div>
+                                                    <label>证件有效期：</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epStartTime7" name="epStartTime7"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{endElem:'#epEndTime7'}">
+                                                    </div>
+                                                    <label>至</label>
+                                                    <div class="control-item">
+                                                        <input type="text" id="epEndTime7" name="epEndTime7"
+                                                               class="form-control mn-datetime-no-icon" placeholder=""
+                                                               data-date="{startElem:'#epStartTime7'}">
+                                                    </div>
+                                                </div>
+                                                <div class="ctn-box" id="typeShow" style="display:none;">
+                                                    如为盈利性机构，请上传营业执照
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clear-fix"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="mn-field-box" style="margin-top: 50px;">
+                            <div class="mn-btns submit-btn">
+                                <a style="margin-right: 108px;" href="javascript:void(0)" class="mn-btn btn-filled inline" id="btnSubmit">确认保存</a>
+                                <a href="/sales/member/member_info.html"  onclick="top.utils.frameBackDel();" class="mn-btn inline">返回</a>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+
+    #parse("common/footer.vm")
+
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/layui/layui.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/Validform_v5.3.2_min.js"></script>
+<script src="/js/select2/select2.min.js"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+<script type="text/javascript">
+    /*设置框架返回按钮*/
+    top.utils.frameBack({
+        render:true,
+        handler:function (btn) {
+            location.href = document.referrer;
+        }
+    })
+    layui.config({
+        base: '/js/layui/extend/'
+    }).use(['addMember'], function () {
+        var addMember = layui.addMember;
+        addMember.run(function (layApp) {
+            //执行本地代码
+            $.Tipmsg.s="该项必填"
+            var vf = $("#submitForm").Validform({
+                tiptype:3,
+                showAllError:true,
+                postonce:true,
+                ajaxPost:false,
+                datatype:{
+                    "xyed":function(vals,obj,form,reg){//信用额度
+                        var status = "$!status";
+                        if(status == 10){
+                            var isPay2 = $("#pay2").prop("checked");
+                            if(isPay2){
+                                if(!/^[1-9][0-9]*$/.test(vals)){
+                                    return false;
+                                }
+                            }
+                        }
+                        return true;
+                    },
+                    select:function (vals,obj,form,reg) {
+                        var _ops= $(obj).find("option");
+                        if(_ops.length > 0){
+                            if(vals){
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        }else{
+                            return true;
+                        }
+                    }
+                },
+                callback:function (form) {
+                    addSave(layApp);
+                    return false;
+                }
+            });
+            $("#btnSubmit").on("click",function () {
+                vf.submitForm();
+            })
+            setTimeout(function () {
+                $("select").on("change",function () {
+                    vf.check(false,$(this));
+                })
+            },500);
+        });
+    })
+
+    function addSave(layApp) {
+
+        //判断企业类型进行remove元素
+        //企业类型非医院和诊所(必填资质)和企业类型非医院和诊所(非必填资质)
+        //验证必填的图片是否上传
+        var saImgPath1=$("#saImgPath1").val();
+        var saImgPath2=$("#saImgPath2").val();
+        var saImgPath3=$("#saImgPath3").val();
+
+        var epStartTime1=$("#epStartTime1").val();
+        var epStartTime2=$("#epStartTime2").val();
+        var epStartTime3=$("#epStartTime3").val();
+
+        var epEndTime1=$("#epEndTime1").val();
+        var epEndTime2=$("#epEndTime2").val();
+        var epEndTime3=$("#epEndTime3").val();
+
+        if(saImgPath1!=""){
+//            if(epStartTime1==""||epEndTime1==""){
+//                layApp.alert({
+//                    head:"提示信息",
+//                    text:"必须填写企业营业执照有效期"
+//                })
+//                return;
+//            }
+        }
+
+        if(saImgPath2!=""){
+//            if(epStartTime2==""||epEndTime2==""){
+//                layApp.alert({
+//                    head:"提示信息",
+//                    text:"必须填写药品经营许可证有效期"
+//                })
+//                return;
+//            }
+        }
+
+        if(saImgPath3!=""){
+//            if(epStartTime3==""||epEndTime3==""){
+//                layApp.alert({
+//                    head:"提示信息",
+//                    text:"必须填写GSP证书有效期"
+//                })
+//                return;
+//            }
+        }
+        //企业类型是医院和诊所(必填资质)和企业类型非医院和诊所(非必填资质)
+        if(eType==6 || eType==7){
+            $("#box2").remove();
+            $("#box3").remove();
+            $("#box6").remove();
+            $("#box7").remove();
+        }
+        //序列化表单
+        var supplierMemberWrapper = $("#submitForm").serializeJson();
+        supplierMemberWrapper.smStatus = $("#smStatus").val();
+        //资质审核状态
+        var userEname = "$!userEname";
+        if(eType==6 || eType==7){
+            var saImgPath1=$("#saImgPath1").val();
+            var saImgPath4=$("#saImgPath4").val();
+            var saImgPath5=$("#saImgPath5").val();
+            var saImgPath8=$("#saImgPath8").val();
+            var saImgPath9=$("#saImgPath9").val();
+            var saImgPath13=$("#saImgPath13").val();
+            if(saImgPath1 == "" && saImgPath4 == "" && saImgPath5 == "" && saImgPath8 == "" && saImgPath9 == "" && saImgPath13 == ""){
+                supplierMemberWrapper.picStatus = 2;
+            }else{
+                supplierMemberWrapper.picStatus = 3;
+            }
+        }else{
+            var saImgPath1=$("#saImgPath1").val();
+            var saImgPath2=$("#saImgPath2").val();
+            var saImgPath3=$("#saImgPath3").val();
+            var saImgPath4=$("#saImgPath4").val();
+            var saImgPath5=$("#saImgPath5").val();
+            var saImgPath6=$("#saImgPath6").val();
+            var saImgPath7=$("#saImgPath7").val();
+            var saImgPath8=$("#saImgPath8").val();
+            var saImgPath9=$("#saImgPath9").val();
+            if(saImgPath1 == "" && saImgPath2 == "" && saImgPath3 == "" && saImgPath4 == "" && saImgPath5 == "" && saImgPath6 == "" && saImgPath7 == "" && saImgPath8 == "" && saImgPath9 == ""){
+                supplierMemberWrapper.picStatus = 2;
+            }else{
+                supplierMemberWrapper.picStatus = 3;
+            }
+        }
+//    		supplierMemberWrapper.picStatus = 3;
+        supplierMemberWrapper.uploadEnterprise = userEname;
+        //权限
+        var flag = false;
+        var purs = "";
+        var purviews = new Array;
+        $("input[name^='selck']").each(function(i, o) {
+            if (flag) {
+                return;
+            }
+            if (o.checked) {
+                var beginTime = $('#' + o.id + "_beginTime").val();
+                if (!beginTime) {
+                    layApp.alert({
+                        head:"提示信息",
+                        text:"请选择【" + o.title + "】经营期限开始时间"
+                    })
+                    flag = true;
+                    return;
+                }
+                var endTime = $('#' + o.id + "_endTime").val();
+                if (!endTime) {
+                    layApp.alert({
+                        head:"提示信息",
+                        text:"请选择【" + o.title + "】经营期限结束时间"
+                    })
+                    flag = true;
+                    return;
+                }
+                flag = false;
+                if (purs != "") {
+                    purs += ",";
+                }
+                purs += o.id;
+                var purobj = {
+                    spId : o.id,
+                    smpStartTime : beginTime,
+                    smpEndTime : endTime
+                };
+                purviews.push(purobj);
+            }
+        });
+        if (flag) {
+            return;
+        }
+
+        if (purs == "") {
+            layApp.alert({
+                head:"提示信息",
+                text:"请选择采购权限"
+            })
+            return;
+        }
+        //参数
+        var eType = $("#eType").val();
+        var roleCode = '';
+        if(eType == 1){
+            roleCode = 'sys004';
+        }else if(eType == 2){
+            roleCode = 'sys001';
+        }else if(eType == 3){
+            roleCode = 'sys002';
+        }else if(eType == 4){
+            roleCode = 'sys003';
+        }else if(eType == 5){
+            roleCode = 'sys008';
+        }else if(eType == 6){
+            roleCode = 'sys005';
+        }else if(eType == 7){
+            roleCode = 'sys006';
+        }
+        var purviewsParam = $.toJSON(purviews);
+        layer.load(2,{shade:[.8]});
+        $.ajax({
+            type : 'post',
+            url : '/sales/member/supplierMember_addSave.html',
+            data : {
+                "supplierMemberWrapper" : $.toJSON(supplierMemberWrapper),
+                "purviews" : purviewsParam,
+                "roleCode" : roleCode
+            },
+            dataType : 'json',
+            success : function(data) {
+                if (data) {
+                    layApp.alert({
+                        head:"提示信息",
+                        text:"保存成功",
+                        ok:function () {
+                            top.utils.frameBackDel();
+                            location = "/sales/member/member_info.html";
+                        }
+                    })
+                } else {
+                    layer.closeAll("loading");
+                    layApp.alert({
+                        head:"提示信息",
+                        text:"保存失败"
+                    })
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+#if($!utils.isRequestFromSaas($!request))
+ <!-- Saas请求访问页面，不显示头部信息 -->
+ #else
+#if($!user && $!{user.appId} != 10 )
+ <!--顶部通栏-->
+ <div class="topbox">
+    <div class="wrap">
+      <p class="welcome fl">
+          您好，
+		   #if($!user)
+			#if($!{user.ename} && $!{user.ename}!='')
+				<a class="name" href="/index.html" title="$!{user.ename}">$!utils.substring($!{user.ename},20)</a>
+			#else
+				<a class="name" href="/index.html" title="$!{user.mname}" >$!utils.substring($!{user.mname},20)</a>
+			#end
+		  #end
+		  欢迎来到我的医药网！
+      </p>
+	  #if(!$!user)
+        <a class="register fl" href="/register.html">注册</a>
+		<a class="login fl" href="/login.html">登录</a>
+	  #else
+		<a class="login fl" href="/logout.html">退出</a>
+	  #end
+      <div class="top_nav fr">
+        <div class="dot">
+          <a href="http://$!{wwwHostAndPort}">医药网首页</a>
+        </div>
+        <span class="fl">|&nbsp;&nbsp;</span>
+        <div class="dot dot_phone">
+          <span class="tel">400-060-3351</span>
+        </div>
+      </div>
+    </div>
+  </div>
+#end
+#end

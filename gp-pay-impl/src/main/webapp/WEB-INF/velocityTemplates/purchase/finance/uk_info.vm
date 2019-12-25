@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>uk信息收集 - 我的医药网</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+	       
+	<script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>
+      <style type="text/css">
+          .clearfix:before,.clearfix:after{display:table; content: " "; clear: both;}
+          .disableBtn {
+              color: rgb(0,0,0,0.6)
+          }
+          .ui-dialog-close{
+          	display:none!important;
+          }
+          .member li label.left{
+          	width:120px;
+          }
+          /*.aplyBtn{
+              background-color: #ccc!important;
+          }*/
+          .aplyBtn{
+              background-color: #0f94a5!important;
+          }
+        .hi{ background-color: #0f94a5!important;}
+         .useableCursor{
+             cursor: pointer!important;
+         }
+         .unuseableCursor{
+             cursor:default!important;
+         }
+      </style>
+     <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/validate-methods.js?v=$!{jscss_version}" type="text/javascript"></script>	
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>	
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/public.js?v=$!{jscss_version}"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+ 	<script type="text/javascript">
+
+
+	 	function toAdd(){
+                if (!checkInputs()){
+                    return;
+                }
+                $.ajax({
+                    type: 'post',
+                    url: #if($!sales==0)'/sales/finance/uk_info_submit.html'#else'/purchase/finance/uk_info_submit.html'#end,
+                    //data: $("form").serialize(),
+                     data: {
+		 			    		"ukInfo":$.toJSON($("#form").serializeJson())
+		 			    	},
+		 			    dataType: 'json',
+                    success: function(data) {
+	                    top.ue.alert({
+			            	content:"申请成功",
+			            	end: function(){
+			            		window.location.reload();
+			            	}
+			            })
+                    }
+                });
+	 	}
+
+        function customizeAlert(msg) {
+            top.ue.msg(msg);
+        }
+
+        function blankAlert(itemName) {
+            customizeAlert(itemName + "未填写，请填写后再操作");
+        }
+
+        function formatAlert(itemName) {
+            customizeAlert(itemName + "格式不正确");
+        }
+
+	 	function submitForm(){
+	 		$('#form').submit();
+	 	}
+        function checkInputs() {
+            if ($.trim($("#ukLegal").val()).length == 0){
+                blankAlert("法人姓名");
+                return false;
+            }
+            if ($.trim($("#ukLegalNo").val()).length == 0){
+                blankAlert("法人身份证号");
+                return false;
+            }
+
+            var reg_email = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
+            if ($.trim($("#ukLeaglEmail").val()).length == 0){
+                blankAlert("邮箱");
+                return false;
+            }
+
+            if (!reg_email.test($.trim($("#ukLeaglEmail").val()))){
+                formatAlert("邮箱");
+                return false;
+            }
+             var reg_tel = /^1[34578][0-9]{9}$/;
+             if (!reg_tel.test($.trim($("#ukLeaglMobile").val()))){
+                formatAlert("手机号");
+                return false;
+            }
+            return true;
+        }
+ 	</script>
+	</head>
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+      #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #if($!position == 1)
+          #parse("common/left_menu_purchase.vm")
+          #else
+          #parse("common/left_menu_sales.vm")
+          #end
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            	<div class="path">
+                    <p class="fl"><a href="/purchase/index.html" class="color">
+                    #if($!position == 1)
+                        采购中心
+                    #else
+                        销售中心
+                    #end
+                    </a> &gt; 金融产品 &gt; </p>
+                </div>
+
+                <form method="post" id="form">
+
+				<!-- 保存的同时即为待审核状态 -->
+                <input type="hidden" name="ukId" id="ukId" value="$!{ukInfo.ukId}"/>
+                <dl class="path_hide">
+                <dd>
+                <div class="order_query order member" style="position: relative;margin-top:10px;">
+                        <ul class="clearfix">
+                             <li class="one">
+                                <label class="left">法人姓名<i>*</i>：</label>
+                                <input name="ukLegal" id="ukLegal" type="text" class="w-txt" value="$!{ukInfo.ukLegal}"  maxlength="45">
+                            </li>
+                             <li class="one">
+                                <label class="left">法人身份证号<i>*</i>：</label>
+                                <input name="ukLegalNo" id="ukLegalNo" type="text" class="w-txt" value="$!{ukInfo.ukLegalNo}"  maxlength="19">
+                            </li>
+                            <li class="one">
+                                <label class="left">邮箱<i>*</i>：</label>
+                                <input name="ukLeaglEmail" id="ukLeaglEmail" type="text" class="w-txt" value="$!{ukInfo.ukLeaglEmail}"  maxlength="50">
+                            </li>
+                            <li class="one">
+                                <label class="left">手机号<i>*</i>：</label>
+                                <input name="ukLeaglMobile" id="ukLeaglMobile" type="text" class="w-txt" value="$!{ukInfo.ukLeaglMobile}"  maxlength="50">
+                            </li>
+                        </ul>
+                        #if($!ukInfo.ukId==0)
+                         <div class="btn" style="padding-left: 120px;"><a href="javascript:void(0);"  onclick="toAdd();" class="aplyBtn">提交申请</a></div>					    
+                		#else
+                		  <div class="btn" style="padding-left: 120px;"><a disabled href="javascript:void(0);" style="display:none; background:#f4f4f4;color:#666;border:1px solid #ccc; cursor:not-allowed;">提交申请</a></div>
+                		 #end
+                		  
+                </div>
+                </dd>
+                </dl>
+                </form>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+   #parse("/common/footer.vm")
+  </body>
+</html>

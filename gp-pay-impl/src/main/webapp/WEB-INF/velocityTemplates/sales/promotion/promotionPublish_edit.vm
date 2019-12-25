@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>我的医药网 - 首页热销管理</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}"> 
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/promotion.css?v=$!{jscss_version}">
+       
+    <script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; <a class="color" href="/sales/promotion/main.html">促销管理</a></p>
+                </div>
+                <dl class="promotions_add mt20">
+                	<dt>
+                    	<ul class="step cc" id="promotion_ul">
+                        	<li class="complete">第一步 配置活动内容</li>
+                            <li class="complete">第二步 配置活动规则</li>
+                            <li class="current">第三步 配置活动展示入口</li>
+                        </ul>
+                    </dt>
+                    <dd>
+                    	<p class="promotions_tips">提示：为了方便，你可直接输入文字信息，系统自动合并成图片！</p>
+                    	<form action="" id="form1">
+                    		<table class="promotion_table" border="0" cellpadding="0" cellspacing="0">
+		                    	<input type="hidden" name="pactId" id="pactId" value="$!{pact.pactId}"/>
+		                          <tr>
+		                            <td colspan="2">
+		                            #if($!pap1)
+		                            <input type="hidden" name="id" id="id_1" value="$!{pap1.id}"/>
+		                            <input class="checkbox" type="checkbox" id="checkbox_1" name="publishStatus"  #if($!{pap1.publishPosition} == 1 && $!{pap1.publishStatus} == 1) checked="checked" #end>
+		                            #else
+		                            <input class="checkbox" type="checkbox" id="checkbox_1" name="publishStatus" value="0">
+		                            #end
+		                            	<label class="text" for="checkbox_1">优惠活动页面广告位置</label>
+		                                <a href="javascript:showImageStep3(1);" class="view_img">查看效果图</a>
+		                            </td>
+		                            <td rowspan="4" align="center">
+                 			            <input id="publishImg_1" name="publishImg"  type="hidden" value="$!{template.tplBannerImg}">
+		                            	<img name="publishImg" src="$!utils.getNewImgDomain($!{template.tplBannerImg})" width="538" height="130">
+		                            </td>
+		                          </tr>
+		                          <tr>
+		                            <td width="85" class="tar">活动标题：</td>
+		                            <td width="290">$!{pact.pactTitle}<input class="input input_l fl" type="hidden" name="publishTitle" id="publishTitle_1" value="$!{pact.pactTitle}"></td>
+		                          </tr>
+		                          <tr>
+		                            <td class="tar">活动描述：</td>
+		                            <td>$!{pact.pactContent}<input class="input input_l fl" type="hidden" id="publishSubTitle_1" name="publishSubTitle" value="$!{pact.pactContent}"></td>
+		                          </tr>
+		                          <tr>
+		                            <td class="tar">排序：</td>
+		                            #if($!pap1)
+		                            <td><input class="input fl" type="text"  onkeyup="value=value.replace(/[^\d.]/g,'')" id="publishOrderby_1" maxlength="5" name="publishOrderby" value="$!{pap1.publishOrderby}"><span class="span fl">越大越靠前</span></td>
+		                            #else
+		                            <td><input class="input fl" type="text"  onkeyup="value=value.replace(/[^\d.]/g,'')" id="publishOrderby_1" maxlength="5" name="publishOrderby" value="0"><span class="span fl">越大越靠前</span></td>
+		                            #end
+		                          </tr>
+		                       </table>
+                    	</form>
+                    	<form action="" id="form2">
+                    		<table class="order_table mt20 promotion_table" border="0" cellpadding="0" cellspacing="0">
+                    		<input id="publishImg_2" name="publishImg"  type="hidden" value="$!{template.tplSmallImg}">
+		                       #if($!pap2)
+		                       <input type="hidden" name="id" id="id_2" value="$!{pap2.id}"/>
+		                          <tr>
+		                            <td colspan="3">
+		                                <input class="checkbox" type="checkbox" id="checkbox_2" name="publishStatus"  #if($!{pap2.publishStatus} == 1) checked="checked" #end>
+		                            	<label class="text" for="checkbox_2">优惠活动页面广告位置</label>
+		                                <a href="javascript:showImageStep3(2);" class="view_img">查看效果图</a>
+		                            </td>
+		                            <td rowspan="4">
+			                            <table border="0">
+				                            <tr>
+					                            <td><img src="$!utils.getNewImgDomain($!{template.tplSmallImg})"></td>
+					                            <td>
+					                            #if($!{pap2.publishCustomImg} && $!{pap2.publishCustomImg} != "")
+					                            <img id="showPic" width="232px" height="150px" src="$!utils.getNewImgDomain($!{pap2.publishCustomImg})"/>
+					                            #else
+					                            <img id="showPic" width="232px" height="150px" />
+					                            #end
+					                            </td>
+					                            <input id="publishCustomImg" name="publishCustomImg"  type="hidden" value="$!{pap2.publishCustomImg}">
+					                            <input id="bucketKey" name="bucketKey"  type="hidden" value="$!{pap2.bucketKey}">
+					                            <input type="hidden" name="imageInfo" id="imageInfo" />
+				                            </tr>
+				                            <tr>
+					                            <td colspan="2">
+							                       	<a id="uploadPic" class="view_img">自定义小活动图上传</a>
+			                                        <span style="color:red;">*建议图片上传尺寸为232*150</span>
+			                                    </td>
+				                            </tr>
+			                            </table>
+		                            </td>
+		                          </tr>
+		                          <tr>
+		                            <td width="85" class="tar">活动标题：</td>
+		                            <td width="500"><input class="input input_l fl" type="text" maxlength="8" name="publishTitle" id="publishTitle_2" value="$!{pap2.publishTitle}"><span class="prompt">请填写活动标题</span></td>
+		                          </tr>
+		                          <tr>
+		                            <td class="tar">活动描述：</td>
+		                            <td><input class="input input_l fl" type="text" maxlength="14" name="publishSubTitle" id="publishSubTitle_2" value="$!{pap2.publishSubTitle}"><span class="prompt">请填写活动描述</span></td>
+		                          </tr>
+		                          <tr>
+		                            <td class="tar">排序：</td>
+		                            <td><input class="input fl" type="text"  onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="5" id="publishOrderby_2" name="publishOrderby" value="$!{pap2.publishOrderby}"><span class="span fl">越大越靠前</span></td>
+		                          </tr>
+		                          #else
+		                          <tr>
+		                            <td colspan="2">
+		                                 <input class="checkbox" type="checkbox" id="checkbox_2" name="publishStatus" value="0">
+		                          	    <label class="text" for="checkbox_2">优惠活动页面广告位置</label>
+		                                <a href="javascript:showImageStep3(2);" class="view_img">查看效果图</a>
+		                            </td>
+		                            <td rowspan="4">
+			                            <table>
+				                            <tr>
+					                            <td><img src="$!utils.getNewImgDomain($!{template.tplSmallImg})"></td>
+					                            <td><img id="showPic" width="232px" height="150px"/></td>
+					                            <input id="publishCustomImg" name="publishCustomImg"  type="hidden" />
+					                            <input type="hidden" id="bucketKey" name="bucketKey" />
+                                                <input type="hidden" name="imageInfo" id="imageInfo" />
+				                            </tr>
+				                            <tr>
+					                            <td colspan="2">
+							                       	<a id="uploadPic" class="view_img">自定义小活动图上传</a>
+			                                        <span style="color:red;">*建议图片上传尺寸为232*150</span>
+			                                    </td>
+				                            </tr>
+			                            </table>
+		                            </td>
+		                          </tr>
+		                          <tr>
+		                            <td width="85" class="tar">活动标题：</td>
+		                            <td width="500"><input class="input input_l fl" type="text" maxlength="8" name="publishTitle" id="publishTitle_2"><span class="prompt">活动标题不超过8个字</span></td>
+		                          </tr>
+		                          <tr>
+		                            <td class="tar">活动描述：</td>
+		                            <td><input class="input input_l fl" type="text" maxlength="14" name="publishSubTitle" id="publishSubTitle_2"><span class="prompt">活动描述不超过14个字</span></td>
+		                          </tr>
+		                          <tr>
+		                            <td class="tar">排序：</td>
+		                            <td><input class="input fl" type="text"  onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="5" id="publishOrderby_2" name="publishOrderby" value="0"><span class="span fl">越大越靠前</span></td>
+		                          </tr>
+		                          #end
+		                       </table>
+                    	</form>
+                       
+                       <div class="btn">
+                       	   <a href="javascript:doLastStep();" class="btn_text">上一步</a>
+                           <a href="javascript:addSave();" class="btn_text">保存</a>
+                       </div> 
+                    </dd>
+                </dl>
+          </div>
+
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+        #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/public.js?v=$!{jscss_version}"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/form.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script>
+/* 		var isBeforeUnload = true;
+	    window.onbeforeunload = function (e) {
+	  	  e = e || window.event;
+	  	  if(isBeforeUnload || "$!{pact.pactStep}"!="3"){
+	  		  // 兼容IE8和Firefox 4之前的版本
+	  		  if (e) {
+	  		    e.returnValue = '关闭提示';
+	  		  }
+	  		  // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
+	  		  return '关闭提示';
+	  	  }
+	  	};	 */
+/*设置框架返回按钮*/
+if(top.utils.getUrlParam('backbtn',window) != 0){
+    top.utils.frameBack({
+        handler:function (btn) {
+            location.href = document.referrer;
+        }
+    })
+}
+  	
+		$(function(){
+			$("body tbody tr").unbind("mouseover");
+			$("#promotion_ul>li").first().click(function(){ 
+				if("$!{pact.pactStep}" ==3)isBeforeUnload=false;
+				window.location.href = "/sales/promotion/promotionstep2.html?id="+"$!{pact.pactId}";
+				window.event.returnValue = false; 
+			});
+			$("#promotion_ul>li").eq(1).click(function(){ 
+				if("$!{pact.pactStep}" ==3)isBeforeUnload=false;
+				window.location.href = "/sales/promotion/step2.html?pactId="+"$!{pact.pactId}";
+				window.event.returnValue = false; 
+			});
+			
+			
+				//图片上传
+				var uploadPic = $("#uploadPic");
+		        new AjaxUpload(uploadPic,{
+		            action: "/cdn/imageInfo_upload.html",
+		            name: 'file_path',
+		            responseType:"json",
+		            onSubmit : function(file, ext){
+		            	if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+		                    ext_str = ext;
+		                } else {
+		                	dialog({
+			                       title: "提示信息",
+			                       content: "非图片文件格式,请重传！",
+			                       width: 300
+			                   });
+		                    return false;
+		                }
+		                $.showLoad();
+		            },
+		            onComplete: function(file, result){
+		            	if (result.success == false) {
+		            		if(result.message == "outofsize"){
+		            			dialog({
+		 	                       title: "提示信息",
+		 	                       content: "文件过大，无法上传！",
+		 	                       width: 300
+		 	                    });
+		            		}else if(result.message == "error"){
+		            			dialog({
+		 	                       title: "提示信息",
+		 	                       content: "文件过大，无法上传！",
+		 	                       width: 300
+		 	                    });
+		            		}
+		            		return false;
+		            		
+		            	}else{
+		            		$("#publishCustomImg").val(result.data.id);//response返回的是mogoDB记录id
+		                	$('#showPic').attr("src",result.data.picUrl);
+		                	$("#bucketKey").val(result.data.id);
+		                	$("#imageInfo").val($.toJSON(result.data.imageInfo));
+		            	}
+		            	
+		                $.hideLoad();
+		            }
+		        });
+			
+		})
+		
+		//上一步
+		function doLastStep(){
+			if("$!{pact.pactStep}" ==3)isBeforeUnload=false;
+			var pactId = $("#pactId").val();
+			window.location.href = "/sales/promotion/step2.html?pactId="+pactId;
+			window.event.returnValue = false; 
+		}
+		
+		function submitData(id){
+			var publish = {};
+			if($("#checkbox_"+id)[0].checked){
+				publish.publishStatus = 1;
+			}else{
+				publish.publishStatus = 0;
+			}
+			
+			if(id == 1){
+				publish.publishPosition = 1;
+				publish.publishCustomImg = "";
+				publish.bucketKey = "";
+			}else{
+				publish.publishPosition = 2;
+				publish.publishCustomImg = $("#publishCustomImg").val();
+				publish.bucketKey = $("#bucketKey").val();
+			}
+			
+			publish.pactId = $("#pactId").val();
+			publish.publishImg = $("#publishImg_" + id).val();
+			publish.id = $("#id_" + id).val();
+			publish.publishTitle = $("#publishTitle_" + id).val();
+			publish.publishSubTitle = $("#publishSubTitle_" + id).val();
+			publish.publishOrderby = $("#publishOrderby_" + id).val();
+			if(id ==2 && $("#checkbox_2")[0].checked && isEmpty(publish.publishCustomImg)){
+				if(publish.publishSubTitle=="" || publish.publishOrderby==""){
+	            	dialog({
+	                    title: "提示信息",
+	                    content: "活动标题或活动描述不能为空！",
+	                    width: 300
+	                });
+	            	return false;
+				}
+			}
+
+			if($("#publishOrderby_" + id).val() ==""){
+				publish.publishOrderby = 0;
+			}
+			return publish;
+		}
+		
+		//保存
+		function addSave(){
+			var publishArray = new Array();
+			
+			publishArray.push(submitData(1));
+			if(submitData(2)){
+				publishArray.push(submitData(2));
+			}else{
+				return ;
+			}
+			
+			var publishJson = $.toJSON(publishArray);
+			$.ajax({
+		           url: "/sales/promotion/publishSave.html",
+		           data: {"jsonParam":publishJson},
+		           type: 'POST',
+		           dataType: 'json',
+		           success: function(result) {
+	                    if (result.success == false) {
+	                    	dialog({
+			                       title: "提示信息",
+			                       content: result.message,
+			                       width: 300
+			                   });
+	                    }else{
+                            top.ue.alert({
+					                title: '提示信息',
+					                content: "活动创建完成！",
+					                end: function() {
+					                    top.utils.frameBackDel();
+					                	window.location.href = "/sales/promotion/main.html";
+					                	window.event.returnValue = false; 
+					                }
+					            })
+	                    }
+			       }
+	            });
+		}
+		
+		//查看效果图
+		function showImageStep3(showType) {
+			var pactId = $("#pactId").val();
+			var title = $("#publishTitle_"+showType).val();
+			var subTitle = $("#publishSubTitle_"+showType).val();
+			$.ajax({
+		           url: "/sales/promotion/showImageStep3.html",
+		           data: {"pactId":pactId,showType:showType,title:title,subTitle:subTitle},
+		           type: 'POST',
+		           dataType: 'json',
+		           success: function(result) {
+	                    if (result.success == false) {
+	                    	dialog({
+			                       title: "提示信息",
+			                       content: result.message,
+			                       width: 300
+			                   });
+	                    }else{
+	                    	var content = result.data;
+	        				dialog({
+	        					title: "查看图片",
+	        					content: content,
+	        					ok: false,
+	        					cancel: false,
+	        					esc: true
+	        				});
+	                    }
+			       }
+	            });
+		}
+    </script>
+    
+  </body>
+</html>

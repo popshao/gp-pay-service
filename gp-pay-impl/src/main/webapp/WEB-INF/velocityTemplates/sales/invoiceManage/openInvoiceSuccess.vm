@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 开票成功</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+    <style type="text/css">
+        .c-box .user-sheet-box .uf-table tr:nth-child(2n) td{
+                 background: none; 
+        }
+    </style>
+</head>
+<body>
+
+<!--页面主体 -->
+    <div class="c-box">
+        <div id='successBox'></div>
+        <script type="text/html" id="successTpl">
+        {{# var d = q;}}
+            <div class="user-kp-result">
+                <img class="ukr-img" src="/front/imgs/invoice/img_fp_04.png">
+                <div class="ukr-right">
+                    <h3 class="ukr-title">开票成功</h3>
+                    <p class="ukr-text mt10">已经扣除您的余额 <i class="user-t-red">{{top.utils.notNull(d.num,'0')}}</i> 张，剩余可开发票 <i class="user-t-red">{{top.utils.notNull(d.leftNum,'0')}}</i> 张。</p>
+                </div>
+            </div>
+            {{# if(d.invoices.length==1){ }}
+
+            <div class="user-kp-result-bottom">
+                <p class="ukrb-text">
+                    <span class="t-left">发票代码：</span>
+                    <span class="t-right">{{top.utils.notNull(d.invoices[0].code,'--')}}</span>
+                </p>
+                <p class="ukrb-text">
+                    <span class="t-left">发票号码：</span>
+                    <span class="t-right">{{top.utils.notNull(d.invoices[0].number,'--')}}</span>
+                </p>
+                <p class="ukrb-text">
+                    <span class="t-left">订单编号：</span>
+                    <span class="t-right">{{top.utils.notNull(d.invoices[0].osn,'--')}}</span>
+                </p>
+                <p class="ukrb-text">
+                    <span class="t-left">金额：</span>
+                    <span class="t-right">{{top.utils.notNullPrice(d.invoices[0].amount)}}</span>
+                </p>
+                <p class="ukrb-text">
+                    <span class="t-left">发票状态：</span>
+                    <span class="t-right">可下载</span>
+                </p>
+            </div>
+            <div class="user-kp-result-btn">
+                <a  href="javascript:void(0)" onclick="top.utils.open('{{d.invoices[0].invoicePdfUrl}}','_blank');" class="user-btn-n">查看发票</a>
+                <a href="javascript:void(0)" class="user-btn-n" onclick='shareInvoice()'>转发</a>
+                <a href="javascript:void(0)" class="user-btn-b" onclick="top.utils.openWithTab(top.utils.getRandom(), '立即开票','/sales/invoice/drawInvoice.html', {refresh: true})">继续开票</a>
+            </div>
+            {{# }else{ }}
+            <div class="user-form user-sheet-box mt10">
+                <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>发票代码</th>
+                            <th>发票号码</th>
+                            <th>订单编号</th>
+                            <th>开票金额</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {{# $.each(d.invoices,function(index,item){ var item = item; var $index = index }}
+                        <tr>
+                            <td>{{top.utils.notNull(item.code,'--')}}</td>
+                            <td>{{top.utils.notNull(item.number,'--')}}</td>
+                            <td>{{top.utils.notNull(item.osn,'--')}}</td>
+                            <td>{{top.utils.notNullPrice(item.kpPrice)}}</td>
+                            <td>
+                                <a class="user-link" href="javascript:void(0)" onclick="top.utils.open('{{item.invoicePdfUrl}}','_blank');">查看发票</a>
+                            </td>
+                        </tr>
+                        {{# }); }}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="user-kp-result-btn mt10">
+                <a href="javascript:void(0)" class="user-btn-b" onclick="top.utils.openWithTab(top.utils.getRandom(), '立即开票','/sales/invoice/drawInvoice.html', {refresh: true})">继续开票</a>
+            </div>
+
+            {{# } }}
+        {{#  }}
+        </script>
+    </div>
+
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>
+
+<script>
+    var q= JSON.parse(getUrlParam("q"));  // 
+    if(!q) {
+        if(window.localStorage){
+           var _ss = localStorage.getItem('data_q');
+           if(_ss){
+               q = JSON.parse(_ss);
+           }
+        }else{
+            localStorage.removeItem('data_q');
+        }
+    }
+    var layer,laypage,laytpl,subData = {};
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage','laytpl'],function () {
+        layer = layui.layer,laypage = layui.laypage,laytpl = layui.laytpl;
+        $(function(){
+            $('body').addClass('user-has-js');
+            if(q)
+                $("#successBox").html(laytpl($("#successTpl").html()).render({datas:q}));
+            else
+                $("#successBox").html(laytpl($("#successTpl").html()).render({error:true}));
+        });
+
+
+    })
+//if(url.indexOf("?") > -1) q = "&";
+    /*转发 分享*/
+    function  shareInvoice() {
+        if(!q)
+            return false;
+        top.utils.iframeLoad();
+        top.utils.openWithTab(top.utils.getRandom(), "转发", '/sales/invoice/transInvoice.html', {fstBread:'发票'});
+        return false;
+    }
+
+</script>
+
+</body>
+</html>

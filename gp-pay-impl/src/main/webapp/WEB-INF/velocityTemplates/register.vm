@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>账号注册_我的医药网 </title>
+    <!-- mypharma_公共资源 -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global-old.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/register.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+       
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/register/register.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+	<!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+ 
+<body>
+	 <div class="head">
+	 	#parse("common/header_top.vm")
+        <div class="headbar">
+            <div class="wrap fn-clear line-l">
+                <h1 class="logo">
+                    <a href="http://$!{wwwHostAndPort}" target="_parent">我的医药网</a>
+                </h1>
+                <div class="logo logo-register">
+                    <a title="账号注册" href="/register.html">账号注册</a>
+                </div>
+                <div class="tel logo-tel">客服电话：400-060-3351</div>
+            </div>
+	    </div>
+    </div>
+        <div class="register wrap">
+               <div class="tab-box">
+                    <div class="tab">
+	                   	<div class="nav-tabs clearfix" id="nav-tabs">
+	                   		<label for="" class="control-label"><i>*</i>企业类型</label>
+	                   		<input class="radio" type="radio" name="registerCusterType" value="1">
+	                   		<label class="text">终端</label>
+	                        <input class="radio" type="radio" name="registerCusterType" value="2">
+	                        <label class="text">商业公司</label>
+	                        <input class="radio" type="radio" name="registerCusterType" value="3">
+	                        <label class="text">工业公司</label>
+	                         <p class="help-tips" id="registerCusterType_title"></p>
+	                   	</div>
+                        <div class="tab-content">
+                            <div class="tab-pane clearfix active">
+                                <form action="/register/addUserInfo.html" id="formview" class="form" role="form" method="post" accept-charset="utf-8">                        <input type="hidden" name="check_num" id="check_num" value="1">
+                                    <input type="hidden" id="enterpriseType" name="enterpriseType" value="0">
+                                    <fieldset>
+                                        <div id="login-method" class="form-group">
+                                            <div class="login-method-box" style="left:0">
+                                                <label for="" class="control-label"><i>*</i>手机号码</label>
+                                                <div class="control-item">
+                                                    <input type="text" name="m_mobile" value="" id="m_mobile" class="form-control" maxlength="11">
+                                                    <span class="help-inline"><button type="button" role="button" class="btn verification" id="sendTelCode">发送验证码</button></span>
+                                                    <span class="help-inline">或者<a href="javascript:void(0);" class="mail" onclick="changeRegistration('mail')">邮箱注册</a></span>
+                                                    <input type="hidden" name="registrationType" id="registrationType" value="tel"> 
+                                                    <p class="help-tips" id="prompt_mobile"></p>
+                                                </div>
+                                            </div>
+                                            <div class="login-method-box" style="left:610px;">
+                                                <label for="" class="control-label"><i>*</i>邮箱地址</label>
+                                                <div class="control-item">
+                                                    <input type="text" name="m_email" id="m_email" class="form-control" value="">
+                                                    <span class="help-inline">或者<a href="javascript:void(0);" class="phone" onclick="changeRegistration('tel')">手机注册</a></span>
+                                                    <p class="help-tips" id="prompt_email"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="login-method2" class="form-group">
+                                            <div class="login-method-box">
+                                                <label for="" class="control-label"><i>*</i>手机验证码</label>
+                                                <div class="control-item">
+<!--                                                     <input type="text" name="m_mobile_code" id="m_mobile_code" class="form-control  mini" value=""> -->
+                                                    <input type="text" name="m_mobile_code" id="m_mobile_code" class="form-control  mini" value=" "   onfocus="clearEmpty(this)"/>
+                                                    <span class="help-tips" id="prompt_mobile_code"></span>
+                                                    <p class="help-tips">&nbsp;</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input  type="password" style="display: none;"/>
+                                        <div class="form-group clearfix">
+                                            <label for="" class="control-label"><i>*</i>设置密码</label>
+                                            <div class="control-item">
+                                                <input name="m_passwd" id="m_passwd" type="password" autocomplete="off" value="" class="form-control">
+                                                <span class="help-tips" id="prompt_passwd"></span>
+                                                <p class="help-tips">请输入6-20位不连续不相同的字母、数字或符号，勿使用联系方式</p>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="control-label"><i>*</i>确认密码</label>
+                                            <div class="control-item">
+                                                <input name="confirm_passwd" id="confirm_passwd" autocomplete="off" type="password" value="" class="form-control">
+                                                <span class="help-tips" id="prompt_confirm_passwd"></span>
+                                                <p class="help-tips">请再次填写密码</p>
+                                            </div>
+                                        </div>
+                                        <div id="login-method3" class="form-group">
+                                            <div class="login-method-box">
+                                                <label for="" class="control-label"><i>*</i>验证码</label>
+                                                <div class="control-item">
+                                                    <input type="text" name="m_captcha" id="m_captcha" value="" class="form-control mini" style="width:65px;">
+                                                    <img id="code_img" onclick="change_captcha()" src="" title="点击可更换验证码" alt="点击可更换验证码" style="cursor:pointer;">&nbsp;&nbsp;
+                                                    <span class="help-tips" id="prompt_captcha"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="" class="control-label">&nbsp;</label>
+                                            <div class="control-item">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input name="m_server" id="m_server" checked="checked" type="checkbox"> 创建网站账号的同时，我同意：遵守<a href="http://cms.mypharma.com/info/298" target="_blank">《“我的医药网”平台服务协议》</a>
+                                                    </label>
+                                                    <p class="help-tips" id="prompt_server"></p>
+                                                </div>
+                                                <input class="btn" type="button" id="m_register" value="立即注册">
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                   </div>
+                   <div id="introduction">
+	                    <!--终端注册介绍 start-->
+	                    <div class="introduction-box"  style="display:none;">
+	                        <div class="join-box">
+	                            <h3><i class="icon-speaker"></i>买家注册：</h3>
+	                            <p>如果您是<b>连锁药店</b>，<b>单体药房</b>，<b>医疗机构</b>,免费注册成为我的医药网采购会员。</p>
+	                            <p class="watchword">上我的医药网寻找好货源，发展本地线上线下营销服务。</p>
+	                        </div>
+	                        <div class="service-box">
+	                            <h3><i class="icon-vip"></i>会员特权：</h3>
+	                            <p>1、医药供应商覆盖全国20＋省、2000＋企业合作;</p>
+	                            <p>2、全网海量独家、畅销、高毛利产品，为您解决货源问题;</p>
+	                            <p>3、平台个性化定价，享受线上产品独家优惠;</p>
+	                            <p>4、高频线上促销订货会、万款产品底价让利;</p>
+	                            <p>5、智能采购，一键导入Excel即可生成订单;</p>
+	                            <p>6、随时接收促销政策通知、掌控一手优惠信息;</p>
+	                            <p>7、下单积分永久有效、实惠好礼兑不停；</p>
+	                            <p>8、7 × 24小时，全天候采购，省心又省力。</p>
+	                        </div>
+	                    </div>
+	                     <!--商业注册介绍 start-->
+	                      <div class="introduction-box"  style="display:none;">
+	                        <div class="introduction400 active">
+	                            <div class="join-box">
+	                                <h3>卖家入驻：</h3>
+	                                <p>如果您是<b>医药商业公司</b>，加入专属您的线上旗舰商城，实现线上智能采购专享属于您的分销、控销、促销一站式服务平台！</p>
+	                            </div>
+	                            <div class="service-box">
+	                                <h3><i class="icon-vip"></i>旗舰商城特色服务：</h3>
+	                                <p><strong>简单</strong><br>
+	                                    • ERP无缝对接，订单实时同步。</p>
+	                                <p><strong>自由</strong><br>
+	                                    • 7X24小时无障碍服务。<br>
+	                                    • 随时发布新品活动，传达优惠信息。</p>
+	                                <p><strong>营销</strong><br>
+	                                    • 品牌营销策划、拉动终端销售<br>
+	                                    • 会员积分管理，提升终端用户活跃度</p>
+	                                <p><strong>安全</strong><br>
+	                                    • 最先进的网络加密技术，保障后台数据安全。 <br>
+	                                    • 专业的数据库管理、强大的技术运营团队。</p>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <!-- 工业注册介绍 -->
+	                    <div class="introduction-box" style="display:none;">
+	                        <div class="introduction400 active">
+	                            <div class="join-box">
+	                                <h3>卖家入驻：</h3>
+	                                <p>如果您是<b>药品生产企业</b>，免费入驻我的医药网“品牌专区”加入“互联网＋”营销新时代！</p>
+	                            </div>
+	                            <div class="service-box">
+	                                <h3><i class="icon-vip"></i>品牌专区特色服务：</h3>
+	                                <p>1、缺货提醒、掌握终端市场需求，定向供货;</p>
+	                                <p>2、流向查询、实现药品流通信息化，精准渠道管控;</p>
+	                                <p>3、确保促销政策落地执行、提升品牌影响力;</p>
+	                                <p>4、新品推广、实现终端快速覆盖;</p>
+	                                <p>5、线上营销活动策划、打造行业口碑;</p>
+	                                <p>6、全网覆盖20＋省  50000＋终端用户。</p>
+	                            </div>
+	                        </div>
+                    	</div>
+                  </div>
+            </div>
+        </div>
+    <!--  footer start  -->
+     #parse("/common/footer.vm")
+     
+    <div class="mask"></div>
+    <div class="dialog w460">
+      <div class="head"><span>发送短信验证</span><a  href="javascript:void(0);" onclick="closeDialog()"  class="btn-close"></a></div>   
+      <div class="con">
+          <form action="" id="check_mask_send_mobile_code">
+          	<input type="hidden" id="daId" name="daId">
+             <ul>
+                 <li style="width:365px; margin: 0 auto; height:auto;">
+                     <label for="">验证码：</label>
+                     <div class="control-item">
+                         <input type="text" name="m_mask_captcha" id="m_mask_captcha" value="" class="form-control mini" style="width:65px;">
+                         <img id="mask_code_img" onclick="change_mask_captcha()" src="" title="点击可更换验证码" alt="点击可更换验证码" style="cursor:pointer;">&nbsp;&nbsp;
+                         <span id="prompt_mask_captcha"></span>
+                         <p class="help-tips">请填写验证码，并查收手机短信</p>
+                     </div>
+                 </li>
+              </ul>
+              <div class="btn">
+              	<a href="javascript:void(0);" id="sendMobileCodeBtn"  class="btn-txt mr7">确认</a>
+              	<a href="javascript:void(0);" onclick="closeDialog()" class="btn-txt" >返回</a>
+              </div>
+          </form>
+      </div>
+    </div>
+    
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script>
+    function clearEmpty(e){
+    	$(e).val($(e).val().replace(/\ +/g,""));//去掉空格
+    }
+	var randomNum = 0;
+	change_captcha();
+	var maskRandomNum = 0;
+	change_mask_captcha();
+	//终端--改变注册方式
+	function changeRegistration(type){
+		var _box = $("#login-method a.mail").parents('.login-method-box');
+		$("#registrationType").val(type);
+		if(type=="tel"){
+			_box.animate({left: '0px'},1000);
+			_box.siblings().animate({left: '610'}, 1000);
+	        $('#login-method2').show();
+		}else if(type="mail"){
+			_box.animate({left: '-610px'}, 1000);
+			_box.siblings().animate({left: '0'}, 1000);
+	        $('#login-method2').hide();
+		}
+	}
+	
+	function change_captcha() {
+		 randomNum= parseInt(Math.random()*90000000+10000000);
+		 $("#code_img").attr("src", "/register/validation.html?randomNum=" + randomNum);
+		 $("#m_captcha").blur();
+	}
+	
+	function change_mask_captcha() {
+		 maskRandomNum= parseInt(Math.random()*90000000+10000000);
+		 $("#mask_code_img").attr("src", "/register/maskValidation.html?randomNum=" + maskRandomNum);
+		 $("#m_mask_captcha").blur();
+	}
+	
+	//关闭dialog
+	function closeDialog(){
+		$(".dialog").hide();
+		$(".mask").hide();
+	}
+</script>
+</body>
+</html>

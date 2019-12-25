@@ -1,0 +1,1168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>企业信息-我的医药网</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+	   
+	<script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>
+    <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/validate-methods.js?v=$!{jscss_version}" type="text/javascript"></script>	
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>	
+    <!-- 脚本 -->
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/public.js?v=$!{jscss_version}"></script>
+    <script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+    	var picSign=0;	
+    
+    	function loadPic(){
+    		var eStatus="$!{bizEnterprise.eStatus}";
+    		var userType="$!{userinfos.userType}";
+    		//商业资质（不区分是否认证状态下必填资质不能修改，改为所有资质均可以修改）
+			if(userType==2){
+				for(var i=1;i<=11;i++){
+        			uploadPic(i);
+        		}
+				for(var i=14;i<=17;i++){
+        			uploadPic(i);
+        		}
+        		for(var i=19;i<=22;i++){
+        			uploadPic(i);
+        		}
+			}
+			//工业资质（不区分是否认证状态下必填资质不能修改，改为所有资质均可以修改）
+			if(userType==3){
+				for(var i=1;i<=2;i++){
+        			uploadPic(i);
+        		}
+        		for(var i=4;i<=12;i++){
+        			uploadPic(i);
+        		}
+        		for(var i=14;i<=17;i++){
+        			uploadPic(i);
+        		}
+        		for(var i=19;i<=22;i++){
+        			uploadPic(i);
+        		}
+        		uploadPic(31);
+			}
+			
+//     		if(eStatus!=1 && eStatus!=2){
+//     			//非认证状态的商业
+//     			if(userType==2){
+//     				for(var i=1;i<=11;i++){
+//             			uploadPic(i);
+//             		}
+//     				for(var i=14;i<=17;i++){
+//             			uploadPic(i);
+//             		}
+//             		for(var i=19;i<=22;i++){
+//             			uploadPic(i);
+//             		}
+//     			}
+//     			//非认证状态的工业
+//     			if(userType==3){
+//     				for(var i=1;i<=2;i++){
+//             			uploadPic(i);
+//             		}
+//             		for(var i=4;i<=12;i++){
+//             			uploadPic(i);
+//             		}
+//             		for(var i=14;i<=17;i++){
+//             			uploadPic(i);
+//             		}
+//             		for(var i=19;i<=22;i++){
+//             			uploadPic(i);
+//             		}
+//     			}
+        		
+//     		}else{
+//     			//认证状态
+//     			uploadPic(4);
+//     			uploadPic(5);
+//     			uploadPic(6);
+//     			uploadPic(7);
+//     			uploadPic(9);
+//     			uploadPic(10);
+//     			uploadPic(22);
+//     		}
+    		//初始化验证方法
+// 			checkForm();
+    		
+    	}
+    	
+    	//站点全选
+    	$(function(){
+    		$("#suDistributionAmount").trigger("keyup");
+    		
+    		//初始化验证方法
+			checkForm();
+    	    $('#allChoose').click(function(){
+    	        if($('input[id="allChoose"]').prop("checked"))
+    	        {
+    	        	$('input[name="siteId"]').prop("checked",true);
+    	        }
+    	        else
+    	        	$('input[name="siteId"]').prop("checked",false);
+    	    });
+    	})
+    	
+    	
+    	var j=1;
+ 	   //订单分发
+ 	   function addButton(){
+ 		   //document.getElementById("orderCate").innerHTML+='<div id="order'+j+'" class="item fl"><input class="input fl" type="text" name="cate" id="orderCate'+j+'"><a class="btn_remove fl" href="javascript:delButton('+j+');"></a></div>';
+ 		    $("#orderCate").append('<div id="order'+j+'" class="item fl"><input class="input fl" name="cate" type="text" id="orderCate'+j+'"><a class="btn_remove fl" href="javascript:void(0);" onclick="delButton(this);"></a></div>');
+ 		   j = j + 1;
+ 	   }
+ 	   function delButton(o){
+			$(o).closest("div.item").remove();
+	   }
+    		
+    	
+	   function uploadPic(picId){
+		   var uploadPic = $("#uploadPic"+picId);
+		   if(!uploadPic || !uploadPic.length){
+		       return false;
+		   }
+	        new AjaxUpload(uploadPic,{
+	            action: "/cdn/imageInfo_upload.html?type=1&parse=1&pcId="+picId,
+	            name: 'file_path',
+	            responseType:"json",
+	            onSubmit : function(file, ext){
+	            	if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+	                    ext_str = ext;
+	                } else {
+	                	dialog({
+		                       title: "提示信息",
+		                       content: "非图片文件格式,请重传",
+		                       width: 300
+		                   });
+	                    return false;
+	                }
+	                $.showLoad();
+	            },
+	            onComplete: function(file, result){
+	            	if (result.success == false) {
+	            		$.hideLoad();
+	            		if(result.message == "outofsize"){
+	            			dialog({
+	 	                       title: "提示信息",
+	 	                       content: "文件过大，无法上传",
+	 	                       width: 300
+	 	                    });
+	            		}else if(result.message == "error"){
+	            			dialog({
+	 	                       title: "提示信息",
+	 	                       content: "文件过大，无法上传",
+	 	                       width: 300
+	 	                    });
+	            		}
+	            		return false;
+	            		
+	            	}else{
+	            		if(picId==1 || picId==2 || picId==3 || picId==8 || picId==11 || picId==12 || picId==14 || picId==15
+	            		   || picId==16 || picId==17 || picId==19 || picId==20){
+	            			picSign=1;
+	            		}
+	            		
+	            		$("#saImgPath"+picId).val(result.data.id);//response返回的是mogoDB记录id
+// 	                	$('#showPic'+picId).attr("src",result.data.picUrl+result.data.id+result.data.picSize);
+	                	$('#showPic'+picId).attr("src",result.data.picUrl.replace("&amp;","&"));
+	                	$("#bucket_key"+picId).val(result.data.id);
+	                	if($("#epNo"+picId).val()==''||$("#epNo"+picId).val()=='undefind'){
+	                		$("#epNo"+picId).val(result.data.cerNo);
+	                	}
+	                	if($("#epStartTime"+picId).val()==''||$("#epStartTime"+picId).val()=='undefind'){
+	                		$("#epStartTime"+picId).val(result.data.startTime);
+	                	}
+	                	if($("#epEndTime"+picId).val()==''||$("#epEndTime"+picId).val()=='undefind'){
+	                		$("#epEndTime"+picId).val(result.data.endTime);
+	                	}
+	                	$("#imageInfo"+picId).val($.toJSON(result.data.imageInfo));
+	            	}
+	                $.hideLoad();
+	            }
+	        });
+	   }
+	   /**
+	   *表单序列化提交
+	   */
+	   function editAndAudit(){
+		 	//判断企业logo是否上传
+	   		var saImgPath21=$("#saImgPath21").val();
+	   		if(saImgPath21==""){
+	   			dialog({
+                      title: "供应商LOGO上传",
+                      content: "供应商LOGO必须上传！",
+                      width: 300
+                  });
+				return;
+	   		}
+	   		//判断商业和工业的资质图片上传
+	   		var userTypeValue=$("#userTypeValue").val();
+	   		//商业
+	   		if(userTypeValue==2){
+	   			var saImgPath1=$("#saImgPath1").val();
+	   			var saImgPath2=$("#saImgPath2").val();
+	   			var saImgPath3=$("#saImgPath3").val();
+	 			var saImgPath8=$("#saImgPath8").val();
+	 			var saImgPath11=$("#saImgPath11").val();
+	 			var saImgPath14=$("#saImgPath14").val();
+	 			var saImgPath15=$("#saImgPath15").val();
+	 			var saImgPath16=$("#saImgPath16").val();
+	 			var saImgPath17=$("#saImgPath17").val();
+	 			var saImgPath19=$("#saImgPath19").val();
+	 			var saImgPath20=$("#saImgPath20").val();
+	 			if(saImgPath1=="" ||  saImgPath2=="" || saImgPath3=="" || saImgPath11==""
+	 				||  saImgPath14=="" || saImgPath15=="" ||  saImgPath16=="" || saImgPath17==""
+	 					||  saImgPath19=="" || saImgPath20==""){
+	 				dialog({
+	                       title: "提示信息",
+	                       content: "必填项资质图片必须上传！",
+	                       width: 300
+	                   });
+	 				return;
+	 			}
+	   		}
+	   		
+	   		//工业
+	   		if(userTypeValue==3){
+	   			var saImgPath1=$("#saImgPath1").val();
+	   			var saImgPath2=$("#saImgPath2").val();
+	 			var saImgPath8=$("#saImgPath8").val();
+	 			var saImgPath11=$("#saImgPath11").val();
+	 			var saImgPath12=$("#saImgPath12").val();
+	 			var saImgPath14=$("#saImgPath14").val();
+	 			var saImgPath15=$("#saImgPath15").val();
+	 			var saImgPath16=$("#saImgPath16").val();
+	 			var saImgPath17=$("#saImgPath17").val();
+	 			var saImgPath19=$("#saImgPath19").val();
+	 			var saImgPath20=$("#saImgPath20").val();
+	 			if(saImgPath1=="" ||  saImgPath2=="" || saImgPath11=="" || saImgPath12==""
+	 				||  saImgPath14=="" || saImgPath15=="" ||  saImgPath16=="" || saImgPath17==""
+	 					||  saImgPath19=="" || saImgPath20==""){
+	 				dialog({
+	                       title: "提示信息",
+	                       content: "必填项资质图片必须上传！",
+	                       width: 300
+	                   });
+	 				return;
+	 			}
+	   			
+	   		}
+	   		//获得企业状态
+	   		var eStatus="$!{bizEnterprise.eStatus}";
+	   		
+		 	//获得订单分发的值
+		   var orcs='';
+		   $("input[name=cate]").each(function(i, item){
+			   var iv=$(item).val();
+			   var socId=$(item).attr('title');
+			   if(!socId){
+			   	socId=0;
+			   }
+			   
+			   if(iv!=''){
+				   if(orcs!=''){
+					   orcs+=',';
+				   }
+				   orcs+=$(item).val()+'_'+socId;
+			   }
+		   });
+		   
+		   
+		 	//获得状态
+	 		var sign=$("#sign").val();
+	 		if(sign==1 || sign==2){
+	 			//如果提交审核或者修改了注册号或者供应商名称，需要重新认证（待审核）
+	 			$("#suStatus").val(2);
+	 			eStatus=2;
+	 		}
+		   //获取勾选的开通站点的区域
+	    	var str=$("input[name='siteId']:checked");
+	    	var objarray=str.length;
+	    	var siteIds="";
+	    	for (i=0;i<objarray;i++){
+	    		siteIds+=","+str[i].value;
+	    	}
+	    	//获取采购关系权限申请条件
+	    	var str=$("input[name='suRequest']:checked");
+	    	var objarray=str.length;
+	    	var suRequests="";
+	    	for (i=0;i<objarray;i++){
+	    		suRequests+=","+str[i].value;
+	    	}
+		   
+		   //获得企业资质的全部信息
+		   var registerEnterpriseWrapper=$("#form").serializeJson();
+		   var suDistributionAmount = $("#suDistributionAmount").val();
+		   if(!isEmpty(suDistributionAmount) && parseInt(suDistributionAmount) > 0){
+			   if($("#su_is_limit")[0].checked){
+				   registerEnterpriseWrapper.suIsLimit = 1;
+			   }else{
+				   registerEnterpriseWrapper.suIsLimit = 0;
+			   }
+		   }else{
+			   registerEnterpriseWrapper.suDistributionAmount = 0;
+			   registerEnterpriseWrapper.suIsLimit = 0;
+		   }
+		   
+		   registerEnterpriseWrapper=$.toJSON(registerEnterpriseWrapper);
+		   $.showLoad();
+		   if(sign==0){
+			   $.ajax({
+				    type: 'post',
+				    url: '/sales/account/enterprise_register_edit.html',
+				    data: {
+				    		"registerEnterpriseWrapper":registerEnterpriseWrapper,
+				    		"supplier":registerEnterpriseWrapper,
+				    		"siteIds":siteIds,
+				    		"suRequests":suRequests,
+				    		"eId":"$!{eId}",
+				    		"orcs":orcs,
+				    		"eStatus":eStatus
+				    	},
+				    dataType: 'json',
+                   complete:function () {
+                       $.hideLoad();
+                   },
+				    success: function(data) {
+				    	if (data) {
+			                  top.ue.alert({
+				                title: '提示信息',
+				                content: "修改成功！",
+				                width: 300,
+				                ok: false,
+				                cancelVal: "确定",
+				                end: function() {
+				                    location = "/sales/account/enterprise_register.html";
+				                }
+				            })
+			               } else {
+			                   top.ue.msg("修改企业信息失败！");
+			             }
+				    }
+				});
+		   }else if(sign==1){
+			   //提交审核
+			   $.ajax({
+				    type: 'post',
+				    url: '/sales/account/enterprise_register_edit.html',
+				    data: {
+				    		"registerEnterpriseWrapper":registerEnterpriseWrapper,
+				    		"supplier":registerEnterpriseWrapper,
+				    		"siteIds":siteIds,
+				    		"suRequests":suRequests,
+				    		"eId":"$!{eId}",
+				    		"orcs":orcs,
+				    		"eStatus":eStatus
+				    	},
+				    dataType: 'json',
+                   complete:function () {
+                       $.hideLoad();
+                   },
+				    success: function(data) {
+				    	if (data) {
+			                  top.ue.alert({
+				                title: '提示信息',
+				                content: "提交审核成功！",
+				                end: function() {
+				                    location = "/sales/account/enterprise_register.html";
+				                }
+				            })
+			               } else {
+			                   top.ue.msg("提交审核失败！");
+			             }
+				    }
+				});
+		   }else if(sign==2){
+	 			//提交认证
+	 		   $.ajax({
+	 			    type: 'post',
+	 			    url: '/sales/account/enterprise_register_edit.html',
+	 			    data: {
+		 			    	"registerEnterpriseWrapper":registerEnterpriseWrapper,
+				    		"supplier":registerEnterpriseWrapper,
+				    		"siteIds":siteIds,
+				    		"suRequests":suRequests,
+				    		"eId":"$!{eId}",
+				    		"orcs":orcs,
+				    		"eStatus":eStatus
+	 			    	},
+	 			    dataType: 'json',
+                   complete:function () {
+                       $.hideLoad();
+                   },
+	 			    success: function(data) {
+	 			    	if (data) {
+	 		                  top.ue.alert({
+	 			                title: '提示信息',
+	 			                content: "资质信息已提交审核，通过后将自动更新！",
+	 			                end: function() {
+	 			                    top.location.href = "/logout.html";
+	 			                }
+	 			            })
+	 		               } else {
+	 		                   top.ue.msg("保存失败！");
+	 		             }
+	 			    }
+	 			});
+ 		 }
+		   
+	   }
+   		
+	   
+	   function toEdit(){
+		   var eStatus="$!{bizEnterprise.eStatus}";
+		   //如果是已认证的企业修改企业工商注册号和供应商名称后需要重新认证企业
+	       if(eStatus==1){
+	           var suLicenseNo=$("#suLicenseNo").val();
+	  		   var suName=$("#suName").val();
+	    	   var suLicenseNoOld="$!{supplier.suLicenseNo}";
+	    	   var suNameOld="$!{supplier.suName}";
+	    	   if(suLicenseNo!=suLicenseNoOld || suName!=suNameOld || picSign==1){
+	    	 		$("#sign").val(2);
+	    	 		$('#form').submit();
+	    	 		return;
+	    	   }
+	       }
+	 	   $("#sign").val(0);
+	 	   $('#form').submit();
+	 	}
+	   
+	   function checkAmount(obj){
+		   obj.value = obj.value.replace(/[^\d]/g,'');
+		   var value = obj.value; 
+		   if(isEmpty(value)){
+			   $("#isLimitAmount").hide();
+		   }else if(parseInt(value) <= 0){
+			   $("#suDistributionAmount").val("");
+			   $("#isLimitAmount").hide();
+		   }else{
+			   $("#isLimitAmount").show();
+		   }
+	   }
+	 	
+	 	function toAudit(){
+            top.ue.confirm({
+                title: '提示信息',
+                content: '您确定要提交审核吗?',
+                ok: function () {
+                    $("#sign").val(1);
+                    $('#form').submit();
+                }
+            });
+	 	}
+	 //验证
+	 function checkForm(){
+				$("#form").validate({
+		            submitHandler: editAndAudit, //如果验证通过的回调函数
+		            rules: {
+		            	suLicenseNo: {
+			                    required: true,
+			                    minlength:15,
+			                    maxlength: 50,
+			               		remote: {
+			                        type: "post",
+			                        url: "/sales/account/enterprise_certified_checkELicenseNo.html",
+			                        data: {
+			                        	eLicenseNo: function() {
+			                                return $("#suLicenseNo").val();
+			                            }
+			                        },
+			                        dataType: "json",
+			                        dataFilter: function(dataXML) {
+			                        	var result = dataXML;
+			                        	//初始的工商注册号
+			                        	var initELicenseNo=$("#initELicenseNo").val();
+			                        	//修改的工商注册号
+			                        	var suLicenseNo=$("#suLicenseNo").val();
+			                        	if(initELicenseNo==suLicenseNo){
+			                        		return true;
+			                        	}else{
+			                        		if (result=="true")
+				                                return false;
+				                            else
+				                                return true;
+			                        	}
+			                        }
+			                    }
+		            		},
+			            	suName:{
+			            		required: true,
+			            		maxlength: 30
+			            	},
+			            	suTel:{
+			            		isMobile:true
+			            	},
+			            	suMail:{
+			            		required: false,
+			            		email:true
+			            	},
+			            	suPhone:{
+			            		isTelephone:true
+			            	},
+			            	suDistributionAmount:{
+			            		min:10
+			            	},
+			            	suShopRemark:{
+			            		maxlength: 1000
+			            	}
+		                },
+		                messages: {
+		                	suLicenseNo:{
+			            		remote: "企业工商注册号已经存在！"
+			            	}
+			            },
+	               errorPlacement: function(error, element) {
+	                   error.appendTo(element.parent());
+	               }
+		        });
+	 	}
+		//查看范例图片
+		function showImage(img) {
+				var imgUrl ="/image/zizhi/img"+img+".jpg";
+				var content = '<img src="'+imgUrl+'" height="400px;" width="750px;"/>';
+				/*dialog({
+					title: "查看图片",
+					content: content,
+					ok: false,
+					cancel: false,
+					esc: true
+				});*/
+				top.utils.showImg(imgUrl);
+		}
+		
+		//查看大图
+		function showBIgImage(img){
+// 			var str = "#saImgPath" + img;
+// 			var url = $(str).val();
+// 			url = "http://img1.mypharma.com/" + url + ".jpg"; 
+            var str = "#showPic" + img;
+            var url = $(str).attr("src");
+			var picurl = "/sales/member/supplierMember_open.html?picurl=" + encodeURIComponent(url);
+			window.open(picurl);
+		}
+		
+		
+		
+
+		$(function(){
+
+
+			$("#notReqInfoBtn").click(function(){
+				if($(this).attr("isHidden") == undefined  || $(this).attr("isHidden") == "1"){
+					$(this).attr("isHidden","0");
+					$("#notReqInfoBtnInfo").hide();	
+					$(this).find("a").removeClass("btn_open_up").addClass("btn_pack_up");
+				}else{
+					$(this).attr("isHidden","1");
+					$("#notReqInfoBtnInfo").show();
+					$(this).find("a").addClass("btn_open_up").removeClass("btn_pack_up");
+				}
+			});
+			
+			$("#reqInfoBtn").click(function(){
+				if($(this).attr("isHidden") == undefined  || $(this).attr("isHidden") == "1"){
+					$(this).attr("isHidden","0");
+					$("#reqInfoBtnInfo").hide();	
+					$(this).find("a").removeClass("btn_open_up").addClass("btn_pack_up");
+				}else{
+					$(this).attr("isHidden","1");
+					$("#reqInfoBtnInfo").show();
+					$(this).find("a").addClass("btn_open_up").removeClass("btn_pack_up");
+				}
+			});
+			
+		});
+	   
+    </script>
+	<!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+ 
+  <body onload="loadPic()">
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+        #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            	<div class="path">
+                    <p class="fl"><a href="/sales/index.html" class="color">销售中心</a> &gt; 账户管理 &gt; 企业认证</p>
+                    #if($!{bizEnterprise.eStatus}!=1)
+						<div class="prompt fl">您必须完成企业认证后才能进行其他操作。</div>
+					#elseif($!{bizEnterprise.eStatus}==1 && $!{loginEStatus}!=1)
+						<div class="prompt fl">已通过认证,请重新登录</div>
+					#elseif($!{loginEStatus}==1)
+						<div class="prompt fl">已通过认证</div>
+					#end
+                </div>
+                <form method="post" id="form">
+                <input name="suIsPriceOpenable" value="$!{supplier.suIsPriceOpenable}" type="hidden"/>
+                <input name="suType" value="$!{supplier.suType}" type="hidden"/>
+                <input id="userTypeValue" value="$!{userinfos.userType}" type="hidden"/>
+                <input id="sign" value="0" type="hidden">
+                <input name="suId" value="$!{supplier.suId}" type="hidden"/>
+                <input name="suIsErp" value="$!{supplier.suIsErp}" type="hidden"/>
+                <input name="eId" value="$!{eId}" type="hidden">
+                <div class="order_query order member">
+                	<h3 class="line">基本信息</h3>
+                    <div class="image_display">
+                      <table class="none" border="0" cellpadding="0" cellspacing="0">
+                      	<tr>
+                            <td width="50%">
+                           	  <div class="left">
+                                	<i>*</i><br>
+                                	公司LOGO<br>
+                                    建议上传图片尺寸200*80px<br>
+                                    底色为无色或者白色
+                                </div>
+                                <div class="right">
+                                	<div class="image-upload-box ">
+	                                	<div class="img-box">
+		                                    <div class="img-file" id="uploadPic21">
+		                                       <img id="showPic21" src="$!{supplier.img_logo_url}" height="139px;" width="139px;"/>
+		                                       <input type="hidden" value="$!{supplier.suLogo}" id="saImgPath21" name="suLogo">
+		                                       <input type="hidden" id="bucket_key21" name="bucket_key_logo" value="$!{supplier.bucket_key_logo}">
+		                                       <input type="hidden" id="imageInfo21" name="imageInfo_logo">
+		                                    </div>
+	                                	</div>
+                               		 </div>
+                                </div>
+                            </td>
+                            <td>
+<!--                             	<div class="left"> -->
+<!--                                     供应商图片1<br> -->
+<!--                                     在企业展示页面右下方显示<br> -->
+<!--                                     建议上传图片宽度不超过300px -->
+<!--                                 </div> -->
+<!--                                 <div class="right"> -->
+<!--                                 	<div class="image-upload-box "> -->
+<!-- 	                                	<div class="img-box"> -->
+<!-- 		                                   <div class="img-file" id="uploadPic22"> -->
+<!-- 		                                   		#if($!{supplier.suPic1}!="") -->
+<!-- 		                           		    		<img id="showPic22" src="$!{supplier.img_pic1_url}" height="139px;" width="139px;"/> -->
+<!-- 		                           		    	#else -->
+<!-- 		                           		    		<img id="showPic22" height="139px;" width="139px;"/> -->
+<!-- 		                           		    	#end -->
+<!-- 		                                       <input type="hidden" value="$!{supplier.suPic1}" id="saImgPath22" name="suPic1"> -->
+<!-- 		                                       <input type="hidden" id="bucket_key22" name="bucket_key_pic1" value="$!{supplier.bucket_key_pic1}"> -->
+<!-- 		                                       <input type="hidden" id="imageInfo22" name="imageInfo_pic1"> -->
+<!-- 		                                    </div> -->
+<!-- 	                                	</div> -->
+<!--                                		 </div> -->
+<!--                                 </div> -->
+                            </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="error-msg">
+                        <ul>
+<!--                         	<li> -->
+<!--                                 <label class="left">企业工商注册号<i>*</i>：</label> -->
+<!--                                 #if($!{bizEnterprise.eStatus} == 1 || $!{bizEnterprise.eStatus} == 2) -->
+<!--                                 $!{supplier.suLicenseNo} -->
+<!--                                 <input name="suLicenseNo" id="suLicenseNo" value="$!{supplier.suLicenseNo}" type="hidden" class="w-txt"> -->
+<!--                                 #else -->
+<!--                                 <input name="suLicenseNo" id="suLicenseNo" value="$!{supplier.suLicenseNo}" type="text" class="w-txt"> -->
+<!--                                 #end -->
+<!--                                 <input id="initELicenseNo" type="hidden" value="$!{supplier.suLicenseNo}"> -->
+<!--                             </li> -->
+                            <li>
+                                <label class="left">企业工商注册号<i>*</i>：</label>
+                                <input name="suLicenseNo" id="suLicenseNo" value="$!{supplier.suLicenseNo}" type="text" class="w-txt" />
+                                <input id="initELicenseNo" type="hidden" value="$!{supplier.suLicenseNo}" />
+                            </li>
+<!--                             <li> -->
+<!--                                 <label class="left">供应商名称<i>*</i>：</label> -->
+<!--                                 #if($!{bizEnterprise.eStatus} == 1 || $!{bizEnterprise.eStatus} == 2) -->
+<!--                                $!{supplier.suName} -->
+<!--                                 <input name="suName" id="suName" value="$!{supplier.suName}" type="hidden" class="w-txt"> -->
+<!--                                 #else -->
+<!--                                 <input name="suName" id="suName" value="$!{supplier.suName}" type="text" class="w-txt"> -->
+<!--                                 #end -->
+<!--                             </li> -->
+                            <li>
+                                <label class="left">公司名称<i>*</i>：</label>
+                                <input name="suName" id="suName" value="$!{supplier.suName}" type="text" class="w-txt" />
+                                <input id="initSuName" type="hidden" value="$!{supplier.suName}" />
+                            </li>
+                            <li style="display: none;">
+                                <label class="left">供应许可证：</label>
+                                <input name="suAllowCode" value="$!{supplier.suAllowCode}" type="text" class="w-txt">
+                            </li>
+                            <li>
+                                <label class="left">公司地址：</label>
+                                <input name="suAddress" value="$!{supplier.suAddress}" type="text" class="w-txt">
+                            </li>
+                            <li>
+                                <label class="left">公司主营业务：</label>
+                                <input name="suMain" value="$!{supplier.suMain}" type="text" class="w-txt">
+                            </li>
+                            <li style="display: none;">
+                                <label class="left">原始供应商主营业务：</label>
+                                <input name="suPurviewOriginal" value="$!{supplier.suPurviewOriginal}" type="text" class="w-txt">
+                            </li>
+                            <li>
+                                <label class="left">认证状态：</label>
+                                	#if($!{bizEnterprise.eStatus} == 0)
+                                		未认证
+                                	#end
+                                	#if($!{bizEnterprise.eStatus} == 1)
+                                		已认证
+                                	#end
+                                	#if($!{bizEnterprise.eStatus} == 2)
+                                		认证中
+                                	#end
+                                	#if($!{bizEnterprise.eStatus} == 3)
+                                		禁用
+                                	#end
+                                	#if($!{bizEnterprise.eStatus} == -1)
+                                		驳回
+                                		#if($!{bizEnterprise.eAuthReason}!="")
+                                			($!{bizEnterprise.eAuthReason})
+                                		#end
+                                	#end
+                                	<input id="suStatus" name="suStatus" type="hidden" value="$!{supplier.suStatus}"/>
+                            </li>
+                            <li>
+                                <label class="left">店铺说明：</label>
+                                <input id="suShopRemark" name="suShopRemark" value="$!{supplier.suShopRemark}" type="text" class="w-txt">
+                            </li>
+<!--                             <li> -->
+<!--                                 <label class="left">最低利润率(%)：</label> -->
+<!--                                 <input id="suMinProfit" name="suMinProfit" value="$!{supplier.suMinProfit}" type="text"  class="w-txt"> -->
+<!--                             </li> -->
+                            <li>
+                            	<label class="left">联系人：</label>
+                                <input name="suContactor" type="text" value="$!{supplier.suContactor}" class="w-txt">
+                            </li>
+                            <li>
+                                <label class="left">最低起送金额：</label>
+                                <input name="suDistributionAmount"  type="text" maxlength="6" placeholder="请输入不小于10的数值" onkeyup="checkAmount(this);" value="$!{supplier.suDistributionAmount}" class="w-txt w70" id="suDistributionAmount"/>
+								<span class="fl mr10">元</span>
+								<div id="isLimitAmount">
+                                	<input class="fl mr5" type="checkbox" name="suIsLimit" id="su_is_limit" value="$!{supplier.suIsLimit}" #if($!{supplier.suIsLimit} == 1) checked="checked" #end/>
+									<span class="fl mr5">低于起送金额禁止下单</span>
+									<i class="order-tips order-tips-mt8" data-tips="true" data-tips-title="限制下单金额的情况下，客户下单金额必须大于等于“最低起送金额”，不满足则提示企业不可下单"></i>
+                                </div>
+                            </li>
+                            #if($!{userinfos.userType}==3)
+                            <li class="one">
+                                <label class="left">销售区域：</label>
+                            <div class="area">
+                                  #foreach($site in $siteList)
+                                  	#set($checked = "unchecked")
+		                              #foreach($siteId in $!siteIdList)
+		                               	  #if($!{siteId} == $!{site.siteId})
+			                              	$!{site.siteName}
+		                               	  #end
+		                              #end
+                                  #end
+                            	</div>
+                            </li>
+                             #end
+                            <li>
+                                <label class="left">手机号码<i class="order-tips" data-tips="true" data-tips-title="该手机号码用于接收订单通知"></i>：</label>
+                                <input name="suTel" id="suTel" type="text" value="$!{supplier.suTel}" class="w-txt">
+                            </li>
+                            <li>
+                                <label class="left">电子邮箱<i class="order-tips" data-tips="true" data-tips-title="该电子邮箱用于接收订单通知"></i>：</label>
+                                <input class="w-txt" id="suMail" name="suMail" value="$!{supplier.suMail}" type="text" >
+                            </li>
+                            <li>
+                                <label class="left">固定电话：</label>
+                                <input class="w-txt" id="suPhone" name="suPhone" value="$!{supplier.suPhone}" type="text">
+                            </li>
+                            <li>
+                                <label class="left">网址：</label>
+                                <input class="w-txt" id="suEnterpriseUrl" name="suEnterpriseUrl" value="$!{supplier.suEnterpriseUrl}" type="text">
+                            	<input class="w-txt" type="hidden" id="suUrl" name="suUrl" value="$!{supplier.suUrl}" type="text">
+                            </li>
+                            <li class="one" style="display: none;">
+                                <label class="left">采购关系权限申请条件：</label>
+                                <div class="area">
+                                		#set($suRequest1 = "unchecked")
+                                		#set($suRequest2 = "unchecked")
+                                		#set($suRequest3 = "unchecked")
+                                		#set($suRequest4 = "unchecked")
+                                		#set($suRequest5 = "unchecked")
+                                		#set($suRequest6 = "unchecked")
+                                		#set($suRequest7 = "unchecked")
+                                		#set($suRequest8 = "unchecked")
+                                	#foreach($suRequest in $!{suRequestList})
+                                		#if($!{suRequest} == 1)
+		                              		#set($suRequest1 = "checked")
+	                               	  	#end
+	                               	  	#if($!{suRequest} == 2)
+		                              		#set($suRequest2 = "checked")
+	                               	  	#end
+	                               	  	#if($!{suRequest} == 3)
+		                              		#set($suRequest3 = "checked")
+	                               	  	#end
+	                               	  	#if($!{suRequest} == 4)
+		                              		#set($suRequest4 = "checked")
+	                               	  	#end
+	                               	  	#if($!{suRequest} == 5)
+		                              		#set($suRequest5 = "checked")
+	                               	  	#end
+	                               	  	#if($!{suRequest} == 6)
+		                              		#set($suRequest6 = "checked")
+	                               	  	#end
+	                               	  	#if($!{suRequest} == 7)
+		                              		#set($suRequest7 = "checked")
+	                               	  	#end
+	                               	  	#if($!{suRequest} == 8)
+		                              		#set($suRequest8 = "checked")
+	                               	  	#end
+                                	#end
+                                	<input #if($!suRequest1=="checked")checked="checked"#end class="checkbox" type="checkbox" name="suRequest" value="1" id="text01">
+                                    <label class="text" for="text01">税务登记证</label>
+                                    
+                                    <input #if($!suRequest2=="checked")checked="checked"#end class="checkbox" type="checkbox" name="suRequest" value="2" id="text02">
+                                    <label class="text" for="text02">组织机构代码证</label>
+                                    
+                                    <input #if($!suRequest3=="checked")checked="checked"#end class="checkbox" type="checkbox" name="suRequest" value="3" id="text03">
+                                    <label class="text" for="text03">药品经营许可证</label>
+                                    
+                                    <input #if($!suRequest4=="checked")checked="checked"#end class="checkbox" type="checkbox" name="suRequest" value="4" id="text04">
+                                    <label class="text" for="text04">食品安全许可证</label>
+                                    
+                                    <input #if($!suRequest5=="checked")checked="checked"#end class="checkbox" type="checkbox" name="suRequest" value="5" id="text05">
+                                    <label class="text" for="text05">食品流通许可证</label>
+                                    
+                                    <input #if($!suRequest6=="checked")checked="checked"#end class="checkbox" type="checkbox" name="suRequest" value="6" id="text06">
+                                    <label class="text" for="text06">医疗机构许可证</label>
+                                    
+                                    <input #if($!suRequest7=="checked")checked="checked"#end class="checkbox" type="checkbox" name="suRequest" value="7" id="text07">
+                                    <label class="text" for="text07">GMP证书</label>
+                                    
+                                    <input #if($!suRequest8=="checked")checked="checked"#end class="checkbox" type="checkbox" name="suRequest" value="8" id="text08">
+                                    <label class="text" for="text08">GSP证书</label>
+                                    
+                                </div>
+                            </li>
+                            <li class="editor">
+                                <label class="left">公司简介：</label>
+                                <div class="editor_ctn">
+                                	<textarea style="height: 200px;width:860px;" name="suTxt">$!{supplier.suTxt}</textarea>
+                                </div>
+                            </li>
+                        </ul>
+                        </div>
+                        #if($!{userinfos.userType}==2)
+                    <h3 class="line">权限信息</h3>
+                    <ul>
+                      <li class="one">
+                      	<label>采购权限<i class="order-tips" data-tips="true" data-tips-title="设置商品所属权限分类，用于采购客户建立采购关系时进行分配可采购的商品权限"></i>：</label>
+                       	<a  href="javascript:void(0);" onclick="top.utils.openWithTab('bjcghqx','编辑采购权限','/sales/account/order_purview_main.html?suId=$!{supplier.suId}',{fstBread:'账户管理'})" class="btn_packet">编辑</a>
+                      </li>
+                      <li class="one">
+                      	<label>分单仓储地点<i class="order-tips" data-tips="true" data-tips-title="设置商品所属仓储地点，用于采购客户下单时，不同仓储地点的商品，系统自动拆单"></i>：</label>
+			#if($!{supplier.suIsErp}!=1)	
+                       		<a href="javascript:addButton();" class="btn_packet fl">添加</a>
+			#end
+                        <div class="orders_box" id="orderCate" name="orderCateName">
+                        	#if($!{shopOrderCates})
+	                        	#foreach($shopOrderCate in $shopOrderCates)
+	                        	<div id="order$!{shopOrderCate.socId}" class="item fl">
+	                        		<input class="input fl" name="cate" title="$!{shopOrderCate.socId}" value="$!{shopOrderCate.socName}" type="text" #if($!{supplier.suIsErp}==1) readonly="true"	#end>
+						#if($!{supplier.suIsErp}!=1)
+	                        			<a class="btn_remove fl" href="javascript:void(0);" onclick="delButton(this);"></a>
+						#end
+	                        	</div>
+	                        	#end
+                        	#end
+                        </div>
+                      </li>
+                    </ul>
+                        #end
+                    <h3 class="line">资质信息</h3>
+                    <!--上传图片-->
+                    <div class="image-upload-box">
+                    	<div>
+	                    	<div class="project_box" id="reqInfoBtn">
+	                        	<span class="caption">必填项目</span>
+	                            <a href="javascript:;" class="btn_open_up"></a>
+	                        </div>
+	                        <div id="reqInfoBtnInfo">
+		                        	<!-- 商业必填的资质 -->
+		                        #if($!{userinfos.userType}==2)
+		                        #foreach($picNotNull in $bizEnterprisePicsNotNull)
+		                        <!-- 商业必填的资质没有GMP证书 -->
+		                        #if($!{picNotNull.epType}!=12)
+		                        <div class="box">
+		                            <div class="cc">
+		                                <div class="img-box">
+		                                    #if($!{picNotNull.epPic})
+	                                    			<h5>
+													<a title="查看大图" href="javascript:showBIgImage($!{picNotNull.epType});" style="color:#0f93ce;">$!{picNotNull.epName}<i>*</i>：</a>
+													</h5>
+											#else
+												<h5>$!{picNotNull.epName}<i>*</i>：</h5>
+											#end
+		                                    <input type="hidden" value="$!{picNotNull.epType}" name="epType$!{picNotNull.epType}"/>
+		                                    <input type="hidden" value="$!{picNotNull.epId}" name="epId$!{picNotNull.epType}"/>
+		                                    <div class="img-file" id="uploadPic$!{picNotNull.epType}">
+		                                    		#if($!{picNotNull.epPic})
+				                                       <img id="showPic$!{picNotNull.epType}" src="$!{picNotNull.imgUrl}" height="139px;" width="139px;"/>
+				                                    #else
+				                                       <img id="showPic$!{picNotNull.epType}" height="139px;" width="139px;"/>
+				                                    #end
+				                                       <input type="hidden" value="$!{picNotNull.epPic}" id="saImgPath$!{picNotNull.epType}" name="epPic$!{picNotNull.epType}">
+				                                       <input type="hidden" id="bucket_key$!{picNotNull.epType}" name="bucket_key$!{picNotNull.epType}" value="$!{picNotNull.bucket_key}">
+		                                               <input type="hidden" id="imageInfo$!{picNotNull.epType}" name="imageInfo$!{picNotNull.epType}">
+				                            </div>
+		                                </div>
+		                                #if($!{bizEnterprise.eStatus} == 1 || $!{bizEnterprise.eStatus} == 2)
+		                                <div class="form-group">
+		                                    <div>
+				                               	#if($!{picNotNull.epPic})
+	                                				<a href="javascript:showBIgImage($!{picNotNull.epType});"><i></i>查看大图</a>
+	                                			#end
+				                               	<a href="javascript:showImage($!{picNotNull.epType});"><i></i>查看范例</a>
+				                            </div>
+		                                    #if($!{picNotNull.epType}!=8 && $!{picNotNull.epType}!=11 && $!{picNotNull.epType}!=14 && $!{picNotNull.epType}!=15 && $!{picNotNull.epType}!=16 && $!{picNotNull.epType}!=17 && $!{picNotNull.epType}!=19 && $!{picNotNull.epType}!=20)
+			                                    <label>证照号码：</label>
+			                                    <div class="control-item">
+			                                        <input type="text" class="form-control" id="epNo$!{picNotNull.epType}" value="$!{picNotNull.epNo}" placeholder="" name="epNo$!{picNotNull.epType}">
+			                                    </div>
+			                                    <label>证件有效期：</label>
+			                                    <div class="control-item">
+			                                        <input type="text" id="epStartTime$!{picNotNull.epType}" value="$utils.formatDate($!{picNotNull.epStartTime},"yyyy-MM-dd")" name="epStartTime$!{picNotNull.epType}"  class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'epEndTime$!{picNotNull.epType}\')}'})">
+			                                    </div>
+			                                    <label>至</label>
+			                                    <div class="control-item">
+			                                        <input type="text" id="epEndTime$!{picNotNull.epType}" value="$utils.formatDate($!{picNotNull.epEndTime},"yyyy-MM-dd")" name="epEndTime$!{picNotNull.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'epStartTime$!{picNotNull.epType}\')}'})">
+			                                    </div>
+		                                    #end
+		                                </div>
+		                                #else
+		                                <div class="form-group">
+		                                    <div>
+				                               	#if($!{picNotNull.epPic})
+	                                				<a href="javascript:showBIgImage($!{picNotNull.epType});"><i></i>查看大图</a>
+	                                			#end
+				                               	<a href="javascript:showImage($!{picNotNull.epType});"><i></i>查看范例</a>
+				                            </div>
+		                                    #if($!{picNotNull.epType}!=8 && $!{picNotNull.epType}!=11 && $!{picNotNull.epType}!=14 && $!{picNotNull.epType}!=15 && $!{picNotNull.epType}!=16 && $!{picNotNull.epType}!=17 && $!{picNotNull.epType}!=19 && $!{picNotNull.epType}!=20)
+			                                    <label>证照号码：</label>
+			                                    <div class="control-item">
+			                                        <input type="text" class="form-control" id="epNo$!{picNotNull.epType}" value="$!{picNotNull.epNo}" placeholder="" name="epNo$!{picNotNull.epType}">
+			                                    </div>
+			                                    <label>证件有效期：</label>
+			                                    <div class="control-item">
+			                                        <input type="text" id="epStartTime$!{picNotNull.epType}" value="$utils.formatDate($!{picNotNull.epStartTime},"yyyy-MM-dd")" name="epStartTime$!{picNotNull.epType}"  class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'epEndTime$!{picNotNull.epType}\')}'})">
+			                                    </div>
+			                                    <label>至</label>
+			                                    <div class="control-item">
+			                                        <input type="text" id="epEndTime$!{picNotNull.epType}" value="$utils.formatDate($!{picNotNull.epEndTime},"yyyy-MM-dd")" name="epEndTime$!{picNotNull.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'epStartTime$!{picNotNull.epType}\')}'})">
+			                                    </div>
+		                                    #end
+		                                </div>
+		                                #end
+		                            </div>
+		                        </div>
+		                        #end
+		                        #end
+		                        #end
+		                        <!-- 工业必填的资质 -->
+		                        #if($!{userinfos.userType}==3)
+		                        #foreach($picNotNull in $bizEnterprisePicsNotNull)
+		                        <!-- 工业必填的资质没有GSP证书 -->
+		                        #if($!{picNotNull.epType}!=3)
+		                        <div class="box">
+		                            <div class="cc">
+		                                <div class="img-box">
+		                                    #if($!{picNotNull.epPic})
+	                                    			<h5>
+													<a title="查看大图" href="javascript:showBIgImage($!{picNotNull.epType});" style="color:#47b7c5;">$!{picNotNull.epName}<i>*</i>：</a>
+													</h5>
+											#else
+												<h5>$!{picNotNull.epName}：</h5>
+											#end
+		                                    <input type="hidden" value="$!{picNotNull.epType}" name="epType$!{picNotNull.epType}"/>
+		                                    <input type="hidden" value="$!{picNotNull.epId}" name="epId$!{picNotNull.epType}"/>
+		                                    <div class="img-file" id="uploadPic$!{picNotNull.epType}">
+		                                    		#if($!{picNotNull.epPic})
+<!-- 				                                       <img id="showPic$!{picNotNull.epType}" src="$!{picUrl}$!{picNotNull.epPic}$!{picSize}" height="139px;" width="139px;"/> -->
+				                                       <img id="showPic$!{picNotNull.epType}" src="$!{picNotNull.imgUrl}" height="139px;" width="139px;"/>
+				                                    #else
+				                                       <img id="showPic$!{picNotNull.epType}" height="139px;" width="139px;"/>
+				                                    #end
+				                                       <input type="hidden" value="$!{picNotNull.epPic}" id="saImgPath$!{picNotNull.epType}" name="epPic$!{picNotNull.epType}">
+				                                       <input type="hidden" id="bucket_key$!{picNotNull.epType}" name="bucket_key$!{picNotNull.epType}" value="$!{picNotNull.bucket_key}">
+		                                               <input type="hidden" id="imageInfo$!{picNotNull.epType}" name="imageInfo$!{picNotNull.epType}">
+				                            </div>
+		                                </div>
+		                                #if($!{bizEnterprise.eStatus} == 1  || $!{bizEnterprise.eStatus} == 2)
+				                                <div class="form-group">
+				                                	<div>
+				                                		#if($!{picNotNull.epPic})
+	                                						<a href="javascript:showBIgImage($!{picNotNull.epType});"><i></i>查看大图</a>
+	                                					#end
+				                                    	<a href="javascript:showImage($!{picNotNull.epType});"><i></i>查看范例</a>
+				                                    </div>
+				                                      #if($!{picNotNull.epType}!=8 && $!{picNotNull.epType}!=11 && $!{picNotNull.epType}!=14 && $!{picNotNull.epType}!=15 && $!{picNotNull.epType}!=16 && $!{picNotNull.epType}!=17 && $!{picNotNull.epType}!=19 && $!{picNotNull.epType}!=20)
+					                                    <label>证照号码：</label>
+					                                    <div class="control-item">
+					                                        <input type="text" class="form-control" id="epNo$!{picNotNull.epType}" value="$!{picNotNull.epNo}" placeholder="" name="epNo$!{picNotNull.epType}">
+					                                    </div>
+					                                    <label>证件有效期：</label>
+					                                    <div class="control-item">
+					                                        <input type="text" id="epStartTime$!{picNotNull.epType}" value="$utils.formatDate($!{picNotNull.epStartTime},"yyyy-MM-dd")" name="epStartTime$!{picNotNull.epType}"  class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'epEndTime$!{picNotNull.epType}\')}'})">
+					                                    </div>
+					                                    <label>至</label>
+					                                    <div class="control-item">
+					                                        <input type="text" id="epEndTime$!{picNotNull.epType}" value="$utils.formatDate($!{picNotNull.epEndTime},"yyyy-MM-dd")" name="epEndTime$!{picNotNull.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'epStartTime$!{picNotNull.epType}\')}'})">
+					                                    </div>
+					                                   #end
+				                                </div>
+		                                #else
+				                                <div class="form-group">
+				                                    <div>
+				                                		#if($!{picNotNull.epPic})
+	                                						<a href="javascript:showBIgImage($!{picNotNull.epType});"><i></i>查看大图</a>
+	                                					#end
+				                                    	<a href="javascript:showImage($!{picNotNull.epType});"><i></i>查看范例</a>
+				                                    </div>
+				                                    #if($!{picNotNull.epType}!=8 && $!{picNotNull.epType}!=11 && $!{picNotNull.epType}!=14 && $!{picNotNull.epType}!=15 && $!{picNotNull.epType}!=16 && $!{picNotNull.epType}!=17 && $!{picNotNull.epType}!=19 && $!{picNotNull.epType}!=20)
+					                                    <label>证照号码：</label>
+					                                    <div class="control-item">
+					                                        <input type="text" class="form-control" id="epNo$!{picNotNull.epType}" value="$!{picNotNull.epNo}" placeholder="" name="epNo$!{picNotNull.epType}">
+					                                    </div>
+					                                    <label>证件有效期：</label>
+					                                    <div class="control-item">
+					                                        <input type="text" id="epStartTime$!{picNotNull.epType}" value="$utils.formatDate($!{picNotNull.epStartTime},"yyyy-MM-dd")" name="epStartTime$!{picNotNull.epType}"  class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'epEndTime$!{picNotNull.epType}\')}'})">
+					                                    </div>
+					                                    <label>至</label>
+					                                    <div class="control-item">
+					                                        <input type="text" id="epEndTime$!{picNotNull.epType}" value="$utils.formatDate($!{picNotNull.epEndTime},"yyyy-MM-dd")" name="epEndTime$!{picNotNull.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'epStartTime$!{picNotNull.epType}\')}'})">
+					                                    </div>
+				                                     #end
+				                                </div>
+		                                #end
+		                            </div>
+		                        </div>
+		                        #end
+		                        #end
+		                        #end
+	                        </div>
+	                        
+                        </div>
+                        <div>
+                        <div class="non_project_box" id="notReqInfoBtn">
+                        	<span class="caption">非必填项目</span>
+                            <a href="javascript:;" class="btn_open_up"></a>
+                        </div>
+                        <div id="notReqInfoBtnInfo">
+                        	#foreach($picIsNull in $bizEnterprisePicsIsNull)
+		                        <div class="box">
+		                            <div class="cc">
+		                                <div class="img-box">
+		                                    #if($!{picIsNull.epPic})
+	                                    			<h5>
+													<a title="查看大图" href="javascript:showBIgImage($!{picIsNull.epType});" style="color:#47b7c5;">$!{picIsNull.epName}</a>
+													</h5>
+											#else
+												<h5>$!{picIsNull.epName}：</h5>
+											#end
+		                                    <input type="hidden" value="$!{picIsNull.epType}" name="epType$!{picIsNull.epType}"/>
+		                                    <input type="hidden" value="$!{picIsNull.epId}" name="epId$!{picIsNull.epType}"/>
+		                                    <div class="img-file" id="uploadPic$!{picIsNull.epType}">
+		                                    			#if($!{picIsNull.epPic})
+		                                    			<img id="showPic$!{picIsNull.epType}" src="$!{picIsNull.imgUrl}"  height="139px;" width="139px;"/>
+		                                    			#else
+		                                    			<img id="showPic$!{picIsNull.epType}"  height="139px;" width="139px;"/>
+		                                    			#end
+				                                       <input type="hidden" value="$!{picIsNull.epPic}" id="saImgPath$!{picIsNull.epType}" name="epPic$!{picIsNull.epType}">
+				                                       <input type="hidden" id="bucket_key$!{picIsNull.epType}" name="bucket_key$!{picIsNull.epType}" value="$!{picIsNull.bucket_key}">
+		                                               <input type="hidden" id="imageInfo$!{picIsNull.epType}" name="imageInfo$!{picIsNull.epType}">
+				                            </div>
+		                                </div>
+		                                <div class="form-group">
+		                                	<div>
+		                                    	#if($!{picIsNull.epPic})
+	                                				<a href="javascript:showBIgImage($!{picIsNull.epType});"><i></i>查看大图</a>
+	                                			#end
+				                               	<a href="javascript:showImage($!{picIsNull.epType});"><i></i>查看范例</a>
+		                                    </div>
+		                                    #if($!{picIsNull.epType}!=8&&$!{picIsNull.epType}!=9 && $!{picIsNull.epType}!=10 && $!{picIsNull.epType}!=18)
+			                                    <label>证照号码：</label>
+			                                    <div class="control-item">
+			                                        <input type="text" class="form-control" id="epNo$!{picIsNull.epType}" value="$!{picIsNull.epNo}" placeholder="" name="epNo$!{picIsNull.epType}">
+			                                    </div>
+			                                    <label>证件有效期：</label>
+			                                    <div class="control-item">
+			                                        <input type="text" id="epStartTime$!{picIsNull.epType}" value="$utils.formatDate($!{picIsNull.epStartTime},"yyyy-MM-dd")" name="epStartTime$!{picIsNull.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'epEndTime$!{picIsNull.epType}\')}'})">
+			                                    </div>
+			                                    <label>至</label>
+			                                    <div class="control-item">
+			                                        <input type="text" id="epEndTime$!{picIsNull.epType}" value="$utils.formatDate($!{picIsNull.epEndTime},"yyyy-MM-dd")" name="epEndTime$!{picIsNull.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'epStartTime$!{picIsNull.epType}\')}'})">
+			                                    </div>
+		                                    #end
+		                                </div>
+		                            </div>
+		                        </div>
+		                        #end
+                        </div>
+                        
+                        </div>
+                        </div>
+                    	<div class="btn tac">
+                    	#if($!{isTask}==1)
+                     	   	<a href="javascript:void(0);" style="background:grey;color:#dfdfdf;cursor:default;">保存</a><br>
+                     		<span style="color:red">资质审核中，请耐心等待</span>
+                     	#else
+                     		<a href="javascript:void(0);" onclick="toEdit();">保存</a><br>
+                     	#end
+                    	</div>
+                </div>
+                </form>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  </body>
+</html>

@@ -1,0 +1,524 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>楼层商品配置-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/sales/index.html" class="color">销售中心</a>&gt; 商城管理&gt; <a
+                                href="/sales/store/floor_main.html" class="color">楼层管理</a> &gt; 楼层商品配置</p>
+                    </div>
+                    <div class="order_query order">
+                        <form action="/sales/store/floorGoods_main.html" method="post" id="searchForm">
+                            <input type="hidden" name="pi" value="$!pi">
+                            <input type="hidden" name="ps" value="$!ps">
+                            <input type="hidden" id="sfId" name="sfId" value="$!sfId">
+                            <input type="hidden" name="sfName" value="$!sfName">
+                            <input type="hidden" id="sgcId1" name="sgcId1" value="$!sgcId1">
+                            <input type="hidden" id="sfType" name="sfType" value="$!sfType">
+                            <ul>
+                                <li>
+                                    <label class="pr12">配置"<i class="color">一级分类</i>"商品：</label>
+                                </li>
+                                <li>
+                                    <label>商品名称：</label><input name="gName" type="text" value="$!gName"
+                                                               class="w-txt w121">
+                                </li>
+                                <!--                             <li> -->
+                                <!--                                 <label>批准文号：</label><input name="name" type="text" value="" class="w-txt w121"> -->
+                                <!--                             </li> -->
+                                <!--                             <li> -->
+                                <!--                                 <label>生产厂家：</label><input name="name" type="text" value="" class="w-txt w121"> -->
+                                <!--                             </li> -->
+                                <!--                             <li> -->
+                                <!--                                 <label>助记码：</label><input name="name" type="text" value="" class="w-txt w121"> -->
+                                <!--                             </li> -->
+                            </ul>
+                            <div class="btn">
+                                <a href="javascript:searchPager('/sales/store/floorGoods_main.html',false);"
+                                   class="btn_query">查询</a>
+                                <a href="javascript:searchPager('/sales/store/floorGoods_main.html?sfId=$!sfId&sfName=$!sfName&sgcId1=$!sgcId1',true);"
+                                   class="btn_query btn_export">清空查询条件</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="order_detail">
+                        <div class="btn-box">
+                            <a href="javascript:addGoods();" class="btn_add" id="sel-a">添加</a>
+##                            <a href="/sales/store/floor_main.html" class="btn_add" id="sel-a">返回楼层</a>
+                                <div class="fr user_cx_tips mt10">功能说明：自定义楼层商品上限为50，超出将无法添加</div>
+                        </div>
+                        <div class="table">
+                            <table cellpadding="0" cellspacing="0">
+                                <thead class="head">
+                                <tr class="line">
+                                    <th width="100px">一级分类</th>
+                                    <th width="150px">商品名称</th>
+                                    <!--                                     <th>商品编号</th> -->
+                                    <th width="150px">批准文号</th>
+                                    <th>生产厂家</th>
+                                    <th width="80px">销量</th>
+                                    <th width="150px">创建时间</th>
+                                    <th width="50px">顺序</th>
+                                    <th width="100px">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    #if(!$null.isNull($shopFloorGoodsList) && $shopFloorGoodsList.size()!=0)
+                                        #foreach($shopFloorGoods in $shopFloorGoodsList)
+                                        <tr>
+                                            <td>$!sfName</td>
+                                            <td>$!{shopFloorGoods.goods.gName}</td>
+                                            <!-- 	                                    <td>$!{shopFloorGoods.goods.gSn}</td> -->
+                                            <td>$!{shopFloorGoods.goods.gLicenseNo}</td>
+                                            <td>$!{shopFloorGoods.goods.gManufacture}</td>
+                                            <td>
+                                                #if($!{shopFloorGoods.goods.gTotal})
+                                                    $!{shopFloorGoods.goods.gTotal}
+                                                #else
+                                                    0
+                                                #end
+                                            </td>
+                                            <td>$utils.formatDate($!{shopFloorGoods.sfgAddTime},
+                                                "yyyy-MM-dd HH:mm:ss")</td>
+                                            <td>$!{shopFloorGoods.sfgOrder}</td>
+                                            <td>
+                                                <a href="javascript:editItem($!{shopFloorGoods.sfgId});"
+                                                   class="btn-txt">修改</a>
+                                                <a href="javascript:floorGoodsDel($!{shopFloorGoods.sfgId});"
+                                                   class="btn-txt">删除</a>
+                                            </td>
+                                        </tr>
+                                        #end
+                                    #else
+                                    <tr>
+                                        <td colspan="9">无相关数据！</td>
+                                    </tr>
+                                    #end
+                                </tbody>
+                            </table>
+                            <!--分页开始 -->
+                            #if($!{pagerInfo})
+                                #if($!{pagerTotal} > 1)
+                                    #pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/store/floorGoods_main.html")
+                                #end
+                            #end
+                            <!--分页结束 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+    #parse("/common/footer.vm")
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/goodsHelp.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+<script type="text/javascript">
+
+    /*设置框架返回按钮*/
+    top.utils.frameBack({
+        render:true,
+        handler:function (btn) {
+            location.href = '/sales/store/floor_main.html';
+        }
+    })
+
+    function checkForm(lay) {
+        $("#editFloorGoodsForm",lay).validate({
+            submitHandler: saveItem, //如果验证通过的回调函数
+            rules: {
+                sfgOrder: {
+                    required: true,
+                    digits: true
+                }
+            },
+            messages: {
+                sfgOrder: {
+                    required: "请输入排序",
+                    digits: "请输入整数"
+                }
+            }
+
+        });
+    }
+
+    //自定义分类楼层商品数量上限
+    var customFloorGoodsSize = 10;
+    //当前已添加的商品数量
+    var totalGoods = 0;
+    #if($!{pagerInfo})
+        totalGoods = $!{pagerInfo.rowsCount};
+    #end
+
+    //添加商品
+    function addGoods() {
+        //自定义分类楼层不能超过50个商品
+        var sfType = $("#sfType").val();
+        if(sfType == 1 && totalGoods >= customFloorGoodsSize){
+            top.ue.alert({
+                content:"商品配置超出上限，无法添加"
+            })
+            return false;
+        }
+
+        var mask = $("#popUpMaskQ");
+        var dialog = $("#popUpDIVQ");
+        var sgcId1 = $("#sgcId1").val();
+        var sfId = $("#sfId").val();
+        top.ue.load();
+        $.ajax({
+            url: "/sales/store/goods_help.html",
+            type: "POST",
+            data: {"sgcId1": sgcId1, "sfId": sfId},
+            dataType: "html",
+            cache: false,
+            complete: function () {
+                top.ue.closeAll("loading");
+            },
+            success: function (result) {
+                if (result !== "") {
+                    if(top.layer.ie && top.layer.ie == 8){
+                        top.ue.alert({
+                            content:"十分抱歉，该功能暂不支持IE8，请使用其他浏览器"
+                        })
+                        return false;
+                    }
+                    top.app.dialog_goods_idx = top.rui.dynamic({
+                        title: "添加商品",
+                        skin: 'dialog-old',
+                        content: result,
+                        area: ['1250px'],
+                        end: function () {
+                            top.app.dialog_goods_idx = null;
+                        },
+                        yes: function (idx, lay) {
+                            saveGoods(idx, lay)
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+    function checkGInSnValue(url, type, type1) {
+        var _lay = top.$("#layui-layer" + top.app.dialog_goods_idx);
+        var gInSns = $("#gInSns", _lay).val();
+        if (gInSns == undefined) {
+            searchGoodsPager(url, type, type1);
+        } else {
+            gInSns = gInSns.replace("，", ",").replace(/\s+/g, "");
+            $("#gInSns", _lay).val(gInSns);
+            if (gInSns.split(",").length > 200 && !type) {
+                top.ue.msg("Sorry,您每次最多可导入200个内码，您可以分多次导入商品。");
+                return;
+            } else if (url) {
+                searchGoodsPager(url, type, type1);
+            }
+        }
+
+    }
+
+    //保存商品
+    function saveGoods(idx, lay) {
+        var length = $("input[name='chk']:checked", lay).length;
+        if (length == 0) {
+            top.layer.msg("请选择你要添加的商品！");
+            return;
+        }
+
+        //自定义分类楼层不能超过50个商品
+        var sfType = $("#sfType").val();
+        var afterAddCount = totalGoods + length;
+        if(sfType == 1 && afterAddCount > customFloorGoodsSize){
+            top.ue.alert({
+                content:"商品配置超出上限，只能再添加" + (customFloorGoodsSize - totalGoods) + "个商品"
+            })
+            return false;
+        }
+
+        var gIds = [];
+        var fgObjArray = [];
+        var sfId = $("#sfId").val();
+        $("input[name='chk']:checked", lay).each(function () {
+            gIds.push($(this).attr("id"));
+            var fgObj = {};
+            fgObj.sfId = sfId;
+            fgObj.gId = $(this).attr("id");
+            fgObjArray.push(fgObj);
+        });
+
+        var gIdJson = $.toJSON(gIds);
+        top.ue.load();
+        //判断是否已经添加过
+        $.ajax({
+            url: "/sales/store/floorGoods_isExist.html",
+            type: "POST",
+            data: {"sfId": sfId, "ids": gIdJson},
+            dataType: 'json',
+            cache: false,
+            complete: function () {
+                top.ue.closeAll("loading");
+            },
+            success: function (result) {
+                if (result.success == false) {
+                    top.layer.msg(result.message);
+                } else {
+                    //重复添加的时候
+                    if (result.data && result.data.length > 0) {
+                        var msg = "以下商品已添加过，不能重复添加<table border='1px;' style='width: 100%'>";
+                        msg += "<tr><th>商品ID</th><th>商品名称</th></tr>";
+                        var item = result.data;
+                        for (var index in item) {
+                            msg += "<tr>";
+                            msg += "<td><span style='color:red'>" + item[index].gid + "</span></td>";
+                            msg += "<td><span style='color:red'>" + item[index].goods.gname + "</span></td>";
+                            msg += "</tr>";
+                        }
+                        msg += "</table>"
+                        top.ue.alert({
+                            title: "提示信息",
+                            content: msg,
+                            area: ['300px']
+                        });
+                        return;
+                    } else {
+                        var fgObjParam = $.toJSON(fgObjArray);
+                        //验证通过
+                        top.ue.load();
+                        $.ajax({
+                            url: "/sales/store/floorGoods_batchAdd.html",
+                            type: "POST",
+                            data: {"jsonParam": fgObjParam},
+                            dataType: 'json',
+                            cache: false,
+                            complete: function () {
+                                top.ue.closeAll("loading");
+                            },
+                            success: function (result) {
+                                if (result.success == false) {
+                                    top.layer.msg(result.message);
+                                } else {
+                                    top.ue.close(idx);
+                                    top.ue.msg("添加成功");
+                                    location.href += "";
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    //编辑
+    function editItem(id) {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIV");
+        top.ue.load();
+        $.ajax({
+            url: "/sales/store/floorGoods_editUI.html",
+            type: "POST",
+            data: {"id": id},
+            cache: false,
+            complete: function () {
+                top.ue.closeAll("loading");
+            },
+            success: function (result) {
+                if (result.success == false) {
+                    top.ue.msg(result.message);
+                } else {
+                    //显示弹出层与遮照层
+                    top.rui.dynamic({
+                        title: "编辑热销商品",
+                        content: dialog.html(),
+                        skin: "dialog-old dialog-old-no-title",
+                        area: ["460px"],
+                        success: function (lay, idx) {
+                            setFormValue(result.data,lay);
+                            checkForm(lay);
+                            top.rui.initTools(lay);
+                        },
+                        yes: function (idx, lay) {
+                            $('#editFloorGoodsForm', lay).attr("data-did", idx).submit();
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+    //给弹出层表单设值
+    function setFormValue(obj,lay) {
+        if (obj) {
+            $('#sfgId',lay).val(obj.sfgId);
+            $('#sfgOrder',lay).val(obj.sfgOrder);
+        }
+    }
+
+    //增加或修改保存
+    function saveItem(obj) {
+        var idx = $(obj).attr("data-did");
+        var lay = top.$("#layui-layer" + idx);
+        var url = null;
+        var flag = true;
+        var id = $("#editFloorGoodsForm",lay).find("#sfgId").val();
+        if (!isEmpty(id)) {
+            url = "/sales/store/floorGoods_edit.html";
+            flag = false;
+        } else {
+            url = "/sales/store/floorGoods_add.html";
+        }
+
+        var floorGoodsObj = {};
+        floorGoodsObj.sfgId = $("#sfgId",lay).val();
+        floorGoodsObj.sfgOrder = $("#sfgOrder",lay).val();
+        var jsonParam = $.toJSON(floorGoodsObj);
+        top.ue.load();
+        $.ajax({
+            url: url,
+            data: {"jsonParam": jsonParam},
+            type: 'POST',
+            dataType: 'json',
+            complete: function () {
+                top.ue.closeAll("loading");
+            },
+            success: function (result) {
+                if (result.success == false) {
+                    top.ue.msg(result.message);
+                } else {
+                    top.ue.close(idx);
+                    var content = flag ? "添加成功" : "修改成功";
+                    top.ue.alert({
+                        title: '提示信息',
+                        content: content,
+                        end: function () {
+                            window.location.reload(true);
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+    //删除楼层
+    function floorGoodsDel(value) {
+        top.ue.confirm({
+            title: "提示信息",
+            content: "你确定要删除该条记录吗？",
+            ok: function () {
+                top.ue.load();
+                $.ajax({
+                    url: '/sales/store/floorGoods_del.html',
+                    data: {"id": value},
+                    type: 'POST',
+                    dataType: 'json',
+                    complete: function () {
+                        top.ue.closeAll("loading");
+                    },
+                    success: function (result) {
+                        if (result.data == true) {
+                            top.ue.alert({
+                                title: '提示信息',
+                                content: "删除成功",
+                                end: function () {
+                                    window.location.reload(true);
+                                }
+                            })
+
+                        } else {
+                            top.ue.msg("删除失败");
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    function saveFloorGoods() {
+        $('#editFloorGoodsForm').submit();
+    }
+</script>
+<!-- 修改页面 -->
+<div class="mask" id="popUpMask"></div>
+<div class="dialog w460" id="popUpDIV">
+    <div class="head"><span class="dialog-title">添加</span><a href="javascript:closePopUpDIV('popUpDIV','popUpMask');"
+                                                             class="btn-close"></a></div>
+    <div class="con">
+        <form id="editFloorGoodsForm">
+            <input type="hidden" name="sfgId" id="sfgId"/>
+            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                <tr>
+                    <td class="table-tit">顺序<i>*</i>：</td>
+                    <td><input type="text" name="sfgOrder" id="sfgOrder" min="0" max="99999" maxlength="5" class="txt">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn"><a href="javascript:saveFloorGoods();" class="btn-txt mr7">保存</a><a
+                    href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn-txt">关闭</a></div>
+        </form>
+    </div>
+</div>
+<!-- 添加页面 -->
+<div class="mask" id="popUpMaskQ"></div>
+<div class="dialog w460" id="popUpDIVQ" style="width:1200px;height:550px;">
+    <div class="head"><span class="dialog-title">选择商品</span><a
+            href="javascript:closePopUpDIV('popUpMaskQ','popUpDIVQ');window.location.reload(true);"
+            class="btn-close"></a></div>
+    <div class="con" id="content">
+    </div>
+</div>
+</body>
+</html>

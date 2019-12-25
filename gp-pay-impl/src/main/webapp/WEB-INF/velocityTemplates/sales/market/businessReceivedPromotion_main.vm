@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; 工业政策邀请</p>
+                </div>
+                
+                <div class="fl user_cx_tips mt20">功能说明：厂家发布对于终端和商业的促销政策，邀请商业加入该促销政策，加入成功后大面积宣传政策信息在商业公司的首页广告位。</div>
+                
+                <div class="order_query order cc">
+	               <form action="/sales/market/promotion/businessMain.html" method="post" id="searchForm">
+	                  <input type="hidden" name="pi" value="$!pi" />
+					  <input type="hidden" name="ps" value="$!ps" />
+					  <input type="hidden" name="processStatus" id="processStatus" value="$!processStatus" />
+	                 <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+	                   <tr>
+	                     <td>
+	                         <input class="input input_l" type="text" name="ipTitle" id="ipTitle" value="$!{ipTitle}" placeholder="促销名称" />
+	                         <a href="javascript:searchPager('/sales/market/promotion/businessMain.html',false);" class="btn-jxsp">查询</a>
+	                         <a href="javascript:searchPager('/sales/market/promotion/businessMain.html',true);" class="btn-jxsp btn-empty"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+	                     </td>
+	                   </tr>
+	                 </table>
+	               </form>
+	               #if($!processStatus != 1)
+                    <div class="btn cc">
+                        <a href="javascript:ipObj.batchDelBusinessIP();" class="btn-n">批量删除</a>
+                    </div>
+                   #end
+                </div>
+                
+                <div class="order_list">
+                    <div class="tabnav">
+                        <ul>
+                           #if($!processStatus == 1)
+                           <li data-value="1" class="on"><a href="javascript:ipObj.setActivityProcessStatus(1);"><span>执行中（$!dataCount1）</span></a></li>
+                           <li data-value="2"><a href="javascript:ipObj.setActivityProcessStatus(2);"><span>待处理（$!dataCount2）</span></a></li>
+                           <li data-value="3"><a href="javascript:ipObj.setActivityProcessStatus(3);"><span>已结束/已停止（$!dataCount3）</span></a></li>
+                           #elseif($!processStatus == 2)
+                           <li data-value="1"><a href="javascript:ipObj.setActivityProcessStatus(1);"><span>执行中（$!dataCount1）</span></a></li>
+                           <li data-value="2" class="on"><a href="javascript:ipObj.setActivityProcessStatus(2);"><span>待处理（$!dataCount2）</span></a></li>
+                           <li data-value="3"><a href="javascript:ipObj.setActivityProcessStatus(3);"><span>已结束/已停止（$!dataCount3）</span></a></li>
+                           #else
+                           <li data-value="1"><a href="javascript:ipObj.setActivityProcessStatus(1);"><span>执行中（$!dataCount1）</span></a></li>
+                           <li data-value="2"><a href="javascript:ipObj.setActivityProcessStatus(2);"><span>待处理（$!dataCount2）</span></a></li>
+                           <li data-value="3" class="on"><a href="javascript:ipObj.setActivityProcessStatus(3);"><span>已结束/已停止（$!dataCount3）</span></a></li>
+                           #end
+                        </ul>
+                    </div>
+                <div class="tab">
+                    <!--进行中-->
+                    <div class="order_detail mt10">
+                        <div class="table table-top table-cx">
+                            <table border="0" cellpadding="0" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th class="b-l"><input type="checkbox" class="check" id="selectAllPro"/></th>
+                                    <th width="150">促销名称</th>
+                                    <th>对商业促销政策</th>
+                                    <th>对终端促销政策</th>
+                                    <th width="160">起止时间</th>
+                                    <th class="b-r" width="100">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="proList">
+                                #if($!ipList && $!ipList.size()>0)
+	                                  #foreach($!industryPromotion in $!ipList)
+	                                  <tr>
+		                                    <td><input type="checkbox" class="check" name="chk" id="$!{industryPromotion.ipId}"/></td>
+		                                    <td>
+			                                    #if($!processStatus == 3)
+				                                    #if($!{industryPromotion.status} == 1)
+				                                    <div class="tag-ysx">已失效</div>
+				                                    #elseif($!{industryPromotion.status} == 2)
+				                                    <div class="tag-yzx">已执行</div>
+				                                    #elseif($!{industryPromotion.status} == 3)
+				                                    <div class="tag-ytzzx">已停止执行</div>
+				                                    #end
+			                                    #end
+			                                    <a class="link" href="/sales/market/promotion/businessView.html?ipId=$!{industryPromotion.ipId}&processStatus=$!{processStatus}">$!{industryPromotion.ipTitle}</a>
+		                                    </td>
+		                                    <td class="tal">$!{industryPromotion.ipToBusiness}</td>
+		                                    <td class="tal">$!{industryPromotion.ipToTerminal}</td>
+		                                    <td>
+		                                        $utils.formatDate($!{industryPromotion.ipStartTime},"yyyy-MM-dd HH:mm:ss")<br>
+		                                        #if($!{industryPromotion.ipEndTime} && $!{industryPromotion.ipEndTime} != '')
+		                                           $utils.formatDate($!{industryPromotion.ipEndTime},"yyyy-MM-dd HH:mm:ss")
+		                                        #else
+		                                                                                                                                 长期有效
+		                                        #end
+		                                    </td>
+		                                    <td>
+		                                    #if($!processStatus == 1)
+		                                    <a href="/sales/market/promotion/businessView.html?ipId=$!{industryPromotion.ipId}&processStatus=$!{processStatus}" class="btn">查看</a>
+		                                    #else
+		                                    <a href="/sales/market/promotion/businessView.html?ipId=$!{industryPromotion.ipId}&processStatus=$!{processStatus}" class="btn">查看</a>
+		                                    <a href="javascript:ipObj.delBusinessIP($!{industryPromotion.ipId});" class="btn-delete">删除</a>
+		                                    #end
+		                                    </td>
+	                                   </tr>
+	                                  #end
+                                #else
+                                    <tr>
+			                            <td colspan="6">无相关数据！</td>
+			                        </tr>
+                                #end
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--分页开始 -->
+						#if($!{pagerInfo}) 
+							#if($!{pagerTotal} > 1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/market/promotion/businessMain.html")
+							#end 
+						#end
+                    </div>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+          </div>
+      </div>
+    </div>
+    </div>
+    #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/promotion/industryPromotion.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+		$("#selectAllPro").click(function(){
+			   	var c_type = $("#selectAllPro")[0].checked;
+			   	$("#proList").find("input[type=checkbox]").not("#selectAllPro").each(function(){
+			   		$(this)[0].checked = c_type;
+			   	});
+		   });
+	
+	    $("#proList").find("input[type=checkbox]").not("#selectAllPro").click(function(){
+		   	var check_type = true;
+		   	$("#proList").find("input[type=checkbox]").not("#selectAllPro").each(function(){
+					if($(this)[0].checked == false){
+						 check_type = false;
+						 return false;
+					}            		
+		   	});
+		   	$("#selectAllPro")[0].checked = check_type;
+	   });
+   </script>      
+    
+  </body>
+</html>

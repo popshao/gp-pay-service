@@ -1,0 +1,128 @@
+<!--工业销售中心左侧菜单栏-->
+#if(!$null.isNull($resources) && $resources.size()!=0)
+    #foreach($resource in $!resources)
+        #foreach($ch in $!resource.childResource)
+            #if($ch.parentId == 251)
+                #if($!userType == 1) <!-- 终端账号 -->
+                <li class="menu-list-p" :attr="{id:'menu_li_$!{ch.resourceId}'}">
+                    <a href="javascript:void(0);"
+                       ms-click="@goto($event, '$!{path}$!{ch.resourceLink}' , $!{ch.resourceId} )"
+                       ms-attr="{id:'menu_$!{ch.resourceId}','data-url':'$!{ch.resourceLink}','data-id':$!{ch.resourceId} }">
+                        <span class="menu-icon"><img src="/front/imgs/icon-qy.png" alt=""></span>
+                        <span class="menu-text">$!{ch.resourceName}</span>
+                        <i class="icon-font">&#xe662;</i>
+                    </a>
+                    <ul class="menu-c" ms-visible="false" data-ptext="$!{ch.resourceName}">
+                        #if($!{isChild} != 1) <!-- 主帐号 -->
+                            #foreach($childResource in $!ch.childResource)
+                                <li class="menu-list-c"
+                                    :attr="{id:'menu_li_$!{childResource.resourceId}'">
+                                    <a href="javascript:void(0);" data-out="$!{childResource.resourceTarget}"
+                                       ms-click="@goto($event ,'$!{path}$!{childResource.resourceLink}' , $!{childResource.resourceId} )"
+                                       ms-attr="{id:'menu_$!{childResource.resourceId}','data-url':'$!{path}$!{childResource.resourceLink}','data-id':$!{childResource.resourceId} }">
+                                        <span class="menu-icon"></span>
+                                        <span class="menu-text">$!{childResource.resourceName}</span>
+                                    </a>
+                                </li>
+                            #end
+                        #else <!-- 子帐号 -->
+                            #foreach($childResource in $!ch.childResource)
+                                #if($!{childResource.resourceId} != 213 && $!{childResource.resourceId} != 254)
+                                    #if($!{childResource.resourceId} == $!resourceId)
+                                        <dd>
+                                            <li class="menu-list-c"
+                                                :attr="{id:'menu_li_$!{childResource.resourceId}'">
+                                                <a href="javascript:void(0);" data-out="$!{childResource.resourceTarget}"
+                                                   ms-click="@goto($event ,'$!{path}$!{childResource.resourceLink}' , $!{childResource.resourceId} )"
+                                                   ms-attr="{id:'menu_$!{childResource.resourceId}','data-url':'$!{path}$!{childResource.resourceLink}','data-id':$!{childResource.resourceId} }">
+                                                    <span class="menu-icon"></span>
+                                                    <span class="menu-text">$!{childResource.resourceName}</span>
+                                                </a>
+                                            </li>
+                                        </dd>
+                                    #else
+                                        <dd>
+                                            <li class="menu-list-c"
+                                                :attr="{id:'menu_li_$!{childResource.resourceId}'">
+                                                <a href="javascript:void(0);" data-out="$!{childResource.resourceTarget}"
+                                                   ms-click="@goto($event ,'$!{path}$!{childResource.resourceLink}' , $!{childResource.resourceId} )"
+                                                   ms-attr="{id:'menu_$!{childResource.resourceId}','data-url':'$!{path}$!{childResource.resourceLink}','data-id':$!{childResource.resourceId} }">
+                                                    <span class="menu-icon"></span>
+                                                    <span class="menu-text">$!{childResource.resourceName}</span>
+                                                </a>
+                                            </li>
+                                        </dd>
+                                    #end
+                                #end
+                            #end
+                        #end
+                    </ul>
+                </li>
+                #else <!-- 商业账号 -->
+                    #if($!{ch.resourceId} != 210) <!-- 排除 -->
+                    <li class="menu-list-p" :attr="{id:'menu_li_$!{ch.resourceId}'}">
+                        <a href="javascript:void(0);"
+                           ms-click="@goto($event, '$!{path}$!{ch.resourceLink}' , $!{ch.resourceId} )"
+                           ms-attr="{id:'menu_$!{ch.resourceId}','data-url':'$!{ch.resourceLink}','data-id':$!{ch.resourceId} }">
+                            <span class="menu-icon"><img src="/front/imgs/icon-qy.png" alt=""></span>
+                            <span class="menu-text">$!{ch.resourceName}</span>
+                            <i class="icon-font">&#xe662;</i>
+                        </a>
+                        <ul class="menu-c" ms-visible="false" data-ptext="$!{ch.resourceName}">
+                            #if($!{isChild} != 1) <!-- 主帐号 -->
+                                #foreach($childResource in $!ch.childResource)
+                                    <li class="menu-list-c"
+                                        :attr="{id:'menu_li_$!{childResource.resourceId}'">
+                                        <a href="javascript:void(0);" data-out="$!{childResource.resourceTarget}"
+                                           ms-click="@goto($event ,'$!{path}$!{childResource.resourceLink}' , $!{childResource.resourceId} )"
+                                           ms-attr="{id:'menu_$!{childResource.resourceId}','data-url':'$!{path}$!{childResource.resourceLink}','data-id':$!{childResource.resourceId} }">
+                                            <span class="menu-icon"></span>
+                                            <span class="menu-text">$!{childResource.resourceName}</span>
+                                        </a>
+                                    </li>
+                                #end
+                            #else <!-- 子帐号 -->
+                                #foreach($childResource in $!ch.childResource)
+                                    #if($!{childResource.resourceId} != 213 && $!{childResource.resourceId} != 254)
+                                        <li class="menu-list-c"
+                                            :attr="{id:'menu_li_$!{childResource.resourceId}'">
+                                            <a href="javascript:void(0);" data-out="$!{childResource.resourceTarget}"
+                                               ms-click="@goto($event ,'$!{path}$!{childResource.resourceLink}' , $!{childResource.resourceId} )"
+                                               ms-attr="{id:'menu_$!{childResource.resourceId}','data-url':'$!{path}$!{childResource.resourceLink}','data-id':$!{childResource.resourceId} }">
+                                                <span class="menu-icon"></span>
+                                                <span class="menu-text">$!{childResource.resourceName}</span>
+                                            </a>
+                                        </li>
+                                    #end
+                                #end
+                            #end
+                        </ul>
+                    #end
+                </li>
+                #end
+            #end
+        #end
+    #end
+<!-- 报告单 -->
+    #if($!{user.eid} != 0 && $!{user.estatus} == 1)
+        #if($!user && $!{utils.containSuId($!user)} == "wh" && $!userType == 1)
+        <li class="menu-list-p" :attr="{id:'menu_li_whxlbgd'}">
+            <a href="javascript:void(0);"
+               ms-click="@goto($event, 'http://wh-report.mypharma.com' , 'whxlbgd' )"
+               ms-attr="{id:'menu_$!{ch.resourceId}','data-url':'http://wh-report.mypharma.com','data-id':'whxlbgd' }">
+                <span class="menu-icon"><img src="/front/imgs/icon-qy.png" alt=""></span>
+                <span class="menu-text">新龙报告单查询</span>
+            </a>
+        </li>
+        #elseif($!user && $!{utils.containSuId($!user)} == "bj" && $!userType == 1)
+        <li class="menu-list-p" :attr="{id:'menu_li_whxlbgd'}">
+            <a href="javascript:void(0);"
+               ms-click="@goto($event, 'http://bj-report.mypharma.com' , 'whxlbgd' )"
+               ms-attr="{id:'menu_$!{ch.resourceId}','data-url':'http://bj-report.mypharma.com','data-id':'whxlbgd' }">
+                <span class="menu-icon"><img src="/front/imgs/icon-qy.png" alt=""></span>
+                <span class="menu-text">新龙报告单查询</span>
+            </a>
+        </li>
+        #end
+    #end
+#end

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.read.GroundPromotionPayConfigReadDao">
+	<resultMap id="groundPromotionPayConfigResult" type="com.mph.coreapi.gp.pay.entity.GroundPromotionPayConfig">
+		<result property="id" column="id" />
+		<result property="type" column="type" />
+		<result property="val" column="val" />
+		<result property="payDescription" column="pay_description" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+	</resultMap>
+
+	<sql id="baseColumns">
+		id,
+      `TYPE`,
+      val,
+      create_time,
+      update_time,
+      pay_description
+	</sql>
+
+	<select id="listGroundPromotionPayConfig" parameterType="Long" resultMap="groundPromotionPayConfigResult">
+		select <include refid="baseColumns"></include>
+		from `ground_promotion_pay_config`
+	</select>
+
+</mapper>

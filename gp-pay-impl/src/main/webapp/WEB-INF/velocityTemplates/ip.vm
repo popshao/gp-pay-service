@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+	    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>用户中心 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+  </head>
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+	   #parse("common/header.vm")
+	   <div class="content">
+        <div class="wrap cc">
+            <!-- 用户中心_主体内容_S -->
+            <div class="user_kh_tips mt10 cc" style="height:480px">
+            	<p class="text_pass fl">
+            	您的IP地址是：<b>$!{IP}</b><br>
+				您的User-Agent是：$!{User-Agent}
+				</p>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+    </div>
+    #parse("/common/footer.vm")
+</body>
+</html>

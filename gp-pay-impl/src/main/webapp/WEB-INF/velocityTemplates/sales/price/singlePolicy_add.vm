@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的医药网 - 首页热销管理</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/promotion.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_E -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; <a class="color" href="/sales/price/singlePolicy_main.html">单品量价政策</a></p>
+                </div>
+                	
+                    <h3 class="entire_single_title cc">
+                        <span class="title fl">第一步  添加政策信息</span>
+                    </h3>
+                    
+                    <table class="promotion_table" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td class="tar" width="104">生效日期：</td>
+                        <td class="td_type" width="180">
+                            <input type="text" name="gspBegin" id="gspBegin" pattern="yyyy-MM-dd HH:mm:ss" class="input fl" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd',minDate:'%y-%M-%d'})"/>
+                        </td>
+                        <td class="tar" width="75">失效日期：</td>
+                        <td class="td_type" width="auto">
+                          	<input type="text" name="gspEnd" id="gspEnd" pattern="yyyy-MM-dd HH:mm:ss" class="input fl" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd',minDate:'%y-%M-%d'})"/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="tar">条件：</td>
+                        <td class="td_type">
+                            <div class="sltitem">
+                                <span></span>
+                                <ul>
+                                    <li data-value="1"><a href="javascript:;">购买数量</a></li>
+                                    <li data-value="2"><a href="javascript:;">购买金额</a></li>
+                                </ul>
+                                <input type="hidden" id="gspType" name="gspType">
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                    <div class="promotions_ctn cc" id="promotion_rule_group">
+                    	<div class="promotions_ctn promotions_ctn_product cc" style="display: none;" id="promotion_rule_template">
+                    		 <span class="span">满</span>
+	                         <input class="input" type="text" maxlength="8"  onkeyup="checkNum(this)" name="conditions_value" id="conditions_value_template"/>
+	                         <span class="span gp">元</span>
+	                         <span class="span">商品单价优惠</span>
+	                         <input class="input" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="solution_value" id="solution_value_template"/>
+	                         <span class="span">%</span>
+                        	 <a href="javascript:;" class="btn_del">删除</a>
+                    	</div>
+                    	<div class="promotions_ctn promotions_ctn_top cc" name="promotion_rule">
+                    		 <span class="span">单个商品满</span>
+	                         <input class="input" type="text" maxlength="8" onkeyup="checkNum(this)" name="conditions_value"/>
+	                         <span class="span gp">元</span>
+	                         <span class="span">商品单价优惠</span>
+	                         <input class="input" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="solution_value"/>
+                    		 <span class="span">%</span>
+                    	</div>
+                    </div>
+                    <div class="promotions_ctn cc">
+                        <a href="javascript:;" onclick="addGroup()" class="btn">添加阶梯政策</a>
+                    </div>
+                                        
+                    <h3 class="entire_single_title cc">
+                        <span class="title fl">第二步  添加商品</span>
+                    </h3>
+                    <input type="hidden" id="selectedGoodsId" name="selectedGoodsId"/>
+                    <input type="hidden" id="chooseGoodsType" value="goodsInfo">
+                    <div class="order_detail">
+                        <div class="table">
+                            <table cellpadding="0" cellspacing="0">
+                                <thead class="head">
+                                    <tr class="line">
+                                      	<th>商品名称</th>
+                                        <th>商品规格</th>
+                                        <th>生产厂家</th>
+                                        <th>基价</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="goodsList">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="btn">
+                           <a href="javascript:;" onclick="addGoods();" class="btn_text">+添加商品</a>
+                        </div>
+                      </div>
+                      <input type="hidden" id="selectedEnterpriseId" name="selectedEnterpriseId">
+                      <h3 class="entire_single_title cc">
+                        <span class="title fl">第三步  选择客户</span>
+                        <span class="text fl">*若不指定客户，系统默认全部有采购权限客户可参与该活动。</span>
+                      </h3>
+                      
+                      <div class="order_detail">
+                          <div class="toogle-wrap entire_single_toogle mt10"  id="promotion_member"  >
+                            <div class="mt">
+                              <ul class="tab-mt">
+                                    <li class="coupon-tab-item curr">按单个客户设定</li>
+                                    <li class="coupon-tab-item">按分组进行设定</li>
+                              </ul>
+                            </div>
+                            <div class="tab-box">
+                                <div class="tab-con" style="display: block;">
+                                    <ul id="customerList">
+<!--                                         <li>
+                                            <div class="customer-item item-selected"><b></b>山东天元大药房</div>
+                                        </li> -->
+                                        <li><a href="javascript:void(0)" class="add_pro" id="sel-a" onclick="addCusteomer()">+ 添加客户</a></li>
+                                  </ul>
+                                </div>
+                                
+                                <div class="tab-con" style="display: none;">
+                                    <div class="type-box cc" id="sct_ids">
+                                        <dl>
+                                            <dt class="type-t">业务分组</dt>
+                                            #if($!listType && $!listType.size()>0)
+	                                            #foreach($type in $!listType)
+		                                            <dd>
+					                              	<div class="customer-item" id="sct_$!{type.shopCustomerType.sctId}">
+					                              	<b></b>$!{type.shopCustomerType.sctName}(<span id="count_1_$!{type.shopCustomerType.sctId}">$!{type.bizCount}</span>)
+					                              	</div>
+					                              </dd>
+                                            	#end
+                                            #end
+                                        </dl>
+                                    </div>
+                                    <div class="type-box cc" id="regionIds">
+                                        <dl>
+                                            <dt class="type-t">区域分组</dt>
+                                            #if($!listRegion && $!listRegion.size()>0)
+	                                            #foreach($region in $!listRegion)
+					                            	<dd><div class="customer-item" id="reg_$!{region.supplierRegion.regionId}">
+					                            		<b></b>$!{region.supplierRegion.regionName}(<span id="count_2_$!{region.supplierRegion.regionId}">$!{region.bizCount}</span>)
+					                            	</div></dd>
+				                                #end
+			                                #end
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+
+                          </div>
+                      </div>
+                      <div class="order_detail">
+                          <div class="btn tac">
+                            <a href="javascript:;" onclick="addSinglePolicy()" class="btn_text">保存</a>
+                          </div>
+                      </div>
+              </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    #parse("common/footer.vm")
+    
+    <!-- 添加页面 -->
+    <div class="mask" id="popUpMaskQ"></div>
+    	<div class="dialog w460" id="popUpDIVQ" style="width:1200px;height:540px;">
+	      <div class="head"><span class="dialog-title">选择商品</span><a href="javascript:closePopUpDIV('popUpMaskQ','popUpDIVQ');" class="btn-close"></a></div>  
+	      <div class="con" id="content">
+      	</div>
+    </div>
+    
+    <!-- 添加页面 -->
+    <div class="mask" id="popUpMaskCustomer"></div>
+    <div class="dialog w460" id="popUpDIVCustomer" style="width:1100px;height:490px;">
+      <div class="head"><span class="dialog-title">选择客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');" class="btn-close"></a></div>  
+      <div class="con" id="contentEnterprise">
+      </div>
+    </div>
+    
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/promotion/choose_enterprise.js?v=$!{jscss_version}&t=2" type="text/javascript"></script>
+    <script src="/js/promotion/choose_goods.js?v=$!{jscss_version}&t=1" type="text/javascript"></script>
+    #parse("common/common_script.vm")   	
+    <script>
+    var wwwUrl = '$!{wwwHostAndPort}';
+    var userUrl = '$!{userHostAndPort}';
+    /*设置框架返回按钮*/
+    top.utils.frameBack({
+        handler:function (btn) {
+            location.href = document.referrer;
+        }
+    })
+    $(function(){
+  	  $('.tab-mt >li').click(function(){
+          var index = $(this).index();
+          $(this).addClass('curr').siblings().removeClass('curr');
+          $('.tab-box >div').hide().eq(index).show();
+      })    
+      
+      $('.customer-item').hover(function(){
+	        $(this).addClass('customer-item-hover');
+	        },function(){
+	            $(this).removeClass('customer-item-hover');
+       }); 
+      
+      $(".type-box dd").click(function(){
+          if($(this).find("div").hasClass("item-selected")){
+       	   $(this).find("div").removeClass("item-selected");
+          }else{
+       	   $(this).find("div").addClass("item-selected");
+          }
+      });
+      
+      $("#gspType").change(function(){
+      		$("div[name=promotion_rule]").each(function(i,o){
+     			$(this).find("input[name=conditions_value]").keyup();
+     		});
+      		if($("#gspType").val()==1){
+ 				$("span.gp").html("盒");
+ 			}else{
+ 				$("span.gp").html("元");
+ 			}
+      });
+      $("#gspType").change();
+      
+	  $("body tbody tr").unbind("mouseover");
+    })
+    </script>
+    <script>
+    
+    function addSinglePolicy(){
+    	if(checkSinglPolicy()){
+    		return;
+    	}
+    	var gspBegin = $("#gspBegin").val();
+    	var gspEnd = $("#gspEnd").val();
+    	var gspType = $("#gspType").val();
+   	 	var gId = $("#goodsList tr").first().attr("id").replace("tr_","");
+   	 	
+   		//获取已选商品ID
+   		var eIds = "";
+   		var sct_ids = "";
+   		var regionIds="";
+   		var type = 0;
+   	    
+   		//按单个客户设定的时候
+   		if($("#promotion_member").find("li").first().hasClass("curr")){
+   			type = 1;
+   			//已选择客户ID
+   			$("#customerList li").not(":first").each(function(){
+   				eIds += $(this).attr("value")+",";
+   			});
+   			
+   			eIds = eIds.substring(0,eIds.length-1);
+   		}else{
+   			type = 2;
+   			//已选择业务分组
+   			$("#sct_ids div.item-selected").each(function(i,o){
+   				sct_ids += $(this).attr("id").replace("sct_","")+",";
+   			});
+   			sct_ids = sct_ids.substring(0,sct_ids.length-1);
+   			
+   			//已选择区域类型
+   			$("#regionIds div.item-selected").each(function(i,o){
+   				regionIds += $(this).attr("id").replace("reg_","")+",";
+   			});
+   			regionIds = regionIds.substring(0,regionIds.length-1);
+   		}
+   	    
+   		var conditions = "";
+   		var solutions = "";
+   		var imgs = {};
+   		$("div[name=promotion_rule]").each(function(i,o){
+   			conditions += $(this).find("input[name=conditions_value]").val()+",";
+   			solutions += $(this).find("input[name=solution_value]").val()+",";
+   		});
+   		conditions = conditions.substring(0,conditions.length-1);
+   		solutions = solutions.substring(0,solutions.length-1);
+   		
+   		var data = {
+   				gspBegin:gspBegin,
+   				gspEnd:gspEnd,
+   				gspType:gspType,
+   				gId:gId,
+   				eIds:eIds,
+   				sct_ids:sct_ids,
+   				regionIds:regionIds,
+   				conditions:conditions,
+   				solutions:solutions
+   	    		};
+   		
+   		$.ajax({
+   	        url: "/sales/price/singlePolicy_saveOrUpdate.html",
+   	        type: "POST",
+   	        data: data,
+   	        dataType: "json",
+   	        cache: false,
+   	        success: function (result) {
+   	            if (result.success == false) {
+   	            	top.ue.msg(result.message);
+   	            }else{
+                    top.utils.frameBackDel();
+   	            	window.location.href = "/sales/price/singlePolicy_main.html";
+   	            	window.event.returnValue = false; 
+   	            }
+   	        }
+   	    });
+    }
+    
+  //添加组
+    function addGroup(){
+    	if($("div[name=promotion_rule]").length==10){
+    		top.ue.msg("政策最多只能添加十组");
+    		return;
+    	}
+    	var promotion_rule_template = $("#promotion_rule_template");
+    	var pro_rule__clone = promotion_rule_template.clone();
+    	pro_rule__clone.removeAttr("id").attr("name","promotion_rule").show()
+    	pro_rule__clone.find("input").removeAttr("id");
+    	pro_rule__clone.find("div").removeAttr("id");
+    	$("#promotion_rule_group").append(pro_rule__clone);
+    	pro_rule__clone.find("a").last().click(function(){
+     		var  p = this.parentNode;
+     		p.parentNode.removeChild(p);
+     	});
+    }
+  
+  	function checkSinglPolicy(){
+  		var gspBegin = $("#gspBegin").val();
+    	var gspEnd = $("#gspEnd").val();
+    	var gspType = $("#gspType").val();
+   	 	var gId_tr = $("#goodsList tr");
+   	 	
+   	 	if(gspBegin=="" || gspEnd==""){
+	   	 	top.ue.msg("生效时间或失效时间不能为空");
+			return true;
+   	 	}
+ 	 	
+ 	 	if(gspBegin.replace(/[^\d]/g,'') > gspEnd.replace(/[^\d]/g,'')){
+ 	 		top.ue.msg("生效时间必须小于失效时间！");
+			return true;
+ 	 	}
+ 	 	
+   	 	if(gspType==""){
+	   	 	top.ue.msg("政策条件类型不能为空！");
+			return true;
+   	 	}
+   	 	
+   	 	var conditions_type = 0;
+   	 	var solutions_type = 0;
+   		$("div[name=promotion_rule]").each(function(i,o){
+   			var conditions = $(this).find("input[name=conditions_value]").val();
+   			var solutions = $(this).find("input[name=solution_value]").val();
+   			if($.trim(conditions) ==""){
+   				conditions_type = 1;
+   				return false;
+   			}
+   			if($.trim(solutions) ==""){
+   				solutions_type = 1;
+   				return false;
+   			}
+   			conditions = parseFloat(conditions);
+   			solutions = parseFloat(solutions);
+   			if(i!=0){
+   				if(conditions<=parseFloat($("div[name=promotion_rule]").eq(i-1).find("input[name=conditions_value]").val())){
+   					$(this).find("input[name=conditions_value]").val("");
+   					conditions_type = 2;
+   					return false;
+   				}
+				if(solutions<=parseFloat($("div[name=promotion_rule]").eq(i-1).find("input[name=solution_value]").val())){
+					$(this).find("input[name=solution_value]").val("");
+					solutions_type = 2;
+					return false;
+   				}
+   			}
+   		});
+   		
+   		if(conditions_type ==1){
+   			dialog({
+	            title: "提示信息",
+	            content: "政策条件不能为空！",
+	            width: 300
+	        });
+			return true;
+   		}else if(conditions_type ==2){
+   			top.ue.msg("政策条件必须递增设置！");
+			return true;
+   		}
+   		
+   		if(solutions_type ==1){
+   			top.ue.msg("政策优惠不能为空！");
+			return true;
+   		}else if(solutions_type ==2){
+   			top.ue.msg("政策优惠必须递增设置！");
+			return true;
+   		}
+   		
+   		if(gId_tr.length==0){
+   			top.ue.msg("商品不能为空！");
+			return true;
+   		}
+
+
+   		var gId = $("#goodsList tr").first().attr("id").replace("tr_","");
+   	    //验证预售商品
+   		var presaleGoodsInfo = checkIfContainPresaleGoods(gId);
+   		if(presaleGoodsInfo){
+   			var a_html = "";
+   			var a_title = "以下商品正在预售中，当前不能添加";
+   			$.each(presaleGoodsInfo,function(i,o){
+   				  var gNameUrl = "http://"+wwwUrl+"/item/"+o.gid+".html";
+   				  a_html+= "<a style=\"color: #3b73af; text-decoration: underline;\" target=\"_blank\" href="+gNameUrl+">"+o.gname+"</a>&nbsp;&nbsp;";
+   			});
+
+   			top.rui.dynamic({
+   				title: a_title,
+   				content:a_html,
+   				area:['520px','300px'],
+   				btn:['确定'],
+   				yes:function (idx,lay) {
+//   					 $("#goodsList tr input[type=checkbox]").each(function(i,o){
+//   		        		  $(this)[0].checked = false;
+//   		        	  });
+//   		        	  $.each(presaleGoodsInfo,function(i,o){
+//   		        		  $("#goodsList tr[id="+o.gid+"]").find("input[type=checkbox]")[0].checked = true;
+//   		        	  });
+
+   		        	  top.ue.close(idx);
+   	            }
+   			})
+
+   			return true;
+   		}
+  	}
+
+    //验证是否有预售商品
+  	function checkIfContainPresaleGoods(gIds){
+  		var errorInfo;
+  	    $.ajax({
+  	      url: "/sales/price/single/checkIfContainPresaleGoods.html",
+  	      type: "POST",
+  	      data: {"gIds":gIds},
+  	      cache: false,
+  	      async: false,
+  	      success: function (result) {
+  	    	  if(result.success && result.data){
+  	    		  errorInfo = result.data;
+  	    	  }else{
+  	    		  errorInfo = false;
+  	    	  }
+  	      },
+  	      error: function(){
+  	         top.layer.msg("系统出现异常！");
+  	      }
+  	  });
+
+  	  return errorInfo;
+  	}
+  	
+    function checkNum(event){
+  	  var gspType = $("#gspType").val();
+  	  var value = $(event).val();
+  	  if(gspType ==1){
+  		  value=value.replace(/[^\d]/g,'');
+  	  }else{
+  		  value=value.replace(/[^\d.]/g,'');
+  	  }
+  	 
+  	  $(event).val(value);
+    }
+    </script>
+  </body>
+</html>

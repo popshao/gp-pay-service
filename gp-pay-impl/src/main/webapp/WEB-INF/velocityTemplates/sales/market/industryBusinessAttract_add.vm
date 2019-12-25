@@ -1,0 +1,599 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的医药网 - 发布招商信息</title>
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}"/>
+       
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+		  #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 市场管理 &gt; <a class="color" href="/sales/market/businessAttract/main.html">招商管理</a> &gt; 发布招商</p>
+                </div>
+                
+                <div class="order_query order cc">
+                
+                    <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td valign="top" class="tar" width="150"><span class="red">*</span>功效关键字：</td>
+                        <td width="auto">
+                        	<dl class="choose-box">
+                            	<dt class="cc">
+                                	<ul class="choose cc" id="appandGroup">
+                                    </ul>
+                                </dt>
+                                <dd class="cc">
+                                	<ul class="choose cc">
+                                #if($!{busfuncList} && $!busfuncList.size()>0)	
+                                	#foreach($!bufunc in $!busfuncList)
+                                    	<li class="addGroup lst_$!{bufunc.id}" ist="1" name="$!{bufunc.funName}" val="$!{bufunc.id}">
+                                    		$!{bufunc.funName}
+                                    	</li>
+                                    #end	
+                                #end 
+                                    </ul>
+                                    <div class="fl user_cx_tips mt5">提示：以上分类请选择贴近商品类型的标签，提供前台代理人员搜索，可以搜索到给商品的招商信息。</div>
+                                </dd>
+                            </dl>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class="tar"><span class="red">*</span>商品名称：</td>
+                        <td>
+                        	<table class="order_table_inside" border="0" cellpadding="0" cellspacing="0">
+                      			<tr>
+			                        <td width="200"><input class="input input-170 b_gname" onkeyup='subName(this,30);' type="text" /></td>
+			                        <td class="tar" width="150"><span class="red">*</span>商品规格：</td>
+			                        <td width="215"><input class="input input-170 gspecifications" onkeyup='subName(this,30);' type="text" /></td>
+			                        <td class="tar" width="150"><span class="red">*</span>批准文号：</td>
+			                        <td width="auto"><input class="input input-170 glicenseNo" onkeyup='subName(this,30);' type="text" /></td>
+			                	</tr>
+                        	</table>
+                      	</td> 
+                      </tr>
+                      <tr>
+                        <td class="tar"><span class="red">*</span>生产厂家：</td>
+                        <td>
+                        	<table class="order_table_inside" border="0" cellpadding="0" cellspacing="0">
+                      			<tr>
+			                        <td width="200"><input class="input input-170 b_ename" type="text" onkeyup='subName(this,30);' value="#if($!{eName})$!{eName}#end"/></td>
+			                        <td class="tar" width="150"><span class="red">*</span>所属分类：</td>
+			                        <td class="td_type" width="215">
+			                        	<div class="sltitem">
+			                                <span></span>
+			                                <ul>
+			                                    <li data-value="1"><a href="javascript:;">OTC</a></li>
+			                                    <li data-value="2"><a href="javascript:;">保健品</a></li>
+			                                    <li data-value="3"><a href="javascript:;">处方药</a></li>
+			                                    <li data-value="4"><a href="javascript:;">西药产品</a></li>
+			                                    <li data-value="5"><a href="javascript:;">药品包装</a></li>
+			                                    <li data-value="6"><a href="javascript:;">药妆</a></li>
+			                                    <li data-value="7"><a href="javascript:;">医疗设备</a></li>
+			                                    <li data-value="8"><a href="javascript:;">诊断试剂</a></li>
+			                                    <li data-value="9"><a href="javascript:;">中间体</a></li>
+			                                    <li data-value="10"><a href="javascript:;">中药材</a></li>
+			                                    <li data-value="11"><a href="javascript:;">中药产品</a></li>
+			                                    <li data-value="12"><a href="javascript:;">计生用品</a></li>
+			                                    <li data-value="13"><a href="javascript:;">其他</a></li>
+			                                </ul>
+			                                <input type="hidden" id="categoryId"/>
+			                                
+			                            </div>
+			                        </td>
+			                        <td class="tar" width="150"><span class="red">*</span>零售价：</td>
+			                        <td width="auto"><input class="input input-170 gprice" type="text" onkeyup='keyPrice(this)' /></td>
+                      	    	</tr>
+                        	</table>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="tar" valign="top"><span class="red">*</span>产品图片：</td>
+                        <td>
+                        	<div class="cc">
+	                        	<a href="javascript:;" class="fl btn" id="uploadPic" isc="1">选择文件</a>
+	                            <div class="fl jsje-ctn">
+	                                <div class="fl jsje-tips-img jsje-tips-show">
+	                                    <div class="jsje-tips">
+	                                        <div class="jsje-tips-top"></div>
+	                                        <div class="jsje-tips-ctn">最多可上传2张图片</div>
+	                                    </div>
+	                                </div>
+	                            </div>
+                            </div>
+                            <div class="cx_file mt10" id="pivDiv" con="0" style="display:none">
+                            	<ul class="file cc" id="file_piv_div">
+                                   
+                                </ul>
+                            </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar"><span class="red">*</span>产品招商区域：</td>
+                        <td>
+                        	<dl class="choose-box">
+                            	<dt class="cc">
+                                	<ul class="choose cc" id="appandSite">
+                                    </ul>
+                                </dt>
+                                <dd class="cc">
+                                	<ul class="choose cc">
+                                		<li class="addquanguoSite loc_0" ioc="1" lname="全国" val="0">全国</li>
+                                	#if($!{locList} && $!locList.size()>0)
+                                		#foreach($!loc in $!{locList})
+                                    	<li class="addSite loc_$!{loc.lId}" ioc="1" lname="$!{loc.lName}" val="$!{loc.lId}">$!{loc.lName}</li>
+                                    	#end
+                                    #end
+                                    </ul>
+                                    <div class="fl user_cx_tips mt5">提示：该商品的招商区域有哪些，设置后，方便代理人员查看。</div>
+                                </dd>
+                            </dl>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">产品说明书：</td>
+                        <td>
+                        	<textarea class="textarea ge_content" onkeyup='subNote(this);' name="" id="baUse" cols="30" rows="10" placeholder="请填写商品功能说明，比如主治、功效、成份等信息，方便代理商了解商品的基本信息，最多输入120字"></textarea>
+                        	<div class="text_count tar ge_content_error">0/120 字</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">对代理商要求：</td>
+                        <td>
+                        	<textarea class="textarea ge_content" onkeyup='subNote(this);' name="" id="require" cols="30" rows="10" placeholder="请在这里写出对代理人员的要求或者其他信息，最多输入120字"></textarea>
+                        	<div class="text_count tar ge_content_error">0/120 字</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">可提供的支持：</td>
+                        <td>
+                        	<textarea class="textarea ge_content" onkeyup='subNote(this);'  name="" id="support" cols="30" rows="10" placeholder="请在这里写出对代理人员的要求或者其他信息，最多输入120字"></textarea>
+                        	<div class="text_count tar ge_content_error">0/120 字</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign="top" class="tar">联系方式：</td>
+                        <td>
+                        	<textarea class="textarea ge_content" onkeyup='subNote(this);'  name="" id="connect" cols="30" rows="10" placeholder="请在这里写出对代理人员的要求或者其他信息，最多输入120字"></textarea>
+                        	<div class="text_count tar ge_content_error">0/120 字</div>
+                        </td>
+                      </tr>
+                   </table>
+                   
+                   <div class="btn tac">
+                        <a href="javascript:submit();" class="btn">确认发布</a>
+                    </div>
+
+                </div>
+                
+            <!-- 用户中心_主体内容_E -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+    </div>
+	#parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+    
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+   	#parse("common/common_script.vm")
+    <script>
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+            render:true,
+            handler:function (btn) {
+                location.href = document.referrer;
+            }
+        })
+        $(function(){
+    	   	$.sltitem.select("gname", "$!{gname}");
+
+            $(".jsje-tips-show").mouseenter(function(){
+                $(this).find(".jsje-tips").show();
+            });
+
+            $(".jsje-tips-show").mouseleave(function(){
+                $(this).find(".jsje-tips").hide();
+            });
+            
+          	//添加组
+            $(".addGroup").click(function(){
+            	var ist = $(this).attr("ist");
+            	if(ist == 0){
+            		return false;
+            	}
+            	var name = $(this).attr("name");
+            	var val = $(this).attr("val");
+                $(this).attr("class","on lst_"+val);
+                
+                $("#appandGroup").append("<li name='group_list' id='dlst_"+val+"' class='groupList' na='"+val+"'>"+name+"<a href='javascript:;' onclick='closeGroup(\"lst_"+val+"\");' class='fr btn-remove'></a></li>");
+                
+                $(this).attr("ist",0);
+            });
+          	
+          //添加省
+            $(".addSite").click(function(){
+            	var ist = $(this).attr("ioc");
+            	if(ist == 0){
+            		return false;
+            	}
+            	var name = $(this).attr("lname");
+            	var val = $(this).attr("val");
+                $(this).attr("class","on loc_"+val);
+                
+                $("#appandSite").append("<li id='dloc_"+val+"' name='site_list' class='s_list' na='"+val+"'>"+name+"<a href='javascript:;' onclick='closeSite(\"loc_"+val+"\");' class='fr btn-remove'></a></li>");
+                
+                $(".addquanguoSite").attr("ioc","0");
+                $(this).attr("ioc",0);
+            });
+          
+          //添加全国
+            $(".addquanguoSite").click(function(){
+            	var ist = $(this).attr("ioc");
+            	if(ist == 0){
+            		return false;
+            	}
+            	var name = $(this).attr("lname");
+            	var val = $(this).attr("val");
+                $(this).attr("class","on loc_"+val);
+                
+                $("#appandSite").append("<li id='dloc_"+val+"' name='site_list' class='s_list' na='"+val+"'>"+name+"<a href='javascript:;' onclick='closequanguoSite(\"loc_"+val+"\");' class='fr btn-remove'></a></li>");
+                
+                $(".addSite").attr("ioc",0);
+                $(this).attr("ioc",0);
+            });
+          	
+            var pCount = 0;
+            var uploadPic = $("#uploadPic");
+            new AjaxUpload(uploadPic,{
+                action: "/cdn/imageInfo_upload.html",
+                name: 'file_path',
+                responseType:"json",
+                onSubmit : function(file, ext){
+                	pCount = $("#pivDiv").attr("con");
+                	var isc = uploadPic.attr("isc");
+                	if(isc != 1){
+                		return false;
+                	}
+                	
+                	if(pCount > 1){
+                		top.ue.msg("最多可上传2张图片！");
+                		return false;
+            		}
+                	if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+                        ext_str = ext;
+                    } else {
+                    	top.ue.msg("非图片文件格式,请重传！");
+                        return false;
+                    }
+                	uploadPic.attr("isc",0);
+                    $.showLoad();
+                },
+                onComplete: function(file, result){
+                	if (result.success == false) {
+                		if(result.message == "outofsize"){
+                			top.ue.msg("文件过大，无法上传！");
+                		}else if(result.message == "error"){
+                			top.ue.msg("文件过大，无法上传！");
+                		}
+                		uploadPic.attr("isc",1);
+                		return false;
+                		
+                	}else{
+                		pCount++;	
+                		if(pCount == 1){
+                			var _html = "<li class='pic1' name='pic_list'>";
+                				_html += "<div class='fl img'><img width='100' height='100' src='"+result.data.picUrl+"'></div>";
+                				_html += "<span class='fl text pid'>"+result.data.id+"</span>";
+                				_html += "<a href='javascript:closeImg(1);' class='btn-delete'>删除</a></li>";
+                			$("#file_piv_div").append(_html);	
+                		}
+                		if(pCount == 2){
+                			var _html = "<li class='none pic2' name='pic_list'>";
+                				_html += "<div class='fl img'><img width='100' height='100' src='"+result.data.picUrl+"'></div>";
+                				_html += "<span class='fl text pid'>"+result.data.id+"</span>";
+                				_html += "<a href='javascript:closeImg(2);' class='btn-delete'>删除</a></li>";
+                			$("#file_piv_div").append(_html);	
+                		}
+                		
+                		uploadPic.attr("isc",1);
+                		$("#pivDiv").attr("con", pCount);
+                		$("#pivDiv").show();
+                	}
+                	
+                    $.hideLoad();
+                }
+            });
+
+        })
+            function closeGroup(cla){
+          		$("."+cla).attr("class","addGroup " + cla);
+          		$("."+cla).attr("class");
+          		$("."+cla).attr("ist","1");
+          		$("#d" + cla).remove();
+          	}
+        
+	        function closeSite(cla){
+	      		$("."+cla).attr("class","addSite " + cla);
+	      		$("."+cla).attr("class");
+	      		$("."+cla).attr("ioc","1");
+	      		if($("li[name=site_list]").length <= 1){
+	      			$(".addquanguoSite").attr("ioc","1");
+            	}
+	      		$("#d" + cla).remove();
+	      	}
+	        function closequanguoSite(cla){
+	      		$("."+cla).attr("class","addquanguoSite " + cla);
+	      		$("."+cla).attr("class");
+	      		$("."+cla).attr("ioc","1");
+	      		$(".addSite").attr("ioc","1");
+	      		$("#d" + cla).remove();
+	      	}
+	        function closeImg(id){
+	        	var con = $("#pivDiv").attr("con");
+	        	con = con - 1;
+	        	if(con <= 0){
+	        		con = 0;
+	        	}
+	      		if(id == 1){
+	      			$(".pic1").remove();
+	      			if($("li[name=pic_list]").length >= 1){
+	      				$(".pic2 a").attr("href","javascript:closeImg(1);");
+	             		$(".pic2").attr("class","pic1");
+	            	}
+	      		}else if(id == 2){
+	      			$(".pic2").remove();
+	      		}
+	      		if(con <= 0){
+	      			$("#pivDiv").hide();
+	      		}
+	      		$("#pivDiv").attr("con",con);
+	      		return;
+	      	}
+         	function keyPrice(th){//   /\D|^0/g
+         	    var regStrs = [
+         	        ['^0(\\d+)$', '$1'], //禁止录入整数部分两位以上，但首位为0
+         	        ['[^\\d\\.]+$', ''], //禁止录入任何非数字和点
+         	        ['\\.(\\d?)\\.+', '.$1'], //禁止录入两个以上的点
+         	        ['^(\\d+\\.\\d{2}).+', '$1'] //禁止录入小数点后两位以上
+         	    ]; 
+         	
+         	    for(i=0; i<regStrs.length; i++){
+         	        var reg = new RegExp(regStrs[i][0]);
+         	        th.value = th.value.replace(reg, regStrs[i][1]);
+         	        if(th.value > 99999.99){
+         	        	th.value = 99999.99;
+         	        }
+         	        
+         	       var lengh = th.value.length;
+         	       if(lengh == 1){
+         	    	   if(th.value == "."){
+         	    		  th.value = "0."; 
+         	    	   }
+         	       }
+         	    }
+         	    
+         	}
+         	
+       	 	//截取2000字符
+        	function subNote(e){
+       		 	var pattern = ""; 
+        		var limitNum = 120;
+        		var remain = $(e).val().length;
+        		if(remain > 120){
+        			var now = $(e).val().substr(0,120);
+        			$(e).val(now);
+        			pattern = "120/120 字";
+        			//return false;
+        		}else{
+        			var result = limitNum - remain;
+        			pattern = remain + '/120 字';
+        		}
+        		$(e).siblings(".ge_content_error").html(pattern);
+        	} 
+       	 	
+       	 	//限制字符长度
+        	function subName(e,count){
+       		 	var pattern = ""; 
+        		var limitNum = count;
+        		var remain = $(e).val().length;
+        		if(remain > count){
+        			var now = $(e).val().substr(0,count);
+        			$(e).val(now);
+        			pattern = count + "/"+count+" 字";
+        			//return false;
+        		}else{
+        			var result = limitNum - remain;
+        			pattern = remain + '/"+count+" 字';
+        		}
+        		//$(e).siblings(".ge_content_error").html(pattern);
+        	} 
+       	 	
+            function submit(){
+            	var fountList = "";//关键字列表
+            	var c = 0;
+            	if($("li[name=group_list]").length <= 0){
+            		top.ue.msg("请选择功效关键字！");
+            		return;
+            	}
+
+
+            	//关键字
+                $(".groupList").each(function (i, e) {//56,57,50
+                	if(c == 0){
+                		fountList += $(this).attr("na");
+                	}else{
+                		fountList += "," + $(this).attr("na");
+                	}
+                	c++;
+                });
+            	
+
+                
+            	var gname = delHtmlTag($(".b_gname").val());
+            	if(gname == ""){
+            		top.ue.msg("请填写商品名称！");
+            		return;
+            	}
+            	var gspecifications = delHtmlTag($(".gspecifications").val());
+            	if(gspecifications == ""){
+            		top.ue.msg("请填写商品规格！");
+            		return;
+            	}
+            	var glicenseNo = delHtmlTag($(".glicenseNo").val());
+            	if(glicenseNo == ""){
+            		top.ue.msg("请填写批准文号！");
+            		return;
+            	}
+            	var ename = delHtmlTag($(".b_ename").val());
+            	if(ename == ""){
+            		top.ue.msg("请填写生产厂家！");
+            		return;
+            	}
+             	var categoryId = $("#categoryId").val();
+             	if(categoryId == ""){
+             		top.ue.msg("请选择所属分类！");
+            		return;
+            	}
+            	var gprice = $(".gprice").val();
+            	if(gprice == ""){
+            		top.ue.msg("请填写零售价！");
+            		return;
+            	}
+            	if($("li[name=pic_list]").length <= 0){
+            		top.ue.msg("请上传商品图片！");
+            		return;
+            	}
+            	if($("li[name=pic_list]").length > 2){
+            		top.ue.msg("最多只能上传张图片！");
+            		return;
+            	}
+            	var pic1 = "";
+            	var pic2 = "";
+             	if($("li[name=pic_list]").length >= 1){
+             		pic1 = $(".pic1 .pid").text();
+            	}
+             	if($("li[name=pic_list]").length == 2){
+             		pic2 = $(".pic2 .pid").text();
+            	}
+            	if($("li[name=site_list]").length <= 0){
+            		top.ue.msg("请选择产品招商区域！");
+            		return;
+            	}
+                //所属省
+                var attractArea = "";
+                var sCon = 0;
+                $(".s_list").each(function (i, e) {//56,57,50
+                	if($(this).attr("na") == 0){
+                		attractArea = "0";
+                		return true;
+                	}else{
+                		if(sCon == 0){
+                			attractArea += $(this).attr("na");
+                    	}else{
+                    		attractArea += "," + $(this).attr("na");
+                    	}
+                	}
+                	sCon++;
+                });             	
+             	
+            	var baUse = delHtmlTag($("#baUse").val());//商品说明
+            	var require = delHtmlTag($("#require").val());//对代理商要求
+            	var support = delHtmlTag($("#support").val());//可提供支持
+            	var connect = delHtmlTag($("#connect").val());//对代理商要求
+            	
+            	var params ={
+           			gname:gname,
+           			baKeyword:fountList,
+           			gspecifications:gspecifications,
+           			glicenseNo:glicenseNo,
+           			ename:ename,
+           			categoryId:categoryId,
+           			gprice:gprice,
+           			gpic:pic1,
+           			gpic2:pic2,
+           			attractArea:attractArea,
+           			baUse:baUse,
+           			require:require,
+           			support:support,
+           			support:support,
+           			connect:connect
+                }
+            	
+            	
+        		var dialog = $("#popUpDIVQ");
+                    $.ajax({
+                        url: "/sales/market/businessAttract/add_conAct.html",
+                        type: "POST",
+                        data: {"params" : $.toJSON(params)},
+                        cache: false,
+                        success: function (result) {
+            	            if (result.success == false) {
+            	            	window.dialog({
+        		                       title: "提示信息",
+        		                       content: result.message,
+        		                       width: 300
+        		                   });
+            	            }else{
+            	            	top.ue.alert({
+					                title: '提示信息',
+					                content: "招商信息发布成功！",
+					                end: function() {
+					                    top.utils.frameBackDel();
+					                	window.location.href = "/sales/market/businessAttract/main.html";
+					                }
+					            })
+            	            }
+                        }
+                    });
+            } 
+            
+            function delHtmlTag(str){
+            	return str.replace(/<[^>]+>/g,"");//去掉所有的html标记
+            }
+    </script>
+  </body>
+</html>

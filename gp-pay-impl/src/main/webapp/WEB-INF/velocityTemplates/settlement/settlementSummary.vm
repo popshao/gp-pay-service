@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>结算信息汇总-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/rc-jsxxmx.css?v=$!{jscss_version}">
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+    <STYLE TYPE="text/CSS">
+        .zero-display{
+            font-size: 16px !important;
+            margin-bottom: 5px;
+        }
+    </STYLE>
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/purchase/index.html" class="color">销售中心</a>&gt; 财务模块 &gt; 结算信息汇总</p>
+                    </div>
+                    <div class="rocky-jsxxhz">
+                        <div class="rc-com">
+                            <div class="rc-je-tb">
+                                <div class="je-line small">
+                                    <p><img src="/image/question.jpg" data-tips="true" data-tips-title="待结款金额：待结款结算单金额总计<br>结算周期：T（签收日期）+1工作日核销结算<br>平台补贴优惠券每月核销结算"><span>待结算金额 (元)：<a class="rc-price">$!{waitAmount}</a></span></p>
+                                    <p><img src="/image/question.jpg" data-tips="true" data-tips-title="结款中金额：已向银行、第三方支付平台申请付款<br>到账时间：具体以银行、第三方支付平台到账时间为准">结款中金额 (元)：<span><a class="rc-price">$!{settlementAmount}</a></span></p>
+                                    <p class="last-cell"><img src="/image/question.jpg" data-tips="true" data-tips-title="补贴金额：已经结算的平台承担的优惠券金额、随机立减金额总计"><span>已结补贴金额 (元)：<a class="rc-price">$!{subsidyAmount}</a></span>
+                                    </p>
+                                    <a id="ruleTips" class="tips" href="javascript:void(0);">结算规则</a>
+                                </div>
+                                <div class="clear-fix"></div>
+                            </div>
+                        </div>
+
+                        <div class="date-sel">
+                            <form action="" method="post" id="searchForm" name="searchForm">
+                                <input type="hidden" name="pi" value="$!pi">
+                            <div class="fl">
+                                <label>结算单生成日期：</label>
+                                <input type="text" name="stAddTimeBegin" id="stAddTimeBegin" value="$!stAddTimeBegin" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'stAddTimeEnd'+'\\'+'\')}'})" class="w-txt w130" style="width:180px;">
+                                <i class="slt_t">—</i>
+                                <input type="text" name="stAddTimeEnd" id="stAddTimeEnd" value="$!stAddTimeEnd" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'stAddTimeBegin'+'\\'+'\')}'})" class="w-txt w130" style="width:180px;">
+                            </div>
+                            </form>
+                            <div class="clear-fix"></div>
+                        </div>
+
+                        <div class="order_query">
+                            <div class="btn tac">
+                                <a href="javascript:searchPager('/sales/settlement/settlementSummary.html',false);" class="btn_query">查询</a>
+                                <a href="javascript:searchPager('/sales/settlement/settlementSummary.html',true);" class="btn_query btn_export btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+                            </div>
+                            <div class="btn">
+                                <a href="javascript:editItem();" class="btn_query btn_export btn-line mr7">导出结算信息</a>
+                                <a href="javascript:editItemOrder();" class="btn_query btn_export btn-line mr7">导出订单明细</a>
+                                <a href="javascript:editItemGoods();" class="btn_query btn_export btn-line mr7">导出商品明细</a>
+                            </div>
+                        </div>
+
+                        <div class="rc-table-box">
+                            <div class="rc-tab">
+                                <p style="top: -25px;">＊金额单位均为人民币（元）</p>
+                                <div class="clear-fix"></div>
+                            </div>
+                            <div class="scroller-box">
+                                <div class="scroller-box-bb">
+                                    <div class="rc-content show" style="width: 100%">
+                                        <table style="width: 100%">
+                                            <tr class="thead">
+                                                <th class="short">结算单<br/>生成日期</th>
+                                                <th class="short">中金<br/>订单金额</th>
+                                                <th class="short">易宝<br/>订单金额</th>
+                                                <th class="short">支付宝<br/>订单金额</th>
+                                                <th class="short">微信<br/>订单金额</th>
+                                                <th class="short">余额<br/>订单金额</th>
+                                                <th class="short">优惠券<br/>平台应补贴金额</th>
+                                                <th class="short">随机立减<br/>平台应补贴金额</th>
+                                                <th class="short">总计<br/>应收金额</th>
+                                                <th class="short">操作</th>
+                                            </tr>
+                                            <tbody>
+                                                #if($settlementList && $settlementList.size()!=0)
+                                                    #foreach($item in $settlementList)
+                                                        #set($pageOrder = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+                                                    <tr>
+                                                        <td class="right">$!item.createTime</td>
+                                                        <td>
+                                                            #if($!item.zjUnit && $!item.zjUnit.amount > 0)
+                                                                <p class="t-ud"><a onclick="openWithTab('zjddje','中金订单金额查看','/sales/settlement/summyOrderDetail.html?stSn=$!utils.urlEncode($!{item.zjUnit.itemSn})&payType=1&stype=1&addTimeBegin=$!utils.urlEncode($!{item.createTime})&addTimeEnd=$!utils.urlEncode($!{item.createTime})&amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{item})})',{fstBread:'结算信息汇总',scdBread:'查看明细'})" style="text-decoration:underline; color:blue;cursor: pointer;" >$!utils.priceFormart($!item.zjUnit.amount)</a></p>
+                                                                <p>($!item.zjUnit.status)</p>
+                                                            #else
+                                                                <p class="zero-display">0.00</p>
+                                                            #end
+                                                        </td>
+                                                        <td width="100px">
+                                                            #if($!item.ybUnit  && $!item.ybUnit.amount > 0)
+                                                                <p class="t-ud"><a onclick="openWithTab('ybddje','易宝订单金额查看','/sales/settlement/summyOrderDetail.html?stSn=$!utils.urlEncode($!{item.ybUnit.itemSn})&payType=4&stype=1&addTimeBegin=$!utils.urlEncode($!{item.createTime})&addTimeEnd=$!utils.urlEncode($!{item.createTime})&amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{item})})',{fstBread:'结算信息汇总',scdBread:'查看明细'})" style="text-decoration:underline; color:blue;cursor: pointer;" >$!utils.priceFormart($!item.ybUnit.amount)</a></p>
+                                                                <p>($!item.ybUnit.status)</p>
+                                                            #else
+                                                                <p class="zero-display">0.00</p>
+                                                            #end
+                                                        </td>
+                                                        <td width="100px">
+                                                            #if($!item.zfbUnit  && $!item.zfbUnit.amount > 0)
+                                                                <p class="t-ud"><a onclick="openWithTab('zfbddje','支付宝订单金额查看','/sales/settlement/summyOrderDetail.html?stSn=$!utils.urlEncode($!{item.zfbUnit.itemSn})&payType=3&stype=1&addTimeBegin=$!utils.urlEncode($!{item.createTime})&addTimeEnd=$!utils.urlEncode($!{item.createTime})&amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{item})})',{fstBread:'结算信息汇总',scdBread:'查看明细'})"  style="text-decoration:underline; color:blue;cursor: pointer;" >$!utils.priceFormart($!item.zfbUnit.amount)</a></p>
+                                                                <p>($!item.zfbUnit.status)</p>
+                                                            #else
+                                                                <p class="zero-display">0.00</p>
+                                                            #end
+                                                        </td>
+                                                        <td width="100px">
+                                                            #if($!item.wxUnit && $!item.wxUnit.amount > 0)
+                                                                <p class="t-ud"><a onclick="openWithTab('wxddje','微信订单金额查看','/sales/settlement/summyOrderDetail.html?stSn=$!utils.urlEncode($!{item.wxUnit.itemSn})&payType=5&stype=1&addTimeBegin=$!utils.urlEncode($!{item.createTime})&addTimeEnd=$!utils.urlEncode($!{item.createTime})&amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{item})})',{fstBread:'结算信息汇总',scdBread:'查看明细'})" style="text-decoration:underline; color:blue;cursor: pointer;"  >$!utils.priceFormart($!item.wxUnit.amount)</a></p>
+                                                                <p>($!item.wxUnit.status)</p>
+                                                            #else
+                                                                <p class="zero-display">0.00</p>
+                                                            #end
+                                                        </td>
+                                                        <td width="100px">
+                                                            #if($!item.wlUnit && $!item.wlUnit.amount > 0)
+                                                                <p class="t-ud"><a onclick="openWithTab('yeddje','余额订单金额查看','/sales/settlement/summyOrderDetail.html?stSn=$!utils.urlEncode($!{item.wlUnit.itemSn})&payType=8&stype=1&addTimeBegin=$!utils.urlEncode($!{item.createTime})&addTimeEnd=$!utils.urlEncode($!{item.createTime})&amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{item})})',{fstBread:'结算信息汇总',scdBread:'查看明细'});"  style="text-decoration:underline; color:blue;cursor: pointer;"  >$!utils.priceFormart($!item.wlUnit.amount)</a></p>
+                                                                <p>($!item.wlUnit.status)</p>
+                                                            #else
+                                                                <p class="zero-display">0.00</p>
+                                                            #end
+                                                        </td>
+                                                        <td width="100px">
+                                                            #if($!item.couponUnit && $!item.couponUnit.amount > 0)
+                                                                <p class="t-ud"><a  onclick="openWithTab('yhqbtje','优惠券补贴金额','/sales/settlement/summyOrderDetail.html?cstSn=$!utils.urlEncode($!{item.couponUnit.itemSn})&stype=2&addTimeBegin=$!utils.urlEncode($!{item.createTime})&addTimeEnd=$!utils.urlEncode($!{item.createTime})&amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{item})})',{fstBread:'结算信息汇总',scdBread:'查看明细'})"  style="text-decoration:underline; color:blue;cursor: pointer;" >$!utils.priceFormart($!item.couponUnit.amount)</a></p>
+                                                                <p>($!item.couponUnit.status)</p>
+                                                            #else
+                                                                <p class="zero-display">0.00</p>
+                                                            #end
+                                                        </td>
+                                                        <td width="100px">
+                                                            #if($!item.promotionUnit && $!item.promotionUnit.amount > 0)
+                                                                <p class="t-ud"><a onclick="openWithTab('sjljbtje','随机立减补贴金额','/sales/settlement/summyOrderDetail.html?pstSn=$!utils.urlEncode($!{item.promotionUnit.itemSn})&stype=3&addTimeBegin=$!utils.urlEncode($!{item.createTime})&addTimeEnd=$!utils.urlEncode($!{item.createTime})&amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{item})})',{fstBread:'结算信息汇总',scdBread:'查看明细'})"  style="text-decoration:underline; color:blue;cursor: pointer;" >$!utils.priceFormart($!item.promotionUnit.amount)</a></p>
+                                                                <p>($!item.promotionUnit.status)</p>
+                                                            #else
+                                                                <p class="zero-display">0.00</p>
+                                                            #end
+                                                        </td>
+                                                        <td>
+                                                            #if($!item.amount)
+                                                                $!utils.priceFormart($!item.amount)
+                                                            #end
+                                                        </td>
+                                                        <td>
+                                                            <a onclick="openWithTab('czzgz','结算明细','/sales/settlement/summyOrderDetail.html?stype=4&addTimeBegin=$!utils.urlEncode($!{item.createTime})&addTimeEnd=$!utils.urlEncode($!{item.createTime})&amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{item})})',{fstBread:'结算信息汇总',scdBread:'结算明细'})" style="cursor: pointer;" class="btn" >结算明细</a>
+                                                            #if($!item.receiptAble)
+                                                            	   #if($!item.amount && $!item.amount > 0)
+                                                                <a href="/sales/settlement/downloadSettlementReceipt.html?stSns=$!utils.urlEncode($!{item.receiptSnStr})" class="btn last">下载回单</a>
+                                                           			#end
+                                                            #else
+                                                                #*<a href="javascript:void(0)" disabled class="btn last">下载回单</a>*#
+                                                            #end
+
+                                                        </td>
+                                                    </tr>
+                                                    #end
+                                                #else
+                                                <tr>
+                                                    <td colspan="11">无相关数据！</td>
+                                                </tr>
+                                                #end
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--分页开始 -->
+                    #if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+                        #pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/jsdgl.html")
+                    #end #end
+
+                    <div>
+                        <form id="exportForm" method="post" style="display: none">
+                            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                                <tbody>
+                                <tr>
+                                    <td class="table-tit">生成时间：</td>
+                                    <td>
+                                        <input type="text" name="startTime" id="startTime" class="txt" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd'})"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table-tit">至：</td>
+                                    <td><input type="text" name="endTime" id="endTime" class="txt" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd'})"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="btn"><a href="javascript:exportByCondition(1);" class="btn-txt mr7">确定</a><a href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn-txt" >关闭</a></div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+                    #parse("/common/footer.vm")
+
+                    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/jquery.nicescroll.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script type="text/javascript" src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+                    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+
+                    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    #parse("common/common_script.vm")
+                    <script type="text/javascript">
+                        var _timer = null;
+                        $(function () {
+
+                            $("#ruleTips").on("click",function () {
+                                var _html = "<div class='tips-text'><li>“T+1”工作日结算付款，T为平台确认收货日（若有退货等其它特殊情况，需等待确认完毕后结算付款）；</li><li>实际收到款项以银行具体到账时间为准；</li><li>平台补贴优惠券每月核销结算（详情参考优惠券核销）； </li></div>"
+                                top.ue.alert({
+                                    title : '<h3 style="font-weight: bold">我的医药网结算规则</h3>',
+                                    content : _html,
+                                    area:['650px']
+                                })
+                            })
+
+                            //本页初始化滚动条
+                            $(".scroller-box").niceScroll({
+                                cursorcolor: '#52b3c1',
+                                autohidemode: false,
+                                background: "#ffffff",
+                                cursorborderradius: "2px"
+                            });
+                            resetScroll();
+
+                        })
+
+                        $(window).on("resize",function () {
+                            resetScroll();
+                        })
+
+                        function openWithTab(id,text,url,opts) {
+                            top.utils.openWithTab(id, text, url, {
+                                fstBread: top.app.index.firstBread,
+                                scdBread:{
+                                    text:top.app.index.secondBread,
+                                    url:location.href,
+                                    prevBread: top.app.index.firstBread
+                                },
+                                thirdBread:text
+                            })
+                        }
+
+                        function resetScroll() {
+                            clearTimeout(_timer);
+                            _timer = setTimeout(function () {
+                                _scroll = $(".nicescroll-rails-hr");
+                                var _left = parseInt(_scroll.css("left")),_top = parseInt(_scroll.css("top"));
+                                _scroll.css({"left":(_left-1)+"px","top":(_top+20)+"px","visibility":"visible"});
+                            },500);
+                        }
+
+                        function editItem() {
+                            exportByCondition(1);
+                        }
+                        function editItemOrder() {
+                            exportByCondition(2);
+                        }
+                        function editItemGoods() {
+                            exportByCondition(3);
+                        }
+
+                        function exportByCondition(value){
+                            $("#exportForm #startTime").val($("#stAddTimeBegin").val());
+                            $("#exportForm #endTime").val($("#stAddTimeEnd").val());
+
+                            if(value==1){
+                                // 结算信息汇总导出
+                                $("#exportForm").attr("action", "/sales/settlement/settlementSummaryList.html");
+                                $("#exportForm").submit();
+                            }else if(value==2){
+                                // 结算订单信息汇总导出
+                                $("#exportForm").attr("action", "/sales/settlement/settlementSummaryOrderList.html");
+                                $("#exportForm").submit();
+                            }else if(value==3) {
+                                // 结算商品信息汇总导出
+                                $("#exportForm").attr("action", "/sales/settlement/settlementSummaryGoodsList.html");
+                                $("#exportForm").submit();
+                            } else {
+                                top.ue.msg("无效操作");
+                            }
+                        }
+                    </script>
+</body>
+</html>

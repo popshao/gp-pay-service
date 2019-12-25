@@ -1,0 +1,1459 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>诊所专区 - 我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    #parse("common/header_css_new.vm")
+    <link rel="stylesheet" type="text/css" href="/front/css/user_common.css"/>
+    <link rel="stylesheet" type="text/css" href="/front/css/user_clinic.css"/>
+    <link rel="stylesheet" type="text/css" href="/front/css/user_clinic_dialog.css"/>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm") #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="c-box">
+                    <div class="user-path">
+                        <p><a class="color" href="/api/index.html">销售中心</a> &gt; 店铺 &gt; <a class="color" href="/api/store/clinicChannel_main.html">诊所专区</a></p>
+                    </div>
+
+
+                    <div class="user-notice user-notice-clinic">
+
+                        <div class="user-tabs tab-hd">
+                            <ul class="ut-nav tab-nav">
+                                <li class="on"><a href="javascript:void(0);">诊所专区频道维护</a></li>
+                                <li ><a href="javascript:void(0);">诊所专区商品</a></li>
+                            </ul>
+                        </div>
+
+					    <div class="tab-bd">
+							<!-- 诊所专区频道维护   start -->
+							<div class="tab-pal">
+
+								<div class="user-tips-c mt10 cc">
+									“诊所专区”频道是您面向诊所客户定向推荐商品的专属频道，包含诊所专销、诊所推荐的商品；页面由广告图、楼层、全部诊所商品三部分组成；
+									<a class="user-link fr" href="javascript:void(0);" onclick="viewZonePage();">查看频道页面效果 >></a>
+								</div>
+
+								<div class="user-clinic-title cc mt20">
+									<span class="uct-title">广告图</span>
+									<span class="user-t-black ml5"><i class="user-t-red">*</i> 提示：最多可添加<i class="user-t-red">6</i>张广告图，如未添加不会影响到页面展示；</span>
+									<div class="uct-btn">
+										<a class="user-btn-b fr ml10" href="javascript:void(0)" id="addAd">+ 添加广告图</a>
+										<a class="user-btn-r fr" href="javascript:void(0)" onclick="viewHistoryAd();">查看历史广告图</a>
+									</div>
+								</div>
+
+								<div class="user-form user-sheet-box user-sheet-clinic">
+									<table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+										<thead>
+										<tr>
+											<th>序号</th>
+											<th>广告图</th>
+											<th>链接地址</th>
+											<th>生效时间</th>
+											<th>失效时间</th>
+											<th>排序</th>
+											<th>操作</th>
+										</tr>
+										</thead>
+										<tbody class="user-tbody" id="clinicAdBox">
+										</tbody>
+									</table>
+								</div>
+								<!-- 广告模板 -->
+								<script type="text/html" id="clinicAdTpl">
+								   {{# if(d.code == 0 && d.data.clinicAd && d.data.clinicAd.length > 0){ }}
+									{{# $.each(d.data.clinicAd,function(i,item){ }}
+									<tr>
+											<td>{{ i+1 }}</td>
+											<td>
+												<img src="$!{downloadUrl}{{ item.saImgPath }}?imageView2/2/w/150" style='max-height:50px;'>
+											</td>
+											<td>{{ item.saLinkUrl }}</td>
+											<td>{{top.utils.dateFmt(item.saStartTime,"yyyy-MM-dd hh:mm:ss")}}</td>
+											<td>{{top.utils.dateFmt(item.saEndTime,"yyyy-MM-dd hh:mm:ss")}}</td>
+											<td>
+												<input type="hidden" name="itemOrder" value="{{ item.saOrder }}"/>
+												<input type="hidden" name="itemId" value="{{ item.saId }}"/>
+												{{# if (d.data.clinicAd.length == 1) { }}
+												{{# }else if(i == 0){ }}
+												   <a href="javascript:void(0)" class="user-link" onclick="moveDownAd({{ item.saId }},this)">下移</a>
+												{{# }else if(i == d.data.clinicAd.length-1){ }}
+												   <a href="javascript:void(0)" class="user-link" onclick="moveUpAd({{ item.saId }},this)">上移</a>
+												{{# }else{ }}
+												   <a href="javascript:void(0)" class="user-link" onclick="moveDownAd({{ item.saId }},this)">下移</a>
+												   <a href="javascript:void(0)" class="user-link" onclick="moveUpAd({{ item.saId }},this)">上移</a>
+												{{# } }}
+											</td>
+											<td>
+												<a href="javascript:void(0)" class="user-link" onclick="editAdUI({{ item.saId }});">修改</a>
+												<a href="javascript:void(0)" class="user-link" onclick="updateAdStatus({{item.saId}},0);">下线</a>
+											</td>
+									 </tr>
+									 {{# }) }}
+
+								   {{# }else{ }}
+								   <tr><td colspan="7"><div class="t-no-data">您还没有添加广告图片</div></td></tr>
+								   {{# } }}
+								</script>
+
+								<div class="user-clinic-title cc mt20">
+									<span class="uct-title">楼层</span>
+									<span class="user-t-black ml5">
+										<i class="user-t-red">*</i> 楼层可按照品类、营销……等维度创建，楼层商品是您面向诊所展示的主推商品，您需要先将商品设置为<a href="javascript:void(0)" class="user-link" onclick="jumptoZoneGoods();">诊所推荐商品</a>，目前最多可添加<i class="user-t-red">10</i>个商品楼层；
+									</span>
+									<div class="uct-btn">
+										<a class="user-btn-b fr ml10" href="javascript:void(0)" id="addFloor">+ 添加楼层</a>
+									</div>
+								</div>
+
+								<div class="user-form user-sheet-box user-sheet-clinic">
+									<table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+										<thead>
+										<tr>
+											<th>序号</th>
+											<th>楼层名称</th>
+											<th>描述</th>
+											<th>楼层“更多>>”跳转地址</th>
+											<th>排序</th>
+											<th>操作</th>
+										</tr>
+										</thead>
+										<tbody class="user-tbody" id="clinicFloorBox">
+										</tbody>
+									</table>
+								</div>
+
+								<script type="text/html" id="clinicFloorTpl">
+								{{# if(d.code == 0 && d.data.clinicFloor && d.data.clinicFloor.length > 0 ){ }}
+									{{# $.each(d.data.clinicFloor,function(i,item){ }}
+									<tr>
+											<td>{{ i+1 }}</td>
+											<td>{{ item.cfName }}</td>
+											<td>{{ item.cfDesc }}</td>
+											<td>{{ item.cfMoreLink }}</td>
+											<td>
+												<input type="hidden" name="itemOrder" value="{{ item.cfOrder }}"/>
+												<input type="hidden" name="itemId" value="{{ item.cfId }}"/>
+												{{# if (d.data.clinicFloor.length == 1) { }}
+												{{# }else if(i == 0){ }}
+												   <a href="javascript:void(0)" class="user-link" onclick="moveDownAd({{ item.cfId }},this,2)">下移</a>
+												{{# }else if(i == d.data.clinicFloor.length-1){ }}
+												   <a href="javascript:void(0)" class="user-link" onclick="moveUpAd({{ item.cfId }},this,2)">上移</a>
+												{{# }else{ }}
+												   <a href="javascript:void(0)" class="user-link" onclick="moveDownAd({{ item.cfId }},this,2)">下移</a>
+												   <a href="javascript:void(0)" class="user-link" onclick="moveUpAd({{ item.cfId }},this,2)">上移</a>
+												{{# } }}
+											</td>
+											<td>
+												<a href="javascript:void(0)" class="user-link" onclick="editFloorUI({{ item.cfId }});">修改</a>
+												<a href="javascript:void(0)" class="user-link" onclick="deleteFloor({{item.cfId}});">删除</a>
+												<a href="javascript:void(0)"  class="user-link" onclick="gotoDetail('gllcsp','/api/clinicFloorGoods/main?cfId={{item.cfId}}&cfName={{item.cfName}}','维护楼层商品')">管理楼层商品</a>
+
+											</td>
+									 </tr>
+									 {{# }) }}
+
+								{{# }else{ }}
+								   <tr><td colspan="6"><div class="t-no-data">您还没有添加楼层信息</div></td></tr>
+								{{# } }}
+								</script>
+
+
+								<div class="user-clinic-title cc mt10">
+									<span class="uct-title">诊所专区全部商品</span>
+								</div>
+
+								<div class="user-form user-sheet-box user-sheet-clinic">
+									<table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+										<tbody class="user-tbody" id="clinicZoneGoodsBox">
+										</tbody>
+									</table>
+								</div>
+
+								<script type="text/html" id="clinicZoneGoodsTpl">
+									 {{# if(d.code == 0 && d.data.clinicZoneGoodsCount > 0 ){ }}
+									   <tr>
+											<td>诊所专区商品共<i class="user-t-red">{{d.data.clinicZoneGoodsCount}}</i>个</td>
+											<td class="t-left" width="200">
+												<a href="javascript:void(0)" class="user-link" onclick="jumptoZoneGoods();">维护诊所专区商品</a>
+											</td>
+										</tr>
+									 {{# }else{ }}
+									 <tr>
+											<td colspan="2">
+												<div class="t-no-data">您还未添加“诊所专区”的商品  <a href="javascript:void(0)" class="user-link" onclick="jumptoZoneGoods();">马上去维护>></a></div>
+											</td>
+									  </tr>
+									 {{# } }}
+								</script>
+							</div>
+							<!-- 诊所专区频道维护   end -->
+
+							<!-- 诊所专区商品   start -->
+							<div class="tab-pal">
+									<div class="user-tips-c mt10 cc">
+										诊所专区商品：是为了方便诊所客户采购所推荐商品，可在诊所专区频道中查到；添加为诊所专区的商品不影响该商品现有的价格体系和采购权限。
+                                        <a class="user-link fr" href="javascript:void(0);" onclick="viewZonePage();">查看频道页面效果 >></a>
+									</div>
+
+									<div class="user-search-box mt10">
+										<form id="searchForm">
+											<ul class="usb-wrap cc">
+												<li class="usb-item">
+													<span class="s-tit">商品信息：</span>
+													<input class="s-input s-input-445"  name="searchKey" type="text" placeholder="商品通用名／商品编码／商品内码／批准文号／生产厂家／商品助记码">
+												</li>
+												<li class="usb-item">
+													<span class="s-tit s-tit-95">旗舰店分类：</span>
+													<select class="s-select2 usb-select2-s spc"  name="sgcId1" placeholder="一级分类">
+														<option value="">一级分类</option>
+													</select>
+													<select class="s-select2 usb-select2-s spcc"  name="sgcId2" placeholder="二级分类">
+														<option value="">二级分类</option>
+													</select>
+												</li>
+												<li class="usb-item">
+													<div class="user-custom-form user-custom-form-clinic fl ml10">
+														<fieldset class="checkboxes">
+															<label for="gTag" class="label_check">
+																<input type="checkbox"  id="gTag" name="gTag" value="0" onclick="setValue(this);"/>诊所专销
+															</label>
+														</fieldset>
+													</div>
+												</li>
+											</ul>
+										</form>
+										<div class="usb-btn">
+											<a href="javascript:void(0)" class="btn-query">查询</a>
+											<a href="javascript:void(0)" class="btn-reset"><img src="/image/icon-refresh.png" alt="">清空查询条件</a>
+										</div>
+									</div>
+
+
+									<div class="user-btn user-btn-clinic mt20 cc">
+										<a href="javascript:void(0)" onclick="batchDel()" class="btn btn-auto fl">批量删除</a>
+										<a href="javascript:void(0)" class="btn btn-auto ml10 fl" id="batchUploadGoods">批量导入商品</a>
+										<a href="/sales/goods_price/download_goods" class="btn btn-link fl mr10">下载商品模板</a>
+										<a href="javascript:void(0)" class="user-btn-b fr" id="addGoods">+ 添加诊所专区商品</a>
+										<div class="b-text">
+											<i class="b-t-ps">*</i>  提示：请先“下载商品模板”，再批量导入商品。最多能导入10000个商品
+										</div>
+									</div>
+
+									<div class="user-form user-sheet-box mt10">
+										<table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+											<thead>
+												<tr>
+													<th>
+														<input type="checkbox" id="g_ck_all" class="check" onclick="checkAll(this);" />
+													</th>
+													<th>序号</th>
+													<th width="120">商品名称</th>
+													<th>商品内码</th>
+													<th>生产厂家</th>
+													<th>规格</th>
+													<th >批准文号</th>
+													<th>上下架状态</th>
+													<th>添加时间</th>
+													<th>操作</th>
+												</tr>
+											</thead>
+											<tbody class="user-tbody" id="listBox">
+											</tbody>
+										</table>
+									</div>
+									<script type="text/html" id="listTpl">
+										{{# if(d && !d.error && d.datas.length){ }}
+										{{# $.each(d.datas,function(index,item){ var $index = (index + 1) + (d.pi-1)*d.ps }}
+										<tr>
+											<td>
+												<input name="ck" type="checkbox" class="check" value="{{item.gid}}" {{# if(item.gtag ==1 ){ }} disabled="disabled" {{# } }}/>
+											</td>
+											<td>{{$index}}</td>
+											<td>{{# if(item.gtag ==1 ){ }}【诊所专销】 {{# } }}{{item.gname}}</td>
+											<td>{{item.ginSn}}</td>
+											<td>{{item.gmanufacture}}</td>
+											<td>{{item.gspecifications}}</td>
+											<td>{{item.glicenseNo}}</td>
+											<td>
+												{{# if(item.gstatus == 1){ }}上架{{# } }}
+												{{# if(item.gstatus == 5){ }}待审核{{# } }}
+												{{# if(item.gstatus == 0){ }}下架{{# } }}
+												{{# if(item.gstatus == 3){ }}删除{{# } }}
+												{{# if(item.gstatus == 4){ }}紧急下架{{# } }}
+
+											</td>
+											<td>{{top.utils.dateFmt(item.gaddTime,'yyyy-MM-dd hh:mm:ss')}}</td>
+											{{# if(item.gtag ==1 ){ }}
+											<td><a href="javascript:void(0)" class="user-link" onclick="top.utils.openWithTab('zgkx','专供控销','/sales/control/clinic_group_edit.html?scgId={{item.gcontrol}}&keys=&pi=1',{fstBread:'销价管理'})">查看定价</a></td>
+											{{# }else{ }}
+											<td><a href="javascript:void(0)" class="user-link" onclick="top.utils.openWithTab('spjgmx','商品定价明细','/sales/priceManager/singleGoodPriceDetail.html?gId={{item.gid}}',{fstBread:'商品价格'})">查看定价</a></td>
+											{{# } }}
+
+
+										</tr>
+										{{# }); }}
+
+										{{# }else{ }}
+										<tr><td colspan="10">根据您的查询条件，没有找到相关数据，请您调整查询条件后重试。</td></tr>
+										{{# } }}
+
+									</script>
+
+									<div class="page rocky-page" style="text-align: right;">
+									</div>
+
+								</div>
+							<!-- 诊所专区商品   end -->
+						</div>
+                    </div>
+                </div>
+            <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+
+   <div id="floorDialog" style="display:none;">
+         <div class="user-dialog-ctn" style="width: auto;">
+         <div class="c-box">
+
+             <div class="user-form-table user-form-table-clinic">
+
+             	 <form id='clinicFloorForm'>
+             	 	<input type="hidden" name="cfId" id="cfId"></input>
+	                <table border="0" cellpadding="0" cellspacing="0">
+	                     <tbody>
+	                      <tr>
+	                         <td class="tar" width="135"><i class="user-t-red">＊</i> 楼层名称：</td>
+	                         <td width="auto">
+	                             <input class="user-input user-input-274" type="text" name='cfName' placeholder="最多可输入8个字">
+	                         </td>
+	                     </tr>
+	                     <tr>
+	                         <td class="tar" valign="top">楼层描述：</td>
+	                         <td>
+	                             <textarea class="user-textarea user-textarea-274 fl" name='cfDesc' placeholder="会在楼层上展示，最多可输入30个字，可不填写"></textarea>
+	                         </td>
+	                     </tr>
+	                     <tr>
+	                         <td class="tar">添加“更多>>”链接：</td>
+	                         <td>
+	                             <input class="user-input user-input-274" type="text" name='cfMoreLink'  placeholder="非必填，如未填写楼层无“更多>>”按钮">
+	                         </td>
+	                     </tr>
+<!-- 	                     <tr> -->
+<!-- 	                         <td class="tar">APP跳转地址：</td> -->
+<!-- 	                         <td> -->
+<!-- 	                             <select id="clPgCode" name="adPgCode" placeholder="请选择"> -->
+<!-- 	                                 <option value="0">请选择</option> -->
+<!-- 	                             </select> -->
+<!-- 	                         </td> -->
+<!-- 	                     </tr> -->
+
+<!-- 	                     <tr data-value="1001" style="display:none;" class="clinic-app"> -->
+<!-- 	                        <td class="tar"><i class="user-t-red">＊</i> H5链接：</td> -->
+<!-- 	                        <td> -->
+<!-- 	                            <input class="user-input user-input-274" type="text" name="url" id="url" placeholder=""> -->
+<!-- 	                        </td> -->
+<!-- 	                    </tr> -->
+
+<!-- 	                     <tr data-value="1001" style="display:none;" class="clinic-app"> -->
+<!-- 	                        <td class="tar">页面标题：</td> -->
+<!-- 	                        <td> -->
+<!-- 	                            <input class="user-input user-input-274" type="text" name="title" id="title" placeholder=""> -->
+<!-- 	                            <input type="hidden" name="hasTitle" id="hasTitle" value="1" > -->
+<!-- 	                        </td> -->
+<!-- 	                    </tr> -->
+	                    
+<!-- 	                    <tr data-value="1054" style="display:none;" class="clinic-app" id="app_1054"> -->
+<!-- 	                        <td class="tar"><i class="user-t-red">＊</i>关键词：</td> -->
+<!-- 	                        <td> -->
+<!-- 	                            <input type="hidden" name="s_supplier" id="s_supplier" value="$!{supplier.suName}"> -->
+<!-- 	                            <input type="hidden" name="sellerId" id="sellerId" value="$!{supplier.suId}"> -->
+<!-- 	                            <input type="hidden" name="suDomainPrefix" id="suDomainPrefix" value="$!{supplier.suDomainPrefix}"> -->
+<!-- 	                            <input class="user-input user-input-274" type="text" name="s_key" id="s_key" placeholder=""> -->
+<!-- 	                        </td> -->
+<!-- 	                    </tr> -->
+	                    
+<!-- 	                    <tr data-value="1013" style="display:none;" class="clinic-app" id="app_1013"> -->
+<!-- 	                        <td class="tar">商城域名前缀：</td> -->
+<!-- 	                        <td> -->
+<!-- 	                            <input class="user-input user-input-274" type="text" name="suDomainPrefix" id="suDomainPrefix" readonly="readonly"  value="$!{supplier.suDomainPrefix}"> -->
+<!-- 	                            <input  type="hidden" name="suType" id="suType" value="1"> -->
+<!-- 	                        </td> -->
+<!-- 	                    </tr> -->
+	                    
+<!-- 	                    <tr data-value="1005" style="display:none;" class="clinic-app" id="app_1005"> -->
+<!-- 	                        <td class="tar"><i class="user-t-red">＊</i> 商品ID：</td> -->
+<!-- 	                        <td> -->
+<!-- 	                            <input class="user-input user-input-274" type="text" name="gId" id="gId" placeholder=""> -->
+<!-- 	                            <input type="hidden" name="siteId" id="siteId"> -->
+<!-- 	                        </td> -->
+<!-- 	                    </tr> -->
+
+	                     </tbody>
+	                 </table>
+                 </form>
+             </div>
+
+         </div>
+     </div>
+   </div>
+
+
+
+  <!--弹窗 -->
+  <div id="adDialog" style="display:none;">
+    <div class="user-dialog-ctn" style="width: auto;">
+        <div class="c-box">
+
+            <div class="user-form-table user-form-table-clinic">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tbody>
+                    <tr>
+                        <input type="hidden" name="saId" id="saId"></input>
+                        <input type="hidden" name="saImgPath" id="saImgPath"></input>
+                        <td class="tar" width="120"><i class="user-t-red">＊</i> 上传图片：</td>
+                        <td width="auto">
+                            <img class="fl" id="showPic" width="150" height="60">
+                            <a class="user-upload-img fl ml10 mt15" href="javascript:void(0)" id="uploadPic"></a>
+                            <span class="user-t-black ml10 mt15">建议上传尺寸：<i class="user-t-red">1200*120</i></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tar">图片链接地址：</td>
+                        <td>
+                            <input class="user-input user-input-274" type="text" name="saLinkUrl" id="saLinkUrl" placeholder="">
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="tar">生效时间：</td>
+                        <td>
+                            <input class="user-input-date" type="text" name="saStartTime" id="saStartTime" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'saEndTime'+'\\'+'\')}'})"/>
+                            <i class="user-t-to">至</i>
+                            <input class="user-input-date" type="text" name="saEndTime" id="saEndTime" readonly="readonly" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'saStartTime'+'\\'+'\')}'})"/>
+                        </td>
+                    </tr>
+                    
+<!--                     <tr> -->
+<!--                         <input type="hidden" name="saAppPic" id="saAppPic"></input> -->
+<!--                         <td class="tar" width="120">上传APP图片：</td> -->
+<!--                         <td width="auto"> -->
+<!--                             <img class="fl" id="showAppPic" width="150" height="60"> -->
+<!--                             <a class="user-upload-img fl ml10 mt15" href="javascript:void(0)" id="uploadAppPic"></a> -->
+<!--                             <span class="user-t-black ml10 mt15">建议上传尺寸：<i class="user-t-red">750*250</i></span> -->
+<!--                         </td> -->
+<!--                     </tr> -->
+                    
+<!--                     <tr> -->
+<!--                         <td class="tar">APP跳转地址：</td> -->
+<!--                         <td> -->
+<!--                             <select class="s-select2 usb-select2" name="adPgCode" id="adPgCode" placeholder="请选择"> -->
+<!--                                 <option value="0">请选择</option> -->
+<!--                             </select> -->
+<!--                         </td> -->
+<!--                     </tr> -->
+                    
+<!--                     <tr data-value="1001" style="display:none;" class="clinic-app"> -->
+<!--                         <td class="tar"><i class="user-t-red">＊</i> H5链接：</td> -->
+<!--                         <td> -->
+<!--                             <input class="user-input user-input-274" type="text" name="url" id="url" placeholder=""> -->
+<!--                         </td> -->
+<!--                     </tr> -->
+<!--                     <tr data-value="1001" style="display:none;" class="clinic-app"> -->
+<!--                         <td class="tar">页面标题：</td> -->
+<!--                         <td> -->
+<!--                             <input class="user-input user-input-274" type="text" name="title" id="title" placeholder=""> -->
+<!--                             <input type="hidden" name="hasTitle" id="hasTitle" value="1" > -->
+<!--                         </td> -->
+<!--                     </tr> -->
+                    
+<!--                     <tr data-value="1054" style="display:none;" class="clinic-app"> -->
+<!--                         <td class="tar"><i class="user-t-red">＊</i>关键词：</td> -->
+<!--                         <td> -->
+<!--                             <input type="hidden" name="s_supplier" id="s_supplier" value="$!{supplier.suName}"> -->
+<!--                             <input type="hidden" name="sellerId" id="sellerId" value="$!{supplier.suId}"> -->
+<!--                             <input type="hidden" name="suDomainPrefix" id="suDomainPrefix" value="$!{supplier.suDomainPrefix}"> -->
+<!--                             <input class="user-input user-input-274" type="text" name="s_key" id="s_key" placeholder=""> -->
+<!--                         </td> -->
+<!--                     </tr> -->
+                    
+<!--                     <tr data-value="1013" style="display:none;" class="clinic-app"> -->
+<!--                         <td class="tar"><i class="user-t-red">＊</i>商城域名前缀：</td> -->
+<!--                         <td> -->
+<!--                             <input class="user-input user-input-274" type="text" name="suDomainPrefix" id="suDomainPrefix" readonly="readonly"  value="$!{supplier.suDomainPrefix}"> -->
+<!--                             <input  type="hidden" name="suType" id="suType" value="1"> -->
+<!--                         </td> -->
+<!--                     </tr> -->
+                    
+<!--                     <tr data-value="1005" style="display:none;" class="clinic-app"> -->
+<!--                         <td class="tar"><i class="user-t-red">＊</i> 商品ID：</td> -->
+<!--                         <td> -->
+<!--                             <input class="user-input user-input-274" type="text" name="gId" id="gId" placeholder=""> -->
+<!--                             <input type="hidden" name="siteId" id="siteId"> -->
+<!--                         </td> -->
+<!--                     </tr> -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+   </div>
+    #parse("/common/footer.vm")
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.SuperSlide.js?v=$!{jscss_version}"></script>
+<script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+<script src="/js/select2/select2.min.js?v=$!{jscss_version}"></script>
+<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/clinic/clinic.js?v=$!{jscss_version}"></script>
+<script src="/front/js/user_common.js?v=$!{jscss_version}"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+
+<script>
+var layer,laypage,laytpl;
+
+	layui.config({
+	    base:'/js/layui/extend/'
+	}).use(['layApp','layer','laypage','laytpl'],function () {
+		layer = layui.layer,laypage = layui.laypage,laytpl = layui.laytpl;
+		$(function(){
+			initSelect();
+			top.ue.load();
+
+			getPageData();
+			
+			$(".btn-reset").on("click",function () {
+                $("#searchForm").get(0).reset();
+                $(".usb-select2,.usb-select2-s").each(function () {
+                    initSelect();
+                })
+                $("#gTag").val(0);
+                $("#gTag").parent().removeClass("c_on");
+                getData();
+            })
+
+            $('.btn-query').on("click",function () {
+                getData();
+            })
+
+            setTimeout(function () {
+                getData();
+            },300);
+			
+            initUploadGoods();
+            $("#addGoods").on("click",function () {
+		            //获取已经添加的商品
+		            var _sels = [];
+		            $.ajax({
+		                url: '/sales/store/clinicGoods_getAddedGoods.html',
+		                type: 'POST',
+		                dataType: 'json',
+		                success: function(result) {
+		                    if (result.success == true && result.data !=null) {
+			                    var addedGoodList = eval(result.data);
+			                    $.each(addedGoodList,function (i,e) {
+			                        _sels.push(e);
+			                    })
+			                }
+		                }
+		            });
+		            var idsArray=new Array();
+		            var ids="";
+		            top.ue.getGoodsModal({
+		                hasSels:_sels,
+		                newUI:true,
+		                yes: function (idx, lay, selDatas) {
+		                    selDatas.push.apply(selDatas,null);
+		                    $.each(selDatas,function (i,e) {
+		                        idsArray.push(e.goods.gid);
+		                    });
+		                    ids = idsArray.join();
+		                    //调用批量添加接口
+		                    $.ajax({
+		                        url: '/sales/store/clinicGoods_batcheAddGoods.html',
+		                        type: 'POST',
+		                        data: {"gIds":ids},
+		                        dataType: 'json',
+		                        success: function(result) {
+		                            if (result.success == true && result.data !=null) {
+		                                getData();
+		                                return true;
+		                            }
+		                        }
+		                    });
+		                }
+		            });
+		        })
+			
+			
+			/*添加楼层*/
+			$("#addFloor").unbind("click").click(function(){
+				top.rui.dynamic({
+					title:"添加楼层",
+					content:$("#floorDialog").html(),
+					area:['600px'],
+					btn:['确认','取消'],
+					success: function(lay,idx){
+						loadAppPages(lay);
+					},
+					yes:function(idx,lay){
+						saveCliniCf(idx,lay)
+					}
+					
+				});
+			});
+			
+			
+			//添加广告
+			$("#addAd").unbind("click").click(function(){
+				top.rui.dynamic({
+					title:"添加广告",
+					content:$("#adDialog").html(),
+					area:['600px'],
+					btn:['确认','取消'],
+					success: function(lay,idx){
+						initFileUpload(lay);
+						loadAppPages(lay);
+					},
+					yes:function(idx,lay){
+						saveClinicAd(idx,lay);
+					}
+				});
+			});
+			
+			<!-- Tab切换 -->
+		    jQuery(".user-notice").slide({ titCell:".tab-hd li", mainCell:".tab-bd",trigger:"click",delayTime:500});
+
+		    $(".user-form").find("tbody.user-tbody tr:odd td").css("background","#f6f6f6");
+			
+			
+		});
+		
+	})
+	
+	function getPageData(){
+        $.ajax({
+            url: '/api/clinicZone/list',
+            type: 'POST',
+            data: {},
+            dataType: 'json',
+            complete:function(){
+                top.ue.closeAll("loading");
+            },
+            success: function(result) {
+                if (result.code == 0) {
+                    laytpl($("#clinicAdTpl").html()).render(result,function(html){
+                        $("#clinicAdBox").html(html);
+                    });
+
+                    laytpl($("#clinicFloorTpl").html()).render(result,function(html){
+                        $("#clinicFloorBox").html(html);
+                    });
+
+                    laytpl($("#clinicZoneGoodsTpl").html()).render(result,function(html){
+                        $("#clinicZoneGoodsBox").html(html);
+                    });
+
+                    if(result.data.clinicAd.length > 5){
+                        $("#addAd").remove();
+                    }
+
+                    if(result.data.clinicFloor.length > 9){
+                        $("#addFloor").hide();
+                    }else{
+                        $("#addFloor").show();
+					}
+
+                }else{
+                    top.layer.msg("加载数据出现异常！");
+                }
+            },
+            error: function(){
+                top.layer.msg("加载数据出现异常！");
+            }
+        });
+	}
+	
+	var nowPage = 1;
+    function getData() {
+        top.utils.pageList({
+            first:true,
+            url:'/sales/store/ajax_get_clinic_goods.html',
+            dom:$('#listBox'),
+            tpl:$("#listTpl"),
+            isAdd:true,
+            filter:'#searchForm',
+            doc:document.body,
+            laypage:laypage,
+            complete:function (res) {
+            },rendered:function (res,settings) {
+                nowPage = settings.data.pi;
+                if(cb) cb(res,settings)
+            }
+        })
+		$("#g_ck_all").removeAttr("checked");
+    }
+
+    //checkbox全选
+    function checkAll(obj) {
+        var f = obj.checked;
+        $("input[name=ck]").each(function() {
+            if($(this).attr("disabled")!="disabled"){
+                $(this)[0].checked = f;
+            }
+        });
+    }
+    
+    function setValue(obj){
+        if($(obj)[0].checked){
+           $("#gTag").val(1);
+        } else{
+           $("#gTag").val(0);
+        }
+    }
+
+    function webOpen(url){
+        window.open(url);
+    }
+
+    function batchDel(){
+        if($("#listBox").find("input[type=checkbox]:checked").length==0){
+            top.ue.msg("请您先勾选要删除的商品");
+            return;
+        }
+        top.ue.confirm({
+            title: '确认',
+            content: "您确认要删除吗？",
+            ok: function() {
+            	var idsArray=new Array();
+                var ids = "";
+                $("#listBox").find("input[type=checkbox]:checked").each(function (i, e) {
+                    idsArray.push($(this).val());
+                });
+                ids = idsArray.join();
+                $.ajax({
+                    url: '/sales/store/clinicGoods_batcheDelGoods.html',
+                    data: {"gIds":ids},
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.success == true && result.data == true) {
+                            top.ue.alert({
+                                title: '提示信息',
+                                content: "删除成功",
+                                end: function() {
+                                    getData();
+                                }
+                            })
+                        } else {
+                            top.ue.msg("删除失败");
+                        }
+                    }
+                });
+            }
+        })
+
+
+    }
+	
+	
+	function loadAppPages(lay,defValue){
+		
+		$("#adPgCode,#clPgCode",lay).select2({
+		        placeholder: $(this).attr("placeholder"),
+		        tags: "true",
+		        allowClear: false,
+		        minimumResultsForSearch: -1,
+		        language: "zh-CN",
+		        width: 200,
+		        cache: true,
+		        ajax1: {
+		            url: '/api/clinicZone/appPages',
+		            processResults: function (res) {
+		                var data = {
+		                    results: []
+		                }
+		                data.results.push({
+		                    id: "0",
+		                    text: "请选择"
+		                });
+		                $.each(res.data, function (i, e) {
+		                    var _arr = {
+		                        id: e.pageCode,
+		                        text: e.pageName
+		                    };
+		                    if(defValue && defValue == e.pageCode){
+		                    	_arr.selected = true;
+		                    }
+		                    data.results.push(_arr);
+		                })
+		                return data;
+		            }
+		        }
+		    }).unbind('select2:select').on('select2:select', function (e) {
+		    	var value = $("#adPgCode,#clPgCode",lay).val();
+				$(".clinic-app",lay).each(function(i,o){
+					if(value == 0){
+						$(o).hide();
+					}else{
+						if($(o).attr("data-value") == value){
+							$(o).show();
+						}else{
+							$(o).hide();
+						}
+					}
+				});
+		        
+		    });
+		
+		$.ajax({
+			url:'/api/clinicZone/appPages',
+			success:function(res){
+				$.each(res.data, function (i, e) {
+					var opt = "";
+					if(defValue == e.pageCode){
+						opt = "<option value="+e.pageCode+" selected>"+e.pageName+"</option>"
+					}else opt = "<option value="+e.pageCode+" >"+e.pageName+"</option>"
+					$("#adPgCode,#clPgCode",lay).append(opt).trigger("select2:select");
+				})
+			}
+		})
+	}
+	
+	
+	
+	function initFileUpload(lay) {
+        var uploadPic = $("#uploadPic",lay);
+        new top.AjaxUpload(uploadPic, {
+            action: "/cdn/imageInfo_upload.html",
+            name: 'file_path',
+            responseType: "json",
+            onSubmit: function (file, ext) {
+                if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+                    ext_str = ext;
+                } else {
+                    top.ue.msg("非图片文件格式,请重传");
+                    return false;
+                }
+                top.ue.load();
+            },
+            onComplete: function (file, result) {
+                top.ue.closeAll("loading");
+                if (result.success == false) {
+                    if (result.message == "outofsize") {
+                       top.ue.msg("文件过大，无法上传");
+                    } else if (result.message == "error") {
+                        top.ue.msg("文件过大，无法上传");
+                    }
+                    return false;
+
+                } else {
+                    $("#saImgPath",lay).val(result.data.id);
+                    $('#showPic',lay).attr("src", result.data.picUrl+"?imageView2/2/w/150");
+                }
+            }
+        });
+        
+        var uploadAppPic = $("#uploadAppPic",lay);
+        new top.AjaxUpload(uploadAppPic, {
+            action: "/cdn/imageInfo_upload.html",
+            name: 'file_path',
+            responseType: "json",
+            onSubmit: function (file, ext) {
+                if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+                    ext_str = ext;
+                } else {
+                    top.ue.msg("非图片文件格式,请重传");
+                    return false;
+                }
+                top.ue.load();
+            },
+            onComplete: function (file, result) {
+                top.ue.closeAll("loading");
+                if (result.success == false) {
+                    if (result.message == "outofsize") {
+                       top.ue.msg("文件过大，无法上传");
+                    } else if (result.message == "error") {
+                        top.ue.msg("文件过大，无法上传");
+                    }
+                    return false;
+
+                } else {
+                    $("#saAppPic",lay).val(result.data.id);
+                    $('#showAppPic',lay).attr("src", result.data.picUrl+"?imageView2/2/w/150");
+                }
+            }
+        });
+    }
+	
+	/*保存广告*/
+	function saveClinicAd(idx,lay){
+		    var saImgPath = $("#saImgPath",lay).val();
+			if(saImgPath == ""){
+				top.layer.msg("请先上传图片！");
+				return;
+			}
+			
+			var saId = $("#saId",lay).val();
+			var exeUrl = "";
+			if(saId == ""){
+				exeUrl = "/api/clinicAd/add";
+			}else{
+				exeUrl = "/api/clinicAd/update";
+			}
+			
+			var saAppPic = $("#saAppPic",lay).val();
+			var saLinkUrl = $("#saLinkUrl",lay).val();
+			var saStartTime = $("#saStartTime",lay).val();
+			var saEndTime = $("#saEndTime",lay).val();
+			var adPgCode = $("#adPgCode",lay).val();
+			if(adPgCode != 0 && saAppPic == ""){
+				top.layer.msg("请上传App图片！");
+				return ;
+			}
+			
+			var adPageParam = "";
+			var param = {};
+			if(adPgCode == 1001){
+				param.url = $("#url",lay).val();
+				if(param.url == ""){
+					top.layer.msg("请输入H5链接！");
+				    return ;
+				}
+				param.title = $("#title",lay).val();
+				param.hasTitle = $("#hasTitle",lay).val();
+			}else if(adPgCode == 1054){
+				param.s_key = $("#s_key",lay).val();
+				if(param.s_key == ""){
+					top.layer.msg("请输入关键词！");
+				    return ;
+				}
+				param.s_supplier = $("#s_supplier",lay).val();
+				param.sellerId = $("#sellerId",lay).val();
+				param.suDomainPrefix = $("#suDomainPrefix",lay).val();
+			}else if(adPgCode == 1005){
+				param.gId = $("#gId",lay).val();
+				if(param.gId == ""){
+					top.layer.msg("请输入商品ID！");
+				    return ;
+				}
+				param.siteId = $("#siteId",lay).val();
+			}else if(adPgCode == 1013){
+				param.suDomainPrefix = $("#suDomainPrefix",lay).val();
+				param.suType = $("#suType",lay).val();
+			}
+			
+			if(adPgCode != 0){
+				adPageParam = $.toJSON(param);
+			}
+			
+			var ad = {};
+			ad.saId = saId;
+			ad.saImgPath = saImgPath;
+			ad.saAppPic = saAppPic;
+			ad.saLinkUrl = saLinkUrl;
+			ad.saStartTime = saStartTime;
+			ad.saEndTime = saEndTime;
+			ad.adPgCode = adPgCode;
+			ad.adPageParam = adPageParam;
+			top.ue.load();
+			$.ajax({
+	            url: exeUrl,
+	            type: 'POST',
+	            data: {"ad":$.toJSON(ad)},
+	            dataType: 'json',
+	            complete:function(){
+	         	   top.ue.closeAll("loading");
+	            },
+	            success: function(result) {
+	                if (result.code == 0) {
+	                   top.ue.close(idx);
+	                   //location.href = "/api/clinicZone/main";
+                        getPageData();
+	                }else{
+	                	top.layer.msg("系统出现异常！");	
+	                }
+	            },
+	            error: function(){
+	         	   top.layer.msg("系统出现异常！");
+	            }
+	        });
+	}
+
+	//修改广告
+    function editAdUI(saId){
+		top.ue.load();
+    	$.ajax({
+	           url: '/api/clinicAd/'+saId,
+	           type: 'POST',
+	           data: {},
+	           dataType: 'json',
+	           complete:function(){
+	        	   top.ue.closeAll("loading");
+	           },
+	           success: function(result) {
+	               if (result.code == 0) {
+	            	   top.rui.dynamic({
+	   					title:"修改广告",
+	   					content:$("#adDialog").html(),
+	   					area:['600px'],
+	   					btn:['确认','取消'],
+	   					success: function(lay,idx){
+	   						initFileUpload(lay);
+	   						
+	   						var data = result.data;
+	   						loadAppPages(lay,data.adPgCode);
+	   						$("#saId",lay).val(data.saId);
+	   						$("#saImgPath",lay).val(data.saImgPath);
+	   						$("#saLinkUrl",lay).val(data.saLinkUrl);
+	   						$("#showPic",lay).attr("src","$!{downloadUrl}" + data.saImgPath + "?imageView2/2/w/150");
+	   						$("#saStartTime",lay).val(top.utils.dateFmt(data.saStartTime,"yyyy-MM-dd"));
+	   						if(data.saEndTime){
+	   							$("#saEndTime",lay).val(top.utils.dateFmt(data.saEndTime,"yyyy-MM-dd"));
+	   						}
+	   						
+	   						if(data.saAppPic){
+	   							$("#saAppPic",lay).val(data.saAppPic);
+		   						$("#showAppPic",lay).attr("src","$!{downloadUrl}" + data.saAppPic + "?imageView2/2/w/150");
+	   						}
+	   						
+	   						$("#adPgCode",lay).val(data.adPgCode);
+	   						if(data.adPgCode == 1001){
+	   							$("#url",lay).val(data.adPageParamJson.url);
+	   							$("#title",lay).val(data.adPageParamJson.title);
+	   						}else if(data.adPgCode == 1054){
+	   							$("#s_supplier",lay).val(data.adPageParamJson.s_supplier);
+	   							$("#sellerId",lay).val(data.adPageParamJson.sellerId);
+	   							$("#suDomainPrefix",lay).val(data.adPageParamJson.suDomainPrefix);
+	   							$("#s_key",lay).val(data.adPageParamJson.s_key);
+	   							
+	   						}else if(data.adPgCode == 1005){
+	   							$("#gId",lay).val(data.adPageParamJson.gId);
+	   							$("#siteId",lay).val(data.adPageParamJson.siteId);
+	   							
+	   						}else if(data.adPgCode == 1013){
+	   							$("#suDomainPrefix",lay).val(data.adPageParamJson.suDomainPrefix);
+	   							$("#suType",lay).val(data.adPageParamJson.suType);
+	   							
+	   						}
+	   					},
+	   					yes:function(idx,lay){
+	   						saveClinicAd(idx,lay);
+	   					}
+	   				});
+	            	   
+	               }else{
+	               	  top.layer.msg("系统出现异常！");	
+	               }
+	           },
+	           error: function(){
+	        	   top.layer.msg("系统出现异常！");
+	           }
+	       });
+		
+	}
+
+	
+	/*保存楼层*/
+	function saveCliniCf(idx,lay,cfId){
+		var cfName = $("input[name='cfName']",lay).val();
+		var cfDesc = $("textarea[name='cfDesc']",lay).val();
+		var cfMoreLink = $("input[name='cfMoreLink']",lay).val();
+		var adPgCode = $("select[name='adPgCode']",lay).val();
+
+		var cfId = $("#cfId",lay).val();
+		var exeUrl = "";
+		if(!cfId){
+			exeUrl = "/api/clinicFloor/add";
+		}else{
+			exeUrl = "/api/clinicFloor/update";
+		}
+
+		if(cfName == ""){
+			top.layer.msg("请填写楼层名称！");
+			return;
+		}
+
+		var param = {};
+		if(adPgCode == 1001){
+			param.url = $("#url",lay).val();
+			param.title = $("#title",lay).val();
+			param.hasTitle = $("#hasTitle",lay).val();
+			if(param.url == '') {
+				top.layer.msg("请填写H5链接！");	
+				return;
+			}
+		}else if(adPgCode == 1054){
+			param.s_supplier = $("#s_supplier",lay).val();
+			param.sellerId = $("#sellerId",lay).val();
+			param.suDomainPrefix = $("#suDomainPrefix",lay).val();
+			param.s_key = $("#s_key",lay).val();
+			if(param.s_key == ""){
+				top.layer.msg("请输入关键词！");
+			    return ;
+			}
+		}else if(adPgCode == 1005){
+			param.gId = $("#gId",lay).val();
+			param.siteId = $("#siteId",lay).val();
+			if(param.gId == '') {
+				top.layer.msg("请填写商品ID！");	
+				return;
+			}
+		}else if(adPgCode == 1013){
+			param.suDomainPrefix = $("#suDomainPrefix",lay).val();
+			param.suType = $("#suType",lay).val();
+		}
+		
+		var adPageParam = "";
+		if(adPgCode>0){
+			adPageParam = $.toJSON(param);
+		}
+		var cf = {
+			cfId : cfId,
+			cfName : cfName,
+			cfDesc : cfDesc,
+			cfMoreLink : cfMoreLink,
+			adPgCode : adPgCode,
+			adPageParam :adPageParam
+		};
+		top.ue.load();
+
+		$.ajax({
+            url: exeUrl,
+            type: 'POST',
+            data: {"cf":$.toJSON(cf)},
+            dataType: 'json',
+            complete:function(){
+         	   top.ue.closeAll("loading");
+            },
+            success: function(result) {
+                if (result.code == 0) {
+                   top.ue.close(idx);
+                   //location.href = "/api/clinicZone/main";
+                    getPageData()
+                }else{
+                	top.layer.msg(result.message);
+                }
+            },
+            error: function(){
+         	   top.layer.msg("系统出现异常！");
+            }
+        });
+	}
+
+	//修改楼层
+    function editFloorUI(cfId){
+		top.ue.load();
+    	$.ajax({
+	           url: '/api/clinicFloor/'+cfId,
+	           type: 'POST',
+	           data: {},
+	           dataType: 'json',
+	           complete:function(){
+	        	   top.ue.closeAll("loading");
+	           },
+	           success: function(result) {
+	               if (result.code == 0) {
+	            	   top.rui.dynamic({
+	   					title:"修改楼层",
+	   					content:$("#floorDialog").html(),
+	   					area:['600px'],
+	   					btn:['确认','取消'],
+	   					success: function(lay,idx){
+	   						
+	   						var data = result.data;
+	   						loadAppPages(lay,data.adPgCode);
+
+	   						$("#cfId",lay).val(data.cfId);
+	   						$("input[name='cfName']",lay).val(data.cfName);
+							$("textarea[name='cfDesc']",lay).val(data.cfDesc);
+							$("input[name='cfMoreLink']",lay).val(data.cfMoreLink);
+
+	   						
+	   						$("#adPgCode",lay).val(data.adPgCode);
+	   						if(data.adPgCode == 1001){
+	   							$("#url",lay).val(data.adPageParamJson.url);
+	   							$("#title",lay).val(data.adPageParamJson.title);
+	   						}else if(data.adPgCode == 1054){
+	   							$("#s_supplier",lay).val(data.adPageParamJson.s_supplier);
+	   							$("#sellerId",lay).val(data.adPageParamJson.sellerId);
+	   							$("#suDomainPrefix",lay).val(data.adPageParamJson.suDomainPrefix);
+	   							$("#s_key",lay).val(data.adPageParamJson.s_key);
+	   							
+	   						}else if(data.adPgCode == 1005){
+	   							$("#gId",lay).val(data.adPageParamJson.gId);
+	   							$("#siteId",lay).val(data.adPageParamJson.siteId);
+	   							
+	   						}else if(data.adPgCode == 1013){
+	   							$("#suDomainPrefix",lay).val(data.adPageParamJson.suDomainPrefix);
+	   							$("#suType",lay).val(data.adPageParamJson.suType);
+	   							
+	   						}
+	   					},
+	   					yes:function(idx,lay){
+	   						saveCliniCf(idx,lay);
+	   					}
+	   				});
+	            	   
+	               }else{
+	               	  top.layer.msg("系统出现异常！");	
+	               }
+	           },
+	           error: function(){
+	        	   top.layer.msg("系统出现异常！");
+	           }
+	       });
+		
+	}
+
+
+	//下线广告
+	function updateAdStatus(saId,status){
+		var ad = {};
+		ad.saId = saId;
+		ad.saStatus = status;
+		top.ue.confirm({
+			content: "<p style='padding:20px 10px;'>您确定要下线该广告吗？</p>", 
+			area:['520px'],
+			ok: function(idx,lay){
+				$.ajax({
+			           url: '/api/clinicAd/offline',
+			           type: 'POST',
+			           data: {"ad":$.toJSON(ad)},
+			           dataType: 'json',
+			           complete:function(){
+			        	   top.ue.close(idx);
+			           },
+			           success: function(result) {
+			               if (result.code == 0) {
+			            	   top.layer.msg("操作成功！");	
+			            	   //window.location.reload(true);
+                               getPageData();
+			               }else{
+			               	  top.layer.msg("系统出现异常！");	
+			               }
+			           },
+			           error: function(){
+			        	   top.layer.msg("系统出现异常！");
+			           }
+			       });
+				
+			}	
+		});
+		
+	}
+	
+	//上移
+	function moveUpAd(id,el,type){
+	   var idArray = [];
+	   var _cur = {},_prev = {};
+	   
+	   var prevId = $(el).parents('tr').prev().find('input[name="itemId"]').val();
+	   var prevOrder = $(el).parents('tr').prev().find('input[name="itemOrder"]').val();
+	   var curOrder = $(el).siblings('input[name="itemOrder"]').val();
+
+	    var url,dataJson;
+	    if(type) {  //  楼层
+	 		_cur.cfId = id;
+	 	    _cur.cfOrder = prevOrder;
+	 	    idArray.push(_cur);
+
+	 	    _prev.cfId = prevId;
+	 	    _prev.cfOrder = curOrder;
+	 	    idArray.push(_prev);
+
+	 		url = '/api/clinicFloor/move';
+	 		dataJson = {"cfs":$.toJSON(idArray)}
+	    }
+	    else {  //  广告
+	 		_cur.saId = id;
+	 	    _cur.saOrder = prevOrder;
+	 	    idArray.push(_cur);
+
+	 	    _prev.saId = prevId;
+	 	    _prev.saOrder = curOrder;
+	 	    idArray.push(_prev);
+
+	 		url = '/api/clinicAd/move';
+	 		dataJson = {"ads":$.toJSON(idArray)}
+	    }
+
+	   $.ajax({
+           url: url,
+           type: 'POST',
+           data: dataJson,
+           dataType: 'json',
+           complete:function(){
+        	   top.ue.closeAll("loading");
+           },
+           success: function(result) {
+               if (result.code == 0) {
+            	   top.layer.msg("操作成功！");	
+            	   //window.location.reload(true);
+                   getPageData();
+               }else{
+               	  top.layer.msg("系统出现异常！");	
+               }
+           },
+           error: function(){
+        	   top.layer.msg("系统出现异常！");
+           }
+       });
+	   
+	}
+	
+	//下移
+	function moveDownAd(id,el,type){
+		   var idArray = [];
+		   var _cur = {},_next = {};
+
+		   var nextId = $(el).parents('tr').next().find('input[name="itemId"]').val();
+	   	   var nextOrder = $(el).parents('tr').next().find('input[name="itemOrder"]').val();
+	       var curOrder = $(el).siblings('input[name="itemOrder"]').val();
+
+		   var url,dataJson;
+		   if(type) {  //  楼层
+				_cur.cfId = id;
+			    _cur.cfOrder = nextOrder;
+			    idArray.push(_cur);
+
+			    _next.cfId = nextId;
+			    _next.cfOrder = curOrder;
+			    idArray.push(_next);
+
+				url = '/api/clinicFloor/move';
+				dataJson = {"cfs":$.toJSON(idArray)}
+		   }
+		   else {  //  广告
+				_cur.saId = id;
+			    _cur.saOrder = nextOrder;
+			    idArray.push(_cur);
+
+			    _next.saId = nextId;
+			    _next.saOrder = curOrder;
+			    idArray.push(_next);
+
+				url = '/api/clinicAd/move';
+				dataJson = {"ads":$.toJSON(idArray)}
+		   }
+
+
+		   $.ajax({
+	           url: url,
+	           type: 'POST',
+	           data: dataJson,
+	           dataType: 'json',
+	           complete:function(){
+	        	   top.ue.closeAll("loading");
+	           },
+	           success: function(result) {
+	               if (result.code == 0) {
+	            	   top.layer.msg("操作成功！");	
+	            	   //window.location.reload(true);
+                       getPageData();
+	               }else{
+	               	   top.layer.msg("系统出现异常！");	
+	               }
+	           },
+	           error: function(){
+	        	   top.layer.msg("系统出现异常！");
+	           }
+	       });
+		
+	}
+
+	//删除楼层
+	function deleteFloor(clId){
+		var cf = {cfId:clId,cfStatus:"-1"};
+		top.ue.confirm({
+			content: "<p style='padding:20px 10px;'>您确定要删除该楼层吗？</p>",
+			area:['520px'],
+			ok: function(idx,lay){
+				$.ajax({
+			           url: '/api/clinicFloor/update',
+			           type: 'POST',
+			           data: {cf:$.toJSON(cf)},
+			           dataType: 'json',
+			           complete:function(){
+			        	   top.ue.close(idx);
+			           },
+			           success: function(result) {
+			               if (result.code == 0) {
+			            	   top.layer.msg("操作成功！");
+			            	   //window.location.reload(true);
+                               getPageData();
+			               }else{
+			               	  top.layer.msg("系统出现异常！");
+			               }
+			           },
+			           error: function(){
+			        	   top.layer.msg("系统出现异常！");
+			           }
+			       });
+
+			}
+		});
+
+	}
+
+    function viewHistoryAd(){
+    	top.utils.openWithTab('cklsgg','查看历史广告','/api/clinicAd/viewUI',{fstBread:'诊所专区频道'});
+    }
+	
+    function jumptoZoneGoods(){
+    	$(".tab-nav").find("li").eq(1).trigger("click");
+    }
+    
+    function viewZonePage(){
+    	top.utils.open('$!{downloadUrl}image/cliniczone-view.jpg');
+    	return false;
+    }
+
+    function showPageModal(url) {
+        top.utils.open(url);
+        /*top.rui.dynamic({
+			type:2,
+            title:"查看频道页面效果",
+            content:url,
+            area:['99%','100%'],
+			btn:null
+        });*/
+        return false;
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+﻿中英文文件名及描述对照
+
+
+
+yhjgl.vm                     销价管理-优惠券管理
+yhjgl_ck.vm                  销价管理-优惠券管理-查看
+yhjgl_ff.vm                  销价管理-优惠券管理-发放
+yhjgl_tj.vm                  销价管理-优惠券管理-添加
+yhjgl_xg_wbd.vm              销价管理-优惠券管理-修改-未绑定
+yhjgl_xg_ybd.vm              销价管理-优惠券管理-修改-已绑定
+yhjgl_dialog.vm              销价管理-优惠券管理-弹窗

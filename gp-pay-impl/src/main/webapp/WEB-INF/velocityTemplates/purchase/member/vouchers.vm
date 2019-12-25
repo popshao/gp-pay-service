@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的优惠券-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+               
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+	   #parse("common/header_top.vm")
+       #parse("common/header.vm")
+        <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 资产中心 &gt; 我的优惠券</p>
+                </div>
+                
+                <div class="order-wdyhj-form cc">
+                	
+                    <input class="input-yhj" type="text" placeholder="请输入兑换优惠券编码进行兑换">
+                    <a href="javascript:redeemVouchers();" class="btn-yhj">兑换优惠券</a>
+                    <span class="text-error"></span>
+                    <span class="text-success">兑换成功</span>
+                    
+                </div>
+                
+                <div class="order_list fn-clear">
+                    <div class="tabnav">
+                        <ul>
+                            <li data-value="0"><a href="javascript:;"><span>未使用<i class="on">($!count.notUsed)</i></span></a></li>
+                            <li data-value="1"><a href="javascript:;"><span>已使用<i>($!count.used)</i></span></a></li>
+                            <li data-value="2"><a href="javascript:;"><span>已过期<i>($!count.expired)</i></span></a></li>
+                        </ul>
+                    </div>
+                 <form action="" method="post" id="searchForm" name="searchForm">
+                        <input type="hidden" name="pi" value="$!pi">
+						<input type="hidden" name="ps" value="6">
+						<input type="hidden" id="status" name="status" value="$status">
+				 </form>
+                <div class="table">
+                	<div class="wdyhj-box">
+	                 #if(!$null.isNull($adList) && $adList.size()!=0 && $status==0)
+				            #foreach($item1 in $adList)
+				     			<div class="wdyhj-ad">
+					     			#if($!item1.aLinkUrl)
+					     			<a href="$utils.getHttpUrl($!item1.aLinkUrl)" target="_blank">
+					     				<img src="$!{downloadUrl}$!item1.aImgPath" title="$!item1.aTitle" width="745" height="115" />
+					     			</a>
+				     				#else
+				     				<img src="$!{downloadUrl}$!item1.aImgPath" title="$!item1.aTitle" width="745" height="115" />
+				     				#end
+				     			</div>       
+				            #end
+		             #end
+					 
+					 #if($status==0)
+					 <ul class="cc">
+					 #else
+					 <ul class="none cc">
+					 #end
+					 #if(!$null.isNull($vouchersList) && $vouchersList.size()!=0)
+			            #foreach($item in $vouchersList)
+							<li>
+							#if($!item.mvaPlatform==2)
+							<i class="icon-tel"></i>
+								#if($status==0)
+								<i class="icon-app"></i>
+								#end
+							#end
+							
+							#if($status==1)
+							<i class="icon-used"></i>
+							#elseif($status==2)
+							<i class="icon-expired"></i>
+							#end
+			            	<div class="top">
+								<p class="text title">$!item.mvaName</p>
+                                <p class="text">
+								#if($!item.mvaRule==1)
+								<span class="unit">¥</span><b class="amount">$!item.mvaValue</b>
+								#elseif($!item.mvaRule==2)
+								#set($highNum=$!item.mvaValue / 10)
+								#set($lowNum=$!item.mvaValue % 10)
+								#if($!item.mvaMaxCheap>0)##
+								<b class="amount">$highNum.$lowNum</b><span class="agio">折(最高优惠$!item.mvaMaxCheap元)</span>
+								#else##
+								<b class="amount">$highNum.$lowNum</b><span class="agio">折</span>
+								#end
+								#end
+								
+								#if($!item.mvaRuleBy==1)
+								<span class="condition">【满$!item.mvaFull元可用】</span></p>
+								#elseif($!item.mvaRuleBy==2)
+								<span class="condition">【满$!item.mvaFull件可用】</span></p>
+								#end
+                                <p class="red">有效期：$utils.formatDate($!item.mvaVouchersStart,"yyyy.MM.dd") - $utils.formatDate($!item.mvaVouchersEnd,"yyyy.MM.dd")
+								<span class="fr">
+								#if($!item.mvaSupplier==1)
+									商家券
+								#else
+									平台券
+								#end
+								</span>
+								</p>
+							</div>
+							<div class="ctn">
+								<div class="hidden">
+									<p class="text" >
+										<span class="left"">使用平台：</span>
+										<span class="right">$item.mvaPlatformParts</span> 
+									</p>
+										
+									<p class="text">
+										<span class="left">支付方式：</span>
+										<span class="right">$item.appointMethods</span>
+									</p>
+									
+									<p class="text">
+										#if($!item.mvaAppoint==1)
+										<span class="left">限定商品：</span>是
+										#end
+									</p>
+									<p class="text">
+										#if($!item.mvaSupplier==2)
+										<span class="left">供应商：</span>
+										<span class="right">全部供应商可用</span>
+										#elseif($!item.mvaSupplier==1)
+										<span class="left">供应商：</span>
+										<span class="right">
+										仅#foreach($condition in $!item.suppliers)$!condition.conditionStr#if( $foreach.hasNext ),#end#end可用
+										</span>
+										#end									
+									</p>
+									<p class="text">
+										#if($!item.mvaArea==2)
+										<span class="left">地区：</span>
+										<span class="right">全部地区可用</span>
+										#elseif($!item.mvaArea==1)
+										<span class="left">地区：</span>
+										<span class="right">
+										仅#foreach($condition in $!item.areas)$!condition.conditionStr#if( $foreach.hasNext ),#end#end可用
+										</span>
+										#end									
+									</p>
+									<p class="text">
+										#if($!item.mvaCategory==2)
+										<span class="left">分类：</span>
+										<span class="right">全部分类可用</span>
+										#elseif($!item.mvaCategory==1)
+										<span class="left">分类：</span>
+										<span class="right">
+										仅#foreach($condition in $!item.categories)$!condition.conditionStr#if( $foreach.hasNext ),#end#end可用
+										</span>
+										#end									
+									</p>
+									<p class="text">
+										#if($!item.mvaManufacture==2)
+										<span class="left">生产厂家：</span>
+										<span class="right">全部生产厂家可用</span>
+										#elseif($!item.mvaManufacture==1)
+										<span class="left">生产厂家：</span>
+										<span class="right">
+										仅#foreach($condition in $!item.manufactures)$!condition.conditionStr#if( $foreach.hasNext ),#end#end可用
+										</span>
+										#end									
+									</p>
+									<p class="text">
+										#if($!item.mvaBrand==2)
+										<span class="left">品牌：</span>
+										<span class="right">全部品牌可用</span>
+										#elseif($!item.mvaBrand==1)
+										<span class="left">品牌：</span>
+										<span class="right">
+										仅#foreach($condition in $!item.brands)$!condition.conditionStr#if( $foreach.hasNext ),#end#end可用
+										</span>
+										#end									
+									</p>
+									<p class="text">
+										#if($!item.mvaPromotion==0)
+										<span class="left">促销限制：</span>
+										<span class="right">该优惠券不能和以下促销同时享受（有买有赠、限时秒杀、特价专区、单品合计满减、低价换购）</span>
+										#end									
+									</p>
+								</div>
+							</div>
+							<a class="btn-more-explain" href="javascript:;">更多说明</a>
+
+							</li>
+                        #end
+					</ul>
+					<!--分页开始 -->
+					#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+					#pagerInfo($!pagerInfo,$!{pagerTotal},"/purchase/vouchers.html")
+					#end #end	
+					#else
+						无相关数据！
+					#end
+					</div>
+				</div>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+	<script type="text/javascript"> 
+/* 		window.onbeforeunload = function () { 
+			var scrollPos; 
+			if (typeof window.pageYOffset != 'undefined') { 
+				scrollPos = window.pageYOffset; 
+			} 
+			else if (typeof document.compatMode != 'undefined' && document.compatMode != 'BackCompat') { 
+				scrollPos = document.documentElement.scrollTop; 
+			} 
+			else if (typeof document.body != 'undefined') { 
+				scrollPos = document.body.scrollTop; 
+			} 
+				document.cookie = "scrollTop=" + scrollPos; //存储滚动条位置到cookies中 
+		} 
+			
+		window.onload = function () { 
+			if (document.cookie.match(/scrollTop=([^;]+)(;|$)/) != null) { 
+				var arr = document.cookie.match(/scrollTop=([^;]+)(;|$)/); //cookies中不为空，则读取滚动条位置 
+				document.documentElement.scrollTop = parseInt(arr[1]); 
+				document.body.scrollTop = parseInt(arr[1]); 
+			} 
+		}  */
+	</script> 
+    <script type="text/javascript">
+ 
+ 		//优惠券-tabs标签页效果
+        $(function(){
+            $('.order_list .tabnav li').click(function(){
+                var index=$(this).index();
+                location.href = "/purchase/member/vouchers.html?status="+index;
+                $(this).addClass('on').siblings().removeClass('on');
+                $('.tab>div').hide().eq(index).show();
+            });
+			
+			$(".wdyhj-box li").each(function () {
+				var _h = $(this).find(".hidden").height();
+				if($(this).find(".hidden").height() > $(this).find(".ctn").height()){
+					$(this).find(".btn-more-explain").show();
+				}else{
+                    $(this).find(".btn-more-explain").hide();
+				}
+            })
+        });
+		
+		//优惠券-更多说明&收起说明效果
+        $(".btn-more-explain").click(function(){
+            if($(this).hasClass("btn-pack-up")){
+                $(this).html("更多说明").removeClass("btn-pack-up").css("bottom","15px");
+                $(this).parents("li").removeClass("more");
+            }else{
+                $(this).html("收起说明").addClass("btn-pack-up").css("bottom",($(this).closest("li").find(".ctn").height() - $(this).closest("li").find(".hidden").height() + 10)+"px");
+                $(this).parents("li").addClass("more");
+            }
+        });
+		
+		//鼠标移出优惠卷收起效果
+		$(".wdyhj-box li .ctn").mouseleave(function(){
+			$(this).parents("li").removeClass("more").find(".btn-more-explain").html("更多说明").removeClass("btn-pack-up").css("bottom","15px");;
+		});
+		
+		//优惠券-APP二维码弹窗	   
+		$(".wdyhj-box li").mouseenter(function(){
+			$(this).find(".icon-app").show();
+		});
+		
+		$(".wdyhj-box li").mouseleave(function(){
+			$(this).find(".icon-app").hide();
+		}); 
+		    
+		//兑换优惠券    
+		$(".text-error").hide();
+		$(".text-success").hide();
+		function redeemVouchers(){
+	    	var redeemCode=$(".input-yhj").val();
+	    	if(redeemCode.replace(/(^\s*)|(\s*$)/g, "") == ""){
+	    		$(".text-error").html("兑换码不能为空").show();
+    	    	return;
+	    	}
+	    	$.showLoad();
+	    	$.ajax({
+	            url: "/redeemVouchers.html",
+	            type: "POST",
+	            data: {"redeemCode":redeemCode},
+	            cache: false,
+	            dataType: "json",
+	            success: function (result) {
+	            	$.hideLoad();
+	            	if(result.success == true && result.data!=undefined && result.data!="" && result.data!=null){
+	            		if(result.data==1){
+	            			$(".text-success").html("兑换成功！").show();
+	               			$(".text-error").html("").hide();
+	               			setTimeout(function(){
+	               				$(".text-success").hide();
+	               			},4000)
+	            			return;
+	            		}else if(result.data==2){
+	            			$(".text-error").html("兑换码不正确！").show();
+	               			$(".text-success").html("").hide();
+	               			setTimeout(function(){
+	               				$(".text-error").hide();
+	               			},4000)
+	            	    	return;
+	            		}else if(result.data==3){
+	            			$(".text-success").html("兑换成功，该优惠券暂未开始！").show();
+	               			$(".text-error").html("").hide();
+	               			setTimeout(function(){
+	               				$(".text-success").hide();
+	               			},4000)
+	            	    	return;
+	            		}else if(result.data==4){
+	            			$(".text-error").html("兑换码已过期！").show();
+	               			$(".text-success").html("").hide();
+	               			setTimeout(function(){
+	               				$(".text-error").hide();
+	               			},4000)
+	            	    	return;
+	            		}else if(result.data==5){
+	            			$(".text-error").html("兑换码已被使用！").show();
+	               			$(".text-success").html("").hide();
+	               			setTimeout(function(){
+	               				$(".text-error").hide();
+	               			},4000)
+	            	    	return;
+	            		}else if(result.data==6){
+	            			$(".text-error").html("兑换码已停用！").show();
+	               			$(".text-success").html("").hide();
+	               			setTimeout(function(){
+	               				$(".text-error").hide();
+	               			},4000)
+	            	    	return;
+	            		}else if(result.data==7){
+	            			$(".text-error").html("兑换码已作废！").show();
+	               			$(".text-success").html("").hide();
+	               			setTimeout(function(){
+	               				$(".text-error").hide();
+	               			},4000)
+	            	    	return;
+	            		}
+	            	}
+	            }
+	        });
+    	}
+	 
+    </script>
+  </body>
+</html>

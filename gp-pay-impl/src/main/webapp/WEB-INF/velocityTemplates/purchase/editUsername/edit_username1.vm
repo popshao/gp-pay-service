@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>修改账户 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+     <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}"/>
+           
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+  	#parse("common/common_script.vm")
+  </head>
+  <body>
+  	<div class="container">
+      #parse("common/header_top.vm")
+      #parse("common/header.vm")  
+      <div class="content">
+        <div class="wrap cc">
+        	
+        	#parse("common/left_menu_purchase.vm")
+        	
+        	<div class="user_right fl">
+	            <!-- 用户中心_主体内容_S -->
+	            <div class="indmain">
+	            	
+	            	<div class="path">
+	                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 账户中心 &gt;<a href="/purchase/account/account_toEdit.html" class="color">账号信息管理</a>&gt; 修改账号</p>
+	                </div>
+	                
+		
+		            <div class="order-zhsz-box">
+		
+		                <div class="order-zhsz-progress-bar">
+		                    <ul class="bar-ls cc">
+		                        <li class="bar-li current">
+		                            <i class="number">1</i>
+		                            <span class="text">验证身份</span>
+		                        </li>
+		                        <li class="bar-li current">
+		                            <i class="number">2</i>
+		                            <span class="text">修改帐号</span>
+		                        </li>
+		                        <li class="bar-li">
+		                            <i class="number">3</i>
+		                            <span class="text">完成</span>
+		                        </li>
+		                    </ul>
+		                </div>
+		
+		                <div class="order-zhsz-table">
+		
+		                    <table border="0" cellpadding="0" cellspacing="0">
+		                        <tr>
+		                            <td class="tar title" width="260">当前帐号：</td>
+		                            <td width="auto">
+		                                <b class="text-title">$!{userInfos.username}</b>
+		                            </td>
+		                        </tr>
+		                        <tr>
+		                            <td class="tar title" valign="top">填写新账号：</td>
+		                            <td>
+		                                <input class="input" type="text" placeholder="" name="newUsername" id="newUsername"/>
+		                                <div class="fl tips-error tips-error-p fn_newUsername" style="display: none;">该账户已被占用</div>
+		                            </td>
+		                        </tr>
+		                        <tr>
+		                            <td class="tar title"></td>
+		                            <td><a href="javascript:;" class="btn">提交</a></td>
+		                        </tr>
+		                    </table>
+		
+		                </div>
+		
+		            </div>
+
+        		</div>
+	            <!-- 用户中心_主体内容_E -->
+        	</div>
+        
+        </div>
+      </div>
+    </div>
+    
+    #parse("/common/footer.vm")
+    
+	<script type="text/javascript" src="/js/login.js?v=$!{jscss_version}"></script>
+    <script>
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+			render:true,
+            handler:function (btn) {
+                location.href = document.referrer;
+            }
+        })
+    function check_data(){
+    	var newUsername   = $("#newUsername").val();
+
+    	if(newUsername == ""){
+    		show_error(".fn_newUsername","请输入您的新账号");
+    		return false;
+    	}
+    	
+    	var p = /[0-9a-z]/i;
+    	var b = p.test(newUsername);//true,说明有英文字母或数字
+    	if(newUsername.length<4||newUsername.length>20||!newUsername.match(/[^0-9]/ig)){
+    		show_error(".fn_newUsername","字母、或字母+数字组合，用户名长度为4~20位");
+    		return false;
+    	}
+    	
+   	　　var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+    	　　if(reg.test(newUsername)){
+    		show_error(".fn_newUsername","字母、或字母+数字组合，用户名长度为4~20位");
+    		return false;
+   		}   
+    	return true;
+    }
+    
+    $(".btn").click(function() {
+		if(!check_data()){
+			return false;
+		}	
+		var newUsername   = $("#newUsername").val();
+		var params = {
+				newUsername	: newUsername
+		};	
+		$.ajax({
+			url: "/purchase/update_username_save.html",
+			type: "post",
+			dataType: "json",
+			data: params,
+			success: function(data) {
+				if(data.success){
+					if(data.data==null){
+						window.location.href = "/purchase/edit_username2.html";
+					}else{
+						if (data.data.status == "101") {
+							show_error(".fn_newUsername","字母、或字母+数字组合，用户名长度为4~20位");
+							$("#newUsername").val("");
+						}else if(data.data.status == "102"){
+							show_error(".fn_newUsername","该用户名已被占用");
+						}else if(data.data.status == "103"){
+							show_error(".fn_newUsername","用户名只能修改两次");
+						}else{
+							show_error(".fn_newUsername","系统错误，请重试");
+						}
+					}
+				}
+			}
+		});
+		return false;
+	})
+	
+	$("input[name=newUsername]").keyup(function() {
+		var newUsername = $("#newUsername").val();
+	   	　　var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+    	　　if(reg.test(newUsername)){
+    		show_error(".fn_newUsername","字母、或字母+数字组合，用户名长度为4~20位");
+    		return false;
+   		   }else{
+   			hide_error(".fn_newUsername");
+   		   } 
+	})
+	
+	function show_error(fun,mes){
+		$(fun).html(mes).show();
+	}
+	function hide_error(fun){
+		$(fun).html("").hide();
+	}
+    </script>
+    
+  </body>
+</html>

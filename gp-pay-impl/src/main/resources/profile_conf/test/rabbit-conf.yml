@@ -1,0 +1,8 @@
+addresses: test.mq.rgec.local:8220,test.mq.rgec.local:8221,test.mq.rgec.local:8222
+conf:
+  -
+    module: default
+    username: admin
+    password: password
+    vhost: /
+    confirms: true

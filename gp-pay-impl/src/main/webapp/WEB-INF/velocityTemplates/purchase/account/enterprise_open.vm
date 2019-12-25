@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>资质查看大图- 我的医药网</title>
+
+<!-- mypharma_公共资源 -->
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+
+<!-- mypharma_样式 -->
+<link rel="stylesheet" type="text/css" href="/css/global-old.css?v=$!{jscss_version}" />
+<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+
+<!--PNG格式图片兼容IE6解决方案 -->
+<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+
+</head>
+
+<body>
+	<img  src="$!{picurl}">
+</body>
+
+</html>

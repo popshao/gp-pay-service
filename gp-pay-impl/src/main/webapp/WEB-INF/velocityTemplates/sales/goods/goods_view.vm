@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>商品信息查看  - 我的医药网</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+       
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    <style type="text/css">
+     .info_box3 li label{
+      width: 306px;
+      }
+    </style>
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+         #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                	<p><a href="/sales/index.html" class="color">销售中心 </a> &gt; 商品管理 &gt; 商品信息查看</p>
+                </div>
+                <h3 class="info_title">商品信息</h3>
+                <div class="info_sheet cc">
+                	<form action="" method="post" id="">
+                        <ul>
+                            <li>
+                                <label>通用名（化学名）：</label>
+                                $!{goods.gName}
+                            </li>
+                            <li>
+                                <label>商品助记码：</label>
+                                $!{goods.gNameCode}
+                            </li>
+                            <li>
+                                <label>商品名：</label>
+                                $!{goods.gCommonName}
+                            </li>
+                            <li>
+                                <label>别名：</label>
+                                $!{goods.gAlias}
+                            </li>
+                            <li>
+                                <label>商品编码：</label>
+                                $!{goods.gSn}
+                            </li>
+                            <li>
+                                <label>批准文号：</label>
+                                $!{goods.gLicenseNo}
+                            </li>
+                            <li>
+                                <label>生产厂家：</label>
+                                $!{goods.gManufacture}
+                            </li>
+                            <li>
+                                <label>生产厂家助记码：</label>
+                                $!{goods.gManufactureCode}
+                            </li>
+                            <li>
+                                <label>商品规格：</label>
+                                $!{goods.gSpecifications}
+                            </li>
+                            <li>
+                                <label>基本单位：</label>
+                                $!{goods.gUnit}
+                            </li>
+                            <li>
+                                <label>是否拆零销售：</label>
+                                #if($goods.gCanSplit==1) 是 #else 否 #end 
+                            </li>
+                            <li>
+                                <label>中包装数量：</label>
+                                $!{goods.gMiddlePackage}
+                            </li>
+                            <li>
+                                <label>大包装数量：</label>
+                                $!{goods.gBigPackage}
+                            </li>
+                            
+                            <li>
+                                <label>商品状态：</label>
+                               	#if($goods.gStatus==1) 上架 #else 下架 #end
+                               	<i class="i-tips">
+                               	#if($goods.gdowntype==0) &nbsp; #else 
+		                           	质检不通过下架，
+		                           	#if($goods.gdowntype==1) 无批准文号 #end  
+		                           	#if($goods.gdowntype==2) 批准文号过期、注销、错误 #end 
+		                           	#if($goods.gdowntype==3) 无规格或规格不明确 #end 
+		                           	#if($goods.gdowntype==4) 根据批文查询，名称错误 #end 
+		                           	#if($goods.gdowntype==5) 根据批文查询，规格错误 #end 
+		                           	#if($goods.gdowntype==6) 根据批文查询，厂家错误 #end 
+		                           	#if($goods.gdowntype==7) 其它 #end 
+                               	#end
+                               	</i>
+                           </li>
+                            #if($!utils.notEmpty($!taxrateList))
+                                <li>
+                                    <label>商品税率：</label>
+                                    $!{goods.gTaxRate}%
+                                </li>
+                                <li>
+                                    <label>商品税务码：</label>
+                                    $!{goods.gTaxRateCode}
+                                </li>
+                            #end
+
+                            <li>
+                                <label>商品内码(供应商)：</label>
+                                $!{goods.gInSn}
+                            </li>
+                            <li>
+                                <label>商品条形码：</label>
+                                $!{goods.gBarCode}                           
+                            </li>
+                            <li>
+                                <label>商品销售控制：</label>
+                                #if($goods.gControl==0) 普通药品 #else #if($goods.gControl==1) 医院专供 #end #end
+                            </li>
+                            #if($user.userType==3)
+                            <li>
+                                <label>库存数量：</label>
+                                $!{goods.gcn}
+                            </li>
+                            <li>
+                                <label>允许超卖：</label>
+                                #if($goods.oversale==1)
+                                    是
+                                #else
+                                    否
+                                #end
+                            </li>
+                            <li>
+                                <label>零售价：</label>
+                                $!{goods.gPrice}
+                            </li>
+                            
+                            #end
+                        </ul>
+               		</form>
+                </div>
+                #if($user.userType==3)
+                <h3 class="info_title">产品一级经销商</h3>
+                <div class="info_sheet cc">
+                    <div class="order_detail">
+                        <div class="toogle-wrap" id="promotion_member">
+                            <div class="tab-box">
+                                <div class="tab-con">
+                                    <ul class="cc">
+                                    #foreach($item in $goodsAgencyList)
+                                        <li><div class="customer-item"><b></b>$!item.agencyEName</div></li>
+                                    #end
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                #end
+                <h3 class="info_title">商品分类信息</h3>
+                <div class="info_sheet cc">
+                	<form action="" method="post" id="">
+                	    <input type="hidden" id="gId" name="gId"  value="$!{goods.gId}"/>
+                        <ul>
+                            <li class="w320">
+                                <label>商品一级分类：</label>
+                                $!{sgc1Name}
+                            </li>
+                            <li class="w320">
+                                <label>商品二级分类：</label>
+                                $!{sgc2Name}
+                            </li>
+                            #if($user.userType==2)             
+                            <li class="w320">
+                                <label>商品类型：</label>
+                                #if($goods.gType==0) 普通 #else #if($goods.gType==1) 挂单品种 #end  #if($goods.gType==2) 新品上架 #end #if($goods.gType==3) 专供品种 #end #end
+                                #if($goods.clinicSupplyFlag == 1)
+                                    ;&nbsp 诊所专区推荐
+                                #end
+                            </li>
+                            #end
+                            #if($user.userType==3)
+                            <li class="textarea_box">
+                                <label>在售区域：</label>
+                                <textarea class="textarea" name="siteGoodsString"  disabled="disabled">$!{siteGoodsString}</textarea>                 
+                            </li>
+                            #end
+                            #if($user.userType==2)
+                            <li>
+                                <label>专供品种：</label>
+                                #if($goods.gTag==0) 否  #end #if($goods.gTag==1) 是 #end  
+                            </li>
+                            <li>
+                            	<label>备注：</label>
+                            	$!{goods.gRemark}
+                             </li>
+                            <li>
+                                <label>药品剂型分类：</label>
+                                $!{gdfName}
+                            </li>
+                            #end
+                        </ul>
+               		</form>
+                </div>
+                #if($user.userType==2)
+                <h3 class="info_title">价格和库存</h3>
+                <div class="info_sheet cc info_box3">
+                	<form action="" method="post" id="">
+                        <ul>
+                            <li>
+                                <label>成本价：</label>
+                                $!{goods.gCost}                    
+                            </li>
+                            <li>
+                                <label>零售价：</label>
+                                $!{goods.gPrice}
+                            </li>
+                            <li>
+                                <label>商品基价：</label>
+                                $!{goods.gBasePrice}
+                            </li>
+                            <li>
+                                <label>商品库存：</label>
+                                $!{goods.gcn}
+                            </li>
+                            <li>
+
+                                <label>允许超卖：</label>
+                                #if($goods.oversale==1)
+                                    是
+                                #else
+                                    否
+                                #end
+
+                            </li>
+
+
+##                            #if(!$null.isNull($!{shopCustomerTypeList}) && ($!shopCustomerTypeList.size()>0))
+##                            #foreach($item in $shopCustomerTypeList)
+##                            <li>
+##                                <label>$!{item.sctName}的采购库存数量：</label>
+##                                $!goodsCustomNumber.get($!{item.sctNumberField})
+##                            </li>
+
+
+                        </ul>
+               		</form>
+                </div>
+                <h3 class="info_title">关键权限</h3>
+                <div class="info_sheet cc">
+                	<form action="" method="post" id="">
+                        <ul>
+                           <li>
+                                <label>内外销：</label>   
+                                #if($goods.gArea==0) 不限  #end #if($goods.gArea==1) 内销  #end #if($goods.gArea==2) 外销" #end
+                            </li>
+                            <li>
+                            	
+                            </li>
+                            <li>
+                                <label>分单类别 仓储地点：</label>
+		                           $!{socName}        
+		                    </li>
+                            <li>
+                                <label>采购权限：</label>      
+                                $!{shopPurvieName}
+                            </li>
+                        </ul>                       
+               		</form>
+                </div>
+                #end
+                <div class="info_btn" >
+                	#*<a href="/sales/goods/goods_index.html?pi=$!{pi}&gIds=$!{gIds}&isAllChoice=$!{isAllChoice}&gName=$!{gName}&gSn=$!{gSn}&gManufacture=$!{gManufacture}&gLicenseNo=$!{gLicenseNo}&gSpecifications=$!{gSpecifications}&gType=$!{gType}&sgcId1=$!{sgcId1}&sgcId2=$!{sgcId2}" class="btn" id="closeBtnBack">关闭</a>*#
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+    <script>
+        function getUrlParam(name) {
+            try{
+                //var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                var pr = ""
+                var url=window.location.href;
+                pr=window.location.search.substr(1).match(reg);
+                if(pr!=null) {
+                    return decodeURI(pr[2]);
+                }
+                return null;
+            }catch (e){
+                return null;
+            }
+        }
+        $(function () {
+            var _url = $("#closeBtnBack").attr("href");
+            var _order = getUrlParam("order");
+            var _word = getUrlParam("word");
+            if(_order){
+                _url+="&order="+_order;
+            }
+            if(_word){
+                _url+="&word="+_word;
+            }
+            $("#closeBtnBack").attr("href",_url);
+        })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,189 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<!--[if gte mso 9]><xml><x:ExcelWorkbook>
+<x:ExcelWorksheets><x:ExcelWorksheet><x:Name>
+</x:Name><x:WorksheetOptions><x:Selected/></x:WorksheetOptions>
+</x:ExcelWorksheet>
+</x:ExcelWorksheets></x:ExcelWorkbook></xml>
+<![endif]-->
+<style>
+.table-dotted {
+    border-collapse: collapse;
+}
+.table-dotted tbody .th {
+    border: 1px #99bbe8;
+    background-color:#8DB4E3;
+    border-spacing: 1px;
+    text-align: right;
+    font-weight: normal;
+    white-space: nowrap;
+    padding: 2px;
+    line-height:22px;
+}
+
+.table-dotted tbody .td {
+    border: 1px #99bbe8;
+    border-spacing: 1px;
+    text-align: left;
+    padding: 2px;
+    line-height:22px;
+}
+.format{
+mso-number-format:'\@';
+}
+</style>
+
+</head>
+<body leftmargin=0 topmargin=0 marginwidth=0 marginheight=0>
+<table class="table-dotted" width="100%">
+<tbody>
+	<tr>
+        <th>结算单生成日期</th>
+        <th>中金订单金额</th>
+        <th>结算状态</th>
+        <th>结算时间</th>
+        <th>易宝订单金额</th>
+        <th>结算状态</th>
+        <th>结算时间</th>
+        <th>支付宝订单金额 </th>
+        <th>结算状态</th>
+        <th>结算时间</th>
+        <th>微信订单金额</th>
+        <th>结算状态</th>
+        <th>余额订单金额</th>
+        <th>结算状态</th>
+        <th>结算时间</th>
+        <th>优惠券平台应补贴金额</th>
+        <th>结算状态</th>
+        <th>结算时间</th>
+        <th>随机立平台应减补贴金额</th>
+        <th>结算状态</th>
+        <th>结算时间</th>
+        <th>总计应收金额</th>
+	</tr>
+	#if($!settlementList && $!settlementList.size()!=0)
+
+    #foreach($item in $settlementList)
+	<tr>
+		<td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.createTime}</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.zjUnit)
+            $!utils.priceFormart($!item.zjUnit.amount)
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.zjUnit)
+            $!item.zjUnit.status
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.zjUnit)
+                $utils.formatDate($!item.zjUnit.auditTime,"yyyy-MM-dd HH:mm:ss")
+            #end
+        </td>
+
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.ybUnit)
+            $!utils.priceFormart($!item.ybUnit.amount)
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.ybUnit)
+            $!item.ybUnit.status
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.ybUnit)
+                $utils.formatDate($!item.ybUnit.auditTime,"yyyy-MM-dd HH:mm:ss")
+            #end
+        </td>
+
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.zfbUnit)
+            $!utils.priceFormart($!item.zfbUnit.amount)
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.zfbUnit)
+            $!item.zfbUnit.status
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.zfbUnit)
+                $utils.formatDate($!item.zfbUnit.auditTime,"yyyy-MM-dd HH:mm:ss")
+            #end
+        </td>
+
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.wxUnit)
+            $!utils.priceFormart($!item.wxUnit.amount)
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.wxUnit)
+            $!item.wxUnit.status
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.wxUnit)
+                $utils.formatDate($!item.wxUnit.auditTime,"yyyy-MM-dd HH:mm:ss")
+            #end
+        </td>
+ 		<td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.wlUnit)
+            $!item.wlUnit.status
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.wlUnit)
+                $utils.formatDate($!item.wlUnit.auditTime,"yyyy-MM-dd HH:mm:ss")
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.couponUnit)
+            $!utils.priceFormart($!item.couponUnit.amount)
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.couponUnit)
+            $!item.couponUnit.status
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.couponUnit)
+                $utils.formatDate($!item.couponUnit.auditTime,"yyyy-MM-dd HH:mm:ss")
+            #end
+        </td>
+
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.promotionUnit)
+            $!utils.priceFormart($!item.promotionUnit.amount)
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.promotionUnit)
+            $!item.promotionUnit.status
+            #end
+        </td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.promotionUnit)
+                $utils.formatDate($!item.promotionUnit.auditTime,"yyyy-MM-dd HH:mm:ss")
+            #end
+        </td>
+
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+            #if($!item.amount)
+                                                   $!utils.priceFormart($!item.amount)
+                                               #end</td>
+     </tr>
+     #end
+     #end
+</tbody>
+</table>
+
+</body>
+</html>

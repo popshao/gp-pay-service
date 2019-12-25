@@ -1,0 +1,858 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>订单收货-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <link rel="stylesheet" href="/js/webupload/webuploader.css?v=1.13">
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}">
+
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/layui/layui.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        function showPromotion(o, valid, tit, txt, url) {
+            if (valid == 1) {
+                $(o).append('<div class="cxbox"><a target="_blank" href="' + url + '">去抢购&gt;&gt;</a><h5>' + tit + '</h5><p>' + txt + '</p></div>');
+            } else {
+                $(o).append('<div class="cxbox"><h5>' + tit + '</h5><p>' + txt + '</p></div>');
+            }
+        }
+
+        function removePromotion(o) {
+            $(o).find('.cxbox').remove();
+        }
+
+        $(function () {
+
+            $(".img-tips-rc").each(function () {
+                $(this).on("mouseenter", function () {
+                    var _this = $(this);
+                    layer.tips("<img style='max-width:450px;max-height:400px;' src='" + _this.attr("data-src-ignore") + "'>", _this, {
+                        tips: [2, '#fff'],
+                        time: 9999999999999,
+                        success: function (lay) {
+                            lay.find("img").on('load', function () {
+                                var _w = $(this).width() + 20;
+                                var _h = $(this).height() + 20;
+                                lay.css({"width": _w + "px", "height": _h + "px"})
+                            })
+                        }
+                    })
+                }).on("mouseleave", function () {
+                    layer.closeAll("tips");
+                })
+            })
+
+        })
+
+    </script>
+
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm") #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_purchase.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 订单中心 &gt; <a
+                                href="/purchase/order/wddd.html" class="color">采购订单</a> &gt; 订单收货</p>
+                    </div>
+                    <div class="order_t">
+                        <span>订单号：$!order.oSn
+                        #* 菲加云订单图标加tips效果 *#
+                            #if ($!order.sourceCode == "saas" || $!order.sourceCode == "saas-cp")
+                                <i class="order-tips-fjy" data-tips-style="{color:'#000'}" data-tips="true"
+                                   data-tips-title="此订单来源于菲加云"></i>
+                            #end
+                             #if($!order.orderType==5)
+		                      <i class="pre-sell-user-detail">[预售]</i>
+		                     #end
+                        </span>
+                        <span>下单时间：$utils.formatDate($!order.oAddTime,"yyyy-MM-dd HH:mm:ss")</span>
+                        <span>供应商：$!order.oSellerName</span><br/>
+                        <span>收货地址：$!order.oProvince $!order.oTown $!order.oArea $!order.oAddress</span>
+                        <span>收货人：$!order.oPeople</span>
+                        <span>手机：$!order.oTel</span>
+                    </div>
+                    <div class="order_detail order_font">
+                        <div class="table">
+                            <a href="/purchase/order/wddd.html?$!{returnPageParam}" class="btn-return">返回</a>
+                            <a href="javascript:void(0);" onclick="accpetCheck();" class="btn_ok ml6">收货</a>
+                            #if($order.isPartSend==1)
+                                <span class="fr"  style="padding-top: 20px;"><font  color="red"  >融资订单不允许商品退货,详情请参考融资合同</font></span>
+                            #end
+                            <table cellpadding="0" cellspacing="0" id="table">
+                                <thead class="head">
+                                <tr class="line">
+                                    <th></th>
+                                    <th>商品名称</th>
+                                    <th>生产厂家</th>
+                                    <th>批准文号</th>
+                                    <th>规格</th>
+                                    <th>单位</th>
+                                    <th>单价(元)</th>
+                                    <th>发货数量</th>
+                                    <th>收货数量</th>
+                                    <th>小计(元)</th>
+                                    <th>批次号</th>
+                                    <!--     <th>状态</th>-->
+                                </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                    #if(!$null.isNull($order.orderDetailList) && $order.orderDetailList.size()!=0)
+                                        #foreach($item in $order.orderDetailList)
+                                        <tr name="comm">
+                                            <td class="td-none">$!velocityCount</td>
+                                            <td style="text-align:left;">
+                                                <dl>
+                                                    #if($!item.pri && $!item.pri.pactType != 0)
+                                                        <dt style="cursor:pointer;"
+                                                            onmouseenter="showPromotion(this,'$!item.pri.isValid','$!item.pri.pactTitle','$!item.pri.rules','http://$!{suDomainPrefix}.mypharma.com/promotion/$!{item.odActivityId}.html');"
+                                                            onmouseleave="removePromotion(this)">
+                                                            #if($!item.pri.pactType == 1)
+                                                                <i class="ico-bg">满减 </i>
+                                                            #elseif($!item.pri.pactType == 2)
+                                                                <i class="ico-bg">买赠 </i>
+                                                            #elseif($!item.pri.pactType == 3)
+                                                                <i class="ico-bg">换购</i>
+                                                            #elseif($!item.pri.pactType == 4)
+                                                                <i class="ico-bg">特价</i>
+                                                            #elseif($!item.pri.pactType == 5)
+                                                                <i class="ico-bg">秒杀</i>
+                                                            #end
+                                                        </dt>
+                                                    #else
+                                                        #if($!item.gType==1 || $!item.gType==2)
+                                                            <dt>
+                                                                <i class="ico-bg">新品</i>
+                                                            </dt>
+                                                        #end
+                                                        #if($!item.gType == 3 || $!item.gType == 5)
+                                                            <dt>
+                                                                <i class="ico-bg">专销</i>
+                                                            </dt>
+                                                        #end
+
+                                                    #end
+                                                    <dd>
+                                                        <a class="a-link"
+                                                           href="http://$!{wwwHostAndPort}/item/$!{item.odGId}.html"
+                                                           target="_blank">
+                                                            $!item.odName
+                                                        </a>
+                                                        <input type="hidden" name="odId" value="$!item.odId"/>
+                                                    </dd>
+                                                </dl>
+                                            </td>
+                                            <td>$!item.odManufacture</td>
+                                            <td>$!item.odLicenseNumber</td>
+                                            <td>$!item.odSpecifications</td>
+                                            <td>$!item.odUnit</td>
+                                            <td>
+                                                #if($!item.odPrice != $!item.odPrePrice)
+                                                    <span style="text-decoration:line-through;">$!utils.priceFormart($!{item.odPrePrice})</span><br/>
+                                                    <p style="font-size:12px; color:#ef0c4a;">$!utils.priceFormart($!{item.odPrice})</p>
+                                                #else
+                                                    $!utils.priceFormart($!{item.odPrice})
+                                                #end
+                                            </td>
+                                            <td>
+                                                #if($!order.oStatus >= 90)
+                                                    #if($!item.odSendNumber == 0)
+                                                        已驳回<i class="order-tips" data-tips="true"
+                                                              data-tips-title="商品由于卖家库存等原因未发货。如有问题，请及时联系供应商"></i>
+                                                    #else
+                                                        $!{item.odSendNumber}
+                                                    #end
+                                                #else
+                                                    未发货
+                                                #end
+                                            </td>
+                                            <td>
+                                                #if($!item.odSendNumber)
+                                                    #if($!item.odSendNumber != 0)
+                                                        <input type="text" class="txt rocky-click" style="width:60px;"
+                                                               name="acceptNumber" value="$!item.odSendNumber"
+                                                               max="$!item.odSendNumber"
+                                                               onkeyup="this.value=this.value.replace(/\D/g,'')"  onafterpaste="this.value=this.value.replace(/\D/g,'')" onkeyupFB="keyupNum(event,this);" onblur="validNumber(this,true);" data-tips="true" data-tips-title="请填写0~$!item.odSendNumber" #if($order.isPartSend==1) disabled="disabled"  #end>
+                                                        <input type="hidden" name="isRebut" value="0">
+                                                    #else
+                                                        --
+                                                        <input type="hidden" name="acceptNumber"
+                                                               value="$!item.odSendNumber">
+                                                        <input type="hidden" name="isRebut" value="1">
+                                                    #end
+                                                #end
+                                            </td>
+                                            <td>
+                                                #if($!item.odSendNumber)
+		                                    #if($!item.odSendNumber != 0)
+                                                    $!utils.priceFormart($!{item.sendSubtotal})
+                                                #end
+		                                    #end
+                                            </td>
+                                            <td>$!item.osiBatch<input type="hidden" name="osiBatch"
+                                                                      value="$!item.osiBatch"></td>
+                                        </tr>
+                                       <!-- 促销信息开始 -->
+								       #if($!item.odActivity==3 && $!item.odActivityId!=0)
+								       #if($!item.pri.policy && $!item.pri.policy!='' && $!item.pri.pactType!=2)
+								       <tr style="font-size:12px;">
+								       <td colspan="14" style="text-align:left;background:white;color:#ef0c4a;">
+								          <span style="padding-right:22px;padding-left:98px;color:#ef0c4a;">$!{item.pri.policy}</span>
+								       </td>
+								       </tr>
+								       #end
+								       #end
+								       <!-- 促销信息结束 -->
+								       
+                                        #end
+                                    #end
+                                    
+                               #* 促销买赠信息开始 *#
+						       #if($!utils.notEmpty($!giftList))
+						       <tr style="font-size:12px;">
+						       <td colspan="14" style="text-align:left;background:white;color:#ef0c4a;">
+						          #foreach($item in $!giftList) 
+						          <span style="padding-right:22px;padding-left:57px;color:#ef0c4a;">$!{item.policy}</span>
+						          #set($giftWrapper = $!item.giftWrapper)
+						          #if($!utils.notEmpty($!giftWrapper.gift_img_list))
+						       	 	 赠品：
+						       	      #foreach($giftimg in $!giftWrapper.gift_img_list)
+						       	      <img data-src-ignore="$!utils.getNewImgDomain($!{giftimg})" class="img-tips-rc" 
+						       	      style="cursor:pointer;vertical-align: middle;" 
+						       	      src="$!utils.getNewImgDomain($!{giftimg})?imageView2/2/w/40" title="$!giftWrapper.gift_name$!{velocityCount}" />
+						       	      #end
+						       	      <br>
+						  	      #end
+						  	      #end
+						       </td>
+						       </tr>
+						       #end
+						       #* 促销买赠信息结束 *#
+						       
+                                </tbody>
+                            </table>
+                            <div class="line_b">
+                                <p>发票号：$!{orderSend.osBill}</p>
+                            </div>
+                            #if ("$!order.deliveryNote" != "")
+                                <div class="line_b">
+                                    <p>出库留言：$!order.deliveryNote</p>
+                                </div>
+                            #end
+							
+							#if($order.leaseDocument2!=0)
+                            #*签收单*#
+                            <div class="txd-modal fl" style="width: 485px; height: 345px;">
+                                <div class="txd-right fl" style="width: 485px; border: 0 none;">
+                                    <div class="txd-head">
+                                        <span>
+                                            签收单
+                                        </span>
+                                        <a class="show-big-exp" href="javascript:void(0);" onclick="showExpModal('/image/txd-2.jpg')">
+                                            <img src="/image/icon-show-exp.png" alt="">
+                                            <span>查看范例</span>
+                                        </a>
+                                    </div>
+                                    <div class="txd-ctx">
+                                        <div class="txd-upfile-box" style="border: 1px solid #ece7e3; padding: 0 15px; height: 195px;">
+                                            <p class="txd-tips">请上传签收单原件照片或原件扫描件</p>
+                                            <div class="txd-file-list">
+
+                                                <div class="txd-file txd-file-add"></div>
+                                            </div>
+                                        </div>
+                                        <div class="txd-btn-box">
+                                            <div class="txd-btn-wrap" style="border-top: 0 none;">
+                                                <p>格式要求JPG、JPEG、PNG、BMP格式，单张图片不大于2M</p>
+                                                <a href="javascript:void(0);"
+                                                   onclick="submitPeer('$!order.oId',2,'',this)"
+                                                   class="txd-btn">确认上传</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            #*发票*#
+                            <div class="txd-modal fr" style="width: 485px; height: 345px;">
+                                <div class="txd-right fl" style="width: 485px; border: 0 none;">
+                                    <div class="txd-head">
+                                        <span>
+                                            发票
+                                        </span>
+                                        <a class="show-big-exp" href="javascript:void(0);" onclick="showExpModal('/image/txd-3.jpg')">
+                                            <img src="/image/icon-show-exp.png" alt="">
+                                            <span>查看范例</span>
+                                        </a>
+                                    </div>
+                                    <div class="txd-ctx">
+                                        <div class="txd-upfile-box" style="border: 1px solid #ece7e3; padding: 0 15px; height: 195px;">
+                                            <p class="txd-tips">请上传发票原件照片或原件扫描件</p>
+                                            <div class="txd-file-list">
+
+                                                <div class="txd-file txd-file-add"></div>
+                                            </div>
+                                        </div>
+                                        <div class="txd-btn-box">
+                                            <div class="txd-btn-wrap" style="border-top: 0 none;">
+                                                <p>格式要求JPG、JPEG、PNG、BMP格式，单张图片不大于2M</p>
+                                                <a href="javascript:void(0);"
+                                                   onclick="submitPeer('$!order.oId',3,'',this)"
+                                                   class="txd-btn">确认上传</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+						#end
+
+                        </div>
+
+                    #*同行单弹窗TPL*#
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 用户中心_主体内容_E -->
+    </div>
+</div>
+    #parse("/common/footer.vm")
+
+<script type="text/html" id="backInfo">
+    <div class="back-info">
+##        <div class="bi-title">
+##            <h3>退款信息填写</h3>
+##            <a href="javascript:void(0);" class="close-btn">×</a>
+##        </div>
+        <div class="bi-ctx">
+            <p class="bi-tips">
+                该订单需原路退款，请维护支付时使用的银行卡信息
+            </p>
+            <form class="">
+                <input type="hidden" id="lineOid" name="lineOid" value="$!ra.raId">
+                <div class="form-line">
+                    <label>账号类型：</label>
+                    <input type="radio" name="zhlx" value="1" id="zhlx1" style="width: 18px; vertical-align: middle;">
+                    <label for="radio1" style="width: auto">个人</label>
+                    <input type="radio" name="zhlx" value="2" id="zhlx2" style="width: 18px;vertical-align: middle;">
+                    <label for="radio2" style="width: auto">企业</label>
+                </div>
+                <div class="form-line" style="margin-top: 0">
+                    <label for="khd">开户地：</label>
+                    <select name="province" id="province" placeholder="请选择" data-tips="开户地省份" style="border: 1px solid #d3d7da;">
+                        <option value="">请选择</option>
+                    </select>
+                    <select name="city" id="city" placeholder="请选择" data-tips="开户地市区" style="border: 1px solid #d3d7da;">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+                <div class="form-line">
+                    <label for="khyh">开户银行：</label>
+                    <select name="bankid" id="bankid" placeholder="请选择" style="width: 248px; border: 1px solid #d3d7da;">
+                        <option value="">请选择</option>
+                        #if($bankList && $!bankList.size!=0)
+                            #foreach($item in $bankList)
+                                <option value="$!item.id">$!item.name</option>
+                            #end
+                        #end
+                    </select>
+                </div>
+                <div class="form-line">
+                    <label for="khzh">开户支行：</label>
+                    <input type="text" id="khzh" name="khzh" placeholder="请输入开户支行名称">
+                </div>
+                <div class="form-line">
+                    <label for="skr">收款账户：</label>
+                    <input type="text" id="skr" name="skr" placeholder="请输入收款人姓名">
+                </div>
+                <div class="form-line">
+                    <label for="yhzh">银行账号：</label>
+                    <input type="text" id="yhzh" data-reg="/^(\d{8,})$/" name="yhzh" data-plc1="$!ra.accountNumber"
+                           data-plc="请输入银行卡账号">
+                </div>
+                #*<div class="form-line mn-btns" style="text-align: left; margin-top: 20px;">
+                    <label for=""></label>
+                    <a href="javascript:void(0);" class="mn-btn btn-filled bi-confirm" style="margin-left: 0">确认</a>
+                    <a href="javascript:void(0);" class="mn-btn bi-cancel">取消</a>
+                </div>*#
+            </form>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="fileListTpl">
+    {{# if(d.fileList){ }}
+    {{# for(var i=0;i < d.fileList.length;i++){ var file = d.fileList[i] }}
+    <div class="txd-file">
+        <div class="prev-box" data-fid="{{file.fileId}}"
+             data-file='{{ JSON.stringify(file) }}'>
+            <input type="hidden" name="fileName" value="{{file.fileName}}">
+            <input type="hidden" name="originalStoreKey"
+                   value="{{file.originalStoreKey}}">
+            <input type="hidden" name="remark" value="{{file.remark}}">
+            <img class="btn-del" src="/image/icon-del-file.png" alt="删除">
+            <img class="prev-img"
+                 src="$!{downloadUrl}/{{file.thumbStoreKey}}"
+                 data-big="$!{downloadUrl}/{{file.originalStoreKey}}">
+        </div>
+    </div>
+    {{# } }}
+    {{# } }}
+</script>
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script type="text/javascript" src="/js/jquery.nicescroll.min.js?v=$!{jscss_version}"></script>
+<script src="/js/webupload/webuploader.nolog.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/peerModal.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+<script type="text/javascript">
+    var layer , laytpl , layApp;
+    layui.config({
+        base: '/js/layui/extend/'
+    }).use(['layApp', 'layer', 'form','laytpl'], function () {
+        layer = layui.layer,laytpl = layui.laytpl;
+        layApp = layui.layApp;
+        /*layApp.citySelect({
+            province: "#province",
+            city: "#city",
+            url: "/location/provincialCity",
+            place: true
+        })*/
+
+        $(".rocky-click").on("focus",function () {
+            $(this).select();
+        })
+
+        $(".txd-file-add").each(function (i,e) {
+
+            getSinglePeer($(this),i+2,$!order.oId,i);
+
+            var _lay = $(this).closest(".txd-modal");
+            _lay.find(".txd-upfile-box").niceScroll({
+                autohidemode: false,  //是否总是显示
+                cursorcolor: "#bcd7e8"
+            });
+            bindUploadEvt($(this),_lay,i);
+            _lay.find(".btn-del").on("click",function () {
+                uploaders[i].reset();
+                $(this).closest(".txd-file").remove();
+                _lay.find(".txd-upfile-box").getNiceScroll().resize();
+            })
+        })
+
+
+    })
+
+    function keyupNum(event, obj) {
+        var keycode = event.keyCode;
+        if (keycode === 9) { // tab切换跳出
+            return false;
+        } else {
+            var max = $(obj).attr("max");
+            max = parseInt(max);
+
+            var number = $(obj).val().replace(/[^\d]/g, max);
+            if (number > max) {
+                number = max;
+            }
+            if (isNaN(parseInt(number))) {
+                number = max;
+            }
+            $(obj).val(number);
+        }
+    }
+
+    function alertDialog(i) {
+        top.ue.msg("请填写第" + i + "行商品的批次号");
+    }
+
+    function accpetCheck(){
+
+        var _checkNum = true;
+        $("#table").find("[name=acceptNumber]").each(function () {
+            if($(this).val() == ""){
+                _checkNum = false;
+                $(this).trigger("mouseenter");
+            }
+        })
+        if(!_checkNum){
+            top.layer.msg("收货数量不能为空！");
+            return false;
+        }
+
+    	 layer.load();
+        $.ajax({
+            url:"/purchase/order/findAuditByOrderId.html",
+            type:"POST",
+            data:{"oid": $!order.oId},
+            success:function(res){
+               if(res.data==1){
+            	   layer.closeAll("loading");
+            	   accpet();
+               }else{
+            	   layer.closeAll("loading");
+            	   top.ue.msg("请上传签收单后再进行收货！");
+               }
+            },error:function(err){
+            }
+          })
+
+    }
+
+    function accpet() {
+        top.ue.confirm({
+            title: '确认',
+            content: "<p>请确认您收到的商品数量？</p><div style='text-align: left;line-height: 1.5; padding: 20px 20px 0 30px; font-size: 12px; color: #666;'><p>如收货数量小于发货数量将会自动退货;</p><p>在线支付订单，供应商确认退货后货款将原路退还，到账时间以银行为准;</p></div>",
+            ok: function () {
+                var array = [];
+                $("#table tbody tr[name=comm]").each(function (i, item) {
+                    var orderAcceptParam = {};
+                    orderAcceptParam.odId = $(item).find("input[name='odId']").val();
+                    orderAcceptParam.batch = $(item).find("input[name='osiBatch']").val();
+
+                    var acceptNumber = $(item).find("input[name='acceptNumber']").val();
+                    orderAcceptParam.acceptNumber = acceptNumber;
+
+                    orderAcceptParam.isRebut = $(item).find("input[name='isRebut']").val();
+                    array.push(orderAcceptParam);
+                });
+                top.ue.load();
+                $.ajaxPost("/purchase/order/isDualPay4Accept.html", {
+                    "oid":$!order.oId,
+                    "array": $.toJSON(array)
+                }, function (result) {
+                    top.ue.closeLoad();
+                    if (result != "") {
+                        var obj = eval("(" + result + ")");
+                        if (1 == obj.data) {
+                            var editFst = false;
+                            top.rui.dynamic({
+                                title:"退款信息填写",
+                                skin: "dialog-old dialog-old-no-title",
+                                area: ["460px"],
+                                content:$("#backInfo").html(),
+                                success:function (lay,idx) {
+                                    var _lineOid = "$!ra.raId", _len = 8;
+                                    var form = lay.find("form");
+                                    form.unbind("change");
+
+                                    layApp.citySelect({
+                                        province: $("#province",lay),
+                                        city: $("#city",lay),
+                                        url: "/location/provincialCity",
+                                        place: true,
+                                        init:function () {
+                                            if ("$!ra.provinceCode") $("#province",lay).val($!ra.provinceCode).trigger("change");
+                                        }
+                                    })
+
+                                    if (_lineOid) {
+                                        editFst = true;
+                                        $("#yhzh",lay).attr("placeholder", $("#yhzh",lay).attr("data-plc1"));
+                                    } else {
+                                        editFst = false;
+                                        $("#yhzh",lay).attr("placeholder", $("#yhzh",lay).attr("data-plc"));
+                                    }
+
+                                    $("#bankid",lay).val("$!ra.bankId");
+
+                                    setTimeout(function () {
+                                        $("#city",lay).val("$!ra.cityCode");
+                                        form.on("change", function (e) {
+                                            if (editFst) {
+                                                editFst = false;
+                                                clearForm(form, e.target);
+                                            }
+                                        })
+                                    }, 500);
+                                    $("#khzh",lay).val("$!ra.branchName");
+                                    $("#skr",lay).val("$!ra.accountName");
+                                    $("#zhlx$!ra.accountType",lay).prop("checked", "checked");
+                                },
+                                yes:function (idx,lay) {
+                                    var _lineOid = "$!ra.raId", _len = 8;
+                                    var form = lay.find("form");
+                                    var form = lay.find("form");
+                                    var selizeForm = $(form).serializeArray();//序列化form表单值
+                                    var _flag = 1;
+                                    if (selizeForm.length != _len) {
+                                        top.ue.msg("请选择账号类型！");
+                                        return false;
+                                    }
+                                    $.each(selizeForm, function (key, v) {
+                                        var _obj = $("#" + v.name,lay);
+                                        var _text = _obj.attr("data-tips") ? _obj.attr("data-tips") : _obj.parents(".form-line").find("label").text().replace(/：|:/g, "");
+                                        if (!(v.name == "yhzh" && _lineOid)) {
+                                            if (!_lineOid && v.name == "lineOid") {
+
+                                            } else {
+                                                if (!v.value) {
+                                                    top.ue.msg(_text + "不能为空！");
+                                                    _flag = 0;
+                                                    return false;
+                                                }
+                                                var _reg = _obj.attr("data-reg");
+                                                if (_reg && !eval(_reg).test(v.value)) {
+                                                    top.ue.msg(_text + "格式不对！");
+                                                    _flag = 0;
+                                                    return false;
+                                                }
+                                            }
+                                        } else {
+                                            var _reg = _obj.attr("data-reg");
+                                            if (!editFst && !v.value) {
+                                                top.ue.msg(_text + "不能为空！");
+                                                _flag = 0;
+                                                return false;
+                                            }
+                                            if (v.value && _reg && !eval(_reg).test(v.value)) {
+                                                top.ue.msg(_text + "格式不对！");
+                                                _flag = 0;
+                                                return false;
+                                            }
+                                        }
+                                    })
+                                    if (!_flag) {
+                                        return false;
+                                    }
+                                    top.ue.load();
+                                    $.ajaxPost("/purchase/bankAccountSave.html", {
+                                        "selizeForm": selizeForm,
+                                        "oid": "$!order.oId",
+                                    }, function (result) {
+                                        top.ue.closeLoad();
+                                        if (result != "") {
+                                            var obj = eval("(" + result + ")");
+                                            if (1 == obj.data) {
+                                                top.ue.load();
+                                                $.ajaxPost("/purchase/order/ddshSave.html", {
+                                                    "array": $.toJSON(array),
+                                                    "oid": "$!order.oId",
+                                                    "suId": "$!order.oSellerId"
+                                                }, function (result) {
+                                                    top.ue.closeLoad();
+                                                    if (result != "") {
+                                                        var obj = eval("(" + result + ")");
+                                                        if (obj.success) {
+                                                            top.ue.close(idx);
+                                                            window.location.href = "/purchase/order/wddd.html?$!{returnPageParam}";
+                                                            return;
+                                                        } else {
+                                                            top.ue.msg(obj.message);
+                                                        }
+                                                    }
+                                                });
+                                            } else if (0 == obj.data) {
+                                                top.ue.msg("退款信息保存失败，请稍后重试！",{},function () {
+                                                    window.location.href = "/purchase/order/wddd.html?$!{returnPageParam}";
+                                                });
+                                                return false;
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                            /*var zjDiag = layer.open({
+                                title: false,
+                                type: 1,
+                                content: $("#backInfo").html(),
+                                area: ["400px", "470px"],
+                                closeBtn: 0,
+                                success: function (lay, idx) {
+                                    var _lineOid = "$!ra.raId", _len = 8;
+                                    var form = lay.find("form");
+                                    form.unbind("change");
+                                    if (_lineOid) {
+                                        editFst = true;
+                                        $("#yhzh").attr("placeholder", $("#yhzh").attr("data-plc1"));
+                                    } else {
+                                        editFst = false;
+                                        $("#yhzh").attr("placeholder", $("#yhzh").attr("data-plc"));
+                                    }
+
+
+                                    $(lay).find(".close-btn,.bi-cancel").on("click", function () {//取消和右上角按钮
+                                        layer.close(idx);
+                                    });
+                                    $("#bankid").val("$!ra.bankId");
+                                    if ("$!ra.provinceCode") $("#province").val($!ra.provinceCode).trigger("change");
+                                    setTimeout(function () {
+                                        $("#city").val("$!ra.cityCode");
+                                        form.on("change", function (e) {
+                                            if (editFst) {
+                                                editFst = false;
+                                                clearForm(form, e.target);
+                                            }
+                                        })
+                                    }, 500);
+                                    $("#khzh").val("$!ra.branchName");
+                                    $("#skr").val("$!ra.accountName");
+                                    $("#zhlx$!ra.accountType").prop("checked", "checked");
+
+                                    $(lay).find(".bi-confirm").unbind("click").on("click", function () { //确认按钮
+                                        var selizeForm = $(form).serializeArray();//序列化form表单值
+                                        var _flag = 1;
+                                        if (selizeForm.length != _len) {
+                                            layer.msg("请选择账号类型！");
+                                            return false;
+                                        }
+                                        $.each(selizeForm, function (key, v) {
+                                            var _obj = $("#" + v.name);
+                                            var _text = _obj.attr("data-tips") ? _obj.attr("data-tips") : _obj.parents(".form-line").find("label").text().replace(/：|:/g, "");
+                                            if (!(v.name == "yhzh" && _lineOid)) {
+                                                if (!_lineOid && v.name == "lineOid") {
+
+                                                } else {
+                                                    if (!v.value) {
+                                                        layer.msg(_text + "不能为空！");
+                                                        _flag = 0;
+                                                        return false;
+                                                    }
+                                                    var _reg = _obj.attr("data-reg");
+                                                    if (_reg && !eval(_reg).test(v.value)) {
+                                                        layer.msg(_text + "格式不对！");
+                                                        _flag = 0;
+                                                        return false;
+                                                    }
+                                                }
+                                            } else {
+                                                var _reg = _obj.attr("data-reg");
+                                                if (!editFst && !v.value) {
+                                                    layer.msg(_text + "不能为空！");
+                                                    _flag = 0;
+                                                    return false;
+                                                }
+                                                if (v.value && _reg && !eval(_reg).test(v.value)) {
+                                                    layer.msg(_text + "格式不对！");
+                                                    _flag = 0;
+                                                    return false;
+                                                }
+                                            }
+                                        })
+                                        if (!_flag) {
+                                            return false;
+                                        }
+                                        if (!_flag) {
+                                            return false;
+                                        }
+                                        top.ue.load();
+                                        $.ajaxPost("/purchase/bankAccountSave.html", {
+                                            "selizeForm": selizeForm,
+                                            "oid": "$!order.oId"
+                                        }, function (result) {
+                                            top.ue.closeLoad();
+                                            if (result != "") {
+                                                var obj = eval("(" + result + ")");
+                                                if (1 == obj.data) {
+                                                    layer.load();
+                                                    $.ajaxPost("/purchase/order/ddshSave.html", {
+                                                        "array": $.toJSON(array),
+                                                        "oid": "$!order.oId",
+                                                        "suId": "$!order.oSellerId"
+                                                    }, function (result) {
+                                                        layer.closeAll("loading");
+                                                        if (result != "") {
+                                                            var obj = eval("(" + result + ")");
+                                                            if (obj.success) {
+                                                                layer.load();
+                                                                window.location.href = "/purchase/order/wddd.html?$!{returnPageParam}";
+                                                                return;
+                                                            } else {
+                                                            	top.ue.msg(obj.message);
+                                                            }
+                                                        }
+                                                    });
+                                                } else if (0 == obj.data) {
+                                                    top.ue.msg("退款信息保存失败，请稍后重试！",{},function () {
+                                                        layer.load();
+                                                        window.location.href = "/purchase/order/wddd.html?$!{returnPageParam}";
+                                                    });
+                                                    return false;
+                                                }
+                                            }
+                                        })
+                                    })
+                                }
+                            })*/
+                        } else if (0 == obj.data) {
+                            top.ue.load();
+                            $.ajaxPost("/purchase/order/ddshSave.html", {
+                                "array": $.toJSON(array),
+                                "oid": "$!order.oId",
+                                "suId": "$!order.oSellerId"
+                            }, function (result) {
+                                top.ue.closeLoad();
+                                if (result != "") {
+                                    var obj = eval("(" + result + ")");
+                                    if (obj.success) {
+                                        layer.load();
+                                        window.location.href = "/purchase/order/wddd.html?$!{returnPageParam}";
+                                        return;
+                                    } else {
+                                    	top.ue.msg(obj.message);
+                                    }
+                                }
+                            });
+                        } else {
+                            top.ue.msg("订单收货失败，请稍后重试！",{},function () {
+                                top.ue.load();
+                                window.location.href = "/purchase/order/wddd.html?$!{returnPageParam}";
+                            });
+                            return false;
+                        }
+                    }
+                });
+            }
+        })
+    }
+
+    function clearForm(form, target) {
+        var _v = $(target).val();
+        form[0].reset();
+        if (target.name == "zhlx") {
+            $("#zhlx" + _v).prop("checked", "checked");
+        }
+        else $(target).val(_v);
+        $("#yhzh").attr("placeholder", $("#yhzh").attr("data-plc"));
+    }
+
+</script>
+</body>
+</html>

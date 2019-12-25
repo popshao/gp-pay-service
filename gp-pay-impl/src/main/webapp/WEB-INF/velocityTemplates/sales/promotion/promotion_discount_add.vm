@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>促销管理-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain c-box">
+
+                    <div class="user-path">销售中心 &gt; 销价管理 &gt; <a href="/sales/promotion/list.html">促销管理</a> &gt; <i class="up-h">$!{pactName}</i></div>
+
+                    <div class="user-cxgl-title">$!{pactName}促销</div>
+
+                    <div class="user-tips mt10">说明：在单笔订单中购买活动商品时，活动商品的合计购买数量或合计购买金额满足设置条件时，所有活动商品单价均享受设置的折扣，可设置优惠阶梯；同时可指定部分客户专享该促销。<br/>
+                        示例：促销添加活动商品A、B,促销规则为购买本活动商品的总数量满100个（或元），活动商品单价均优惠1%；<br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单笔订单中有商品A、B、C、D，当购买的活动商品A+B的总数量（或总金额）大于等于100个（或元）时，A和B的商品单价均优惠1%。</div>
+
+                    <div class="user-cxgl-table">
+
+                        <table class="order_table mt10" border="0" cellpadding="0" cellspacing="0">
+                            <input type="hidden" id="pactType" name="pactType" value="$!{pactType}"/>
+                            <tr>
+                                <td class="tar" width="102"><span class="red">*</span><b>促销标题：</b></td>
+                                <td width="auto">
+                                    <input class="input input-420 fl" type="text" id="pactTitle" maxlength="11"  name="pactTitle" placeholder="将用于活动页页头活动标题，请针对本次活动内容设定标题">
+                                    <span class="fl ml10">促销标题最多10个字</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tar" valign="top"><span class="red">*</span><b>促销描述：</b></td>
+                                <td>
+                                    <textarea class="textarea fl" name="pactContent" id="pactContent" cols="30" rows="10" maxlength="120" onkeyup="this.value = this.value.substring(0, 120)" placeholder="用于活动页标题下方的活动介绍，可进一步描述本次活动的卖点，吸引客户下单"></textarea>
+                                    <span class="fl ml10">促销描述最多120个字</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tar"><span class="red">*</span><b>有&nbsp;&nbsp;效&nbsp;&nbsp;期：</b></td>
+                                <td>
+                                    <input class="input input-date fl" type="text" name="pactStartTime" id="pactStartTime" readonly="readonly" onfocus-="WdatePicker({skin : 'whyGreen',onpicked:promotion.showTime(), dateFmt : 'yyyy-MM-dd HH:mm:ss', minDate:'%y-%M-%d',maxDate:'#F{$dp.$D('+'\\'+'\'pactEndTime'+'\\'+'\')}'})"/>
+                                    <i class="to">至</i>
+                                    <input class="input input-date fl" type="text" name="pactEndTime" id="pactEndTime" readonly="readonly" onfocus-="WdatePicker({skin : 'whyGreen', onpicked:promotion.showTime(),dateFmt : 'yyyy-MM-dd HH:mm:ss', minDate:'#F{$dp.$D('+'\\'+'\'pactStartTime'+'\\'+'\')}'})"/>
+                                    <div class="fl ml10" style="display: none" id="timeDhm">
+                                        活动时长：
+                                        <span id="time_d"></span>天
+                                        <span id="time_h"></span>时
+                                        <span id="time_m"></span>分
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tar"><span class="red">*</span><b>优惠类型：</b></td>
+                                <td>
+                                    <div class="sltitem sltitem-193">
+                                        <span class="">购买数量</span>
+                                        <ul style="display: none;">
+                                            <li data-value="M"><a href="javascript:;">购买金额</a></li>
+                                            <li data-value="Q"><a href="javascript:;">购买数量</a></li>
+                                        </ul>
+                                        <input type="hidden" name="rule_group_type" id="rule_group_type" value="Q">
+                                    </div>
+                                    <div class="fl ml10">
+                                        <span class="fl"><b>促销力度：</b></span>
+                                        <input class="radio" type="radio" name="solution" id="solution_P" value="P" checked="checked" />
+                                        <label class="text" for="solution_P">按%百分比优惠</label>
+                                        <input class="radio" type="radio" name="solution" id="solution_Y" value="Y"/>
+                                        <label class="text" for="solution_Y">按金额优惠</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tar"></td>
+                                <td>
+                                    <div class="user-cxgl-ctn" id="ruleInfoGroup">
+                                        <div class="promotions_ctn" style="display: none" id="ruleTemplate">
+                                            <span class="span">本活动的商品总数量满</span>
+                                            <input class="input" type="text" maxlength="8"  name="conditions_value" id="conditions_value_template"/>
+                                            <span class="span">，</span>
+                                            <span class="span">该商品单价优惠 </span>
+                                            <input class="input" type="text"  name="solution_value" id="solution_value_template"/>
+                                            <span class="span">%</span>
+                                            <a href="javascript:;" class="btn">删除组</a>
+                                        </div>
+                                        <div class="promotions_ctn" name="ruleInfo">
+                                            <span class="span">本活动的商品总数量满</span>
+                                            <input class="input" type="text" maxlength="8"  name="conditions_value" />
+                                            <span class="span">，</span>
+                                            <span class="span">该商品单价优惠 </span>
+                                            <input class="input" type="text"  name="solution_value" />
+                                            <span class="span">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="user-cxgl-ctn">
+                                        <div class="promotions_ctn">
+                                            <a href="javascript:;" onclick="promotion.addRule();" class="btn btn-add">+添加促销阶梯</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tar" valign="top"><span class="red">*</span><b>选择客户：</b></td>
+                                <td>
+                                    <div class="user-cxgl-detail">
+
+                                        <div class="order_detail">
+
+                                            <div class="promotions_ctn">
+                                                <input class="radio" type="radio" name="pact_member_status" id="pact_member_status_0" value="0" checked />
+                                                <label class="text text-b" for="pact_member_status_0">全部客户参与活动</label>
+                                                <input class="radio" type="radio" name="pact_member_status" id="pact_member_status_1" value="1" />
+                                                <label class="text text-b" for="pact_member_status_1">部分客户参与活动</label>
+                                            </div>
+
+                                            <div class="toogle-wrap mt10" id="tabbox">
+                                                <div class="mt">
+                                                    <ul class="tab-mt" id="tabmt">
+                                                        <li data-value="1" class="coupon-tab-item curr">按单个客户设定</li>
+                                                        <li data-value="2" class="coupon-tab-item">按分组进行设定</li>
+                                                    </ul>
+                                                    <span class="count" id="customerCount">共选择12家客户</span>
+                                                    <div class="count-p">您提交保存促销时，仅当前选中标签中的客户可享受该促销</div>
+                                                </div>
+                                                <div class="tab-box">
+                                                    <div class="tab-con" style="display: block;">
+                                                        <p class="count"></p>
+                                                        <ul id="customerList">
+                                                            <li><a href="javascript:void(0);" onclick="promotion.addCustomer();" class="add_pro" id="sel-a">+ 添加客户</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="tab-con" style="display: none;">
+
+                                                        <p class="count"></p>
+
+                                                        <div class="type-box cc" id="sctIds">
+                                                            <dl>
+                                                                <dt class="type-t">业务分组</dt>
+                                                                #foreach($type in $!listType)
+                                                                    <dd>
+                                                                        <div class="customer-item" id="sct_$!{type.shopCustomerType.sctId}">
+                                                                            <b></b>$!{type.shopCustomerType.sctName}（<span id="count_1_$!{type.shopCustomerType.sctId}">$!{type.bizCount}</span>）
+                                                                        </div>
+                                                                    </dd>
+                                                                #end
+                                                            </dl>
+                                                        </div>
+                                                        <div class="type-box cc" id="regionIds">
+                                                            <dl>
+                                                                <dt class="type-t">区域分组</dt>
+                                                                #foreach($region in $!listRegion)
+                                                                    <dd>
+                                                                        <div class="customer-item" id="reg_$!{region.supplierRegion.regionId}">
+                                                                            <b></b>$!{region.supplierRegion.regionName}（<span id="count_2_$!{region.supplierRegion.regionId}">$!{region.bizCount}</span>）
+                                                                        </div>
+                                                                    </dd>
+                                                                #end
+                                                            </dl>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tar" valign="top"><span class="red">*</span><b>选择商品：</b></td>
+                                <td>
+                                    <div class="user-cxgl-detail mt10">
+
+                                        <div class="order_detail">
+
+                                            <div class="user-form">
+                                                <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                                    <thead>
+                                                    <tr>
+                                                        <th><input type="checkbox" class="check" onclick="promotion.selectAllGoods(this);"/></th>
+                                                        <th>商品ID</th>
+                                                        <th width="130">商品名称</th>
+                                                        <th width="130">商品规格</th>
+                                                        <th width="130">生产厂家</th>
+                                                        <th width="130">基价</th>
+                                                        <th>是否拆零</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="goodsList">
+                                                    <!-- 商品显示区域 -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            <div class="function cc mt10">
+                                                #if($!{supplier.suIsErp} == 1)
+                                                    <a class="btn" href="javascript:;" onclick="promotion.importGoodsUI();">通过内码批量添加</a>
+                                                #end
+                                                <a class="btn" href="javascript:;" onclick="promotion.addGoodsUI($!{pactType});">手动添加</a>
+                                                <a class="btn" href="javascript:;" onclick="promotion.batchDelGoods();">删除</a>
+                                                <span class="count" id="goodsCount">共选择12件商品</span>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="user-cxgl-btn mt20">
+                        <input class="check" id="createAct" type="checkbox">
+                        <label class="check-text" for="createAct">创建活动页面</label>
+                        <a href="javascript:;" onclick="promotion.savePromotion();" class="btn_text">创建</a>
+                    </div>
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+    <!-- 弹窗用 -->
+    #parse("sales/promotion/promotion_common_window.vm")
+</div>
+    #parse("common/footer.vm")
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+##<script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+<script src="/front/js/layui/laydate.js?v=$!{jscss_version}"></script>
+<script src="/js/promotion/promotionActivityContext.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+<script>
+    /*设置框架返回按钮*/
+    top.utils.frameBack({
+        handler:function (btn) {
+            location.href = document.referrer;
+        }
+    })
+</script>
+</body>
+</html>

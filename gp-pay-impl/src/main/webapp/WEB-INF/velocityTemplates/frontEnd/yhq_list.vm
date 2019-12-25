@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>优惠券管理 - 我的医药网</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}" />
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="c-box">
+
+                    <div class="user-path">
+                        <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; <a class="up-h" href="#">优惠券管理</a></p>
+                    </div>
+
+                    <div class="user-query">
+                        <table class="uq-table" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="tar" width="100">关键字搜索：</td>
+                                <td width="170">
+                                    <input class="input input-160" type="text" placeholder="优惠券名称/优惠券ID" />
+                                </td>
+                                <td class="tar" width="130">优惠券有效时间段：</td>
+                                <td width="360">
+                                    <input class="input input-date-160" type="text" value="2017-03-30" />
+                                    <i class="to">至</i>
+                                    <input class="input input-date-160" type="text" value="2017-03-30" />
+                                </td>
+                                <td class="tar" width="80">发放状态：</td>
+                                <td width="auto">
+                                    <div class="sltitem sltitem-120">
+                                        <span>全部</span>
+                                        <ul>
+                                            <li data-value=""><a href="javascript:;">诊所控销区申请</a></li>
+                                            <li data-value="1"><a href="javascript:;">诊所控销区申请</a></li>
+                                            <li data-value="2"><a href="javascript:;">诊所控销区申请</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tar">可用商品范围：</td>
+                                <td>
+                                    <div class="sltitem sltitem-160">
+                                        <span>全部</span>
+                                        <ul>
+                                            <li data-value=""><a href="javascript:;">诊所控销区申请</a></li>
+                                            <li data-value="1"><a href="javascript:;">诊所控销区申请</a></li>
+                                            <li data-value="2"><a href="javascript:;">诊所控销区申请</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td class="tar">优惠券规则：</td>
+                                <td>
+                                    <div class="sltitem sltitem-160">
+                                        <span>全部</span>
+                                        <ul>
+                                            <li data-value=""><a href="javascript:;">诊所控销区申请</a></li>
+                                            <li data-value="1"><a href="javascript:;">诊所控销区申请</a></li>
+                                            <li data-value="2"><a href="javascript:;">诊所控销区申请</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" class="tac">
+                                    <a href="javascript:;" class="f-none mt20 btn-query">查询</a>
+                                    <a href="javascript:;" class="f-none mt20 btn-empty"><i class="icon"></i>清空查询条件</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="user-btn mt30">
+                        <a href="javascript:;" class="btn-l btn-120">+ 添加优惠券</a>
+                    </div>
+
+                    <div class="user-form mt10">
+                        <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>优惠券ID</th>
+                                <th>优惠券名称</th>
+                                <th>优惠券规则</th>
+                                <th>使用期限</th>
+                                <th>可用商品范围</th>
+                                <th>优惠券数量</th>
+                                <th>已领取数量</th>
+                                <th>已使用数量</th>
+                                <th>发放状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>333</td>
+                                <td>广药大众新用户专享券</td>
+                                <td>满50减30</td>
+                                <td>2017-02-10-<br />2017-03-10</td>
+                                <td>全部商品</td>
+                                <td>200</td>
+                                <td>200</td>
+                                <td>3</td>
+                                <td>发放中</td>
+                                <td>
+                                    <a href="javascript:;" class="t-link">发放</a>
+                                    <a href="javascript:;" class="t-link">复制</a><br>
+                                    <a href="javascript:;" class="t-link">统计</a>
+                                    <a href="javascript:;" class="t-link">结束</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>333</td>
+                                <td>广药大众新用户专享券</td>
+                                <td>满50减30</td>
+                                <td>2017-02-10-<br />2017-03-10</td>
+                                <td>全部商品</td>
+                                <td>200</td>
+                                <td><span class="t-error">0</span></td>
+                                <td>3</td>
+                                <td><span class="t-error">未发放</span></td>
+                                <td>
+                                    <a href="javascript:;" class="t-link">删除</a>
+                                    <a href="javascript:;" class="t-link">修改</a><br>
+                                    <a href="javascript:;" class="t-link">发放</a>
+                                    <a href="javascript:;" class="t-link">复制</a><br>
+                                    <a href="javascript:;" class="t-link">统计</a>
+                                    <a href="javascript:;" class="t-link">结束</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>333</td>
+                                <td>广药大众新用户专享券</td>
+                                <td>满50减30</td>
+                                <td>2017-02-10-<br />2017-03-10</td>
+                                <td>全部商品</td>
+                                <td>200</td>
+                                <td>200</td>
+                                <td>3</td>
+                                <td>发放中</td>
+                                <td>
+                                    <a href="javascript:;" class="t-link">发放</a>
+                                    <a href="javascript:;" class="t-link">复制</a><br>
+                                    <a href="javascript:;" class="t-link">统计</a>
+                                    <a href="javascript:;" class="t-link">结束</a>
+                                </td>
+                            </tr>
+                            <tr class="t-none">
+                                <td>1</td>
+                                <td>333</td>
+                                <td>广药大众新用户专享券</td>
+                                <td>满50减30</td>
+                                <td>2017-02-10-<br />2017-03-10</td>
+                                <td>全部商品</td>
+                                <td>200</td>
+                                <td>200</td>
+                                <td>3</td>
+                                <td>发放中</td>
+                                <td>
+                                    <a href="javascript:;" class="t-link">统计</a><br>
+                                    <a href="javascript:;" class="t-link">复制</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="page">
+                        <input type="hidden" name="page" value="1">
+                        <input type="hidden" name="" value="15" id="total_pages">
+                        <span class="pageno">
+                                        <a href="/member/?page=2" class="page_prev">上一页</a>
+                                        <a href="javascript:;" class="on">1</a>
+                                        <a href="/member/?page=2">2</a>
+                                        <a href="/member/?page=3">3</a>
+                                        <a href="/member/?page=4">4</a>
+                                        <a href="/member/?page=5">5</a>
+                                        <a href="/member/?page=6">6</a>
+                                        <a href="/member/?page=7">7</a>
+                                        <a href="/member/?page=8">8</a>
+                                        <em>...</em>
+                                        <a href="/member/?page=2" class="page_next">下一页</a>
+                                    </span>
+                        <span> <span>共53页 到第<input name="fill_num" type="text" value="2">页</span><a href="javascript:;" id="redirect" class="page_confirm">确定</a> </span>
+                    </div>
+
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+    #parse("/common/footer.vm")
+
+
+
+#*脚本文件引入及页面交互逻辑代码区*#
+<script src="/front/js/rog-ui.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+<script src="/js/publish.js?v=$!{jscss_version}"></script>
+<script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+<script>
+
+    $(function(){
+
+        <!-- uf-table表格最后一行无下边框 -->
+        $(".uf-table").find("tr:last td").css("border-bottom","none");
+
+    })
+
+</script>
+</body>
+
+</html>

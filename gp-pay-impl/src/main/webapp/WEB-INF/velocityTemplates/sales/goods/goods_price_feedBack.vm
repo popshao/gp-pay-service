@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销售订单-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+   
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+
+	<script type="text/javascript" >
+	var  login_url = "http://passport.mypharma.com/login?app_id=5&return_uri=http://$!{wwwHostAndPort}/";
+	var  b2b_url = "http://$!{wwwHostAndPort}/";
+	var  user_url = "$!{userHostAndPort}/";
+           var wwwUrl = '$!{wwwHostAndPort}';
+           var userUrl = '$!{userHostAndPort}';
+    </script>
+</head>
+
+<body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm") 
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+                <div class="user_right fl">
+                    <!-- 用户中心_主体内容_S -->
+                    <div class="indmain">
+            	    <div class="path">
+		                    <p><a href="/sales/index.html" class="color">销售中心</a>&gt; 商品管理&gt; 商品价格反馈</p>
+		                </div>
+                        <div class="order_query">
+                            <form action="" method="post" id="searchForm" name="searchForm">
+                                <input type="hidden" name="pi" value="$!pi">
+                                <ul>
+                                    <li>
+                                        <label class="label_w90">反馈日期：</label>
+                                        <input type="text" name="createTime" id="createTime" value="$!createTime" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd'})" class="w-txt150">
+                                    	-<input type="text" name="createTimeEnd" id="createTimeEnd" value="$!createTimeEnd" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd'})" class="w-txt150">
+                                    </li>
+                                    <li>
+                                        <label class="label_w90">客户名称：</label>
+                                        <input name="gUsername" type="text" value="$!gUsername" class="w-txt150">
+                                    </li>
+                                    <li>
+                                        <label class="label_w90">商品名称：</label>
+                                        <input name="goodsName" type="text" value="$!goodsName" class="w-txt150">
+                                    </li>
+                                    <li>
+                                        <label class="label_w90">联系人名称：</label>
+                                        <input name="customerContact" type="text" value="$!customerContact" class="w-txt150">
+                                    </li>
+                                    <li>
+                                        <label class="label_w90">联系人电话：</label>
+                                        <input name="customerTel" type="text" value="$!customerTel" class="w-txt150">
+                                    </li>
+                                    <li>
+                                    	<input class="fl ml10" id="remark"  type="checkbox" onclick="remarkFunc(this)"/>
+                                    	<input id="remarkType" name="remarkType" type="hidden" value="$!remarkType">
+                                    	<label>只查看有备注的信息</label>
+                                    </li>
+                                    
+                                </ul>
+                                <div class="btn tac">
+									<a href="javascript:searchPager('/sales/goods/goods_price_feedBack',false);" class="btn_query">查询</a>
+						            <a href="javascript:searchPager('/sales/goods/goods_price_feedBack',true);" class="btn_query btn_export btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+								</div>
+                                <div class="btn">
+                                    <a href="javascript:exportByCondition();" class="btn_query btn_export btn-line mr7">导出Excel</a>
+                                </div>
+                            </form>
+                            <form action="" id="exportForm" method="post">
+                            	<input name="createTime" type="hidden" value="$!createTime">
+                            	<input name="createTimeEnd" type="hidden" value="$!createTimeEnd">
+                            	<input name="gUsername" type="hidden" value="$!gUsername">
+                            	<input name="goodsName" type="hidden" value="$!goodsName">
+                            	<input name="customerContact" type="hidden" value="$!customerContact">
+                            	<input name="customerTel" type="hidden" value="$!customerTel">
+                            	<input name="remarkType" type="hidden" value="$!remarkType">
+                            </form>
+                        </div>
+                        <div class="order_detail yh order_font">        
+                            <div class="table">
+                                <table cellpadding="0" cellspacing="0">
+                                    <thead class="head">
+                                        <tr class="line">
+                                            <th width="110">时间</th>
+                                            <th width="80">客户名称</th>
+                                            <th width="80">商品名称</th>
+                                            <th width="60">规格</th>
+                                            <th width="100">生产厂家</th>
+                                            <th width="80">商品价格</th>
+                                            <th width="80">期望价格</th>
+                                            <th width="80">期望购买数量</th>
+                                            <th width="120">留言</th>
+                                            <th width="80">客户联系人</th>
+                                            <th width="120">联系人电话</th>
+                                            <th width="">备注</th>
+                                        </tr>
+                                    </thead>
+                                       #if(!$null.isNull($goodsPriceFeedbackList) && $goodsPriceFeedbackList.size()!=0)
+	                                       #foreach($item in $goodsPriceFeedbackList)
+		                                       	<tr>
+		                                    		<td>$!{item.createTime}</td>
+		                                    		<td>$!{item.username}</td>
+		                                    		<td>
+		                                    		<a href="http://$!{wwwHostAndPort}/item/$!{item.gid}.html" target="_blank" class="a-link">
+               											$!{item.goodsName}
+               										</a>    
+		                                    		</td>
+		                                    		<td>$!{item.goodsSpecifications}</td>
+		                                    		<td>$!{item.goodsManufacture}</td>
+		                                    		<td>$!{item.goodsPrice}</td>
+		                                    		<td>$!{item.expectPrice}</td>
+		                                    		<td>$!{item.expectNum}</td>
+		                                    		<td>$!{item.leavingMessage}</td>
+		                                    		<td>$!{item.customerContact}</td>
+		                                    		<td>$!{item.customerTel}</td>
+		                                    		<td><input type="text" value="$!{item.remark}" onBlur="editRemark($!{item.id},this)"/></td>
+	                                    		</tr>
+	                                       #end
+                                       #end
+									<tbody>
+ 									</tbody>
+                                </table>
+                                <!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/order/ddgl.html")
+								#end #end
+                            </div>
+                            <form id="operForm" name="operForm" method="post">
+                            <input  type="hidden" name="returnPageParam" id="returnPageParam" value="$!{returnPageParam}"/>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 用户中心_主体内容_E -->
+                </div>
+            </div>
+        </div>
+    </div>
+    #parse("common/footer.vm")
+
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+	    
+		$(function(){
+		   if("$!remarkType"==1){
+			   $("#remark")[0].checked = true;
+		   }
+		})
+	   
+	    function remarkFunc(event){
+	    	if($(event)[0].checked){
+	    		$("#remarkType").val(1);
+	    	}else{
+	    		$("#remarkType").val("");
+	    	}
+	    }
+		
+		function editRemark(id,event){
+			var remark = $(event).val();
+			$.ajax({
+	           url: "/sales/goods/goods_price_feedBack_edit",
+	           data: {"id":id,"remark":remark},
+	           type: 'POST',
+	           dataType: 'json',
+	           success: function(result) {
+		       }
+            });
+		}
+		
+		
+		function exportByCondition(){
+			$("#exportForm").attr("action", "/sales/goods/exportByCondition.html");
+			$("#exportForm").submit();
+		}
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>商业客户信息管理-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link href="/js/select2/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="/css/member-new.css?v=$!{jscss_version}"/>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain member-new">
+
+                    <div class="mn-tips">
+                        <p>当前共有：<span class="spc-pink">XXXX</span>个采购客户，<span class="spc-pink">XX</span>个客户未登录，<span
+                                class="spc-pink">XXX</span>个客户下订单，<span class="spc-pink">XXX</span>个客户使用在线支付下单</p>
+                    </div>
+                    <div class="mn-nav">
+                        <p class="fl">
+                            <a href="javascript:void(0)">销售中心</a> &gt; <a href="javascript:void(0)">客户管理</a> &gt; <a
+                                href="#" class="spc-blue">客户信息添加</a>
+                        </p>
+                        <div class="mn-btns fr">
+                            <a href="javascript:void(0);" class="mn-btn">+ 添加新客户</a>
+                            <a href="javascript:void(0);" class="mn-btn">批量导入</a>
+                            <a href="javascript:void(0);" class="mn-btn">批量导出</a>
+                            <a href="javascript:void(0);" class="mn-btn">下载导入模板</a>
+                        </div>
+                        <div class="clear-fix"></div>
+                    </div>
+
+                    <div class="mn-form">
+                        <div class="mn-fline">
+                            <div class="mn-fcell mn-flong">
+                                <label for="">搜索关键字：</label>
+                                <input type="text" class="mn-ftext mn-search"
+                                       placeholder="企业名称/企业注册号/企业编码/企业内码/企业联系人邮箱/企业联系人手机号/客户账号"/>
+                            </div>
+                            <div class="clear-fix"></div>
+                        </div>
+                        <div class="mn-fline">
+                            <div class="mn-fcell">
+                                <label for="">企业类型：</label>
+                                <select type="text" class="mn-ftext mn-select" placeholder="请选择企业类型"></select>
+                            </div>
+                            <div class="mn-fcell">
+                                <label for="">登录情况：</label>
+                                <select type="text" class="mn-ftext mn-select" placeholder=""></select>
+                            </div>
+                            <div class="mn-fcell">
+                                <label for="">区域分组：</label>
+                                <select type="text" class="mn-ftext mn-select" placeholder=""></select>
+                            </div>
+                            <div class="clear-fix"></div>
+                        </div>
+                        <div class="mn-fline">
+                            <div class="mn-fcell">
+                                <label for="">资质状态：</label>
+                                <select type="text" class="mn-ftext mn-select" placeholder=""></select>
+                            </div>
+                            <div class="mn-fcell">
+                                <label for="">业务类型：</label>
+                                <select type="text" class="mn-ftext mn-select" placeholder=""></select>
+                            </div>
+                            <div class="clear-fix"></div>
+                        </div>
+
+                        <div class="mn-fcell mn-btns">
+                            <a href="javascript:void(0);" class="mn-btn btn-filled mn-mw40">查询</a>
+                            <a href="javascript:void(0);" class="mn-btn btn-block"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+                        </div>
+                    </div>
+
+                    <div class="mn-tbox">
+                        <div class="mn-tab">
+                            <ul>
+                                <li class="active"><a href="javascript:void(0);">合作中（99999家）</a></li>
+                                <li><a href="javascript:void(0);">停止合作（99999家）</a></li>
+                            </ul>
+                        </div>
+                        <div class="mn-tctx">
+
+                            <div class="table-block show">
+                                <table cellpadding="0" width="100%">
+                                    <tr>
+                                        <th width="40"><input type="checkbox" name=""></th>
+                                        <th width="160">企业名称</br>
+                                            联系人信息
+                                        </th>
+                                        <th>客户账号</th>
+                                        <th>业务类型 <br>
+                                            区域分组
+                                        </th>
+                                        <th>企业类型</th>
+                                        <th>企业编码<br>
+                                            企业内码
+                                        </th>
+                                        <th>支付方式</th>
+                                        <th>登录情况</th>
+                                        <th>资质情况</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name=""></td>
+                                        <td>
+                                            <p>企业北京永惠国康大药房朝阳东七门店</p>
+                                            <p>谭啸</p>
+                                            <p>18500540555</p>
+                                            <p><span class="spc-pink">（已邀请未激活）</span></p>
+                                        </td>
+                                        <td><p>SJFID0020039939012</p></td>
+                                        <td><p>普通用户</p>
+                                            <p>华北大区</p>
+                                        </td>
+                                        <td><p>商业公司</p></td>
+                                        <td>
+                                            <p>13542655654</p>
+                                            <p>13542655654</p>
+                                        </td>
+                                        <td>
+                                            <p>在线支付</p>
+                                            <p>账期付款</p>
+                                            <p>药白条 <span class="spc-pink">30天  ¥50000</span> </p>
+                                        </td>
+                                        <td><p>已登录</p></td>
+                                        <td><p>已完善</p></td>
+                                        <td class="mn-btns">
+                                            <p><a href="javascript:void(0);" class="mn-btns spc-blue">修改</a></p>
+                                            <p><a href="javascript:void(0);" class="mn-btns spc-blue">下载资质</a></p>
+                                            <p><a href="javascript:void(0);" class="mn-btns spc-blue">上传资质</a></p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="table-block">
+                                <table cellpadding="0" width="100%">
+                                    <tr>
+                                        <th width="40"><input type="checkbox" name=""></th>
+                                        <th width="160">企业名称</br>
+                                            联系人信息
+                                        </th>
+                                        <th>客户账号</th>
+                                        <th>业务类型 <br>
+                                            区域分组
+                                        </th>
+                                        <th>企业类型</th>
+                                        <th>企业编码<br>
+                                            企业内码
+                                        </th>
+                                        <th>支付方式</th>
+                                        <th>登录情况</th>
+                                        <th>资质情况</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name=""></td>
+                                        <td>
+                                            <p>企业北京永惠国康大药房朝阳东七门店</p>
+                                            <p>谭啸1111</p>
+                                            <p>18500540555</p>
+                                            <p><span class="spc-pink">（已邀请未激活）</span></p>
+                                        </td>
+                                        <td><p>SJFID0020039939012</p></td>
+                                        <td><p>普通用户</p>
+                                            <p>华北大区</p>
+                                        </td>
+                                        <td><p>商业公司</p></td>
+                                        <td>
+                                            <p>13542655654</p>
+                                            <p>13542655654</p>
+                                        </td>
+                                        <td>
+                                            <p>在线支付</p>
+                                            <p>账期付款</p>
+                                            <p>药白条 <span class="spc-pink">30天  ¥50000</span> </p>
+                                        </td>
+                                        <td><p>已登录</p></td>
+                                        <td><p>已完善</p></td>
+                                        <td class="mn-btns">
+                                            <p><a href="javascript:void(0);" class="mn-btns spc-blue">修改</a></p>
+                                            <p><a href="javascript:void(0);" class="mn-btns spc-blue">下载资质</a></p>
+                                            <p><a href="javascript:void(0);" class="mn-btns spc-blue">上传资质</a></p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+
+    #parse("common/footer.vm")
+
+##弹窗组件TPL
+
+##已经发过邀请
+<script type="text/html" id="hasSendU">
+    <div class="mn-at-box">
+        <p>今日您已向 <span>123123123123</span> 发送过 <span>2</span> 次邀请，同一天内最多发送 <span>2</span>次邀请；</p>
+        <p>企业名称：<span>朝阳区大地阳光药店</span></p>
+        <p>被邀请客户需要一定的时间完成激活注册，请您耐心待。</p>
+    </div>
+</script>
+
+##已经发过邀请
+<script type="text/html" id="hasSendM">
+    <div class="mn-at-box">
+        <p>今日您已向 <span>朝阳区大地阳光药店</span> 发送过 <span>2</span> 次邀请，同一天内最多发送 <span>2</span>次邀请；</p>
+        <p>邀请手机号码：<span>13244333334</span></p>
+        <p>被邀请客户需要一定的时间完成激活注册，请您耐心待。</p>
+    </div>
+</script>
+
+##邀请注册
+<script type="text/html" id="inviteSend">
+    <div class="mn-at-box mn-inp-box">
+        <p>请输入并确认邀请注册企业的手机号码</p>
+        <p><input type="text" placeholder="请输入手机号" id="invPhone"></p>
+        <p style="font-size: 12px" class="tips">您已向该企业发送 <span>6</span>次邀请，上次邀请手机号码：<span>13244333334</span>。</p>
+    </div>
+</script>
+
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/layui/layui.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/select2/select2.min.js"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+<script type="text/javascript">
+
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp'],function () {
+
+        $(".mn-tab li").on("click",function (i,e) {
+            if(!$(this).hasClass("active")){
+                $(this).addClass("active");
+                $($(".table-block").get(i)).addClass("show").siblings().removeClass("show");
+            }
+        })
+
+        $(".mn-select").each(function () {
+            $(this).select2({
+                placeholder: $(this).attr("placeholder"),
+                tags: "true",
+                allowClear: true,
+                minimumResultsForSearch: -1,
+                language: "zh-CN"
+            });
+        })
+
+        var layAlert = layui.layApp.alert;
+        layAlert({
+            tpl:"#hasSendU"
+        });
+        layAlert({
+            tpl:"#hasSendM"
+        });
+        layAlert({
+            tpl:"#inviteSend",
+            btn:"确认发送邀请",
+            ok:function (vues,idx,layero) {
+                var phone = vues.invPhone;
+                if(phone && /^1[3|4|5|7|8]\d{9}$/.test(phone)){
+                    //TODO 手机号正确 执行自己的逻辑
+                }else{
+                    layero.find(".tips").addClass("error").text("手机号码格式错误，请重新输入");
+                    return true;
+                }
+            }
+        });
+    })
+
+</script>
+
+</body>
+
+</html>

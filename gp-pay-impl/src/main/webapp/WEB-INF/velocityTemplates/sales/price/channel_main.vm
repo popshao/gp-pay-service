@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>渠道分组 - 我的医药网</title>
+
+<!-- mypharma_公共资源 -->
+<meta name="keywords" content="">
+	<meta name="description" content="">
+		<link rel="icon" type="image/x-icon" href="/favicon.ico">
+			<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+				<!-- mypharma_样式 -->
+				<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+					<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+						<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+   
+							<!--PNG格式图片兼容IE6解决方案 -->
+							<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="container">
+		#parse("common/header_top.vm") #parse("common/header.vm")
+		<div class="content">
+			<div class="wrap cc">
+				#parse("common/left_menu_sales.vm")
+				<div class="user_right fl">
+					<!-- 用户中心_主体内容_S -->
+					<div class="indmain">
+						<div class="path">
+							<p><a class="color" href="/sales/index.html">销售中心</a>&gt; 客户管理 &gt; 客户分组管理</p>
+						</div>
+						<div class="order_query order">
+							<form action="/sales/channel/channel_main.html" method="post" id="searchForm">
+								<input type="hidden" name="pi" value="$!pi" /> 
+								<input type="hidden" name="ps" value="15" />
+								<input type="hidden" name="flag" id="flag" value="$!{flag}"/>
+								<input type="hidden" name="smArea" id="smArea" value="$!{smArea}"/>
+								<input type="hidden" name="smCustomerType" id="smCustomerType" value="$!{smCustomerType}"/>
+								<div class="packet_btn">
+									<a href="/sales/channel/channel_group.html" class="btn_query btn-line" style="text-align: center;">编辑分组</a>
+									<a href="/sales/channel/batch.html" class="btn_query btn-line">批量设置分组</a>
+								</div>
+								<h3 class="packet_title">业务分组</h3>
+								<ul class="packet_ul cc">
+									<li #if($!{flag}==0) class="select" #else #end onclick="getByParam(0,0)">$!{allCount}</li>
+									#foreach($type in $!listType)
+									 <li group="a$!{velocityCount}" #if($!{flag}==1 and $!{type.shopCustomerType.sctId}==$!{smCustomerType}) class="select" #else #end onclick="getByParam($!{type.shopCustomerType.sctId},1)">
+									   	$!{type.shopCustomerType.sctName}($!{type.bizCount})
+									   </li>
+									#end
+									
+								</ul>
+								<h3 class="packet_title">区域分组</h3>
+								<ul class="packet_ul cc">
+									<li onclick="getByParam(0,0)" #if($!{flag}==0) class="select" #else #end>$!{allCount}</li>
+									#foreach($region in $!listRegion)
+									 <li  group="b$!{velocityCount}" #if($!{flag}==2 and $!{region.supplierRegion.regionId}==$!{smArea}) class="select" #else #end onclick="getByParam($!{region.supplierRegion.regionId},2)" >$!{region.supplierRegion.regionName}($!{region.bizCount})</li>
+									#end
+								</ul>
+							</form>
+						</div>
+						<div class="order_detail">
+							<div class="table">
+								<table cellpadding="0" cellspacing="0">
+									<thead class="head">
+										<tr class="line">
+											<th>序号</th>
+											<th>企业名称</th>
+											<th>企业编码</th>
+											<th width="120">业务分组</th>
+											<th width="120">区域分组</th>
+										</tr>
+									</thead>
+									<tbody>
+									#if(!$null.isNull($listMember) && $listMember.size()!=0)	
+									 #foreach($list in $!listMember)
+									 #set($pageIndex = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+										<tr>
+											<td>$!{pageIndex}</td>
+											<td>$!{list.smName}</td>
+											<td>$!{list.smCode}</td>
+											<td class="packet">
+												<select onchange="changeType($!{list.smId})" id="selectsmCustomerType_$!{list.smId}" style="width: 90px;"> 
+<!-- 												<option value="0"></option> -->
+													#foreach($type in $!listType)
+													 
+													    <option value="$!{type.shopCustomerType.sctId}" #if($!{list.smCustomerType}==$!{type.shopCustomerType.sctId})
+														selected="selected" #else #end on>$!{type.shopCustomerType.sctName}</option>
+													 
+													#end
+												</select>
+											</td>
+											<td class="packet">
+												<select onchange="changeType($!{list.smId})" id="selectsmArea_$!{list.smId}" style="width: 90px;">
+													<option value="0"></option>
+													#foreach($region in $!listRegion)
+														
+															<option value="$!{region.supplierRegion.regionId}" #if($!{list.regionId}==$!{region.supplierRegion.regionId})
+														selected="selected" #else #end>$!{region.supplierRegion.regionName}</option>
+													#end
+											</select>
+											</td>
+										</tr>
+									  #end
+									 #else
+									  <tr>
+				                      	 <td colspan="5">无相关数据！</td>
+				                	 </tr>
+									 #end 	
+									</tbody>
+								</table>
+								<form id="operForm" name="operForm" method="post"></form>
+								<!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} >1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/channel/channel_main.html")
+								#end #end
+								<!--分页结束 -->
+								
+							</div>
+						</div>
+					</div>
+					<form id="operForm" name="operForm" method="post">
+                            <input  type="hidden" name="returnPageParam" id="returnPageParam" value="$!{returnPageParam}"/>
+                            </form>
+					<!-- 用户中心_主体内容_E -->
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("/common/footer.vm")
+
+	<!-- mypharma_脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/load.js?v=$!{jscss_version}"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+	#parse("common/common_script.vm")
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"
+		type="text/javascript"></script>
+
+	<script>
+		function getByParam(id,flag){
+			if(flag == 0){
+				$("#operForm").append("<input type=hidden name=flag value="+0+" />");
+		    	$("#operForm").attr("action","/sales/channel/channel_main.html");
+			}
+			if(flag ==1){
+				$("#operForm").append("<input type=hidden name=flag value="+1+" />");
+				$("#operForm").append("<input type=hidden name=smCustomerType value="+id+" />");
+		    	$("#operForm").attr("action","/sales/channel/channel_main.html");
+			}
+			if(flag ==2){
+				$("#operForm").append("<input type=hidden name=flag value="+2+" />");
+				$("#operForm").append("<input type=hidden name=smArea value="+id+" />");
+		    	$("#operForm").attr("action","/sales/channel/channel_main.html");
+			}
+			$("#operForm").submit();
+		}
+		
+		function changeType(id){
+			var type = $("#selectsmCustomerType_"+id).val();
+			var region = $("#selectsmArea_"+id).val();
+			var returnUrl = $("#returnPageParam").val();
+			//if(type == "0" && region == "0"){
+			//	alert("请选择需要设置的业务分组或者销售区域");
+			//	return; 
+			//}
+			
+			if(type == null || type =="" || type=="0"){
+				type = "-1";
+			}
+			if(region == null || region =="" || region=="0"){
+				region = "-1";
+			}
+			
+					$.ajax({
+						url : '/sales/channel/edit_type_region.html',
+						data : {
+							"smId" : id,
+							"customerType" : type,
+							"smArea" : region,
+							"returnPageParam" : returnUrl,
+							"mainPage" : 1
+						},
+						type : 'POST',
+						dataType : 'json',
+						success : function(result) {
+							if (result.data == true) {
+								top.ue.alert({
+									title : '提示信息',
+									content : "设置成功",
+									end : function() {
+										window.location.href=result.message;
+									}
+								})
+
+							} else {
+								dialog({
+									title : "提示信息",
+									content : "设置失败失败",
+									width : 300
+								});
+							}
+						}
+					});
+				
+		}
+	</script>
+
+</body>
+</html>

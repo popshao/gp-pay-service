@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>终端统计-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+   
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+                <div class="user_right fl">
+                    <!-- 用户中心_主体内容_S -->
+                    <div class="indmain">
+            	    <div class="path">
+		                    <p><a href="/sales/index.html" class="color">销售中心</a>&gt; 金融产品 &gt; 帮你付终端管理</p>
+		                </div>
+                        <div class="order_query">
+                            <form action="" method="post" id="searchForm" name="searchForm">
+                                <input type="hidden" name="pi" value="$!pi">
+                                <ul>
+                                	<li>
+                                    <label class="w70">终端名称：</label>
+                                        <input id="eName" name="eName" type="text" value="$!eName" class="w-txt w-150">
+                                    </li>
+                                
+                                	<li>      
+                                        <label class="w70">终端状态：</label>
+                                    	<input class="fl ml10" id="auditStatus2" name="auditStatus" type="checkbox" value="2"/><label>已开通</label>
+                                    	<input class="fl ml10" id="auditStatus0"  name="auditStatus" type="checkbox" value="0"/><label>未申请</label>
+                                    	<input class="fl ml10" id="auditStatus1"  name="auditStatus" type="checkbox" value="1"/><label>待确认</label>
+                                 	</li>
+                                 </ul>
+                                <div class="btn tac">
+									<a href="javascript:searchPager('/sales/statistics.html',false);" class="btn_query">查询</a>
+						            <a href="javascript:searchPager('/sales/statistics.html',true);" class="btn_query btn_export btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+								</div>
+                            </form>
+                        </div>
+                        <div class="order_detail yh order_font">        
+                            <div class="table">
+                                <table cellpadding="0" cellspacing="0">
+                                    <thead class="head">
+                                        <tr class="line">
+                                            <th></th>
+                                            <th>终端名称（下游）</th>
+                                            <th>金融产品状态</th>
+                                            <th>已支付订单数 </th>
+                                            <th>已支付订单总额</th>
+                                            <th>未支付订单数</th>
+                                        </tr>
+                                    </thead>
+									<tbody>
+									#if($hypOrderStatisticsList && $hypOrderStatisticsList.size()!=0)
+                                       #foreach($item in $hypOrderStatisticsList)
+                                       #set($pageOrder = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+		                               <tr>
+		                                    <td>$!pageOrder</td>
+		                                    <td>
+		                                     	                                        $!item.eName
+		                                    </td>
+  		                                    <td>
+								           #if($!item.eHypStatus == 2&&$!item.auditStatus == 1)  
+								         	 <a href="javascript:void(0);" onclick="audit('$!item.eName',$!item.suId,$!item.eId);">
+  		                                     <span style="text-decoration:underline;color:#0000FF">
+								                            待开通
+								           </span>
+								            </a>
+								            #elseif($!item.auditStatus == 2)  
+								                             已开通
+								            #elseif($!item.auditStatus == -2)  
+								                             审核不通过
+								            #elseif($!item.auditStatus == 0)  
+								                             未申请
+								            #end  
+		                                    </td>
+		                                    <td>
+		                                    #if($!item.auditStatus == 2)  
+		                                     $!item.pay_order_count
+								            #else  
+								               	-- 
+								            #end 
+		                                    </td>
+		                                    <td>
+                         		           #if($!item.auditStatus == 2)  
+		                                        $!item.pay_order_amout
+								            #else  
+								               	-- 
+								            #end 
+		                                    </td>
+		                                    <td>
+		                                    #if($!item.auditStatus == 2)  
+		                                        $!item.unpay_order_count
+								            #else  
+								               	-- 
+								            #end 
+		                                    </td>
+		                                </tr>
+		                             #end   
+		                             #else    
+			                            <tr>
+			                              <td colspan="11">无相关数据！</td>
+			                            </tr>
+		                             #end
+									</tbody>
+                                </table>
+                                <!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/jsdgl.html")
+								#end 
+								#end
+                            </div>
+                            <form id="operForm" name="operForm" method="post">
+                            <input  type="hidden" name="returnPageParam" id="returnPageParam" value="$!{returnPageParam}"/>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 用户中心_主体内容_E -->
+                </div>
+            </div>
+        </div>
+    </div>
+    #parse("common/footer.vm")
+
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+        <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+	   $(function(){
+	   	   var auditStatus="$!status";
+	   	   var array;
+	   	   if(auditStatus!=''){
+	   		array=auditStatus.split(',');
+	   	   }
+	   	   for(var i=0;i<array.length;i++){
+	   		   if(array[i]==0){
+	   		   	 $("#auditStatus0").attr("checked",'true'); 
+	   		   }
+	   		   if(array[i]==1){
+		   		   	 $("#auditStatus1").attr("checked",'true'); 
+		   	   }
+	   		   if(array[i]==2){
+		   		   	 $("#auditStatus2").attr("checked",'true'); 
+	   		   }
+	   	   }
+	   	   $.sltitem.select("eName", "$!eName");
+	   })
+	   
+	   function audit(eName,suId,eId){
+        	top.ue.confirm({
+	              title: '帮你付资质审核',
+	              content: "确认允许"+eName+"使用帮你付下单吗？",
+	              btn: ["通过申请","拒绝申请"],
+	              ok: function(idx) {
+	                  top.ue.close(idx);
+	            	   $.showLoad();
+			           $.ajaxPost("/sales/updateStatistics.html", {"su_id":suId,"e_id":eId,"status":2}, function(result) {
+			        	   $.hideLoad(); 
+			        	   if (result != "") {
+	 			            	 var obj=eval("("+result+")");
+	 			            	 if(1 == obj.data){
+	 			            		window.location.href = "/sales/statistics.html?$!{returnPageParam}";
+	 				        		return false;
+	 			            	 }else{
+                                     top.ue.msg("审核失败，请联系管理员");
+	 			         			 window.location.href = "/sales/statistics.html";
+	 				        		 return false;
+	 			            	 }
+	 			             } 
+			           });
+	               },
+	               btn2: function(idx,lay) {
+                       top.ue.close(idx);
+	            	   $.showLoad();
+			           $.ajaxPost("/sales/updateStatistics.html", {"su_id":suId,"e_id":eId,"status":-2}, function(result) {
+			        	   $.hideLoad(); 
+			        	   if (result != "") {
+	 			            	 var obj=eval("("+result+")");
+	 			            	 if(1 == obj.data){
+	 			            		window.location.href = "/sales/statistics.html?$!{returnPageParam}";
+	 				        		return false;
+	 			            	 }else{
+	 			         			 top.ue.msg("审核失败，请联系管理员");
+	 			         			 window.location.href = "/sales/statistics.html";
+	 				        		 return false;
+	 			            	 }
+	 			             } 
+			           });
+	               }
+	         })
+        }
+    </script>
+    
+</body>
+
+</html>

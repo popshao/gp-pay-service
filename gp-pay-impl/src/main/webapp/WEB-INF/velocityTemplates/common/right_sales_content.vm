@@ -1,0 +1,187 @@
+<div class="user_right fl">
+    <!-- 用户中心_主体内容_S -->
+    <div class="indmain">
+        <div class="title-intro">
+			#if($!{supplier.suLogo})
+				<img src="$!{supplier.img_logo_url}" width="171px" height="106px" alt="">
+			#end
+			<!-- <span>待结算金额(元)： $!{waitAmount}  结款中(元)： $!{settlementAmount} 元</span> -->
+				<div class="name-n cc">
+				#if($!{supplier.suIsShop}==1)
+					<a class="a" href="http://$!{supplier.suDomainPrefix}.mypharma.com" target="_blank" title="$!{supplier.suName}">$!utils.substring($!{supplier.suName},10)</a>
+				#else
+					<span class="name" title="$!{supplier.suName}">$!utils.substring($!{supplier.suName},10)</span>
+				#end
+					
+					<div class="txtScroll-top fr">
+		                    <div class="bd">
+		                        <ul class="infoList">
+		                          	#if(!$null.isNull($creditMessages) && $creditMessages.size()>0)
+										#foreach($creditMessage in $creditMessages)
+											#if($!userType == 2 || $!userType == 3)
+											<li>
+											<a href="javascript:void(0);" onclick="top.utils.openWithTab('qyrz','企业认证','/sales/account/enterprise_register.html',{fstBread:'账户管理'})" style="color:red;">$!utils.substring($!{creditMessage},20)</a>
+											</li>
+											#elseif($!userType == 1)
+											<li>
+											<a href="/purchase/account/enterprise_certified.html" style="color:red;">$!utils.substring($!{creditMessage},20)</a>
+											</li>
+											#end
+										#end
+									#end
+		                        </ul>
+		                    </div>
+		                </div>
+					
+				</div>
+			#if($!{supplier.suIsShop}==1)
+                <p class="web"><a href="http://$!{supplier.suDomainPrefix}.$!{domain}" target="_blank">$!{supplier.suDomainPrefix}.mypharma.com</a></p>
+			#end
+			
+			<div class="jsje-box-index cc">
+			#if($!userType == 2)
+				#if($!{supplier.suIsShop}==1)
+					<p class="site fl">我的旗舰商城：<a href="http://$!{supplier.suDomainPrefix}.$!{domain}" target="_blank">点击进入</a></p>
+				#else
+					<p class="site fl">我的旗舰商城：暂未开通</p>
+				#end
+			#elseif($!userType == 3)
+				#if($!{siteList})
+					<p class="site fl">销售区域：
+						<span>
+							#foreach($site in $!siteList)
+								$!{site.siteName}&nbsp;
+							#end
+						</span>
+					</p>
+				#end
+			#end
+			
+			<!-- 2016-11-02-结算金额展示-S -->
+				<div class="jsje-ctn fr">
+					<a href="javascript:void(0);" onclick="top.utils.openWithTab('ddjsdgl','订单结算单管理','/sales/settelmentgl.html',{fstBread:'财务模块',scdBread:'订单结算单管理'})">结款记录</a>
+				</div>
+                <div class="jsje-ctn fr">
+                    <span class="fl">结款中(元)：</span>
+                    <div class="fl jsje-tips-img jsje-tips-show">
+                        <div class="jsje-tips" style="left: -228px;">
+                            <div class="jsje-tips-top" style="background: url(/image/img_jsjezs_02.png) no-repeat 65px;"></div>
+                            <div class="jsje-tips-ctn">
+				                                    结款中金额：已向银行、第三方支付平台申请付款<br/>
+				                                    到账时间：具体以银行、第三方支付平台到账时间为准
+                            </div>
+                        </div>
+                    </div>
+                    <span class="fl red">$!{settlementAmount}</span>
+                </div>
+                <div class="jsje-ctn jsje-line fr">
+                    <span class="fl">待结款金额(元)：</span>
+                    <div class="fl jsje-tips-img jsje-tips-show">
+                        <div class="jsje-tips">
+                            <div class="jsje-tips-top"></div>
+                            <div class="jsje-tips-ctn">
+				                                    待结款金额：待结款结算单金额总计<br/>
+				                                    待结款金额T+1工作日结算
+                            </div>
+                        </div>
+                    </div>
+                    <span class="fl red">$!{waitAmount}</span>
+                </div>
+            <!-- 2016-11-02-结算金额展示-E -->
+			
+			</div>
+        </div>
+		#if($!userType == 2)
+		<!--
+		    暂不使用
+			<h3 class="level mt10">供应等级<i></i></h3>
+            <p class="level-num">经验值</p>
+            <div class="level_pass">
+                <div class="step step1">
+                    <ul>
+                       <li class="line"><i></i></li>
+                        <li class="s1"><span>0</span><i></i></li>
+                        <li class="s2"><span>500</span><i></i></li>
+                        <li class="s3"><span>500</span><i></i></li>
+                        <li class="s4"><span>500</span><i></i></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="level-intro">距离下一成长值还差500点成长值</p>
+            <div class="level-btn"><span class="qidai">敬请期待</span></div>
+		-->
+		#end
+        <h3 class="line mt10">待处理事项</h3>
+        <ul class="item-box">
+            <li><p>待审核会员</p>
+            <a onclick="top.utils.openWithTab('dshhy','客户申请审核','/sales/member/member_check.html?mprStatus=2',{fstBread:'客户管理'})" href="javascript:void(0);" ><img src="/image/ico_01.jpg" alt=""></a>
+            <p>$!{staData.waitCheckMemberCount}</p></li>
+            <li><p>待发货订单</p>
+            <a onclick="top.utils.openWithTab('khsqsh','销售订单','/sales/order/ddgl.html?status=2',{fstBread:'交易管理'})" href="javascript:void(0);"><img src="/image/ico_02.jpg" alt=""></a>
+            <p>$!{staData.waitSendOrderCount}</p></li>
+            <li><p>待付款订单</p>
+            <a onclick="top.utils.openWithTab('khsqsh','销售订单','/sales/order/ddgl.html?payStatus=10',{fstBread:'交易管理'})" href="javascript:void(0);"><img src="/image/ico_03.jpg" alt=""></a>
+            <p>$!{staData.waitPayOrderCount}</p></li>
+            <li><p>待退货订单</p>
+            <a onclick="top.utils.openWithTab('thgl','退货管理','/sales/order/thdcx.html?obStatus=0',{fstBread:'交易管理'})" href="javascript:void(0);"><img src="/image/ico_04.jpg" alt=""></a>
+            <p><i>$!{staData.waitReturnOrderCount}</i></p></li>
+        </ul>
+        <h3 class="line mt10">我的销售<a class="fr" href="javascript:void(0);" onclick="top.utils.openWithTab('xstj','销售统计','/sales/order/salesStatistics.html',{fstBread:'我的销售单'})" style="color:#47b7c5;">详情>></a></h3>
+        <div class="table mt10">
+        <table cellpadding="0" cellspacing="0">
+            <thead class="head">
+                <tr>
+                    <th></th>
+                    <th>今日</th>
+                    <th>昨日</th>
+                    <th>本月</th>
+                    <th>上月</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>订单数量</td>
+                    <td>$!{staData.todayOrderCount}</td>
+                    <td>$!{staData.yesterdayOrderCount}</td>
+                    <td>$!{staData.currentMonthOrderCount}</td>
+                    <td>$!{staData.lastMonthOrderCount}</td>
+                </tr>
+                 <tr>
+                    <td>订单金额</td>
+                    <td>$!utils.doubleFormat($!{staData.todayOrderMoney})</td>
+                    <td>$!utils.doubleFormat($!{staData.yesterdayOrderMoney})</td>
+                    <td>$!utils.doubleFormat($!{staData.currentMonthOrderMoney})</td>
+                    <td>$!utils.doubleFormat($!{staData.lastMonthOrderMoney})</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        #if($!bottomAd)
+            #set($aLinkUrl = $utils.getAccessLinkUrl($!{bottomAd.aLinkUrl}))
+            #if($aLinkUrl == "javascript:void(0);")
+        	<div id="dhh_content"><a target="blank_" href="$aLinkUrl" onclick="return false;"><img src="$utils.getNewImgDomain($!{bottomAd.aImgPath})" alt=""></a></div>
+		    #else
+        	<div id="dhh_content"><a target="blank_" href="$aLinkUrl"><img src="$utils.getNewImgDomain($!{bottomAd.aImgPath})" alt=""></a></div>
+		    #end
+        #end
+    </div>
+    </div>
+    <!-- 用户中心_主体内容_E -->
+</div>
+
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.SuperSlide.js?v=$!{jscss_version}"></script>
+<script type="text/javascript">
+	jQuery(".txtScroll-top").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"top",autoPlay:true,delayTime:700});
+	
+	$(function(){
+        $(".jsje-tips-show").mouseenter(function(){
+            $(this).find(".jsje-tips").show();
+        });
+
+        $(".jsje-tips-show").mouseleave(function(){
+            $(this).find(".jsje-tips").hide();
+        });
+	})
+	   
+</script>

@@ -1,0 +1,380 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的医药网 - 账号设置</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_公共样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/order.css">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/layui/layui.js?v=$!{jscss_version}" type="text/javascript" ></script>
+    
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}" />
+	<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="../scripts/DD_belatedPNG_0.0.8a-min.js"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+		  #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+           
+           <div class="c-box">
+           #if(${user.verifyPhone}==1)
+		        <div class="user-zhye-tips">提示：验证手机号，即可开通账户余额，请您先进行手机号验证</div>
+		    #else    
+		        <div class="user-zhye-tips">提示：验证手机号，即可开通账户余额，请您先进行手机号验证，该手机号码绑定到您的账户</div>
+		    #end
+		        <div class="user-zhye-table mt20">
+		            <table border="0" cellpadding="0" cellspacing="0">
+		                <tbody>
+		                <tr>
+		                    <td class="tar" width="100">手机号：</td>
+		                    <td width="auto">
+		                    #if(${user.verifyPhone}==1)
+		                    	<span class="text fl">$!{pas}</span>
+		                        <input type="hidden" class="input input-220 fl" type="text" placeholder="" name="mobile" id="mobile" value="$!{user.mobile}">
+		                         <a href="javascript:void(0);" data-able="true" class="btn-kt fl ml10" id="sendMobileCodeBtn">发送验证码</a>
+		                         <a href="javascript:void(0);"  onclick="top.utils.openWithTab('khxxgl','账户中心','/purchase/edit_mobile.html',{fstBread:'账户中心',scdBread:'账号信息管理'})"  title="点击查看账户余额"  data-able="true" class="t-link fl ml10" id="sendMobileCodeBtn">更改手机</a>
+	                     	#else   
+	                     		<input class="input input-220 fl" type="text" placeholder="" name="mobile" id="mobile" value="$!{user.mobile}">
+		                        <a href="javascript:void(0);" data-able="true" class="btn-kt fl ml10" id="sendMobileCodeBtn">发送验证码</a>
+	                        #end
+	                        <span class="t-error ml10 fn_mobile" style="display: none;" ></span>
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <td class="tar">短信验证码：</td>
+		                    <td>
+		                        <input class="input" type="text" placeholder="" id ="smsCode" name="smsCode">
+		                        <span class="t-error ml10 fn_smsCode" style="display: none;">短信验证码错误</span>
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <td class="tar">支付密码：</td>
+		                    <td>
+		                        <input class="input" type="password" placeholder="" id="payPassword" name="payPassword">
+		                        <span class="t-error ml10 fn_payPassword" style="display: none;" ></span>
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <td class="tar">再输一遍：</td>
+		                    <td>
+		                        <input class="input" type="password" placeholder=""  id="payPasswordRe" name="payPasswordRe">
+		                        <span class="t-error ml10 fn_payPasswordRe" style="display: none;" >两次输入密码不一致</span>
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <td class="tar"></td>
+		                    <td>
+		                        <a href="javascript:;" class="btn">马上开通</a>
+		                    </td>
+		                </tr>
+		                </tbody>
+		            </table>
+		        </div>
+		
+		    </div>
+           
+            <!-- 用户中心_主体内容_E -->
+		</div>
+      </div>
+    </div>
+    </div>
+        #parse("/common/footer.vm")
+  </body>
+</html>
+#parse("common/common_script.vm")
+<script type="text/html" id="openSuccess">
+<div class="mn-at-box">
+    <p>恭喜您，已经开通账户，若子账户开通余额使用权限，需进入角色管理设置权限 &nbsp;<a  class="openOther"  style="color:blue;">马上开通子账户权限</a></p>
+</div>
+</script>
+
+<script type="text/html" id="openSuccessForBussiness">
+<div class="mn-at-box">
+    <p>恭喜您，已经开通余额使用权限</p>
+</div>
+</script>
+<script>
+	var layer,layApp,laytpl;
+	layui.config({
+	    base: '/js/layui/extend/'
+	}).use(['layApp','layer','form','laytpl'], function () {
+	    layer = layui.layer;
+	    layApp = layui.layApp,laytpl = layui.laytpl;
+	    layApp.citySelect({
+	        province: "#province",
+	        city: "#city",
+	        url: "/location/provincialCity",
+	        place:true
+    })
+	var layAlert = layui.layApp.alert;
+    $(function(){
+	    $("input[name=smsCode]").focus(function() {
+	    	hide_error(".t-error ml10");
+    	})
+    	
+    	$("input[name=mobile]").focus(function() {
+	    	hide_error(".fn_payPassword");
+    	})
+    })
+		$(".btn").click(
+						function() {
+							var mobile = $("#mobile").val();
+							var smsCode = $("#smsCode").val();
+							if (mobile == "") {
+								show_error(".fn_mobile", "请输入手机号码");
+								return false;
+							}
+							if (smsCode == "") {
+								show_error(".fn_smsCode", "请输入短信验证码");
+								return false;
+							}
+					    	var payPassword   = $("#payPassword").val();
+					    	var payPasswordRe = $("#payPasswordRe").val();
+					    	if(payPassword == ""){
+					    		show_error(".fn_payPassword","请输入支付密码");
+					    		return false;
+					    	}
+					    	if(payPassword.length<8||payPassword.length>20 ){
+					    		show_error(".fn_payPassword","支付密码长度不能小于8位或大于20位");
+					    		return false;
+					    	}
+					    	if(payPasswordRe == ""){
+					    		show_error(".fn_payPasswordRe","请输入确认密码");
+					    		return false;
+					    	}
+					    	if(payPassword!=payPasswordRe){
+					    		show_error(".fn_payPasswordRe","两次输入的支付密码不一致，请重试");
+					    		return false;
+					    	}
+					    	var flag=checkStrong(payPassword);
+			    	    	if(flag<=0){
+					    		show_error(".fn_payPasswordRe","请输入字母和数字组合的支付密码");
+					    		return false;
+					    	}
+							var params = {
+								mobile : mobile,
+								payPassword : payPassword,
+								smsCode : smsCode
+							};
+							var tplStr;
+					    	if(${user.userType}>1){
+				            	tplStr="#openSuccessForBussiness";
+				            }else{
+				            	tplStr="#openSuccess";
+				            }
+							$.ajax({url : "/purchase/update_balance.html",
+										type : "post",
+										dataType : "json",
+										data : params,
+										success : function(data) {
+											if (data.success) {
+												if (data.data == null) {
+											    layAlert({
+				    					            tpl:tplStr,
+				    					            init:function(lay,idx){
+				    					            	lay.find(".openOther").on("click",function(){
+				    					            		top.ue.close(idx);
+				    					            		top.utils.closeTopTab(null,true,function(){
+				    					            			top.utils.openWithTab("jsxxgl","角色管理","/purchase/rg/role/main.html",{firstBread:"企业"})
+				    					            		})
+				    					            		return false;
+				    					            	})
+				    					            },
+				    					            data:{
+					    					            },ok:function(values,idx,layer){
+					    			        				location.reload();
+					    					            }
+				    				        		}); 
+				            					}else {
+													if (data.data.status == "1") {
+														show_error(".fn_smsCode","短信验证码错误");
+													} else if (data.data.status == "101") {
+														show_error(".fn_smsCode","手机号已被占用");
+													} else {
+														show_error(".fn_smsCode","系统错误，请重试");
+													}
+												}
+											}
+										}
+									});
+							return false;
+						})
+		function show_error(fun, mes) {
+			$(fun).html(mes).show();
+		}
+		
+		function hide_error(fun) {
+			$(fun).html("").hide();
+		}
+
+		/*判断输入是否为合法的手机号码*/
+		function isphone(inputString) {
+			var partten = /^1[2,3,4,5,6,7,8,9]\d{9}$/;
+			var fl = false;
+			if (partten.test(inputString)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+		function checkStrong(val) {
+	    	var flag=0;
+	    	val=val.trim();
+	        if (val.length >= 6&&val.length<20) {
+	        	$($(".p-t-img").get(0)).attr("src","../image/icon_zhsz_04.png");
+	        	$($(".p-t-img").get(1)).attr("src","../image/icon_zhsz_05.png");
+	        	$($(".p-t-img").get(2)).attr("src","../image/icon_zhsz_05.png");
+	        	$($(".order-level-progress").find("i").get(1)).removeClass("middle");
+	        	$($(".order-level-progress").find("i").get(2)).removeClass("high");
+	        	$($(".order-password-tips").find("span").get(0)).removeClass("text-middle").removeClass("text-high").text("低");
+	        }else{
+	          	$($(".p-t-img").get(0)).attr("src","../image/icon_zhsz_05.png");
+	        	$($(".p-t-img").get(1)).attr("src","../image/icon_zhsz_05.png");
+	        	$($(".p-t-img").get(2)).attr("src","../image/icon_zhsz_05.png");
+	        	$($(".order-level-progress").find("i").get(2)).removeClass("high");
+	        	$($(".order-level-progress").find("i").get(2)).removeClass("middle");
+	        	$($(".order-password-tips").find("span").get(0)).removeClass("text-middle").removeClass("text-high").text("低");
+	        }
+	        
+	        if (val.length >= 6&&/[a-z]/.test(val)&&/[A-Z]/.test(val)) {
+	        	$($(".p-t-img").get(1)).attr("src","../image/icon_zhsz_04.png");
+	        	$($(".p-t-img").get(2)).attr("src","../image/icon_zhsz_05.png");
+	        	$($(".order-level-progress").find("i").get(1)).addClass("middle");
+	        	$($(".order-level-progress").find("i").get(2)).removeClass("high");
+	        	$($(".order-password-tips").find("span").get(0)).removeClass("text-high").addClass("text-middle").text("中");
+	        	flag= 1;
+	        }
+	        
+	        if (val.length >= 6&&(/[a-z]/.test(val)||/[A-Z]/.test(val)||/\W/.test(val))&&/[0-9]/.test(val)) {
+	        	$($(".p-t-img").get(1)).attr("src","../image/icon_zhsz_04.png");
+	        	$($(".p-t-img").get(2)).attr("src","../image/icon_zhsz_05.png");
+	        	$($(".order-level-progress").find("i").get(1)).addClass("middle");
+	        	$($(".order-level-progress").find("i").get(2)).removeClass("high");
+	        	$($(".order-password-tips").find("span").get(0)).removeClass("text-high").addClass("text-middle").text("中");
+	        	flag= 1;
+	        }
+	        
+	        if (val.length >= 6&&/[a-z]/.test(val)&&/[A-Z]/.test(val)&&/\W/.test(val)) {
+	        	$($(".p-t-img").get(2)).attr("src","../image/icon_zhsz_04.png");
+	        	$($(".p-t-img").get(1)).attr("src","../image/icon_zhsz_04.png");
+	        	$($(".order-level-progress").find("i").get(2)).addClass("high");
+	        	$($(".order-password-tips").find("span").get(0)).removeClass("text-middle").addClass("text-high").text("高");
+	        	flag= 2;
+	        }
+	        
+	        if (val.length >= 6&&/[a-z]/.test(val)&&/[A-Z]/.test(val)&&/[0-9]/.test(val)) {
+	        	$($(".p-t-img").get(2)).attr("src","../image/icon_zhsz_04.png");
+	        	$($(".p-t-img").get(1)).attr("src","../image/icon_zhsz_04.png");
+	        	$($(".order-level-progress").find("i").get(2)).addClass("high");
+	        	$($(".order-password-tips").find("span").get(0)).removeClass("text-middle").addClass("text-high").text("高");
+	        	flag= 2;
+	        }
+	        
+	        if (val.length >= 6&&(/[a-z]/.test(val)||/[A-Z]/.test(val))&&/\W/.test(val)&&/[0-9]/.test(val)) {
+	        	$($(".p-t-img").get(2)).attr("src","../image/icon_zhsz_04.png");
+	        	$($(".p-t-img").get(1)).attr("src","../image/icon_zhsz_04.png");
+	        	$($(".order-level-progress").find("i").get(2)).addClass("high");
+	        	$($(".order-password-tips").find("span").get(0)).removeClass("text-middle").addClass("text-high").text("高");
+	        	flag= 2;
+	        }
+	        return flag;
+	    };
+
+		$('#sendMobileCodeBtn').click(function() {
+			if ($(this).attr("data-able") == "false") {
+				return false;
+			}
+			var mobile = $("#mobile").val();
+			if (mobile == "") {
+				show_error(".fn_mobile", "请输入手机号码");
+				return false;
+			}
+			if (!isphone(mobile)) {
+				show_error(".fn_mobile", "手机号码格式不正确");
+				return false;
+			}
+			var mask_captahs = $.trim($("#smsCode").val());
+			if (!smsCode) {
+				$("#smsCode").blur();
+			}
+			if (!smsCode) {
+				return false;
+			}
+
+			$(this).attr("data-able", "false");
+
+			timeout = 60;
+			var sell_mobile = $("#mobil").val();
+			$("#sendMobileCodeBtn").show();
+			$("#sendMobileCodeBtn").html("正在发送...");
+			$.ajax({
+				url : '/purchase/sendBalanceOpenCode.html',
+				data : {
+					"tel" : mobile
+				},
+				type : "post",
+				success : function(data) {
+					if (data.data) {
+						smsClock();
+					} else {
+						show_error(".fn_smsCode",data.message);
+						$(".btn-kt").attr("data-able", "true");
+						$("#sendMobileCodeBtn").html('发送验证码');
+						timeout = 0;
+					}
+					;
+				},
+				error : function() {
+					$("#sendMobileCodeBtn").html('发送验证码');
+					timeout = 0;
+				}
+			});
+		});
+		
+		$("input[name=mobile]").keyup(function() {
+			hide_error(".fn_mobile");
+			hide_error(".fn_smsCode");
+		})
+
+		var smsClock = function() {
+			if (timeout <= 0) {
+				$(".btn-kt").attr("data-able", "true");
+				$("#sendMobileCodeBtn").html('发送验证码');
+				timeout = 0;
+			} else {
+				$("#sendMobileCodeBtn").html(timeout-- + ' 秒后重新获取');
+				setTimeout(function() {
+					smsClock();
+				}, 1000);
+			}
+		};
+		});
+	</script>

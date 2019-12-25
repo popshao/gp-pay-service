@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>买家商家成长值体系 - 成长值明细</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico"/>
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" /> 
+           
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="scripts/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm") #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心 </a> &gt; 我的成长值 &gt; <span class="color">成长值明细</span></p>
+                </div>
+                
+              <div class="integral_top cc">
+                
+                <div class="privilege-growth">
+                    <div class="growth-progress-bar">
+                    	<div class="bar-progress-mask">#if($!expSum > 0)<span></span>#end</div>
+                        <ul class="bar-ls clearfix">
+                            <li class="bar-li li-rank-1 ">
+                                <a href="javascript:toCzzsm();"><i class="icon-growth icon-growth-1"></i></a>
+                            </li>
+                            <li class="bar-li li-rank-2 ">
+                                <a href="javascript:toCzzsm();"><i class="icon-growth icon-growth-2"></i></a>
+                            </li>
+                            <li class="bar-li li-rank-3 ">
+                                <a href="javascript:toCzzsm();"><i class="icon-growth icon-growth-3"></i></a>
+                            </li>
+                            <li class="bar-li li-rank-4 ">
+                                <a href="javascript:toCzzsm();"><i class="icon-growth icon-growth-4"></i></a>
+                            </li>
+                            <li class="bar-li li-rank-5 ">
+                                <a href="javascript:toCzzsm();"><i class="icon-growth icon-growth-5"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+              	<div class="tac mt10">
+                	#if($!expSum == 0)
+              		<p class="info">
+                    	您的成长值为
+                    	<a class="a_red" href="/purchase/growth/czzmx.html">0</a>
+                                                                      成长值大于0即可升级为<span class="info_red">普通会员</span>。
+                        <a class="info_link" target="_black" href="http://cms.mypharma.com/node/137">查看成长值加速系数介绍</a>
+                    </p>
+                    #elseif($!expSum >= 50000)
+                    <p class="info">
+                    	您的成长值为
+                    	<a class="a_red" href="/purchase/growth/czzmx.html">$!expSum</a>
+                                                                        ，已是最高等级会员。
+                        <a class="info_link" target="_black" href="http://cms.mypharma.com/node/137">查看成长值加速系数介绍</a>
+                    </p>
+					#elseif($!expSum > 0 && $!expSum < 50000)
+                	<p class="info">
+                    	您的成长值为
+                    	<a class="a_red" href="/purchase/growth/czzmx.html">$!expSum</a>
+                                                                       还差
+                        <span class="info_red">$!sub</span>
+                                                                       成长值升级为
+                        <span class="info_red">$!levelName会员</span>。
+                        <a class="info_link" target="_black" href="http://cms.mypharma.com/node/137">查看成长值加速系数介绍</a>
+                    </p>
+                     #end
+                </div>
+              </div>
+                
+              <div class="order_query order">
+              		<form action="/purchase/growth/czzmx.html" method="post" id="searchForm">
+              		<input type="hidden" name="pi" value="$!pi" />
+              		<ul>
+							<li class="fr">
+								<div class="btn">
+									<a href="javascript:searchPager('/purchase/growth/czzmx.html',false);" class="btn_query">查询</a>
+								</div>
+							</li>
+							<li class="fr">
+								<input type="text" id="startTime" class="w-txt w130" name="startTime" value="$!startTime" onblur="javascript:$.sltitem.select('quick','9');" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'endTime\')}'})" />
+								<div class="fl mr10">-</div>
+								<input type="text" id="endTime" class="w-txt w130" name="endTime" value="$!endTime" onblur="javascript:$.sltitem.select('quick','9');" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'startTime\')}'})" />
+							</li>
+						</ul>
+                    </form>
+                </div>
+                
+                <div class="integral_table">
+                	<table border="0" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr class="line">
+                                <th>成长值<img class="img" src="../../image/icon_27.png" title="点击查看成长值说明" onclick="toCzzsm();"></th>
+                                <th>类型</th>
+                                <th>详情</th>
+                                <th>时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            #if(!$null.isNull($list) && $list.size()!=0) 
+							#foreach($bizEnterpriseExperience in $list)
+                            <tr>
+                                	#if($!bizEnterpriseExperience.expCountType == 1)
+                                	<td class="red">
+                                		+$!bizEnterpriseExperience.expValue分
+                                	 </td>
+                                	#else 
+                                	<td class="green">
+                                		$!bizEnterpriseExperience.expValue分 
+                                	 </td>
+                                	#end
+                                <td>
+                                	#if($!bizEnterpriseExperience.expType == -1)
+                                		等级有效期到期
+                                	#elseif($!bizEnterpriseExperience.expType == 1)
+                                		登录
+                                	#elseif($!bizEnterpriseExperience.expType == 2)
+                                		企业认证
+                                	#elseif($!bizEnterpriseExperience.expType == 3)
+                                		下单
+                                	#elseif($!bizEnterpriseExperience.expType == 6)
+                                		升降级
+                                	#end
+                                </td>
+                                <td>$!bizEnterpriseExperience.expSource</td>
+                                <td>$utils.formatDate($!bizEnterpriseExperience.expAddTime,"yyyy-MM-dd")</td>
+                            </tr>
+                            #end
+							#else
+							<tr>
+								<td colspan="10">
+									暂无成长值获取记录
+								</td>
+								</tr>
+							#end
+                        </tbody>
+                    </table>
+                    <!--分页开始 -->
+					#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+					#pagerInfo($!pagerInfo,$!{pagerTotal},"/purchase/growth/czzmx.html")
+					#end #end
+					<!--分页结束 -->
+                </div>
+          </div>
+          
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	#parse("common/common_script.vm")
+	<script>
+		
+		$(function() {
+			//计算百分比
+			var count = '$!expSum';
+			
+			if(count > 0 && count < 1000){//普通
+				var w = (count-0)/(1000-0) * 188 + 188;
+				$(".bar-progress-mask").css("width",w);		
+			}else if(count >= 1000 && count < 10000){
+				var w = (count-1000)/(10000-1000) * 188 + 188 +188;
+				$(".bar-progress-mask").css("width",w);		
+			}else if(count >= 10000 && count < 50000){
+				var w = (count-10000)/(50000-10000) * 188 + 188 + 188 + 188;
+				$(".bar-progress-mask").css("width",w);
+			}else if(count >= 50000){
+				var w = 188 + 188 + 188 +188;
+				$(".bar-progress-mask").css("width",w);
+			}
+			
+			
+	    	//判断当前会员等级
+			if(count == 0){
+				$(".li-rank-1").addClass("current");
+			}else if(count > 0 && count < 1000){
+				$(".li-rank-2").addClass("current");
+			}else if(count >= 1000 && count < 10000){
+				$(".li-rank-3").addClass("current");
+			}else if(count >= 10000 && count < 50000){
+				$(".li-rank-4").addClass("current");
+			}else if(count >= 50000){
+				$(".li-rank-5").addClass("current");
+			}
+			
+		})
+		
+		function toCzzsm(){
+			window.open("http://cms.mypharma.com/node/137");
+		}
+	</script>
+    
+  </body>
+</html>

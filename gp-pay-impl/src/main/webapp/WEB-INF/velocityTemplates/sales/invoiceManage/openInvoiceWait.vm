@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 开票等待</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+    <style type="text/css">
+        .c-box .user-sheet-box .uf-table tr:nth-child(2n) td{
+                 background: none; 
+        }
+    </style>
+</head>
+<body>
+
+<!--页面主体 -->
+    <div class="c-box">
+        <div id='successBox'></div>
+        <script type="text/html" id="successTpl">
+        {{# if(q){ }}
+        {{# var d = q;}}
+            <div class="user-kp-result">
+                <img class="ukr-img" src="/front/imgs/invoice/img_fp_04.png">
+                <div class="ukr-right">
+                    <h3 class="ukr-title">开票等待中</h3>
+                   
+                </div>
+            </div>
+            <div class="user-kp-result-btn">
+                <a href="javascript:void(0)" class="user-btn-b" onclick="gotoDetail('ckfp','/sales/invoice/drawInvoice.html','开票')">继续开票</a>
+            </div>
+        
+        
+        {{# }else{ }}
+        {{# } }}
+        </script>
+    </div>
+
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>
+
+<script>
+    var q= JSON.parse(getUrlParam("q")) || {};  // 
+    console.log(q)
+    var layer,laypage,laytpl,subData = {};
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage','laytpl'],function () {
+        layer = layui.layer,laypage = layui.laypage,laytpl = layui.laytpl;
+        $(function(){
+            $('body').addClass('user-has-js');
+
+            $("#successBox").html(laytpl($("#successTpl").html()).render({datas:q}));
+
+        });
+
+
+    })
+//if(url.indexOf("?") > -1) q = "&";
+    /*转发 分享*/
+    function  shareInvoice() {
+        if(!q)
+            return false;
+        top.utils.iframeLoad();
+        q = getUrlParam("q");
+        top.utils.openWithTab(top.utils.getRandom(), "转发", '/sales/invoice/transInvoice.html?q='+q, {fstBread:'发票'});
+        return false;
+    }
+
+</script>
+
+</body>
+</html>

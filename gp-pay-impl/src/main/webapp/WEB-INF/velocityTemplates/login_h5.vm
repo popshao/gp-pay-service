@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>登录我的医药网</title>
+    <link href="/h5/res/css/weui.min.css?v=$!{jscss_version}" type="text/css" rel="stylesheet">
+    <link href="/h5/res/css/jquery-weui.css?v=$!{jscss_version}" type="text/css" rel="stylesheet">
+    <link href="/h5/aui/css/aui.css?v=$!{jscss_version}" type="text/css" rel="stylesheet">
+    <link href="/h5/aui/css/aui-slide.css?v=$!{jscss_version}" type="text/css" rel="stylesheet">
+    <link href="/h5/aui/css/aui-slide.css?v=$!{jscss_version}" type="text/css" rel="stylesheet">
+    <link href="/h5/res/css/iconfont.css?v=$!{jscss_version}" type="text/css" rel="stylesheet">
+    <link href="/h5/res/css/style.css?v=$!{jscss_version}" type="text/css" rel="stylesheet">
+       
+    <style>
+        .aui-input-row:first-child:after{
+            border-top: 0;
+        }
+        .aui-input-row .aui-input-addon.aui-iconfont{
+            font-size: 20px;
+            color: #9e9e9e;
+        }
+        .addrs-form .aui-input-addon{
+            text-indent: 0;
+        }
+    </style>
+</head>
+<body style="background: white">
+
+<div class="dl-box" style="display:none;position: absolute; top: 0; left: 0; width: 100%; height: 60px; z-index: 20170101;background: rgba(0,0,0,.5)">
+    <img style="height: 46px; margin:7px; float:left;" src="/image/dl-logo.png" alt="我的医药网">
+    <div style="float:left; color: white; height:50px;line-height:20px; margin-top:10px;  ">
+        <b style="font-size: 16px;  color: #fff;">随时随地轻松采购</b>
+        <p style="font-size: 14px; color: #fff;">优惠促销抢先知晓</p>
+    </div>
+    <button style="padding:0 12px; font-size:18px;background:none; outline: none; border-radius: 8px; position:absolute; right: 45px; top: 8px; height: 45px; line-height: 42px; border: 1px solid white; color: white;">立即打开</button>
+    <span onclick="$(this).closest('.dl-box').remove();" style="font-size: 25px; position: absolute; right: 5px; line-height: 1; top: 12px; padding: 4px 8px; color: white;">x</span>
+</div>
+
+<div class="aui-content box" style="margin-bottom: 0">
+
+    <header class="aui-bar aui-bar-nav">
+      #if($!{return_uri})
+         <a class="aui-pull-left" href="$!{return_uri}">
+            <span class="aui-iconfont aui-icon-left"></span>返回
+        </a>       
+      #else
+ 		<a class="aui-pull-left">
+            <span class="aui-iconfont aui-icon-left"></span>返回
+        </a>         
+      #end  
+        <div class="aui-title">登录我的医药网</div>
+    </header>
+
+    <div class="aui-content" style="margin: 0">
+
+        <div class="aui-logo">
+            <img src="/h5/res/imgs/logo.png" >
+        </div>
+      <form action="" method="post" id="mphLogin">
+        <div class="aui-form addrs-form aui-content-padded" style="margin: 10px 10%;">
+            <div class="aui-input-row">
+                <label class="aui-input-addon aui-iconfont aui-icon-my" ></label>
+                <input type="text" class="aui-input" id="username" placeholder="请输入手机/邮箱/用户名"/>
+            </div>
+            <div class="aui-input-row" style="margin-top: 25px;">
+                <label class="aui-input-addon aui-iconfont aui-icon-lock"></label>
+                <input type="password" class="aui-input" id="password" placeholder="请输入密码"/>
+            </div>
+        </div>
+            <input type="hidden" name="return_uri" id="return_uri" value="$!{return_uri}" />
+            <input type="hidden" name="client_display" id="client_display" value="$!{client_display}" />
+            <input type="hidden" name="app_id" id="app_id" value="$!{app_id}" />
+            <input type="hidden" name="state" id="state" value="$!{state}" />
+            <input type="hidden" name="scope" id="scope" value="$!{scope}" />
+            <input type="hidden" name="$!{rand_param}" id="rand_param" value="1" />
+     </form>       
+    </div>
+
+
+    <div class="aui-btn aui-btn-block aui-btn-outlined btn-add login" style="margin-top: 50px; ">登录</div>
+
+</div>
+
+<div class="totop">
+    <img src="/h5/res/imgs/btn_back_top_normal.png">
+</div>
+
+
+
+<script type="text/javascript" src="/h5/res/js/zepto.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/res/js/jquery-weui.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/res/js/city-picker.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/res/js/webMutual-U-20160420.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/res/js/rogAjax.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/res/js/template.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/res/js/zepto.cookie.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/res/js/fastclick.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/res/layer/layer.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/aui/script/aui-slide.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/res/js/app.js?v=$!{jscss_version}"></script>
+<script type="text/javascript" src="/h5/res/js/md4.js?v=$!{jscss_version}"></script>
+#parse("common/common_script.vm")
+<script type="text/javascript">
+
+function showError(text){
+	$("#showError").html("提示信息：" + text);
+}
+ 
+ $(function(){
+	 
+	 $(".btn-add").on("click", function (){
+			var loginUrl 	= '/login/ajax_login.html';
+			var oName 		= $("#username"),
+				sName 		= $.trim(oName.val()), // 用户名值
+				oPwd  		= $("#password"),
+				sPwd  		= $.trim(oPwd.val()), // 密码值
+				oAuto 		= $("#autoLogin"),
+				sAuto  		= 1, // 自动登录, 1是选中, 0是未选中
+				oSub  		= $(".btn-add");
+			    oCode  		= $("#s_code"),
+			    sCode  		= $.trim(oCode.val()), // 验证码值     
+			    v_code      = $("#v_code").val();
+
+			// 检查输入
+			if (sName == '') {
+				oName.focus();
+                top.ue.msg("请先输入您的账号！", 1);
+				return false;
+			} 
+
+			if (sPwd == '') {
+				oPwd.focus();
+                top.ue.msg("请输入您的密码！", 2);
+				return false;
+			} 
+			if(v_code == 1){
+				if (sCode == '') {
+					oCode.focus();
+                    top.ue.msg("请先输入验证码！", 3);
+					return false;
+				};
+			}
+
+			// 保存自动登录
+			if (!oAuto.hasClass("checked")) {
+				sAuto = 0;
+			};
+			// 锁定登录键并提交表单
+			var actConde = "";
+			$.ajax({
+				url : '/ajax/ajax_login.html',
+				async : false,
+	            data: {username : sName, v_code : v_code, code : sCode},
+	            type: 'POST',
+	            dataType: 'json',			
+				success : function(data) {
+					if(data.success){
+						actConde = data.data;
+					}
+				}
+			});
+			if(actConde == ""){
+                top.ue.msg("登录异常，请刷新登录。");
+				return false;
+			}
+			// 锁定登录键并提交表单
+			oSub.get(0).disabled = true;
+			oSub.html("正在登录...");
+			
+			var params = {
+					username		: sName, 
+					password		: sPwd, 
+					auto_login		: sAuto, 
+					return_uri		: $("#return_uri").val(), 
+					client_display	: $("#client_display").val(), 
+					app_id			: $("#app_id").val(), 
+					state			: $("#state").val(), 
+					scope			: $("#scope").val(), 
+					v_code          : v_code,
+					actCode        : actConde,
+					timestamp		: new Date().getTime()
+				};		
+			
+			params[$("#rand_param").attr('name')] = 1;
+
+			$.ajax({
+				url: loginUrl,
+				type: "post",
+				dataType: "json",
+				data: params,
+				success: function(data) {
+					if(data.success){
+						if (data.data.status === "1") {
+							window.location.href = data.data.msg + "&type=1";
+						} else if(data.data.status === "101"){
+							$("#v_code").val("1");
+							$("#v_code_div").show();
+							
+							oSub.get(0).disabled = false;
+							oSub.html("登&#12288;录");
+							
+							// 错误提示
+                            top.ue.msg(data.data.msg);
+							
+				        } else if(data.data.status === "102"){
+							oSub.get(0).disabled = false;
+							oSub.html("登&#12288;录");
+							
+							// 错误提示
+                            top.ue.msg(data.data.msg);
+							
+				        } else {
+							// 恢复登录键
+							oSub.get(0).disabled = false;
+							oSub.html("登&#12288;录");
+							
+							// 错误提示
+                            top.ue.msg(data.data.msg);
+						}
+					}else{
+						// 恢复登录键
+						oSub.get(0).disabled = false;
+						oSub.html("登&#12288;录");
+						
+						// 错误提示
+                        top.ue.msg("登陆失败，请重新刷新登陆！");
+					}	
+				},
+				error: function() {
+					// 恢复登录键
+					oSub.get(0).disabled = false;
+					oSub.html("登&#12288;录");
+				}
+			});
+
+			// 无需提交表单
+			return false;
+		})
+
+     /*打开 app*/
+     var dlApptimer;
+     $(".dl-box").fadeIn().find("button").on("click",function () {
+         if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)  || navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Linux') > -1) {
+             var loadDateTime = new Date();
+             dlApptimer = window.setTimeout(function() {
+                         var timeOutDateTime = new Date();
+                         if (timeOutDateTime - loadDateTime < 100) {
+                             location.href = "http://hd.mypharma.com/appLine";
+                         }
+                     },
+                     25);
+             window.location = "rograndmphapp://openApp";
+         }else{
+             location.href = "http://hd.mypharma.com/appLine";
+         }
+     });
+ })
+ 
+</script>
+
+</body>
+</html>

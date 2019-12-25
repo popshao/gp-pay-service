@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的专供 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    
+    <script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+
+  <body>
+    <div class="container">
+     #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="$!{userHostAndPort}/"  class="color">采购中心</a>&gt; 订单中心 &gt; 我的专供 </p>
+                </div>
+                <div class="order_list">
+                    <div class="tabnav">
+                        <ul>
+                            <li data-value="0" class="on"><a href="javascript:;"><span>可采购商品</span></a></li>
+                            <li data-value="1"><a href="/purchase/member/list_my_sale_control_record.html"><span>申请记录</span></a></li>
+                      	</ul>
+                      	<div class="btn-box">
+                        <form action="/purchase/member/list_my_sale_control.html" method="post" id="searchForm">
+                            <div class="search fr mt5">
+                          		<input type="hidden" name="pi" value="$!pi">
+								<input type="hidden" name="ps" value="10">
+                                <input type="text"  autocomplete="off" id="gName" name="gName"> 
+                                <input type="submit" class="button" id="keyBtn" value="" onclick="search()">
+                          </div>
+                         </form>  
+                      </div>
+                    </div>
+                <div class="tab mt20">
+                <!--待付款-->
+                <div class="order_detail supply">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th>商品信息</th>
+                                    <th width="200">供应商</th>
+                                    <th>价格</th>
+                                    <th>库存</th>
+                                    <th>数量</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              #if(!$null.isNull($!myGoodsList) && $!myGoodsList.size()!=0)	
+                               #foreach($myGoods in $!myGoodsList) 
+	                               <tr>
+	                                   <td><div class="ico_msg"><a href="http://$!{wwwHostAndPort}/item/$!{myGoods.goods.gId}.html" target="_blank"><img src="$!utils.getNewImgDomain($!{myGoods.defaultPic},150,150)" onerror="this.src='/image/default.jpg'" alt="" width="150px;" height="150px;"></a><div class="msg-box"><p class="msg-tit">
+	                                   	<a href="http://$!{wwwHostAndPort}/item/$!{myGoods.goods.gId}.html" target="_blank">$!utils.getGoodsName($!{myGoods.nrName},$!{myGoods.nrCommonName},$!{myGoods.goods.gName},$!{myGoods.goods.gCommonName})</a>
+	                                   </p><p>国批准字：$!{myGoods.goods.gLicenseNo}
+	                                       </p><p class="msg-size">$!{myGoods.goods.gSpecifications}</p><p>$!{myGoods.goods.gManufacture}</p></div></div></td>
+	                                    <td>$!{myGoods.supplier.suName}</td>
+	                                    <td>#if($!{myGoods.isCanBuy} == 8)不可采购 #else¥$!{myGoods.buyPrice}#end<input id="pic_$!{myGoods.goods.gId}" value="$!{myGoods.buyPrice}" type="hidden" />	</td>
+	                                    <td>#if($!{myGoods.isCanBuy} == 8)--#else$!{myGoods.stockStr}#end</td>
+	                                    <td class="td-num"><div class="box">
+	                                    #set($minBuyNum = $!{myGoods.goods.gMiddlePackage})
+														#if($!{myGoods.goods.gCanSplit} == 1)
+															#set($minBuyNum = 1)
+														#end
+									
+											#set($buyernum = $!{myGoods.goods.gMiddlePackage})
+											  #if($!{myGoods.minNum}>0)
+											  	#set($buyernum = $!{myGoods.minNum})
+											  #end			
+										<input name="购买数量"  class="buynum" type="text" value="$buyernum" ori="$buyernum" maxlength="6" tabindex="1" id="num_$!{myGoods.goods.gId}" max="$!{myGoods.stock}" sal="$buyernum" cansplit="$!{myGoods.goods.gCanSplit}"  midpackage="$!{myGoods.goods.gMiddlePackage}" #if($!{myGoods.stock}==0) disabled="disabled" #else #end>
+										<a href="javascript:;" class="#if($!{myGoods.stock}==0) ups #else up #end" max="$!{myGoods.stock}" va="$minBuyNum" sal="$buyernum"></a>
+                                            <a href="javascript:;" class="#if($!{myGoods.stock}==0) downs #else down #end" max="$!{myGoods.stock}" va="$minBuyNum" sal="$buyernum"></a>
+									</div></td>
+	                                    <td><a href="javascript:void(0);" id="fly_$!{myGoods.goods.gId}" onclick="$!utils.getCart($!{myGoods.isCanBuy},$!{myGoods.buyPrice},$!{myGoods.goods.gSellerId},$!{myGoods.goods.gId},6,1)" #if($!{myGoods.stock}==0 || ($!{myGoods.goods.gCanSplit}==0 && $minBuyNum>$!{myGoods.stock})) class="btn-none" #elseif($!utils.inArray($!{cartGoodsList},$!{myGoods.goods.gId})) class="btn-carted" #else class="btn-cart" #end
+	                                    #if($!{myGoods.isCanBuy} == 8)style="padding-left: 0px;background: #bcbcbc url('../image/ico_cart.png') no-repeat scroll 10px 3px;" #end>
+	                                    #if($!{myGoods.isCanBuy} == 8)
+	                                    	定向销售
+	                                    #elseif ($!{myGoods.stock}==0 || ($!{myGoods.goods.gCanSplit}==0 && $minBuyNum>$!{myGoods.stock}))
+	                                    	已售罄
+	                                    #else
+	                                    	#if($!utils.inArray($!{cartGoodsList},$!{myGoods.goods.gId}))继续购买 #else加入进货单 #end
+	                                    #end
+	                                    </a></td>
+	                                </tr>
+                                #end
+                               #else
+                               	 <tr>
+				                       <td colspan="6">无相关数据！</td>
+				                 </tr>
+                               #end 
+                            </tbody>
+                        </table>
+                        <!--分页开始 -->
+						#if($!{pagerInfo}) #if($!{pagerTotal} >1)
+							#pagerInfo($!pagerInfo,$!{pagerTotal},"/purchase/member/list_my_sale_control_goods.html")
+						#end #end
+						<!--分页结束 -->
+						
+                      </div>
+                </div>
+                
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}"></script>
+     <script type="text/javascript" src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+     <script type="text/javascript" src="/js/public/jquery.cookie.js?v=$!{jscss_version}"></script>
+	 <script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	 #parse("common/common_script.vm")
+    <script>
+    $(function(){
+    $('.order_list .tabnav li').click(function(){
+        var index=$(this).index();
+        $(this).addClass('on').siblings().removeClass('on');
+        $('.tab>div').hide().eq(index).show();
+    }); 
+    })
+    function search(){
+    	$("#searchForm").submit();
+    }
+    
+    </script>
+  </body>
+</html>

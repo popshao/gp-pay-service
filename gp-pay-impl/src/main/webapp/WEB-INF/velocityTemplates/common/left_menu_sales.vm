@@ -1,0 +1,152 @@
+<!--销售中心左侧菜单栏-->
+<div class="leftmenu fl">
+    <div class="cnt">
+    	#if(!$null.isNull($resources) && $resources.size()!=0)	
+    		#foreach($resource in $!resources)
+    		  #foreach($ch in $!resource.childResource)
+    		     #if($ch.parentId == 252)
+    		     	#if($!userType == 2) <!-- 商业账号 -->
+		    			<dl >
+				            <dt id="btn1" class="toggleID" data-id="$!{ch.resourceId}"><i></i>$!{ch.resourceName}</dt>
+<!-- 				            	#if($!{childResource.resourceId} != 250) 排除销售控制 -->
+					            	#if($!{isChild} != 1) <!-- 主帐号 -->
+						            	#foreach($childResource in $!ch.childResource)
+						            		#if($!{childResource.resourceId} != 250) <!--排除销售控制 -->
+												<!--工业政策邀请与禁销商品渠道管理 引导标识设定开始-->
+												#set($idVar = "")
+												#if($!{childResource.resourceLink} == '/sales/sale_banned/gy_xsgl.html')
+													#set($idVar = "sale_banned")
+												#elseif($!{childResource.resourceLink} == '/sales/market/promotion/businessMain.html')
+													#set($idVar = "businessMain")
+												#end
+												<!--工业政策邀请与禁销商品渠道管理 引导标识设定结束-->
+							            		#if($!{childResource.resourceId} == $!resourceId)
+									            <dd>
+									            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+													<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" class="on" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+									            	#else
+									            	<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" class="on" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+									            	#end
+									            </dd>
+									            #else
+									            <dd>
+									            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+													<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+									            	#else
+									            	<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+									            	#end
+									            </dd>
+									            #end
+									        #end
+							            #end
+						            #else <!-- 子帐号 -->
+						            	#foreach($childResource in $!ch.childResource)
+						            		#if($!{childResource.resourceId} != 250) <!--排除销售控制 -->
+							            		#if($!{childResource.resourceId} != 225 && $!{childResource.resourceId} != 254) <!-- 排除子帐号管理和角色管理 -->
+								            		<!--工业政策邀请与禁销商品渠道管理 引导标识设定开始-->
+    												#set($idVar = "")
+        											#if($!{childResource.resourceLink} == '/sales/sale_banned/gy_xsgl.html')
+    													#set($idVar = "sale_banned")
+    												#elseif($!{childResource.resourceLink} == '/sales/market/promotion/businessMain.html')
+    													#set($idVar = "businessMain")
+    												#end
+    												<!--工业政策邀请与禁销商品渠道管理 引导标识设定结束-->
+													#if($!{childResource.resourceId} == $!resourceId)
+										            <dd>
+										            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+														<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" class="on" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+										            	#else
+										            	<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" class="on" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+										            	#end
+										            </dd>
+										            #else
+										            <dd>
+										            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+														<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+										            	#else
+										            	<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+										            	#end
+										            </dd>
+										            #end
+									            #end
+									        #end
+							            #end
+						            #end
+<!-- 					            #end -->
+		        		</dl>
+		        	#else <!-- 工业账号 -->
+		        		<dl>
+				            <dt id="btn1" class="toggleID" data-id="$!{ch.resourceId}"><i></i>$!{ch.resourceName}</dt>
+<!-- 				            	#if($!{childResource.resourceId} != 244 && $!{childResource.resourceId} != 245 && $!{childResource.resourceId} != 246 && $!{childResource.resourceId} != 247 && $!{childResource.resourceId} != 248 && $!{childResource.resourceId} != 249) 排除商品定价，专供控销，申请管理，促销管理，单品量价政策，订单关联单品政策 -->
+					            	#if($!{isChild} != 1) <!-- 主帐号 -->
+						            	#foreach($childResource in $!ch.childResource)
+						            		#if($!{childResource.resourceId} != 244 && $!{childResource.resourceId} != 245 && $!{childResource.resourceId} != 246 && $!{childResource.resourceId} != 247 && $!{childResource.resourceId} != 248 && $!{childResource.resourceId} != 249 && $!{childResource.resourceId} != 340) <!--排除商品定价，专供控销，申请管理，促销管理，单品量价政策，订单关联单品政策 -->
+							            		<!--发布招商信息与邀请商业参与促销 引导标识设定开始-->
+												#set($idVar = "")
+												#if($!{childResource.resourceLink} == '/sales/market/businessAttract/main.html')
+													#set($idVar = "businessAttract")
+												#elseif($!{childResource.resourceLink} == '/sales/market/promotion/main.html')
+													#set($idVar = "promotion")
+												#end
+												<!--发布招商信息与邀请商业参与促销 引导标识设定结束-->
+												#if($!{childResource.resourceId} == $!resourceId)
+									            <dd>
+									            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+													<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" class="on" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+									            	#else
+									            	<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" class="on" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+									            	#end
+									            </dd>
+									            #else
+									            <dd>
+									            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+													<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+													#else
+													<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+													#end
+									            </dd>
+									            #end
+								            #end
+							            #end
+						            #else <!-- 子帐号 -->
+						            	#foreach($childResource in $!ch.childResource)
+						            		#if($!{childResource.resourceId} != 244 && $!{childResource.resourceId} != 245 && $!{childResource.resourceId} != 246 && $!{childResource.resourceId} != 247 && $!{childResource.resourceId} != 248 && $!{childResource.resourceId} != 249) <!--排除商品定价，专供控销，申请管理，促销管理，单品量价政策，订单关联单品政策 -->
+							            		#if($!{childResource.resourceId} != 225 && $!{childResource.resourceId} != 254) <!-- 排除子帐号管理和角色管理 -->
+								            		<!--发布招商信息与邀请商业参与促销 引导标识设定开始-->
+    												#set($idVar = "")
+    												#if($!{childResource.resourceLink} == '/sales/market/businessAttract/main.html')
+    													#set($idVar = "businessAttract")
+    												#elseif($!{childResource.resourceLink} == '/sales/market/promotion/main.html')
+    													#set($idVar = "promotion")
+    												#end
+    												<!--发布招商信息与邀请商业参与促销 引导标识设定结束-->
+													#if($!{childResource.resourceId} == $!resourceId)
+										            <dd>
+										            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+														<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" class="on" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+														#else
+														<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" class="on" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+														#end
+										            </dd>
+										            #else
+										            <dd>
+										            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+														<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+										            	#else
+										            	<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" id="$!{idVar}" #if($!{childResource.resourceLink} == '/sales/flow/flow_main.html') target="_blank" #end>$!{childResource.resourceName}</a>
+										            	#end
+										            </dd>
+										            #end
+									            #end
+									        #end
+							            #end
+						            #end
+<!-- 					            #end -->
+		        		</dl>
+		        	#end	
+        		#end
+        	  #end	
+    		#end
+    	#end
+    </div>
+  </div>

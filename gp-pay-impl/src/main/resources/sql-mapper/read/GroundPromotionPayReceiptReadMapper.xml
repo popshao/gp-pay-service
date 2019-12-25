@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.read.GroundPromotionPayReceiptReadDao">
+	<resultMap id="groundPromotionPayReceiptResult" type="com.mph.coreapi.gp.pay.entity.GroundPromotionPayReceipt">
+		<result property="id" column="id" />
+		<result property="receiptSn" column="receipt_sn" />
+		<result property="userId" column="user_id" />
+		<result property="totalAmount" column="total_amount" />
+		<result property="taxAmount" column="tax_amount" />
+		<result property="finalAmount" column="final_amount" />
+		<result property="status" column="status" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+        <result property="bankName" column="bank_name" />
+        <result property="bankCardNo" column="bank_card_no" />
+	</resultMap>
+    <resultMap id="vipReceiptInfoResult" type="com.mph.coreapi.gp.pay.entity.VipReceiptInfo">
+        <result property="userId" column="user_id" />
+    </resultMap>
+
+	<sql id="baseColumns">
+        id,
+        receipt_sn,
+        user_id,
+        total_amount,
+        tax_amount,
+        final_amount,
+        `status`,
+        create_time,
+        update_time
+	</sql>
+
+	<select id="listGroundPromotionPayReceipt" resultMap="groundPromotionPayReceiptResult">
+		select <include refid="baseColumns"></include>
+		from `ground_promotion_pay_receipt`
+		where 1=1
+        <if test="status != null">
+            and `status`=#{status}
+        </if>
+        <if test="userId != null">
+            and `userId`=#{userId}
+        </if>
+        <if test="receiptId != null">
+            and `id`=#{receiptId}
+        </if>
+	</select>
+
+    <select id="getGroundPromotionPayReceiptAmount" resultType="java.lang.Double">
+        select sum(final_amount)
+        from `ground_promotion_pay_receipt`
+        where 1=1
+        <if test="userId != null">
+            and `user_id` = #{userId}
+        </if>
+
+        <if test="status != null">
+            and `status`=#{status}
+        </if>
+    </select>
+
+	<select id="listGroundPromotionPayReceiptAll" parameterType="Long" resultMap="groundPromotionPayReceiptResult">
+		select <include refid="baseColumns"></include>
+		from `ground_promotion_pay_receipt`
+	</select>
+
+    <select id="getGroundPromotionReceiptAmount" resultType="java.lang.Double">
+        select IFNULL(SUM(total_amount),0)
+        from `ground_promotion_pay_receipt`
+        where `user_id` = #{userId} AND PERIOD_DIFF( DATE_FORMAT( NOW( ) , '%Y%m' ) , DATE_FORMAT( create_time, '%Y%m' ) ) =0
+    </select>
+
+
+    <select id="listGroundPromotionPayReceiptInfo"  resultMap="groundPromotionPayReceiptResult">
+        SELECT * FROM ground_promotion_pay_receipt AS grpr
+	    LEFT JOIN ground_promotion_bank_info AS grbi ON grpr.user_id=grbi.user_id
+        WHERE 1=1
+        <if test="userId != null">
+            and grpr.user_id = #{userId}
+        </if>
+        <if test="payStatus != null">
+            and grpr.status in (${payStatus})
+        </if>
+        order by grpr.create_time desc
+        <if test="start != null">
+            LIMIT #{start},#{pageSize}
+        </if>
+    </select>
+
+
+    <select id="countGroundPromotionPayReceiptInfo" resultType="java.lang.Integer">
+        SELECT count(1) FROM ground_promotion_pay_receipt AS grpr
+        LEFT JOIN ground_promotion_bank_info AS grbi ON grpr.user_id=grbi.user_id
+        WHERE 1=1
+        <if test="userId != null">
+            and grpr.user_id = #{userId}
+        </if>
+        <if test="payStatus != null">
+            and grpr.status in (${payStatus})
+        </if>
+    </select>
+
+    <select id="getSqlReceiptUserId" resultMap="vipReceiptInfoResult">
+
+    </select>
+</mapper>

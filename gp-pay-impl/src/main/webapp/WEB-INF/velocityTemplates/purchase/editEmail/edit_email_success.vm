@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+       	#if($!{one}=="yes")
+	    <title>绑定邮箱 - 我的医药网</title>
+	    #else
+	    <title>修改邮箱 - 我的医药网</title>
+	    #end
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+	<!-- mypharma_样式 -->
+	<link rel="stylesheet" type="text/css"
+		href="/css/global.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css"
+		href="/css/index.css?v=$!{jscss_version}" />
+	<link rel="stylesheet" type="text/css"
+		href="/css/order.css?v=$!{jscss_version}" />
+	<!--PNG格式图片兼容IE6解决方案 -->
+	<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"
+		type="text/javascript"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"
+		type="text/javascript"></script>
+		#parse("common/common_script.vm")
+	<script >
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+			render:true,
+            handler:function (btn) {
+                location.href = "/purchase/account/account_toEdit.html";
+            }
+        })
+	</script>
+</head>
+<body>
+	<div class="container">
+		#parse("common/header_top.vm")
+		#parse("common/header.vm")
+		<div class="content">
+			<div class="wrap cc">
+				
+				#parse("common/left_menu_purchase.vm")
+				
+				<div class="user_right fl">
+		            <!-- 用户中心_主体内容_S -->
+		            <div class="indmain">
+		            
+			            <div class="path">
+		                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 账户中心 &gt;<a href="/purchase/account/account_toEdit.html" class="color">账号信息管理</a>&gt; #if($!{one}=="yes")
+												   绑定邮箱
+												    #else
+												    修改邮箱
+												    #end</p>
+		                </div>
+	
+		
+						<div class="order-zhsz-box">
+
+					<div class="order-zhsz-progress-bar">
+						<ul class="bar-ls cc">
+							<li class="bar-li current"><i class="number">1</i> <span
+								class="text">验证身份</span></li>
+							<li class="bar-li current"><i class="number">2</i> <span
+								class="text">#if($!{one}=="yes")
+										   绑定邮箱
+										    #else
+										    修改邮箱
+    				#end</span></li>
+							<li class="bar-li current"><i class="number">3</i> <span
+								class="text">完成</span></li>
+						</ul>
+					</div>
+
+					<div class="order-zhsz-tips">
+						<img class="img" src="../image/img_zhsz_02.png"> <b
+							class="text ml10">恭喜，#if($!{one}=="yes")
+										   绑定邮箱
+										    #else
+										    修改邮箱
+										    #end成功！</b>
+					</div>
+
+					<div class="order-zhsz-table">
+						<table border="0" cellpadding="0" cellspacing="0">
+							#if($!{userInfos.passwordStrength}==0&&$!{userInfos.verifyPhone}==0&&$!{userInfos.verifyEmail}==0)
+							<tr>
+								<td class="tar title" width="260" valign="top">目前安全级别：</td>
+								<td width="auto"><span class="text-title text-low">很低</span>
+									<div class="order-level-progress">
+										<i class="low"></i> <i></i> <i></i> <i></i>
+									</div>
+									<div class="tips-text">
+										在医药网，<i class="text-low">90%</i>用户完成了手机绑定设置<a
+											class="link ml10" href="../../purchase/edit_mobile.html">立即设置</a>
+									</div></td>
+							</tr>
+							#end
+							#if($!{userInfos.passwordStrength}>0&&$!{userInfos.verifyPhone}==0&&$!{userInfos.verifyEmail}==1)
+							<tr>
+								<td class="tar title" width="260" valign="top">目前安全级别：</td>
+								<td width="auto"><span class="text-title text-low">中</span>
+									<div class="order-level-progress">
+										<i class="middle"></i> <i class="middle"></i> <i
+											class="middle"></i> <i></i>
+									</div>
+									<div class="tips-text">
+										在医药网，<i class="text-low">90%</i>用户完成了手机绑定设置<a
+											class="link ml10" href="../../purchase/edit_mobile.html">立即设置</a>
+									</div></td>
+							</tr>
+							#end
+							#if($!{userInfos.passwordStrength}==0&&$!{userInfos.verifyPhone}==0&&$!{userInfos.verifyEmail}==1)
+							<tr>
+								<td class="tar title" width="260" valign="top">目前安全级别：</td>
+								<td width="auto"><span class="text-title text-low">低</span>
+									<div class="order-level-progress">
+										<i class="low"></i> <i class="low"></i> <i></i> <i></i>
+									</div>
+										<div class="tips-text">
+										在医药网，<i class="text-low">90%</i>用户完成了手机绑定设置<a
+											class="link ml10" href="../../purchase/edit_mobile.html">立即设置</a>
+									</div></td>
+							</tr>
+							#end
+							#if($!{userInfos.passwordStrength}==0&&$!{userInfos.verifyPhone}==1&&$!{userInfos.verifyEmail}==0)
+							<tr>
+								<td class="tar title" width="260" valign="top">目前安全级别：</td>
+								<td width="auto"><span class="text-title text-low">低</span>
+									<div class="order-level-progress">
+										<i class="low"></i> <i class="low"></i> <i></i> <i></i>
+									</div>
+									<div class="tips-text">
+										在医药网，<i class="text-low">80%</i>用户完成邮箱绑定设置<a
+											class="link ml10" href="../../purchase/edit_email.html">立即设置</a>
+									</div></td>
+							</tr>
+							#end
+							#if($!{userInfos.passwordStrength}>0&&$!{userInfos.verifyPhone}==0&&$!{userInfos.verifyEmail}==0)
+								<tr>
+									<td class="tar title" width="260" valign="top">目前安全级别：</td>
+									<td><span class="text-title text-low">低</span>
+										<div class="order-level-progress">
+											<i class="low"></i> <i class="low"></i> <i></i> <i></i>
+										</div>
+										<div class="tips-text">
+											在医药网，<i class="text-low">80%</i>用户完成邮箱绑定设置<a
+												class="link ml10" href="../../purchase/edit_email.html">立即设置</a>
+										</div></td>
+								</tr>
+								#end
+								#if($!{userInfos.passwordStrength}>0&&$!{userInfos.verifyPhone}==1&&$!{userInfos.verifyEmail}==0)
+								<tr>
+									<td class="tar title" width="260" valign="top">目前安全级别：</td>
+									<td width="auto"><span class="text-title text-low">中</span>
+										<div class="order-level-progress">
+											<i class="middle"></i> <i class="middle"></i> <i
+												class="middle"></i> <i></i>
+										</div>
+										<div class="tips-text">
+											在医药网，<i class="text-low">80%</i>用户完成邮箱绑定设置<a
+												class="link ml10" href="../../purchase/edit_email.html">立即设置</a>
+										</div></td>
+								</tr>
+								#end
+								#if($!{userInfos.passwordStrength}==0&&$!{userInfos.verifyPhone}==1&&$!{userInfos.verifyEmail}==1)
+								<tr>
+									<td class="tar title" width="260" valign="top">目前安全级别：</td>
+									<td><span class="text-title text-middle">中</span>
+										<div class="order-level-progress">
+											<i class="middle"></i> <i class="middle"></i> <i
+												class="middle"></i> <i></i>
+										</div>
+										<div class="tips-text">
+											在医药网，<i class="text-middle">75%</i>用户帐号密码等级超过或是“强度中级”<a
+												class="link ml10" href="../../purchase/edit_password.html">立即设置</a>
+										</div></td>
+								</tr>
+								#end
+								#if($!{userInfos.passwordStrength}>0&&$!{userInfos.verifyPhone}==1&&$!{userInfos.verifyEmail}==1)
+									<tr>
+										<td class="tar title" width="260" valign="top">目前安全级别：</td>
+										<td><span class="text-title text-high">高</span>
+											<div class="order-level-progress">
+												<i class="high"></i> <i class="high"></i> <i class="high"></i>
+												<i class="high"></i>
+											</div></td>
+									</tr>
+								#end
+								<tr>
+									<td class="tar title"></td>
+									<td><a onclick="top.utils.frameBackDel();"  href="../../purchase/account/account_toEdit.html"
+										class="btn">返回帐号设置</a></td>
+								</tr>
+						</table>
+					</div>
+				</div>
+			
+					</div>
+		            <!-- 用户中心_主体内容_E -->
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	
+	#parse("/common/footer.vm")
+	
+</body>
+</html>

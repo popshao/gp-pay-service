@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>商品禁销 - 我的医药网</title>
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+ 
+  <body>
+    <div class="container">
+    #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            	<div class="indmain">
+						<div class="path">
+						    #if($!{gType}==2)	
+								<p><a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理  &gt; 商品禁销</p>
+							#else
+								<p><a class="color" href="/sales/index.html">销售中心</a> - 销价管理  - 商品禁销</p>
+							#end
+						</div>
+						<div class="order_query">
+							<form action="/sales/sale_banned/gy_xsgl.html" method="post" id="searchForm">
+								<input type="hidden" name="pi" id="pi" value="$!pi">
+								<input type="hidden" name="ps" value="10">
+								<input type="hidden" name="isAllChoice" value="" id="isAllChoice"/>
+								<ul>
+									<li class="li_four"><label>商品名称：</label> <input
+										class="input" name="gName" id="gName" type="text" value="$!{gName}">
+								    </li>
+									<li class="li_four"><label>批准文号：</label> <input
+										class="input" name="gLicenseNo" id="gLicenseNo"  type="text" value="$!{gLicenseNo}">
+									</li>
+									<li class="li_four"><label>生产厂家：</label> <input
+										 class="input" name="gManufacture" id="gManufacture" type="text" value="$!{gManufacture}">
+									</li>
+								     <li class="li_four">
+										 <div class="btn">
+											<a href="javascript:searchPager('/sales/sale_banned/gy_xsgl.html',false);" class="btn_query">查询</a> 
+										 </div>
+								     </li>
+								</ul>
+								
+							</form>
+						</div>
+						<div class="order_detail">
+						<div class="btn cc">
+		                       <a href="/sales/sale_banned/add_sale_banned.html" class="btn_query btn-line">添加禁销商品</a>
+		                       <a href="javascript:batchDelete();" class="btn_query btn-line">批量删除</a>
+		                       <div class="fr user_cx_tips mt10">功能说明：部分客户禁止购买指定商品</div>
+		                   </div>
+							<div class="table">
+								<table cellpadding="0" cellspacing="0">
+									<thead class="head">
+										<tr class="line">
+										<th class="thead_th_top"><input type="checkbox" class="check"  id="chooseAll" name="chooseAll" onclick="selectAll(this);""/></th>
+											<th class="thead_th_top">商品名称/规格</th>
+											<th class="thead_th_top">批准文号</th>
+											<th class="thead_th_top" width="20%">生产厂家</th>
+											 <th class="thead_th_top" width="20%">禁销指定客户组</th>
+											 <th class="thead_th_top" width="12%">禁销指定客户</th>
+											<th class="thead_th_top" width="10%">有效时间</th>
+											<th class="thead_th_top" width="90">操作</th>
+										</tr>
+									</thead>
+									<tbody>
+									   #if(!$null.isNull($saleList) && $saleList.size()!=0)	
+										#foreach($sale in $!saleList)
+											<tr >
+											<td><input type="checkbox" class="check"  name="choose" value="$!{sale.sbId}" onclick="choicePrices(this)"/></td>
+												<td>$!{sale.gName}<br>$!{sale.gSpecifications}</td>
+												<td>$!{sale.gLicenseNo}</td>
+												 #if($!gType ==  2)	
+													<td>$!{sale.gManufacture}</td>
+												 #end
+															<td >
+																#if($!{sale.supplierCustomerType})
+																	业务分组: $!{sale.supplierCustomerType}<br>
+																#end
+																#if($!{sale.regoinName})
+																	区域分组: $!{sale.regoinName}<br>
+																#end
+															</td>
+												 			<td>
+												 				#if($!{sale.eidCount})
+												 					单独指定$!{sale.eidCount}个企业
+												 				#end
+												 			</td>
+												 			<td>
+												 				#if($!{sale.beginDate})
+												 					$!{sale.beginDate}<br/>
+												 				#end
+												 				#if($!{sale.endDate})
+												 					$!{sale.endDate}
+												 				#end
+												 				#if(!${sale.beginDate} && !${sale.endDate})
+												 					长期有效
+												 				#end
+												 			</td>
+												 			
+															<td width="120"><a href="/sales/sale_banned/sale_banned_edit.html?sbId=$!{sale.sbId}&pi=$!pi&gName=$!gName&gLicenseNo=$!gLicenseNo&gManufacture=$!gManufacture" class="btn-txt" style="width: 60px;">编辑策略</a><a
+																href="javascript:;" class="btn-delete" onclick="deleteSaleBanned($!{sale.sbId})">删除</a></td>
+											</tr>
+										#end
+									   #else
+										  <tr>
+										  #if($!gType ==  3)
+				                       		<td colspan="7">无相关数据！</td>
+				                       	  #else
+				                       	  <td colspan="8">无相关数据！</td>
+				                       	  #end	
+				                		 </tr>
+									   #end	
+									</tbody>
+								</table>
+								<!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} >1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/sale_banned/gy_xsgl.html",$!{pagerQueryParam})
+								#end #end
+								<!--分页结束 -->
+								
+							</div>
+						</div>
+					</div>
+					
+					
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/pop_div.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+     <script src="/js/load.js?v=$!{jscss_version}"></script>
+     <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+     #parse("common/common_script.vm")
+    <script>
+    	function searchSale(){
+    		$("#searchForm").submit();
+    	}
+    	//重置方法
+		function reset(){
+			$("#gName").val('');
+			$("#gSpecifications").val('');
+			$("#gSn").val('');
+			$("#searchForm").submit();
+		}
+		
+    	
+    	
+    	//删除
+    	function deleteSaleBanned(sbId){
+    		var pi=$("#pi").val();
+    		var gName = $("#gName").val();
+    		var gLicenseNo = $("#gLicenseNo").val();
+    		var gManufacture = $("#gManufacture").val();
+
+    		top.ue.confirm({
+			    title: "提示信息",
+			    content: "你确定要删除该条记录吗？",
+			    ok: function() {
+			    	$.ajax({
+				           url: '/sales/sale_banned/delete_sale_banned.html',
+				           data: {"sbId":sbId},
+				           type: 'POST',
+				           dataType: 'json',
+				           success: function(result) {
+				               if (result.data == true) {
+				            	   window.location.href="/sales/sale_banned/gy_xsgl.html?pi="+pi+"&gName="+gName+"&gLicenseNo="+gLicenseNo+"&gManufacture="+gManufacture;
+					            } else {
+				                   top.ue.msg("删除禁销策略失败");
+					            }
+				           	}
+				        })
+			    }
+			}); 
+    		
+    		 
+    	}
+    	
+    	function selectAll(obj){
+		    if($(obj).prop("checked")){
+		       $("#isAllChoice").val(true);
+		       $("input[name='choose']").prop("checked",true);
+		    }else{
+		       $("#isAllChoice").val(false);
+		      $("input[name='choose']").prop("checked",false);
+		    }
+         }
+		
+		 function choicePrices(obj){          
+	            if(!$(obj).prop("checked"))
+	            {
+	                $("#isAllChoice").val(false);
+	                $("input[name='chooseAll']:checked").prop("checked",false);        
+	            }
+	        }
+		
+		function batchDelete(){
+			var array = $("input[name='choose']").prop("checked"); 
+			var chk_value =[]; 
+			$('input[name="choose"]:checked').each(function(){ 
+				chk_value.push($(this).val()); 
+			}); 
+			if(chk_value.length <1){
+                top.ue.msg("请选择商品禁销策略");
+				return;
+			}
+			deleteSaleBanned(chk_value.toString())
+		}
+		
+		
+		function selectAllGoods(obj){
+		    if($(obj).prop("checked")){
+		       $("input[name='chkGoods']").prop("checked",true);
+		    }else{
+		      $("input[name='chkGoods']").prop("checked",false);
+		    }
+	  }
+    </script>
+  </body>
+</html>

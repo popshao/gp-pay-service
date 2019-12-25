@@ -1,0 +1,52 @@
+<!-- 添加页面 -->
+    <div class="mask" id="popUpMaskQ"></div>
+    	<div class="dialog w460" id="popUpDIVQ" style="width:1250px;height:600px;">
+	      <div class="head"><span class="dialog-title">选择商品</span><a href="javascript:closePopUpDIV('popUpMaskQ','popUpDIVQ');" class="btn-close"></a></div>  
+	      <div class="con" id="content">
+      	</div>
+    </div>
+    
+	<!-- 添加页面 -->
+    <div class="mask" id="popUpMaskCustomer"></div>
+    <div class="dialog w460" id="popUpDIVCustomer" style="width:900px;height:500px;">
+      <div class="head"><span class="dialog-title">选择客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');" class="btn-close"></a></div>  
+      <div class="con" id="contentEnterprise">
+      </div>
+    </div>
+    
+    <!-- 根据内码导入  -->
+    <div class="mask" id="popUpMaskImport"></div>
+    <div class="dialog w460" id="popUpDIVImport" style="width:550px;height:320px;">
+      <div class="head"><span class="dialog-title">根据内码导入商品</span>
+      <a href="javascript:closePopUpDIV('popUpMaskImport','popUpDIVImport');" class="btn-close"></a></div> 
+      <div class="con cc" id="contentImport">
+      	<div>
+      		请填写商品内码进行导入：
+      	</div>
+      	<textarea rows="10" cols="10" placeholder="用逗号分隔多个内码“C102318,C102319”，每次最多500个"  id="importGInSns"></textarea>
+      </div>
+      <div class="btn">
+        	<a href="javascript:;" onclick="promotion.batchImportGoods()" class="btn_query">保存</a>
+   			<a href="javascript:closePopUpDIV('popUpMaskImport','popUpDIVImport');" class="btn_query btn_export">取消</a>
+      </div>
+    </div>
+    
+    <!-- 根据内码导入错误提示  -->
+    <div class="mask" id="popUpMaskImportError"></div>
+    <div class="dialog w460" id="popUpDIVImportError" style="width:550px;height:320px;">
+      <div class="head"><span class="dialog-title">根据内码导入商品</span>
+      <a href="javascript:closePopUpDIV('popUpMaskImportError','popUpDIVImportError');" class="btn-close"></a></div>  
+      <div class="con cc">
+      	<div>
+      		以下商品因内码无法识别或商品已下架未成功添加:
+      	</div>
+      	<p class="mt10" id="contentImportError" style="height: 185px; line-height: 24px; word-break:break-all; word-wrap:break-word;overflow: auto;"></p>
+      </div>
+      <div class="btn">
+   			<a href="javascript:closePopUpDIV('popUpMaskImportError','popUpDIVImportError');" class="btn_query btn_export">取消</a>
+      </div>
+    </div>
+    <script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>

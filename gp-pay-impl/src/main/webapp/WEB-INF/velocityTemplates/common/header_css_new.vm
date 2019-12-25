@@ -1,0 +1,23 @@
+<!-- mypharma_样式 -->
+<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}"/>
+<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}"/>
+
+<link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}"/>
+<link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}"/>
+<link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}"/>
+<link rel="stylesheet" type="text/css" href="/js/select2/select2.min.css"/>
+
+
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/front/css/user_common.css"/>
+<link rel="stylesheet" type="text/css" href="/front/css/xjgl_spdj_style.css"/> <!--销价-->
+<link rel="stylesheet" type="text/css" href="/front/css/invoice_style.css"/>  <!--发票-->
+
+<!--PNG格式图片兼容IE6解决方案 -->
+<!--[if IE 6]>
+<script type="text/javascript" src="http://user.mypharma.com/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+<script type="text/javascript">
+    DD_belatedPNG.fix('*');
+</script>
+<![endif]-->

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>在线支付 - 我的医药网</title>
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+       
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+    <script type="text/javascript">
+    $(function(){
+    	$.showLoad();
+    	
+    	var payTransactionWrapper = {};
+        payTransactionWrapper.clientId = "$!{payTransactionWrapper.clientId}";
+         payTransactionWrapper.serviceId = "$!{payTransactionWrapper.serviceId}";
+        payTransactionWrapper.platformId = "$!{payTransactionWrapper.platformId}";
+        payTransactionWrapper.title = "$!{payTransactionWrapper.title}";
+        payTransactionWrapper.description = "$!{payTransactionWrapper.description}";
+        payTransactionWrapper.amount = "$!{payTransactionWrapper.amount}";
+        
+        var detail = new Array();
+        #if(!$null.isNull($payTransactionWrapper.detail) && $payTransactionWrapper.detail.size()!=0)
+        #foreach($item in $payTransactionWrapper.detail)
+        var de = {};
+        de.name = "$!{item.name}";
+        de.amount = "$!{item.amount}";
+        de.orderId = "$!{item.orderId}";
+        de.merchantId = "$!{item.merchantId}";
+        de.merchantName = "$!{item.merchantName}";
+        detail.push(de);
+        #end
+        #end
+        payTransactionWrapper.detail = detail;
+        
+    	$("#payTransaction").val($.toJSON(payTransactionWrapper));
+    	$("#payForm").submit();
+    	
+    })
+       
+       
+    </script>
+	<!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+</head>
+  <body>
+    
+  
+  <form method="post" id="payForm" name="payForm" action="/pay/online.html">
+  <input type="hidden" name="payTransaction" id="payTransaction" />
+  </form>
+  
+  </body>
+</html>

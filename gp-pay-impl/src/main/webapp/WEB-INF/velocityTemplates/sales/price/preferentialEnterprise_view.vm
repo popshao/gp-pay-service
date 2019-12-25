@@ -1,0 +1,64 @@
+
+<!-- 用户中心_主体内容_S -->
+<div class="indmain" >
+	<div class="order_query order">
+		<form action="/sales/price/preferentialEnterprise_view.html" method="post"
+			id="searchEnterpriseForm">
+			<input type="hidden" name="pi" value="$!pi"> 
+			<input type="hidden" name="ps" value="$!ps">
+			<input type="hidden" name="ppId" value="$!ppId" id="ppId">
+			<ul>
+				<li><span style="margin-left: 20px;">企业名称：</span><input
+					class="input" name="eName" id="eName" type="text" value="$!{eName}">
+				</li>
+				<li>
+					<a id="search_btn" href="javascript:top.app.frameWindow.searchEnterprisePagerC('/sales/price/preferentialEnterprise_view.html',false,true);" class="btn_query">查询</a>
+					<a href="javascript:top.app.frameWindow.searchEnterprisePagerC('/sales/price/preferentialEnterprise_view.html',true);" class="btn_query btn_export mr7">清空查询条件</a>
+				</li>
+			</ul>
+		</form>
+	</div>
+	<div class="order_detail">
+		<div class="table">
+			<table cellpadding="0" cellspacing="0">
+				<thead class="head">
+					<tr class="line">
+						<th><input type="checkbox" class="check" id="selectCustAll"
+							onclick="top.app.frameWindow.selectCustAll(this,'userchk');"></th>
+						<th>企业ID</th>
+						<th>企业名称</th>
+						<th>企业地址</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					#if(!$null.isNull($enterpriseList) && $enterpriseList.size()>0)
+					#foreach($enterprise in $enterpriseList)
+		   				 #if($!utils.isContais($!{enterprise.eId},$!eIds))
+                         	<tr class="gray">
+                         	<td><input type="checkbox"  disabled=“disabled” class="check" name="userchk" id="$!{enterprise.eId}"></td>
+                         #else
+                         	<tr>
+                         	<td><input type="checkbox" class="check" name="userchk" id="$!{enterprise.eId}"></td>
+                         #end
+						<td>$!{enterprise.eId}</td>
+						<td>$!{enterprise.eName}</td>
+						<td>$!{enterprise.eAddress}</td>
+						<td><a href="javascript:void(0)" onclick="top.app.frameWindow.deleteCustomer($!{ppId},$!{enterprise.eId})" class="btn">删除</a></td>
+					</tr>
+					#end #end
+				</tbody>
+			</table>
+			<!--分页开始 -->
+			#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+			#dialogPagerInfoC($!pagerInfo,$!{pagerTotal},"/sales/price/preferentialEnterprise_view.html")
+			#end #end
+			<!--分页结束 -->
+		</div>
+	</div>
+</div>
+<!-- 用户中心_主体内容_E -->
+
+
+
+

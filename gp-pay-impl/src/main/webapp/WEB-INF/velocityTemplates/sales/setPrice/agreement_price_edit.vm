@@ -1,0 +1,694 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>设置价格组- 我的医药网</title>
+
+<!-- mypharma_公共资源 -->
+<meta name="keywords" content="">
+	<meta name="description" content="">
+		<link rel="icon" type="image/x-icon" href="/favicon.ico">
+			<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+				<!-- mypharma_样式 -->
+				<link rel="stylesheet" type="text/css" href="/css/global.css">
+					<link rel="stylesheet" type="text/css" href="/css/index.css">
+						<link rel="stylesheet" type="text/css" href="/css/order.css">
+
+							<!--PNG格式图片兼容IE6解决方案 -->
+							<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="container">
+		#parse("common/header_top.vm") #parse("common/header.vm")
+		<div class="content">
+			<div class="wrap cc">
+				#parse("common/left_menu_sales.vm")
+				<div class="user_right fl">
+					<!-- 用户中心_主体内容_S -->
+				<div class="indmain">
+					<div class="path">
+						<p>
+							<a class="color" href="/sales/index.html">销售中心</a> &gt; 销价管理 &gt; 配置协议价（试）
+						</p>
+					</div>
+					
+                    <div class="order_detail mt10">
+                    
+                    	<h3 class="xjgl-title cc">
+		                    <span class="title-b fl">设置价格组</span>
+		                </h3>
+                    	
+                    	<div class="xjgl-step">
+
+		                    <div class="xjgl-step-top cc">
+		                        <div class="number">1</div>
+		                        <div class="title">选择商品</div>
+		                        <a class="btn fr" href="javascript:addGoods();">+ 添加商品</a>
+		                    </div>
+		                 
+		                </div>
+                  
+                        <div class="table table-top table-jxsp mt20">
+                        <input type="hidden" name="pi" id="pi" value="$!{pi}"/>
+                        <input type="hidden" name="gName" id="gName" value="$!{gName}" />
+						<input type="hidden" name="gSn" id="gSn" value="$!{gSn}" />
+						<input type="hidden" name="gManufacture" id="gManufacture" value="$!{gManufacture}" />
+                        <input type="hidden" id="selectedGoodsId" name="selectedGoodsId"/>
+						<input type="hidden" name="listMemberSize" id="listMemberSize" value="$!{listMemberSize}" />
+						<input type="hidden" name="selectedEnterpriseId" id="selectedEnterpriseId" />
+						<input type="hidden" name="selectedgIds" id="selectedgIds" />
+						<input type="hidden" name="gpsId" id="gpsId" value="$!{gpsId}"/>  
+						<input type="hidden" name="selectGroupIds" id="selectGroupIds" value="$!{selectGroupIds}" /> 
+						<div class="table table-top">
+                            <table cellpadding="0" cellspacing="0">
+                                <thead class="head">
+                                    <tr>
+                                      	<th>商品名称</th>
+                                        <th>商品规格</th>
+                                        <th>生产厂家</th>
+                                        <th>基价</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="goodsList">
+	       							 #foreach($good in $!goodList)
+	       							 	<tr id="tr_$!{good.gId}"></td>
+	       							 	<td >$!{good.gName}</td>
+	       							 	<td >$!{good.gSpecifications}</td>
+	       							 	<td >$!{good.gManufacture}</td>
+	       							 	<td >$!{good.gBasePrice}</td>
+	       							 	<td><a href='javascript:void(0);' onclick='deltr($!{good.gId})'>删除</a></td>
+	       							 	</tr>
+	       							 #end
+                                </tbody>
+                            </table>
+                        </div>
+                      </div>
+                      
+                      	<div class="xjgl-step cc">
+		                    <div class="xjgl-step-top cc">
+		                        <div class="number">2</div>
+		                        <div class="title">选择客户</div>
+		                    </div>
+		
+		                </div>
+
+						<div class="toogle-wrap toogle-wrap-jxsp mt20">
+							<div class="mt">
+									 <div class="fl title">按客户分组设置</div>
+                                	<a href="javascript:void(0);" onclick="top.utils.openWithTab('fzgl','分组管理','/sales/channel/channel_main.html',{fstBread:'客户管理'})" class="fr link">分组管理 ></a>
+								</div>
+								<div class="tab-box">
+									<div class="tab-con">
+	                                    <div class="type-box cc">
+	                                        <dl>
+	                                            <dt class="type-t">业务类型</dt>
+	                                            #foreach($type in $!listType)
+	                                            	<dd><div class="customer-item #if($!type.selected) item-selected #end" id="1_$!{type.shopCustomerType.sctId}"><b></b>$!{type.shopCustomerType.sctName}(<span id="count_1_$!{type.shopCustomerType.sctId}">$!{type.bizCount}</span>)</div></dd>
+	                                            #end
+	                                        </dl>
+	                                    </div>
+                                	</div>
+								</div>
+							<div class="mt mt-t">
+                                <div class="fl title">单独指定部分客户</div>
+                                <span class="fl division">|</span>
+                                <span class="fl text">您共选择了<span class="amount" id="amount">$!{listMemberSize}</span>个客户！</span>
+                            </div>
+							<div class="tab-box">
+								<div class="tab-con">
+									<ul id="customer-list">
+										<li><a href="javascript:addCusteomer();" class="add_pro" id="sel-a">+ 添加客户</a></li>
+										 #foreach($member in $!lisMember)
+										<li name='eIds' id='eIds_$!{member.eId}'
+											value="$!{member.eId}"><div
+												class='customer-item item-selected'>
+												<b onclick="delli($!{member.eId})"></b>$!{member.eName}
+											</div></li> #end
+											
+										
+									</ul>
+								</div>
+							</div>
+							
+						</div>
+						
+
+						<div class="xjgl-step cc">
+
+		                    <div class="xjgl-step-top cc">
+		                        <div class="number">3</div>
+		                        <div class="title">设定价格</div>
+		                    </div>
+		                    <div class="text-ctn mt10">
+								指定金额<input class="input-45" type="text" id="price" onkeyup="checkNum(this);" value="$!{priceSet.price}">元
+		                    </div>
+		                    <div class="text-ctn mt10 cc">
+		                        <p class="ps fl">当商品调整基价时商品定价不会随之变动</p>
+		                    </div>
+		
+		                </div>
+		
+		                <div class="xjgl-step xjgl-step-none">
+				
+		                    <div class="xjgl-step-top cc">
+		                        <div class="number">4</div>
+		                        <div class="title">为价格组命名</div>
+		                    </div>
+		                    <div class="text-ctn mt10">
+		                       	 价格组名称：<input class="input-l" type="text" placeholder="指定商品（10）指定客户（5）价格上浮10%" id="gps_name" value="$!{priceSet.gpsName}">
+		                    </div>
+		                    <div class="text-ctn mt10 cc">
+		                        <label class="checkbox"><input id="gps_status" class="check"  onclick="changeButton(this)" name="gps_status" type="checkbox" #if($priceSet.gpsStatus == 1) checked="checked" #end value="">立即生效</label>
+		                    </div>
+		                    <div class="text-ctn mt10 cc">
+		                        <label class="checkbox"><input id="isAgreement" class="check"  onclick="changeButton(this)" name="isAgreement" type="checkbox" #if($priceSet.isAgreement == 1) checked="checked" #end value="">设置为协议价</label>
+		                    </div>
+		                    <div class="text-ctn mt10 tac">
+		                        <a href="javascript:void(0);" class="btn" onclick="save()">保存</a>
+		                    </div>
+		
+		                </div>
+				                
+					</div>
+					<!-- 用户中心_主体内容_E -->
+					
+			</div>
+		</div>
+	</div>
+	#parse("/common/footer.vm")
+
+	<!-- mypharma_脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?version=201612090950"></script>
+	<script src="/js/publish.js"></script>
+	<script src="/js/jquery-1.9.1.min.js?version=201612090950" type="text/javascript"></script>
+	<script src="/js/pager.js" type="text/javascript"></script>
+	<script src="/js/pop_div.js" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js" type="text/javascript"></script>
+	<script src="/js/jquery.json-2.2.js" type="text/javascript"></script>
+	<script src="/js/load.js"></script>
+	<script src="/js/dialog/dialog.js"></script>
+	#parse("common/common_script.vm")
+	<script src="/js/public/My97DatePicker/WdatePicker.js"
+		type="text/javascript"></script>
+	<script src="/js/enterpriseHelp.js" type="text/javascript"></script>
+	<script src="/js/base.js" type="text/javascript"></script>
+
+	<script>
+   $(document).ready(function() {
+		 initNumber2();
+	});	
+   
+   $(".type-box dd").click(function(){
+       //
+       var groupIds = $("#selectGroupIds").val();
+       
+       var selected = $(this).find("div").attr("class").indexOf("item-selected");
+       if(selected !=-1){
+    	   $(this).find("div").removeClass("item-selected");
+    	   var last = "," + groupIds;
+    	   var id = "," + $(this).find("div").attr("id")+","
+    	   
+    	   if(last.indexOf(id) !=-1){
+    		   if(last.indexOf(id) == 0){
+    			   groupIds = last.replace(id,"");   
+    		   }else{
+    			   groupIds = last.replace(id,",");   
+    		   }
+    		   if(groupIds.substring(0,1)==','){
+    			   groupIds = groupIds.substring(1,groupIds.length);
+    		   }
+    		   
+    	   }
+    	   
+       }else{
+    	   var count = $("#count_"+$(this).find("div").attr("id")).text();
+    	   if(count == 0){
+               top.ue.msg("该分组下没有客户,请重新选择");
+    		   return;
+    	   }else{
+    		   $(this).find("div").addClass("item-selected");
+        	   groupIds += $(this).find("div").attr("id")+",";
+    	   }
+    	   
+       }
+       $("#selectGroupIds").val(groupIds);
+   });
+   
+   function addCusteomer(){
+		
+		var eIds = "";
+		$("#customer-list li").not(":first").each(function(){
+			eIds +=$(this).attr("value")+",";
+		});
+		$("#selectedEnterpriseId").val(eIds);
+		
+   	var mask = $("#popUpMaskCustomer");
+		var dialog = $("#popUpDIVCustomer");
+           $.ajax({
+               url: "/sales/biz/enterprise_help.html",
+               type: "POST",
+               data: {"eIds":eIds},
+               dataType: "html",
+               cache: false,
+               success: function (result) {
+   	            if (result.success == false) {
+   	            	top.ue.msg(result.message);
+   	            }else{
+						//设置弹出框内容
+						document.getElementById("contentEnterprise").innerHTML = result;
+						//显示弹出层与遮照层
+						showPopUpDIV(dialog,mask);
+   	            }
+               }
+           });
+   
+		
+	}
+   
+   function checkSmInternalCodeValue(url,type1,type2){
+		var smInternalCodes = $("#smInternalCodes").val();
+		if(smInternalCodes == undefined){
+			searchEnterprisePagerC(url,type1,type2);	
+		}else{
+			smInternalCodes = smInternalCodes.replace("，",",").replace(/\s+/g,"");
+			$("#smInternalCodes").val(smInternalCodes);
+			if(smInternalCodes.split(",").length>200 && !type1){
+				top.ue.msg("Sorry,您每次最多可导入200个内码，可分多次导入客户！");
+				return ;
+			}else if(url){
+				searchEnterprisePagerC(url,type1,type2);	
+			}
+		}
+	}
+   
+   function chooseEnterprise(){
+		var length = $("input[name='userchk']:checked").length;
+   	if(length == 0){
+   		top.ue.msg("请选择你要添加的客户！");
+   		return ;
+   	}
+   	var eid = $("#selectedEnterpriseId").val();
+   	var eids ="";
+   	if(eid != null && eid !=""){
+   		eids = eid.split(",");
+   	}
+
+   	var listMemberSize = $("#listMemberSize").val();
+   	var flag = true;
+   	$("input[name='userchk']:checked").each(function(){
+   	 flag = true;
+   		var tr = $(this).parent().parent();
+   		var eId = tr.children('td').eq(1).text();
+   		var eName = tr.children('td').eq(3).text();
+   		if(eids != null && eids !=""){
+   			for(var i =0 ;i<eids.length;i++){
+   				if(eids[i]==eId){
+   					flag = false;
+   					break;
+   				}
+   			}
+   		}
+   		if(flag){
+   			$("#customer-list").append("<li name='eIds' id='eIds_"+eId+"' value="+eId+"><div class='customer-item item-selected'><b onclick=\'delli("+eId+")\'></b>"+eName+"</div></li>");
+   			
+   			if(listMemberSize >= 0){
+   			   listMemberSize = parseInt(listMemberSize)+1;
+   			   $("#listMemberSize").val(listMemberSize);
+   			   $("#amount").html(listMemberSize);
+   			   
+   		   }
+   		}
+   			
+   		
+   		
+   	});
+   	closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');
+	}
+   
+   function delli(eId){
+	   var listMemberSize = $("#listMemberSize").val();
+	   if(listMemberSize > 0){
+		   listMemberSize = listMemberSize-1;
+		   $("#listMemberSize").val(listMemberSize);
+		   $("#amount").html(listMemberSize);
+		   
+	   }
+		$("#eIds_"+eId).remove(); 
+	}
+   
+   function save(){
+	   var pi=$("#pi").val();
+	   var gpsId = $("#gpsId").val();
+	   var gName = $("#gName").val();
+		var gSn = $("#gSn").val();
+		var gManufacture = $("#gManufacture").val();
+		var groupIds = $("#selectGroupIds").val();
+	   var gIds = "";
+		//获取已选商品ID
+		$("#goodsList tr").each(function(){
+			var text = $(this).attr("id").replace("tr_","");
+			gIds += text+",";
+		});
+		
+		gIds = gIds.substring(0,gIds.length-1);
+		if(gIds == null || gIds == ""){
+            top.ue.msg("请至少添加一个商品！")
+			   return;
+		   }
+	   var eIds ="";
+	   $("#customer-list li").not(":first").each(function(){
+			eIds +=$(this).attr("value")+",";
+		});
+	   
+	   if((eIds == null || eIds == "") && (groupIds == null || groupIds == '')){
+           top.ue.msg("请指定客户或客户组！")
+		   return;
+	   }
+	   
+		if(eIds != null && eIds != ""){
+			eIds = eIds.substring(0,eIds.length-1);
+		}
+	   
+		var price = $("#price").val();
+		if(price == '' || price == null){
+            top.ue.msg("请输入协议价");
+			return;
+		}
+		if(price <= 0){
+            top.ue.msg("协议价不能小于或等于0");
+			return;
+		}
+		var gps_name = $("#gps_name").val();
+		if(gps_name == ''){
+            top.ue.msg("请输入价格组名称");
+			return;
+		}
+		var gps_status = $("#gps_status").is(':checked');
+		var isAgreement = $("#isAgreement").is(':checked');
+		$.ajax({
+			url : '/sales/agreement_price/save_agreement_price.html',
+			data : {
+				
+				"gIds" : gIds,
+				"eIds" : eIds,
+				"price":price,
+				"gps_name":gps_name,
+				"gps_status":gps_status,
+				"gpsId":gpsId,
+				"isAgreement":isAgreement,
+				"selectGroupIds":groupIds
+			},
+			type : 'POST',
+			dataType : 'json',
+			success : function(result) {
+				if (result.data == true) {
+					top.ue.alert({
+						title : '提示信息',
+						content : "设置成功！",
+						end : function() {
+							window.location.href="/sales/agreement_price/main.html?pi="+pi+"&gName="+gName+"&gSn="+gSn+"&gManufacture="+gManufacture;
+						}
+					})
+
+				} else {
+					top.ue.msg("设置失败！");
+				}
+			}
+		}); 
+   }
+   
+ //添加商品
+   function addGoods(){
+   	var gIds = "";
+   	$("#goodsList tr").each(function(){
+   		var text = $(this).attr("id").replace("tr_","");
+   		gIds+=text+",";
+   	});
+   	gIds = gIds.substring(0,gIds.length-1);
+   	$("#selectedgIds").val(gIds);
+   	
+   	var mask = $("#popUpMaskQ");
+   	var dialog = $("#popUpDIVQ");
+          $.ajax({
+              url: "/sales/sale_banned/sale_banned_good_add.html",
+              type: "POST",
+              data: {gIds:gIds},
+              async:false,
+              dataType: "html",
+              cache: false,
+              success: function (result) {
+   	            if (result.success == false) {
+   	            	top.ue.msg(result.message);
+   	            }else{
+   					//设置弹出框内容
+   					document.getElementById("content").innerHTML = result;
+   					//显示弹出层与遮照层
+   					showPopUpDIV(dialog,mask);
+   	            }
+              }
+          });
+   }
+ 
+ 
+ //保存商品
+   function saveGoods(){
+   	var length = $("input[name='chk']:checked").length;
+      	if(length == 0){
+      		top.ue.msg("请选择你要添加的商品！");
+      		return ;
+      	}
+      	
+      	var gid = $("#selectedgIds").val();
+       	var gids ="";
+       	if(gid != null && gid !=""){
+       		gids = gid.split(",");
+       	}
+      	
+      	var flag = true;
+      	//遍历选择商品
+      	$("input[name='chk']:checked").each(function(){
+      		flag = true;
+       		var tr = $(this).parent().parent();
+      		//商品ID
+      		var gId = tr.children('td').eq(0).find("input").attr("id");
+      		
+       		if(gids != null && gids !=""){
+       			for(var i =0 ;i<gids.length;i++){
+       				if(gids[i]==gId){
+       					flag = false;
+       					break;
+       				}
+       			}
+       		}
+       		if(flag){
+      		
+      		
+      	    //商品编码
+//      		var gSn = tr.children('td').eq(1).text();
+      	    //商品名称
+      		var gName = tr.children('td').eq(2).text();
+      	    //商品规格
+      		var gSpec = tr.children('td').eq(5).text();
+      	    //生产厂家
+      		var gMan = tr.children('td').eq(4).text();
+      	    //基价
+      		var gBasePrice = tr.children('td').eq(7).text();
+      	    //中包装
+//      		var gMiddlePackage = tr.children('td').eq(8).text();
+      	    //是否可拆零
+//      		var gCanSplit = tr.children('td').eq(9).text();
+//      		var g_gCanSplit = (gCanSplit.replace(/^\s+|\s+$/g,""))=="是"?1:0;
+      		$("#goodsList").append("<tr id=tr_"+gId+">" +
+   					"<td>"+gName+"</td>" +
+   					"<td>"+gSpec+"</td>" +
+   					"<td>"+gMan+"</td>" +
+   					"<td>"+gBasePrice+"</td>" +
+   					"<td><a href=\'javascript:void(0)\' onclick=\'deltr("+gId+")\'>删除</a></td></tr>");
+       		}
+      	});
+      	
+       //关闭窗口
+      	closePopUpDIV('popUpMaskQ','popUpDIVQ');
+   }
+ 
+ //删除已选商品
+   function deltr(index){
+   	 $("#tr_"+index).remove();
+   }
+ 
+   
+ //全选,反选
+   function selectCustAll(obj, cName) {
+   	var checkboxs = document.getElementsByName(cName);
+   	for ( var i = 0; i < checkboxs.length; i += 1) {
+   		if($(checkboxs[i]).attr("disabled")!="disabled"){
+   			checkboxs[i].checked = obj.checked;
+   		}
+   	}
+   }
+   
+ //查询商品
+   function searchGoodsPager(url,flag,isSearchButton) {
+   	var mask = $("#popUpMaskQ");
+   	var dialog = $("#popUpDIVQ");
+   	var obj = {};
+   	if(!flag){
+   	   //点击查询按钮的时候
+   	   if(isSearchButton){
+   		   $("#searchGoodsForm input[name=pi]").val(1);
+   	   }
+   	   obj = $("#searchGoodsForm").serialize();
+   	}
+   	var gIds = "";
+   	$("#goodsList tr").each(function(){
+   		var text = $(this).attr("id").replace("tr_","");
+   		gIds+=text+",";
+   	});
+   	gIds = gIds.substring(0,gIds.length-1);
+         $.ajax({
+             url: url,
+             type: "POST",
+             data: obj+"&gids="+gIds,
+             cache: false,
+             success: function (result) {
+   	            if (result.success == false) {
+   	            	top.ue.msg( result.message);
+   	            }else{
+   					//显示弹出层与遮照层
+   					showPopUpDIV(dialog,mask);
+   					//设置弹出框内容
+   					document.getElementById("content").innerHTML = result;
+   	            }
+             }
+         });
+   }
+
+
+   /**
+   * 上一页
+   * pi:第几页
+   */
+   function pagerDialogPre(pi){
+   	var pi = parseInt(pi, 10);
+   	var n = pi - 1;
+   	myPageDialog(n);
+   }
+
+   /**
+   * 下一页
+   * pi:第几页
+   * pt:总页数
+   */
+   function pagerDialogNext(pi,pt){
+   	var pi = parseInt(pi, 10);
+   	var m = pi + 1;
+     if (m > pt) {
+         m = pt;
+     }
+     myPageDialog(m);
+   }
+   /**
+   * 跳转页
+   * pt:总页数
+   */
+   function pagerDialogTo(pt){
+   	var pi = parseInt($("#pi").val(), 10);
+     if (isNaN(pi)) {
+         pi = 1;
+     }
+     if (pi > pt) {
+         pi = pt;
+     }
+     myPageDialog(pi);
+   }
+   /**
+   * 发送action分页请求
+   * pi:第几页
+   * pt:总页数
+   * url:action请求地址url
+   * queryParam:请求action参数患，例如：m=aaa&k=cccc&ps=9
+   */
+   function pagerDialog(pi,pt){
+   	var pi = parseInt(pi, 10);
+     if (pi < 1) {
+         pi = 1;
+     }
+     if (pi > pt) {
+         pi = pt;
+     }
+     myPageDialog(pi);
+   }
+
+   /**
+   * 分页表单提交
+   * @param pi 第几页
+   */
+   function myPageDialog(pi){
+    $("#searchGoodsForm input[name=pi]").val(pi);
+    searchGoodsPager('/sales/sale_banned/sale_banned_good_add.html',false);
+   } 
+   
+   function checkGInSnValue(url,type1,type2){
+		var gInSns = $("#gInSns").val();
+		if(gInSns == undefined){
+			searchGoodsPager(url,type1,type2);	
+		}else{
+			gInSns = gInSns.replace("，",",").replace(/\s+/g,"");
+			$("#gInSns").val(gInSns);
+			if(gInSns.split(",").length>200 && !type1){
+				top.ue.msg("Sorry,您每次最多可导入200个内码，您可以分多次导入商品。");
+				return ;
+			}else if(url){
+				searchGoodsPager(url,type1,type2);	
+			}
+		}
+	}
+   
+   function checkNum(obj){
+		var id = obj.id;
+		$('#'+id).keyup(function(e) {
+			var keycode = e.keyCode;
+			if (keycode === 9) { // tab切换跳出
+				return false;
+			} else if (keycode < 48 || (keycode > 57 && keycode < 96) || keycode > 105) {
+				//var number = $(this).val().replace(/\D|^0/g, '');
+				var number = $(this).val().replace(/[^\d.-]/g, "");
+				$('#'+id).val(number);
+			}
+		})
+		
+		
+		
+	}
+   
+   </script>
+   
+   <!-- 商品添加页面 -->
+    <div class="mask" id="popUpMaskQ"></div>
+    	<div class="dialog w460" id="popUpDIVQ" style="width:1200px;height:550px;">
+	      <div class="head"><span class="dialog-title">选择商品</span><a href="javascript:closePopUpDIV('popUpMaskQ','popUpDIVQ');" class="btn-close"></a></div>  
+	      <div class="con" id="content"></div>
+    </div>
+    
+	<!-- 添加页面 -->
+	<div class="mask" id="popUpMaskCustomer"></div>
+	<div class="dialog w460" id="popUpDIVCustomer"
+		style="width: 900px; height: 500px;">
+		<div class="head">
+			<span class="dialog-title">选择客户</span><a
+				href="javascript:closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');"
+				class="btn-close"></a>
+		</div>
+		<div class="con" id="contentEnterprise"></div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>查看详情-采购申请-采购管理-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+      #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            	<div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 账户中心 &gt;<a href="/purchase/member/purchase.html?status=0" class="color">采购关系管理</a>
+                    &gt; 合作详情&gt; 查看详情</p>
+                </div>
+                <div class="user_kh_tips mt10 cc">
+                	<i class="img fl"></i>
+                    <p class="text fl">温馨提醒：您可以查看审核通过的采购申请详情。</p>
+                </div>
+                <h3 class="info_title">采购结果</h3>
+                <div class="kh_audit_results">
+                	<h3 class="title">审核结果</h3>
+                    <p class="text">审核状态：
+						#if($!scw.mprStatus==0)
+                   			未提交
+                   		#elseif($!scw.mprStatus==1)
+                   			成功
+                   		#elseif($!scw.mprStatus==2)
+                  				待审核
+                  			#elseif($!scw.mprStatus==-1)
+                  				驳回
+                  			#elseif($!scw.mprStatus==3)
+                  				历史记录(已失效)
+                   		#end
+					</p>
+                    <p class="text">审核理由：$!scw.mprAuthReason</p>
+                    <p class="text">审核时间：$utils.formatDate($!scw.mprActionTime,"yyyy.MM.dd")</p>
+                </div>
+                <div class="kh_enterprise_detail cc">
+                	<p class="top fl">
+                        <label class="text" for="checkbox_01">$!scw.suName</label>
+                        <span class="fr">
+                        #if($!scw.supplierMember && $!scw.mprStatus==1)
+                        	 对应关系：$!scw.supplierMember.sctName
+                        #end
+                        </span>
+                    </p>
+                    <div class="detail fl">
+                    	<div class="left">
+                        	<div class="img">
+                       	    	<img src="$!{scw.suLogo}" style="width:110px;height:50px;">
+                            </div>
+                            <div class="text">商品数量：
+                            	#if($!scw.goodsCount)
+                            		$!scw.goodsCount
+                            	#else
+                            		0
+                            	#end
+                            </div>
+                        </div>
+                        <div class="right">
+                        	<p>许可证号：$!scw.suAllowCode</p>
+                            <p>主营业务：$!scw.suMain</p>
+                            <!-- <p class="prompt">申请条件：
+                            		#foreach ($suReauest in $!scw.suRequestObjList)
+                            			$suReauest.name
+                            		#end
+									
+							</p> -->
+                        </div>
+                    </div>
+                    <div class="introduction fl">
+<!--                     	<span class="left">企业简介</span> -->
+                        <p class="right">$!scw.suTxt</p>
+                    </div>
+                    <ul class="purchase fl">
+                    	<li class="fl">
+                        	<span class="fl">一级采购权限（范围）</span>
+                            <span class="fr">二级采购权限（范围）有效期</span>
+                        </li>
+						#foreach($item in  $!scw.shopPurviewList)
+					    <li class="fl">
+                        	<span class="fl">$item.spName</span>
+                        	<span class="fr">
+                        	#foreach($item2 in  $!item.children)
+                        		$item2.spName 
+                        		$utils.formatDate($!item2.SmpStartTime,"yyyy-MM-dd")
+	                        		#if($utils.formatDate($!item2.SmpStartTime,"yyyy-MM-dd")!="")
+										至
+	                        		#end
+                        		$utils.formatDate($!item2.SmpEndTime,"yyyy-MM-dd")
+                        		<br>
+                        	#end
+                        	</span>
+                        </li>
+						#end
+                    </ul>
+                </div>
+               <div class="order_query order member" style="clear:both;">
+                <h3 class="line">资质证明 
+					<a href="javascript:void(0);" onclick="downLoadPic($!{scw.suId})" class="btn_download">下载资质</a>
+				</h3>
+				<div class="image-upload-box">
+									#foreach($bizEnterprisePic in $list)
+									<div class="box">
+										#if($!{bizEnterprisePic.epPic})	
+											<a onclick="downLoadSingle($!{bizEnterprisePic.epId})" class="btn_download">下载资质</a>
+										#end
+										<div class="cc">
+											<div class="img-box">
+												#if($!{bizEnterprisePic.epPic})
+													<h5>
+														<a title="查看大图" href="javascript:showBIgImage($!{bizEnterprisePic.epType});" style="color:#47b7c5;">$!{bizEnterprisePic.epName}：</a>
+													</h5>
+												#else
+													<h5>$!{bizEnterprisePic.epName}：</h5>
+												#end
+												<input type="hidden" value="$!{bizEnterprisePic.epType}" name="epType$!{bizEnterprisePic.epType}" /> 
+												<input type="hidden" value="$!{bizEnterprisePic.epId}" name="epId$!{bizEnterprisePic.epType}" />
+												<div class="img-file" id="uploadPic$!{bizEnterprisePic.epType}">
+													#if($!{bizEnterprisePic.epPic}) 
+														<img id="showPic$!{bizEnterprisePic.epType}" src="$!{bizEnterprisePic.imgUrl}" height="139px;" width="139px;" />
+												    #else 
+												    	<img id="showPic$!{bizEnterprisePic.epType}" height="139px;" width="139px;" />
+												    #end 
+												    	<input type="hidden" value="$!{bizEnterprisePic.epPic}" id="saImgPath$!{bizEnterprisePic.epType}" name="epPic$!{bizEnterprisePic.epType}"/>
+												    	<input type="hidden" value="$!{bizEnterprisePic.bucket_key}" id="bucket_key$!{bizEnterprisePic.epType}" name="bucket_key$!{bizEnterprisePic.epType}"/>
+		                                                <input type="hidden" id="imageInfo$!{bizEnterprisePic.epType}" name="imageInfo$!{bizEnterprisePic.epType}"/>
+												</div>
+											</div>
+											<div class="form-group">
+												<div>
+														#if($!{bizEnterprisePic.epPic})
+															<a href="javascript:showBIgImage($!{bizEnterprisePic.epType});"><i></i>查看大图</a>
+														#end
+														<a href="javascript:showImage($!{bizEnterprisePic.epType});"><i></i>查看范例</a>
+												</div>
+												#if($!bizEnterprisePic.epType != 8 && $!bizEnterprisePic.epType != 9 && $!bizEnterprisePic.epType != 10)
+												<label>证照号码：</label>
+												<div class="control-item">
+													<input type="text" disabled="disabled" class="form-control" value="$!{bizEnterprisePic.epNo}" placeholder="" name="epNo$!{bizEnterprisePic.epType}" />
+												</div>
+												<label>证件有效期：</label>
+												<div class="control-item">
+													<input type="text" disabled="disabled"  id="epStartTime$!{bizEnterprisePic.epType}" value="$utils.formatDate($!{bizEnterprisePic.epStartTime},'yyyy-MM-dd')" name="epStartTime$!{bizEnterprisePic.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'epEndTime$!{bizEnterprisePic.epType}\')}'})"/>
+												</div>
+												<label>至</label>
+												<div class="control-item">
+													<input type="text" disabled="disabled"  id="epEndTime$!{bizEnterprisePic.epType}" value="$utils.formatDate($!{bizEnterprisePic.epEndTime},'yyyy-MM-dd')" name="epEndTime$!{bizEnterprisePic.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'epStartTime$!{bizEnterprisePic.epType}\')}'})"/>
+												</div>
+												#end 
+											</div>
+										</div>
+									</div>
+									#end
+								</div>
+								</div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+  
+        <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+	<script>
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+            render:true,
+            handler:function (btn) {
+                location.href = document.referrer;
+            }
+        })
+	function checkZz(suId){
+		  var flag = 0;
+		  $.ajax({
+			  url: '/purchase/member/checkZz.html',
+	           data: {"suId":suId},
+	           type: 'POST',
+	           dataType: 'json',
+	           async: false,
+	           success: function(result) {
+	        	   if (result.data == true) {
+	        		   flag = 0;   
+	        	   }else{
+	        	   	   if(result.message=="1"){
+	        	   	   		flag=1;
+	        	   	   }else{
+	        		   		flag = 2;
+	        		   }
+	        	   }
+	           }
+		  });
+		  return flag;
+	  }
+	  
+	 function downLoadPic(suId){
+	 	 var flag=checkZz(suId);
+	 	 
+		 if(flag==1){
+             top.ue.msg("一分钟之内只能下载一次");
+		 }else if(flag==0){
+             top.ue.msg("该企业没有资质，暂时不能下载");
+		 }else if(flag==2){
+		 	 window.location.href="/purchase/member/downLoadAllPic.html?suId="+suId+"";
+		 }
+	 }
+	  
+	function downLoadSingle(epId){
+		window.location.href="/purchase/member/downLoadSinglePic.html?epId="+epId+"";
+	}
+	
+		//查看范例图片
+	function showImage(img) {
+			var imgUrl ="/image/zizhi/img"+img+".jpg";
+			var content = '<img src="'+imgUrl+'" height="400px;" width="750px;"/>';
+        top.utils.showImg(imgUrl);
+	}
+	
+		//查看大图
+		function showBIgImage(img){
+// 			var str = "#saImgPath" + img;
+// 			var url = $(str).val();
+// 			url = "http://img1.mypharma.com/" + url + ".jpg";
+            var str = "#showPic" + img;
+            var url = $(str).attr("src");
+			var picurl = "/purchase/account/enterprise_open.html?picurl=" + encodeURIComponent(url);
+			window.open(picurl);
+		}
+	</script>
+    
+  </body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>分类管理- 我的医药网 </title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/sales/index.html" class="color">销售中心 </a> &gt; 商品管理 &gt; 商品分类管理</p>
+                    </div>
+                    <div class="order_query">
+                        <form>
+                            <div class="function">
+                                <a class="btn" href="javascript:editItem('','add');">添加</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="order_detail">
+                        <div class="table">
+                            <table class="none" border="0" cellpadding="0" cellspacing="0">
+                                <thead class="head">
+                                <tr class="line">
+                                    <th>分类名称</th>
+                                    <th width="15%">顺序号</th>
+                                    <th width="15%">状态</th>
+                                    <th width="30%">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    #foreach($shopGoodsCate in $!shopGoodsCateList)
+                                    <tr>
+                                        <td width="40%"><p style="text-align: left; width: 50%; margin: 0 auto;"><a
+                                                href="javascript:void(0);"
+                                                class="btn_open_up mr10"></a>$!{shopGoodsCate.sgcName}</p></td>
+                                        <td>$!{shopGoodsCate.sgcOrder}</td>
+                                        <td>#if($!{shopGoodsCate.sgcStatus} == 1)启用#else停用#end</td>
+                                        <td><a href="javascript:editItem($!{shopGoodsCate.sgcId},'edit');"
+                                               class="btn-txt">编辑</a>#if($null.isNull($shopGoodsCate.subShopGoodsCateList) || $shopGoodsCate.subShopGoodsCateList.size()==0)
+                                            <a href="javascript:delGoodsGate($!{shopGoodsCate.sgcId});"
+                                               class="btn-delete">删除</a>
+                                        #end
+                                        </td>
+                                    </tr>
+
+                                    <tr class="drug_list">
+                                        #if(!$null.isNull($shopGoodsCate.subShopGoodsCateList) && $shopGoodsCate.subShopGoodsCateList.size()!=0)
+                                            <td colspan="4">
+                                                <table class="sort" border="0" cellpadding="0" cellspacing="0">
+                                                    #foreach($childShopGoodsCate in $!{shopGoodsCate.subShopGoodsCateList})
+                                                        <tr>
+                                                            <td width="40%"><p
+                                                                    style="text-align: left; width: 50%; margin: 0 auto; padding-left:52px;">$!{childShopGoodsCate.sgcName}</p>
+                                                            </td>
+                                                            <td width="15%">$!{childShopGoodsCate.sgcOrder}</td>
+                                                            <td width="15%">#if($!{childShopGoodsCate.sgcStatus} == 1)
+                                                                启用#else停用#end</td>
+                                                            <td width="30%"><a
+                                                                    href="javascript:editItem($!{childShopGoodsCate.sgcId},'edit');"
+                                                                    class="btn-txt">编辑</a><a
+                                                                    href="javascript:delGoodsGate($!{childShopGoodsCate.sgcId});"
+                                                                    class="btn-delete">删除</a></td>
+                                                        </tr>
+                                                    #end
+                                                </table>
+                                            </td>
+                                        #end
+                                    </tr>
+
+                                    #end
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+    #parse("/common/footer.vm")
+<div class="mask" id="popUpMask"></div>
+<div class="dialog dialog_box mt20" id="popUpDIV">
+    <dl class="dialog_ctn">
+        <dt>
+            <span class="title">商品分类添加</span>
+            <a href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn_close"></a>
+        </dt>
+        <dd class="b0">
+            <div class="dialog_sheet">
+                <form id="editNavForm">
+                    <input type="hidden" name="sgcId" id="sgcId">
+                    <table width="100%">
+                        <tr>
+                            <td class="tar" width="90">所属分类:</td>
+                            <td id="sgcParentShow">
+                                <div class="sltitem">
+                                    <span></span>
+                                    <ul>
+                                        <li data-value="0"><a href="javascript:;">选择分类</a></li>
+                                        #if(!$null.isNull($shopGoodsCateList) && $shopGoodsCateList.size()!=0)
+                                            #foreach($shopGoodsCate in $shopGoodsCateList)
+                                                <li data-value="$!{shopGoodsCate.sgcId}"><a
+                                                        href="javascript:;">$!{shopGoodsCate.sgcName}</a></li>
+                                            #end
+                                        #end
+                                    </ul>
+                                    <input type="hidden" name="sgcParentId" id="sgcParentId">
+                                </div>
+                                <span class="red">*默认为一级分类</span>
+                            </td>
+                            <td id="sgcParentValueShow"><input type="text" id="sgcParentValue" value=""
+                                                               disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="tar">分类名称<span class="red">*</span>:</td>
+                            <td><input class="input" type="text" name="sgcName" id="sgcName" maxlength="30"/></td>
+                        </tr>
+                        <tr>
+                            <td class="tar tdtop">排序号<span class="red">*</span>:</td>
+                            <td><input class="input" type="text" name="sgcOrder" id="sgcOrder" maxlength="8"/></td>
+                        </tr>
+                        <tr>
+                            <td class="tar">状态:</td>
+                            <td>
+                                <input class="radio" type="radio" name="sgcStatus" id="sgcStatus_1" checked="checked"
+                                       value="1"/>
+                                <label class="text" for="sgcStatus_1">启用</label>
+                                <input class="radio" type="radio" name="sgcStatus" id="sgcStatus_2" value="0"/>
+                                <label class="text" for="sgcStatus_2">停用</label>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </dd>
+    </dl>
+    <div class="dialog_btn">
+        <a href="javascript:saveNav();" class="btn">保存</a>
+        <a href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn">取消</a>
+    </div>
+</div>
+</div>
+<!-- 脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+<script src="/js/publish.js?v=$!{jscss_version}"></script>
+<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+<script type="text/javascript">
+    function checkForm(lay) {
+        $("#editNavForm", lay).validate({
+            submitHandler: saveItem, //如果验证通过的回调函数
+            rules: {
+                sgcName: {
+                    required: true
+                },
+                sgcOrder: {
+                    required: true,
+                    digits: true
+                }
+            },
+            messages: {
+                sgcName: {
+                    required: "请输入分类名称"
+                },
+                sgcOrder: {
+                    required: "请输入排序号",
+                    digits: "请输入整数"
+                }
+            }
+
+        });
+    }
+
+    //增加或修改保存
+    function saveItem(obj) {
+        var idx = $(obj).attr("data-did");
+        var lay = top.$("#layui-layer"+ idx);
+        var url = null;
+        var flag = true;
+        var sgcId = $("#sgcId",lay).val();
+        if (!isEmpty(sgcId)) {
+            url = "/sales/store/shop_goodscate_edit.html";
+            flag = false;
+        } else {
+            url = "/sales/store/shop_goodscate_add.html";
+        }
+        var sgcParentId = $("#sgcParentId",lay).val();
+        var sgcName = $('input[name="sgcName"]',lay).val();
+        var sgcOrder = $('input[name="sgcOrder"]',lay).val();
+        var sgcStatus = $('input[name="sgcStatus"]:checked',lay).val();
+        $.ajax({
+            url: url,
+            data: {
+                "sgcId": sgcId,
+                "sgcParentId": sgcParentId,
+                "sgcName": sgcName,
+                "sgcOrder": sgcOrder,
+                "sgcStatus": sgcStatus
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function (result) {
+                if (result.success == false) {
+                    top.ue.msg(result.message);
+                } else {
+                    top.ue.close(idx);
+                    var content = flag ? "添加分类成功" : "修改分类成功";
+                    top.ue.alert({
+                        title: '提示信息',
+                        content: content,
+                        end:function () {
+                            window.location.reload(true);
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+    //增加与编辑，mode值有：add与edit
+    function editItem(id, mode) {
+
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIV");
+        if (mode == "edit") {
+            top.ue.load();
+            $.ajax({
+                url: "/sales/store/shop_goodscate_editUI.html",
+                type: "POST",
+                data: {"sgcId": id},
+                cache: false,
+                complete: function () {
+                    top.ue.closeAll("loading");
+                },
+                success: function (result) {
+                    if (result.success == false) {
+                        top.ue.msg(result.message);
+                    } else {
+                        top.rui.dynamic({
+                            title: "编辑商品分类",
+                            content: dialog.html(),
+                            skin: "dialog-old",
+                            area: ["660px"],
+                            success: function (lay, idx) {
+                                //给弹出层表单设值
+                                setFormValue(result.data, lay);
+                                //设置弹出层标题
+                                //清除错误信息
+                                $(".error", lay).parent().find("label").remove();
+                                //验证表单
+                                checkForm(lay);
+                                top.rui.initTools(lay);
+                            },
+                            yes:function (idx,lay) {
+                                $('#editNavForm',lay).attr("data-did",idx).submit();
+                            }
+                        })
+                        //显示弹出层与遮照层
+                        //showPopUpDIV(dialog,mask);
+
+                    }
+                }
+            });
+        } else {
+            top.rui.dynamic({
+                title: "添加商品分类",
+                content: dialog.html(),
+                skin: "dialog-old",
+                area: ["660px"],
+                success: function (lay, idx) {
+                    //给弹出层表单设值
+                    setFormValue(null, lay);
+                    //设置弹出层标题
+                    //清除错误信息
+                    $(".error", lay).parent().find("label").remove();
+                    //验证表单
+                    checkForm(lay);
+                    top.rui.initTools(lay);
+                },
+                yes:function (idx,lay) {
+                    $('#editNavForm',lay).attr("data-did",idx).submit();
+                }
+            })
+        }
+    }
+
+
+    //给弹出层表单设值sgcParentValue
+    function setFormValue(obj, lay) {
+        if (obj) {
+            $('#sgcId', lay).val(obj.sgcId);
+            $.sltitem.select("sgcParentId", 0);
+            $('#sgcParentShow', lay).hide();
+            $('#sgcParentValueShow', lay).show();
+            $('#sgcName', lay).val(obj.sgcName);
+            $('#sgcOrder', lay).val(obj.sgcOrder);
+            if (obj.sgcParentId == 0) {
+                $('#sgcParentValue', lay).val("根分类");
+            } else {
+
+                $('#sgcParentValue', lay).val(obj.sgcParentName);
+            }
+
+            if (obj.sgcStatus == 1) {
+                $('#sgcStatus_1', lay).attr("checked", true);
+            } else {
+                $('#sgcStatus_2', lay).attr("checked", true);
+            }
+        } else {
+            $('#sgcId', lay).val("");
+            $.sltitem.select("sgcParentId", 0);
+            $('#sgcName', lay).val("");
+            $('#sgcOrder', lay).val("");
+            $('#sgcStatus_1', lay).attr("checked", true);
+            $('#sgcParentShow', lay).show();
+            $('#sgcParentValueShow', lay).hide();
+            $('#sgcParentValue', lay).val("");
+        }
+    }
+
+    //删除广告
+    function delGoodsGate(value) {
+        top.ue.confirm({
+            title: "提示信息",
+            content: "你确定要删除该条记录吗？",
+            ok: function () {
+                $.ajax({
+                    url: '/sales/store/shop_goodscate_delete.html',
+                    data: {"sgcId": value},
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result.data == true) {
+                            top.ue.alert({
+                                title: '提示信息',
+                                content: "删除分类成功",
+                                end: function () {
+                                    window.location.reload(true);
+                                }
+                            })
+
+                        } else {
+                            top.ue.msg("删除分类失败");
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    function saveNav() {
+        $('#editNavForm').submit();
+    }
+
+</script>
+</body>
+</html>

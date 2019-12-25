@@ -1,0 +1,17 @@
+##此页面是医药网 万家 通用头
+<!--万家页面通栏顶栏-->
+<div class="wanjia-common-top">
+    <div class="w1200">
+        <div class="wc-top-left fl">
+            <img src="/image/index/wanjia-logo.png" alt="">
+        </div>
+        <div class="wc-top-right fr">
+        
+        
+            <a target="_blank" href="http://$!{wwwHostAndPort}">医药网首页</a>
+            <span>进货单 <a id="shopping-amount" href="http://$!{wwwHostAndPort}/cart.html" target="_blank">#if($!{cartCount}) $!{cartCount} #else 0 #end</a> 件</span>
+            <a target="_blank" href="$!{userHostAndPort}/purchase/order/wddd.html" style="margin-right: 15px;">我的订单</a>
+        </div>
+        <div class="clear-fix"></div>
+    </div>
+</div>

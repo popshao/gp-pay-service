@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.write.GroundPromotionAchievementWriteDao">
+
+    <insert id="createGroundPromotionAchievement" parameterType="com.mph.coreapi.gp.pay.entity.GroundPromotionAchievement" useGeneratedKeys="true" keyProperty="id">
+            INSERT INTO ground_promotion_achievement (
+            id,
+            user_id,
+            user_province_id,
+            month_display,
+            amount,
+            quatity,
+            order_in_province,
+            order_change,
+            TYPE,
+            create_time,
+            update_time,
+            user_name
+            )
+            VALUES
+            (
+            #{id,jdbcType=INTEGER},
+            #{userId,jdbcType=INTEGER},
+            #{userProvinceId,jdbcType=INTEGER},
+            #{monthDisplay,jdbcType=VARCHAR},
+            #{amount,jdbcType=DECIMAL},
+            #{quatity,jdbcType=DECIMAL},
+            #{orderInProvince,jdbcType=INTEGER},
+            #{orderChange,jdbcType=INTEGER},
+            #{type,jdbcType=BIT},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{updateTime,jdbcType=TIMESTAMP},
+            #{userName}
+            )
+    </insert>
+
+    <update id="updateGroundPromotionAchievement">
+        update ground_promotion_achievement
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userProvinceId != null">
+                user_province_id = #{userProvinceId,jdbcType=INTEGER},
+            </if>
+            <if test="monthDisplay != null">
+                month_display = #{monthDisplay,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="quatity != null">
+                quatity = #{quatity,jdbcType=DECIMAL},
+            </if>
+            <if test="orderInProvince != null">
+                order_in_province = #{orderInProvince,jdbcType=INTEGER},
+            </if>
+            <if test="orderChange != null">
+                order_change = #{orderChange,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=BIT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+</mapper>

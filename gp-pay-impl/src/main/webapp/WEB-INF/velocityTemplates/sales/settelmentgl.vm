@@ -1,0 +1,635 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销售订单-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/js/select2/select2.min.css" rel="stylesheet"/>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc" style="margin-bottom: 30px;">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/sales/index.html" class="color">销售中心</a>&gt; 财务模块 &gt; 订单结算单管理</p>
+                    </div>
+                    <!-- 2016-11-02-结算金额展示-S -->
+                    <div class="jsje-box cc">
+
+                        <div class="jsje-ctn jsje-line fl">
+                            <span class="fl">待结款金额(元)：</span>
+                            <div class="fl jsje-tips-img jsje-tips-show">
+                                <div class="jsje-tips" style="left: -140px;">
+                                    <div class="jsje-tips-top"
+                                         style="background: url(/image/img_jsjezs_02.png) no-repeat -25px;"></div>
+                                    <div class="jsje-tips-ctn">
+                                        待结款金额：待结款结算单金额总计<br/>
+                                        待结款金额T+1工作日结算
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="fl red">$!{waitAmount}</span>
+                        </div>
+                        <div class="jsje-ctn fl">
+                            <span class="fl">结款中(元)：</span>
+                            <div class="fl jsje-tips-img jsje-tips-show">
+                                <div class="jsje-tips">
+                                    <div class="jsje-tips-top"></div>
+                                    <div class="jsje-tips-ctn">
+                                        结款中金额：已向银行、第三方支付平台申请付款<br/>
+                                        到账时间：具体以银行、第三方支付平台到账时间为准
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="fl red">$!{settlementAmount}</span>
+                        </div>
+
+                    </div>
+                    <!-- 2016-11-02-结算金额展示-E -->
+
+
+                    <div class="order_query">
+                        <form action="" method="post" id="searchForm" name="searchForm">
+                            <input type="hidden" name="pi" value="$!pi">
+                            <ul>
+                                <li>
+                                    <label class="w70">结算单号：</label>
+                                    <input id="stSn" name="stSn" type="text" value="$!stSn" class="w-txt w256">
+                                </li>
+                                <li>
+                                    <label>结算状态：</label>
+                                    #*<div class="fl mr10">
+                                        <select type="text" class="mn-ftext mn-select" name="settelmentStatus" placeholder="">
+                                            <option value="0" #if($!settelmentStatus == 0) selected="selected" #end>全部</option>
+                                            <option value="3" #if($!settelmentStatus == 3) selected="selected" #end>待结算</option>
+                                            <option value="1" #if($!settelmentStatus == 1) selected="selected" #end>已结算</option>
+                                            <option value="2" #if($!settelmentStatus == 2) selected="selected" #end>银行处理中</option>
+                                            <option value="-1" #if($!settelmentStatus == -1) selected="selected" #end>结算失败</option>
+                                        </select>
+                                    </div>*#
+                                    <div class="sltitem w150">
+                                        <span class=""></span>
+                                        <ul style="display: none;">
+                                            <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                            <li data-value="3"><a href="javascript:void(0);">待结算</a></li>
+                                            <li data-value="1"><a href="javascript:void(0);">已结算</a></li>
+                                            <li data-value="2"><a href="javascript:void(0);">银行处理中</a></li>
+                                            <li data-value="-1"><a href="javascript:void(0);">结算失败</a></li>
+                                        </ul>
+                                        <input type="hidden" id="settelmentStatus" name="settelmentStatus"
+                                               id="settelmentStatus">
+                                    </div>
+                                    <label>结算渠道：</label>
+                                    #*<div class="fl mr10">
+                                        <select type="text" class="mn-ftext mn-select" name="orderPayType" placeholder="">
+                                            <option value="0" #if($!orderPayType == 0) selected="selected" #end>全部</option>
+                                            <option value="1" #if($!orderPayType == 1) selected="selected" #end>中金</option>
+                                            <option value="2" #if($!orderPayType == 2) selected="selected" #end>民生</option>
+                                            <option value="3" #if($!orderPayType == 3) selected="selected" #end>支付宝</option>
+                                            <option value="4" #if($!orderPayType == 4) selected="selected" #end>易宝</option>
+                                            <option value="5" #if($!orderPayType == 5) selected="selected" #end>微信</option>
+                                            <option value="5" #if($!orderPayType == 5) selected="selected" #end>闪贷</option>
+                                            <option value="5" #if($!orderPayType == 5) selected="selected" #end>余额</option>
+                                        </select>
+                                    </div>*#
+                                    <div class="sltitem w150" style="width:120px;">
+                                        <span class=""></span>
+                                        <ul style="display: none;">
+                                            <li data-value="0"><a href="javascript:void(0);">全部</a></li>
+                                            <li data-value="1"><a href="javascript:void(0);">中金</a></li>
+                                            <li data-value="2"><a href="javascript:void(0);">民生</a></li>
+                                            <li data-value="3"><a href="javascript:void(0);">支付宝</a></li>
+                                            <li data-value="4"><a href="javascript:void(0);">易宝</a></li>
+                                            <li data-value="5"><a href="javascript:void(0);">微信</a></li>
+                                            <li data-value="5"><a href="javascript:void(0);">闪贷</a></li>
+                                            <li data-value="5"><a href="javascript:void(0);">余额</a></li>
+                                        </ul>
+                                        <input type="hidden" id="orderPayType" name="orderPayType" id="orderPayType">
+                                    </div>
+                                </li>
+                                <li class="w630">
+                                    <label>生成时间：</label>
+                                    <input type="text" name="stAddTimeBegin" id="stAddTimeBegin"
+                                           value="$!stAddTimeBegin"
+                                           onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'stAddTimeEnd'+'\\'+'\')}'})"
+                                           class="w-txt w256" style="width:120px;">
+                                    <i class="slt_t">至</i>
+                                    <input type="text" name="stAddTimeEnd" id="stAddTimeEnd" value="$!stAddTimeEnd"
+                                           onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'stAddTimeBegin'+'\\'+'\')}'})"
+                                           class="w-txt w256" style="width:120px;">
+                                </li>
+                                 <li>
+                                    <label class="w70">订单号：</label>
+                                    <input id="stSn" name="osn" type="text" value="$!osn" class="w-txt w256">
+                                </li>
+                            </ul>
+                            <div class="btn tac">
+                                <a href="javascript:searchPager('/sales/settelmentgl.html',false);"
+                                   class="btn_query">查询</a>
+                                <a href="javascript:searchPager('/sales/settelmentgl.html',true);"
+                                   class="btn_query btn_export btn-empty mr7"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+                            </div>
+                            <div class="btn">
+                                <a href="javascript:editItem();" class="btn_query btn_export btn-line mr7">导出结算单</a>
+                                <a href="javascript:editSettle();" class="btn_query btn_export btn-line mr7">导出订单明细</a>
+                            ##<a href="javascript:editItemOrder();" class="btn_query btn_export mr7">导出订单明细</a>##
+                                <a href="javascript:editItemGoods();" class="btn_query btn_export btn-line mr7">导出商品明细</a>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="order_detail yh order_font">
+                        <div class="table">
+                            <table cellpadding="0" cellspacing="0">
+                                <thead class="head">
+                                <tr class="line">
+                                    <th></th>
+                                    <th>结算单号</th>
+                                    <th>结算状态</th>
+                                    <th>结算渠道</th>
+                                    <th>订单总额</th>
+                                    <th>退款单总额</th>
+                                    <th>佣金总额</th>
+                                    <th>结算单总额</th>
+                                    <th width="80">生成时间</th>
+                                    <th width="80">审核时间</th>
+                                    <th width="100" align="center">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    #if($settlementList && $settlementList.size()!=0)
+                                        #foreach($item in $settlementList)
+                                            #set($pageOrder = $!{velocityCount} + ($!pagerInfo.pageIndex - 1) * $!pagerInfo.pageSize)
+                                        <tr>
+                                            <td>$!pageOrder</td>
+                                            <td>
+                                                <a class="a-link"
+                                                   href="javascript:viewSettleOrder($!item.stId)"><b>$!item.stSn</b></a>
+                                            </td>
+                                            <td>
+                                                #if($!item.stState == -1)
+                                                    结算失败
+                                                #elseif($!item.stState == 0)
+                                                    <span style="cursor:pointer;"
+                                                          title="财务同学正在加紧结算中，工作日结算后到账时间以银行到账时间为准">待结算</span>
+                                                #elseif($!item.stState == 1)
+                                                    已结算
+                                                #elseif($!item.stState == 2)
+                                                    银行处理中
+                                                #else
+                                                    $!item.stState
+                                                #end
+                                            </td>
+                                            <td>
+                                                #if($!item.payType == 1)
+                                                    中金
+                                                #elseif($!item.payType == 2)
+                                                    民生
+                                                #elseif($!item.payType == 3)
+                                                    支付宝
+                                                #elseif($!item.payType == 4)
+                                                    易宝
+                                                #elseif($!item.payType == 5)
+                                                    微信
+                                                 #elseif($!item.payType == 6)
+                                                	浦发
+                                                 #elseif($!item.payType == 7)
+                                                	闪贷
+                                                 #elseif($!item.payType == 8)
+                                                	余额
+                                                #else
+                                                    民生
+                                                #end
+                                            </td>
+                                            <td>
+                                                $!item.stAmount
+                                            </td>
+                                            <td>
+                                                $!item.refundAmount
+                                            </td>
+                                            <td>
+                                                $!item.commission
+                                            </td>
+                                            <td>
+                                                #set($balance=$item.stAmount - $item.refundAmount - $!item.commission)
+		                                    $!utils.priceFormart($!{balance})
+                                            </td>
+                                            <td>$utils.formatDate($!item.stAddTime,"yyyy-MM-dd")</td>
+                                             <td>$utils.formatDate($!item.stAuditTime,"yyyy-MM-dd")</td>
+                                            <td>
+                                                <a href="javascript:viewOrder($!item.stId,$!item.payType);"
+                                                   class="btn-txt-n">导出订单</a>
+                                                <a href="javascript:viewGoods($!item.stId,$!item.payType);"
+                                                   class="btn-txt-n">导出商品</a>
+                                                <a href="javascript:viewSettleOrder($item.stId)"
+                                                   class="btn-txt-n">查看订单</a>
+                                                #if($!item.stState == 1)
+                                                    <a href="javascript:download($!item.stId,'$!item.stSn');"
+                                                       class="btn-txt-n">下载回单</a>
+                                                #end
+                                            </td>
+                                        </tr>
+                                        #end
+                                    #else
+                                    <tr>
+                                        <td colspan="11">无相关数据！</td>
+                                    </tr>
+                                    #end
+                                </tbody>
+                            </table>
+                            <!--分页开始 -->
+                            #if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+                                #pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/jsdgl.html")
+                            #end #end
+                        </div>
+                        <form id="operForm" name="operForm" method="post">
+                            <input type=hidden name="backUrl" value="/sales/settelmentgl.html"/>
+                            <input type="hidden" name="returnPageParam" id="returnPageParam"
+                                   value="$!{returnPageParam}"/>
+                        </form>
+                    </div>
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mask" id="popUpMask"></div>
+<div class="dialog w700" id="popUpDIV">
+    <div class="head"><span class="dialog-title">添加</span><a href="javascript:closePopUpDIV('popUpDIV','popUpMask');"
+                                                             class="btn-close"></a></div>
+    <div class="con">
+        <form id="exportForm" method="post">
+            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                <tr>
+                    <td class="table-tit">生成时间：</td>
+                    <td>
+                        <input type="text" name="startTime" id="startTime" class="txt" readonly="readonly"
+                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'endTime'+'\\'+'\')}'})" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table-tit">至：</td>
+                    <td><input type="text" name="endTime" id="endTime" class="txt" readonly="readonly"
+                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'startTime'+'\\'+'\')}'})" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn"><a href="javascript:exportByCondition(1);" class="btn-txt mr7">确定</a><a
+                    href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn-txt">关闭</a></div>
+        </form>
+    </div>
+</div>
+<div class="dialog w700" id="popUpDIVOrder">
+    <div class="head"><span class="dialog-title">添加</span><a
+            href="javascript:closePopUpDIV('popUpDIVOrder','popUpMask');" class="btn-close"></a></div>
+    <div class="con">
+        <form id="exportFormOrder" method="post">
+            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                <tr>
+                    <td class="table-tit">生成时间：</td>
+                    <td>
+                        <input type="text" name="startTime" id="OrderStartTime" class="txt" readonly="readonly"
+                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'OrderEndTime'+'\\'+'\')}'})" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table-tit">至：</td>
+                    <td><input type="text" name="endTime" id="OrderEndTime" class="txt" readonly="readonly"
+                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'OrderStartTime'+'\\'+'\')}'})" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn"><a href="javascript:exportByCondition(2);" class="btn-txt mr7">确定</a><a
+                    href="javascript:closePopUpDIV('popUpDIVOrder','popUpMask');" class="btn-txt">关闭</a></div>
+        </form>
+    </div>
+</div>
+<div class="dialog w700" id="popUpDIVGoods">
+    <div class="head"><span class="dialog-title">添加</span><a
+            href="javascript:closePopUpDIV('popUpDIVGoods','popUpMask');" class="btn-close"></a></div>
+    <div class="con">
+        <form id="exportFormGoods" method="post">
+            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                <tr>
+                    <td class="table-tit">生成时间：</td>
+                    <td>
+                        <input type="text" name="startTime" id="goodsStartTime" class="txt" readonly="readonly"
+                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'goodsEndTime'+'\\'+'\')}'})" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table-tit">至：</td>
+                    <td><input type="text" name="endTime" id="goodsEndTime" class="txt" readonly="readonly"
+                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'goodsStartTime'+'\\'+'\')}'})" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn"><a href="javascript:exportByCondition(3);" class="btn-txt mr7">确定</a><a
+                    href="javascript:closePopUpDIV('popUpDIVGoods','popUpMask');" class="btn-txt">关闭</a></div>
+        </form>
+    </div>
+</div>
+<!--结算导出时间 start-->
+
+
+<div class="dialog w700" id="popUpDIVSettle">
+    <div class="head"><span class="dialog-title">添加</span><a
+            href="javascript:closePopUpDIV('popUpDIVSettle','popUpMask');" class="btn-close"></a></div>
+    <div class="con">
+        <form id="expprtSettleExport" method="post">
+            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                <tr>
+                    <td class="table-tit">生成时间：</td>
+                    <td>
+                        <input type="text" name="startTime" id="settleStartTime" class="txt" readonly="readonly"
+                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'settleEndTime'+'\\'+'\')}'})" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table-tit">至：</td>
+                    <td><input type="text" name="endTime" id="settleEndTime" class="txt" readonly="readonly"
+                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'settleStartTime'+'\\'+'\')}'})" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn"><a href="javascript:exportByCondition(4);" class="btn-txt mr7">确定</a><a
+                    href="javascript:closePopUpDIV('popUpDIVSettle','popUpMask');" class="btn-txt">关闭</a></div>
+        </form>
+    </div>
+</div>
+<!--结算导出时间  end-->
+<div>
+    <form name="forSpecificDetailExport" id="forSpecificDetailExport" method="post">
+
+    </form>
+</div>
+
+    #parse("common/footer.vm")
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+<script src="/js/select2/select2.min.js"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pop_div.js?v=$!{jscss_version}&a=1" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+<script type="text/javascript">
+
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp'],function () {
+        $(".mn-select").each(function () {
+            $(this).select2({
+                placeholder: $(this).attr("placeholder"),
+                tags: "true",
+                allowClear: false,
+                minimumResultsForSearch: -1,
+                language: "zh-CN",
+                width: 120
+            });
+        })
+
+    })
+
+    $(function () {
+        $.sltitem.select("orderPayType", "$!orderPayType");
+        $.sltitem.select("stSn", "$!stSn");
+        $.sltitem.select("settelmentStatus", "$!settelmentStatus");
+
+
+        $(".jsje-tips-show").mouseenter(function () {
+            $(this).find(".jsje-tips").show();
+        });
+
+        $(".jsje-tips-show").mouseleave(function () {
+            $(this).find(".jsje-tips").hide();
+        });
+    })
+
+
+    function editItem() {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIV");
+        /*//显示弹出层与遮照层
+        showPopUpDIV(dialog,mask);
+        //设置弹出层标题
+        dialog.find('.dialog-title').text("导出结算单");
+        //清除错误信息
+        $(".error").parent().find("label").remove();*/
+        top.rui.dynamic({
+            title: "导出结算单",
+            content: dialog.html(),
+            skin: "dialog-old dialog-old-no-title",
+            area: ["700px"],
+            success: function (lay, idx) {
+                $(".error", lay).parent().find("label").remove();
+                top.rui.initTools(lay);
+            },
+            yes: function (idx, lay) {
+                exportByCondition(1, idx, lay)
+            }
+        })
+    }
+
+    function editItemOrder() {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIVOrder");
+        /*//显示弹出层与遮照层
+        showPopUpDIV(dialog,mask);
+        //设置弹出层标题
+       dialog.find('.dialog-title').text("导出订单明细");
+       //清除错误信息
+       $(".error").parent().find("label").remove();*/
+        top.rui.dynamic({
+            title: "导出订单明细",
+            content: dialog.html(),
+            skin: "dialog-old dialog-old-no-title",
+            area: ["700px"],
+            success: function (lay, idx) {
+                $(".error", lay).parent().find("label").remove();
+                top.rui.initTools(lay);
+            },
+            yes: function (idx, lay) {
+                exportByCondition(2, idx, lay)
+            }
+        })
+    }
+
+    function editItemGoods() {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIVGoods");
+        /*//显示弹出层与遮照层
+        showPopUpDIV(dialog,mask);
+        //设置弹出层标题
+       dialog.find('.dialog-title').text("导出商品明细");
+       //清除错误信息
+       $(".error").parent().find("label").remove();*/
+        top.rui.dynamic({
+            title: "导出商品明细",
+            content: dialog.html(),
+            skin: "dialog-old dialog-old-no-title",
+            area: ["700px"],
+            success: function (lay, idx) {
+                $(".error", lay).parent().find("label").remove();
+                top.rui.initTools(lay);
+            },
+            yes: function (idx, lay) {
+                exportByCondition(3, idx, lay)
+            }
+        })
+    }
+
+    function editSettle() {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIVSettle");
+        /*//显示弹出层与遮照层
+        showPopUpDIV(dialog, mask);
+        //设置弹出层标题
+        dialog.find('.dialog-title').text("导出结算信息");
+        //清除错误信息
+        $(".error").parent().find("label").remove();*/
+        top.rui.dynamic({
+            title: "导出订单明细",
+            content: dialog.html(),
+            skin: "dialog-old dialog-old-no-title",
+            area: ["700px"],
+            success: function (lay, idx) {
+                $(".error", lay).parent().find("label").remove();
+                top.rui.initTools(lay);
+            },
+            yes: function (idx, lay) {
+                exportByCondition(4, idx, lay)
+            }
+        })
+    }
+
+    function exportSettleSpecialDetails() {
+        var parms = $("#searchForm").serialize();
+        $("#forSpecificDetailExport").attr("action", "/sales/exportSettleSpecialDetails.html?" + parms);
+        $("#forSpecificDetailExport").submit();
+    }
+
+    function exportByCondition(value,idx,lay) {
+        var start;
+        var end;
+        var stSn = $("#stSn").val();
+        var settelmentStatus = $("#settelmentStatus").val();
+        var orderPayType = $("#orderPayType").val();
+        var temp = "?stSn=" + stSn + "&settelmentStatus=" + settelmentStatus + "&orderPayType=" + orderPayType
+
+        if (value == 1) {
+            start = $("#startTime",lay).val();
+            end = $("#endTime",lay).val();
+        } else if (value == 2) {
+            start = $("#OrderStartTime",lay).val();
+            end = $("#OrderEndTime",lay).val();
+        } else if (value == 3) {
+            start = $("#goodsStartTime",lay).val();
+            end = $("#goodsEndTime",lay).val();
+        } else {
+            start = $("#settleStartTime",lay).val();
+            end = $("#settleEndTime",lay).val();
+        }
+        if (start == "" || end == "") {
+            top.ue.msg("请选择导出结算单的起止时间");
+            return;
+        } else {
+            if (value == 1) {
+                $("#exportForm",lay).attr("action", "/sales/exportByCondition.html" + temp);
+                $("#exportForm",lay).submit();
+            } else if (value == 2) {
+                $("#exportFormOrder",lay).attr("action", "/sales/exportOrderByCondition.html" + temp);
+                $("#exportFormOrder",lay).submit();
+            } else if (value == 3) {
+                $("#exportFormGoods",lay).attr("action", "/sales/exportGoodsByCondition.html" + temp);
+                $("#exportFormGoods",lay).submit();
+            } else {
+                $("#expprtSettleExport",lay).attr("action", "/sales/exportOrderByCondition.html?" + temp);
+                $("#expprtSettleExport",lay).submit();
+            }
+            top.ue.close(idx);
+        }
+    }
+
+    function viewGoods(id, payType) {
+        $("#operForm").attr("action", "/sales/exportGoodsByCondition.html?stId=" + id);
+        $("#operForm").submit();
+    }
+
+    function viewOrder(id, payType) {
+        $("#operForm").attr("action", "/sales/exportOrderByCondition.html?stId=" + id);
+        $("#operForm").submit();
+    }
+
+    //下载回单
+    function download(stId, stSn) {
+        window.location.href = "/sales/order/downloadsettelmentgl.html?stId=" + stId + "&stSn=" + stSn;
+        return false;
+    }
+
+    function viewSettleOrder(stId) {
+        /*$.showLoad();
+        $("#operForm").append("<input type=hidden name=stId value=" + stId + " />");
+        $("#operForm").attr("action", "/sales/settleOrderDetail.html");
+        $("#operForm").submit();*/
+
+        top.utils.openWithTab("jsddmx", "结算订单明细", "/sales/settleOrderDetail.html?stId="+stId, {
+            fstBread: top.app.index.firstBread,
+            scdBread:{
+                text:top.app.index.secondBread,
+                url:location.href,
+                prevBread: top.app.index.firstBread
+            },
+            thirdBread:"结算订单明细"
+        })
+
+    }
+
+</script>
+
+</body>
+
+</html>

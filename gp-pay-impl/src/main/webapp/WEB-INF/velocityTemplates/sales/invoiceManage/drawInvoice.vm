@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 立即开票</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+
+</head>
+<body>
+
+<!--页面主体 -->
+    <div class="c-box">
+
+        <div class="user-search-box mt10">
+            <form id="searchForm" class='usb-btn'>
+                <a href="javascript:void(0)" onclick="gotoDetail('plkp','/sales/invoice/openGroupInvoice.html','批量开票')"  class="user-btn-n mr10 fl">批量开票</a>
+
+                <ul class="usb-wrap cc fl">
+                    <li class="usb-item" style='padding:0'>
+                        <span class="s-tit" style='width:170px;'>查询关键字：</span>
+                        <input class="s-input s-input-445" name="oSnOrOMName" type="text" placeholder="请输入订单号/客户名称" value="" style='width:228px;'>
+                    </li>
+                    <li class="usb-item" style='padding:0'>
+                        <span class="s-tit" style='width:120px;'>结算状态：</span>
+                        <select class="s-select2 usb-select2" name="accountsStatus" placeholder="全部">
+                            <option value=" " select>全部</option>
+                            <option value="0">未生成结算单</option>
+                            <option value="10">待结算</option>
+                            <option value="50">已结算</option>
+                        </select>
+                    </li>
+                </ul>
+                <a href="javascript:void(0)" class="user-btn-b mr10 b-query fr">查询</a>
+
+                <div class='clear'></div>
+            </form>
+            <div class="usb-btn" style='display:none;'>
+                <a href="javascript:void(0)" class="btn-reset"><img src="/image/icon-refresh.png" alt="">清空查询条件</a>
+            </div>
+        </div>
+
+        <div class="user-notice mt20">
+
+            <div class="user-invoice-tabs tab-hd">
+                <ul class="uit-nav tab-nav">
+                    <li><a href="javascript:void(0);">未开票</a></li>
+                    <li><a href="javascript:void(0)">已开票</a></li>
+                </ul>
+                <div class="user-tips-unit" data-tips="true" data-tips-title="当订单发货后，即可开票。发票一经开出，在平台中无法作废，如果订单信息出现问题，请在报税时解决说明即可。">什么状态的订单可以开票？</div>
+            </div>
+
+            <div class="tab-bd">
+
+                <div class="tab-pal">
+
+                    <div class="user-form user-sheet-box invoice-table">
+                        <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>订单号</th>
+                                <th>
+                                    发货时间
+                                    <span class='user-sort-unit'>
+                                        <em class='up'></em>
+                                        <em class='down'></em>
+                                    </span>
+                                </th>
+                                <th>采购商</th>
+                                <th>实付/应收金额</th>
+                                <th>订单状态</th>
+                            </tr>
+                            </thead>
+                            <tbody id="listBox">
+                            </tbody>
+                        </table>
+                    </div>
+                    <script type="text/html" id="listTpl">
+                        {{# if(d && !d.error && d.datas.length){ }}
+                        {{# $.each(d.datas,function(index,item){ var item = item; var $index = (index + 1) + (d.pageNo-1)*d.pageSize }}
+                        <tr>
+                            <td>{{item.oSn}}</td>
+                            <td>{{top.utils.dateFmt(item.oaAddTime)}}</td>
+                            <td>{{item.oEName}}</td>
+                            <td>
+                                {{d.win._oPaymentMethod(item.oPaymentMethod)}}<br>
+                                {{# if(item.payStatus!=50 ){ }}
+                                    <span class="user-t-gray mt5">{{d.win._payStatus(item.payStatus)}} {{top.utils.notNullPrice(item.oTotalPrice,'--')}}</span>
+                                {{# } else{ }}
+                                    <span class="user-t-red mt5">{{d.win._payStatus(item.payStatus)}} {{top.utils.notNullPrice(item.oTotalPrice,'--')}}</span>
+                                {{# } }}
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" class="user-link"  onclick="gotoDetail('ckdd','/sales/order/ddxq.html?oId={{item.oId}}','查看订单')">查看订单</a>
+                                <a href="javascript:void(0)" class="user-link"   onclick="checkGoodsTex({{item.oId}},'ckfp','/sales/invoice/openInvoice.html?oId={{item.oId}}&pathName='+location.pathname+'&titleBack=立即开票','开票')">开票</a>
+                            </td>
+                        </tr>
+                        {{# }); }}
+
+                        {{# }else{ }}
+                        <tr><td colspan="5">暂无数据</td></tr>
+                        {{# } }}
+
+                    </script>
+                    <div class="page rocky-page1" style="text-align: right;">
+                    </div>
+
+                </div>
+
+                <div class="tab-pal">
+
+                    <div class="user-form user-sheet-box invoice-table">
+                        <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>订单号</th>
+                                <th>
+                                    发货时间
+                                    <span class='user-sort-unit'>
+                                        <em class='up'></em>
+                                        <em class='down'></em>
+                                    </span>
+                                </th>
+                                <th>采购商</th>
+                                <th>实付/应收金额</th>
+                                <th>订单状态</th>
+                            </tr>
+                            </thead>
+                            <tbody id="listBox2">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <script type="text/html" id="listTpl2">
+                        {{# if(d && !d.error && d.datas.length){ }}
+                        {{# $.each(d.datas,function(index,item){ var item = item; var $index = (index + 1) + (d.pageNo-1)*d.pageSize }}
+                        <tr>
+                            <td>{{item.oSn}}</td>
+                            <td>{{top.utils.dateFmt(item.oaAddTime)}}</td>
+                            <td>{{item.oEName}}</td>
+                            <td>
+                                {{d.win._oPaymentMethod(item.oPaymentMethod)}}<br>
+                                {{# if(item.payStatus!=50 ){ }}
+                                    <span class="user-t-gray mt5">{{d.win._payStatus(item.payStatus)}} {{top.utils.notNullPrice(item.oTotalPrice,'--')}}</span>
+                                {{# } else{ }}
+                                    <span class="user-t-red mt5">{{d.win._payStatus(item.payStatus)}} {{top.utils.notNullPrice(item.oTotalPrice,'--')}}</span>
+                                {{# } }}
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" class="user-link"  onclick="gotoDetail('ckdd','/sales/order/ddxq.html?oId={{item.oId}}','查看订单')">查看订单</a>
+								{{# if(item.waiting==0){ }}
+                                <a href="javascript:void(0)" class="user-link"  onclick="gotoDetail('ckfp','/sales/invoice/historyInvoice.html?oId={{item.oId}}','查看订单发票')">查看发票</a>
+								{{# } else{ }}
+                                <a href="javascript:void(0)" class="user-link" style="color: #888; cursor: default;" >查看发票</a>
+ 								{{# } }}
+                            </td>
+                        </tr>
+                        {{# }); }}
+
+                        {{# }else{ }}
+                        <tr><td colspan="5">暂无数据</td></tr>
+                        {{# } }}
+
+                    </script>
+
+
+                    <div class="page rocky-page2" style="text-align: right;">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>
+<script>
+
+
+
+    var layer,laypage,sortType='desc',type = 0;
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage'],function () {
+        layer = layui.layer,laypage = layui.laypage;
+        $(function(){
+            $('body').addClass('user-has-js');
+
+            initSelect();
+
+
+            <!-- Tab切换 -->
+            jQuery(".user-notice").slide({ titCell:".tab-hd li", mainCell:".tab-bd",trigger:"click",delayTime:500});
+         //   var currentTab = [1,0];
+            $('.uit-nav li').each(function(index, el) {
+                $(this).click(function(event) {
+                    type = index;
+
+
+                    $("#searchForm").get(0).reset();
+                    $(".usb-select2,.usb-select2-s").each(function () {
+                        $(this).select2("destroy");
+                        initSelect();
+                    })
+                    getData(index,sortType);
+
+                    /*currentTab[index]++;
+                    if(currentTab[index] <= 1){
+                        $("#searchForm").get(0).reset();
+                        $(".usb-select2,.usb-select2-s").each(function () {
+                            $(this).select2("destroy");
+                            initSelect();
+                        })
+                        getData(index); 
+                    }*/
+                         
+                });
+
+            });
+
+            sortInit(function() {
+                getData(type,sortType);
+            });
+
+            $(".btn-reset").on("click",function () {
+                $("#searchForm").get(0).reset();
+                $(".usb-select2,.usb-select2-s").each(function () {
+                    $(this).select2("destroy");
+                    initSelect();
+                })
+              //  $('.btn-query').trigger("click");
+                getData(type,sortType);        
+            })
+
+            $('.b-query').on("click",function () {
+                getData(type,sortType);     
+            })
+
+            setTimeout(function () {
+                getData(type,sortType);
+            },300);
+        });
+    })
+
+    function getData(type,sortType) {
+        if(type == 0){
+            top.utils.pageList({
+                first:true,
+                url:'/invoiceOrder/getNotInvoiceOrder',
+                dom:$('#listBox'),
+                tpl:$("#listTpl"),
+                pageDom:'.rocky-page1',
+                isAdd:true,
+                type:'get',
+                data:{order:sortType},
+                filter:'#searchForm',
+                doc:document.body,
+                win: window,
+                laypage:laypage,
+                rendered:function (res) {
+               //     bindInvoice();
+                }
+            })   
+        } else{
+            top.utils.pageList({
+                first:true,
+                url:'/invoiceOrder/getInvoiceOrder',
+                dom:$('#listBox2'),
+                tpl:$("#listTpl2"),
+                pageDom:'.rocky-page2',
+                isAdd:true,
+                type:'get',
+                data:{order:sortType},
+                filter:'#searchForm',
+                doc:document.body,
+                win: window,
+                laypage:laypage,
+                rendered:function (res) {
+                    bindInvoice();
+                }
+            })   
+        }
+        
+    }
+
+    function checkGoodsTex(oid,rid,url,text) {
+        checkTex(oid,function () {
+            gotoDetail(rid,url,text);
+        })
+    }
+
+
+    /**
+     * @param url
+     * @param text
+     * @param isSearch
+     * @returns {boolean}
+     */
+    function gotoNewTab(url,text,isSearch) {
+        var data = "" , q = "?";
+        if(url.indexOf("?") > -1) q = "&";
+        if(isSearch){
+            data = $("#searchForm").serializeJson();
+            q+="forms="+JSON.stringify(data);
+        }else{
+            data = getSelIds('#listBox');
+            if(!data || !data.length){
+                layer.msg("请先选择订单");
+                return false;
+            }
+            q+="gids="+data;
+            if(type == 0) top.app["GoodsPriceSSData"] = getSelDatas("#listBox","list");
+            else top.app["GoodsPriceSDData"] = getSelDatas("#listBox","list");
+        }
+        top.utils.openWithTab(top.utils.getRandom(), text, url+q, {
+            fstBread: top.app.index.firstBread,
+            scdBread:{
+                text:top.app.index.secondBread,
+                url:location.href,
+                prevBread: top.app.index.firstBread
+            },
+            thirdBread:text
+        })
+    }
+
+    
+</script>
+
+</body>
+</html>

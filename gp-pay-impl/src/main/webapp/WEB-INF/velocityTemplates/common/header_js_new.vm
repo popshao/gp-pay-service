@@ -1,0 +1,8 @@
+<!-- 脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.SuperSlide.js?v=$!{jscss_version}"></script>
+<script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+<script src="/js/select2/select2.min.js?v=$!{jscss_version}"></script>
+##<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+##<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>

@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>采购中心 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/fullcalendar.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/theme.css?v=$!{jscss_version}">
+	
+   
+
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+	<script type="text/javascript">
+	<!--  签到日历  -->
+	$(function(){
+	        /* 初始化fullCalendar*/
+	        var date = new Date();
+	        var d = date.getDate();
+	        var m = date.getMonth();
+	        var y = date.getFullYear();
+	        //头部日期
+			
+	        $('#calendar').fullCalendar({
+				//
+				header: {
+				left: 'prev',
+				center: 'title',
+				right: 'next'
+			},
+				//
+	            //header:false,
+	            monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],    
+	            monthNamesShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],    
+	            dayNames: ["日", "一", "二", "三", "四", "五", "六"],    
+	            dayNamesShort: ["日", "一", "二", "三", "四", "五", "六"], 
+	            editable: false,
+				buttonText: {
+	             today: '本月',
+	             month: '月',
+	             week: '周',
+	             day: '日'
+				 
+	             //prev: '上一月',
+	             //next: '下一月'
+	         }
+				#if(!$null.isNull($dateList) && $dateList.size()!=0)
+					,viewDisplay: function(view) { 
+						//请求数据
+						#foreach($item in $dateList)
+							$("td[data-date='$item']").css("background","#fff url(../image/Signed.png) no-repeat center");
+						#end
+					}
+				#end
+// 	            viewDisplay: function(view) { 
+// 	              //请求数据
+// 	              $("td[data-date='2016-09-01']").css("background","#fff url(../image/Signed.png) no-repeat center");
+// 	              $("td[data-date='2016-11-01']").css("background","#fff url(../image/Signed.png) no-repeat center");
+// 	              $("td[data-date='2016-11-02']").css("background","#fff url(../image/Signed.png) no-repeat center");
+// 	              $("td[data-date='2016-11-03']").css("background","#fff url(../image/Signed.png) no-repeat center");
+// 				  $("td[data-date='2016-11-04']").css("background","#fff url(../image/Signed.png) no-repeat center");
+// 				  $("td[data-date='2016-11-05']").css("background","#fff url(../image/Signed.png) no-repeat center");
+// 				  $("td[data-date='2016-11-06']").css("background","#fff url(../image/Signed.png) no-repeat center");
+// 				  $("td[data-date='2016-11-16']").css("background","#fff url(../image/Signed.png) no-repeat center");
+// 	              //遍历颜色
+// 	             } 
+				 
+	        });      
+	        jQuery(".cgzx-index-ctn-left .main").slide({ mainCell:"ul",vis:6,prevCell:".sPrev",nextCell:".sNext",effect:"leftLoop"});
+	        
+			$("<span class='fl fc-mrqd'>每日签到领药金币</span>").insertBefore($(".fc-header"));
+			
+// 			$("<a class='fr btn_sign' href='#'>立即签到</a>").insertBefore($(".fc-header"));
+			
+			#if($!flag)
+				$("<a class='fr btn_sign_no'>已签到</a>").insertBefore($(".fc-header"));
+            #else
+            	$("<a class='fr btn_sign' href='javascript:sign();'>立即签到</a>").insertBefore($(".fc-header"));
+            #end
+			
+		 	$(".fc-header").css("width","30%");
+	        
+	        $(".fc-day>div").css("min-height","26px");
+	        
+	        $(".fc-button-prev,.fc-button-next").on("click",function(){
+				$(".fc-header").css("width","30%");
+				$(".fc-day>div").css("min-height","26px");
+			})
+			
+			setTimeout(loadAd,500);
+	 });
+		
+        
+        function sign(){
+        	$.ajax({
+    			type : 'post',
+    			url : '/purchase/point/signGetPoint.html', // url : '/purchase/point/sign.html'
+    			data : {},
+    			dataType : 'json',
+    			success : function(data) {
+    				if (data) {//签到成功
+    					window.location.href="/purchase/index.html";
+    				} else {
+    					return false;
+    				}
+    			}
+    		});
+        }
+        
+        function loadAd() {
+            var ad92 = "$!{ad92}";
+            if(ad92 != null  && ad92 != "" && ad92 != undefined) {
+                var imgPath = "$!utils.getNewImgDomain($!{ad92.aImgPath})";
+                var linkUrl = "$!utils.getAccessLinkUrl($!{ad92.aLinkUrl})";
+
+                return window.top.app.index.showImg(imgPath,'$!{ad92.aName}',null,function (img) {
+                    if(linkUrl) {
+                        $(img).on("click",function () {
+                            window.top.utils.open(linkUrl,"_blank");
+                        })
+                    }
+                });
+
+                if(linkUrl == "" || linkUrl == undefined){
+                    linkUrl == "javascript:void(0);";
+                }
+                //刷新首页弹出遮罩层广告
+                var closeBtn = document.getElementById("btn-close-r");
+                var maskLayer = document.getElementById("mask");
+                var Box = document.getElementById("box");
+                var top = ($(window).height() - $("#box").height())/4;
+                var left = ($(window).width() - $("#box").width())/2;
+                var scrollTop = $(document).scrollTop();
+                var scrollLeft = $(document).scrollLeft();
+                var href='';
+                if("javascript:void(0);" == linkUrl){
+                    href = '<a href="'+linkUrl+'"  onclick="return false;" style="position: absolute; margin: 49px 0 0 6px;display: inline-block;  width: 950px; height: 420px;"></a>';
+                }else{
+                    href = '<a href="'+linkUrl+'" target="_blank" style="position: absolute; margin: 49px 0 0 6px;display: inline-block;  width: 950px; height: 420px;"></a>';
+                }
+
+                var html = '<div id="mask" style="position: absolute; width: 100%; height:100%; left: 0px; top: 0px; background: url(/image/home_cover_bg.png) repeat scroll 0 0; _background: none;z-index: 9999999;"></div>'+
+                        '<div id="box" style="position: absolute; background: url('+imgPath+') no-repeat; top: 0; left: 50%; width: 950px; height: 420px; margin-left: -480px; z-index: 99999999;">'+
+                        '<a href="javascript:;" id="btn-close-r" style="position: absolute; margin: -32px 0 0 950px;display: inline-block;  width: 44px; height: 44px;"><img src="/image/btn-close-r.png"/></a>'+
+                        href +
+                        '</div>';
+                $("body").prepend(html);
+                if(!ie6){
+                    $("#mask").css("height",$(document).height());
+                    $("#mask").css("width",$(document).width());
+                    $("#mask").show();
+                }
+                $("#box").css({'top' : top + scrollTop, left : left + scrollLeft }).show();
+
+                $("#btn-close-r").click (function(){
+                    if(!ie6){
+                        $("#mask").hide();
+                    }
+                    $("#box").hide();
+                })
+                
+            }
+        }
+    </script>
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+	#if($!userType == 1 && $!guideStatus == 1)
+    <style type="text/css">
+        .container{ position: relative;}
+        .hidebl{ display: none;  position: absolute;left:0; top:0; z-index:999;}
+        .mask_bl{position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: black; z-index: 998; opacity: 0.6;filter:alpha(opacity:60); display: none;}
+    </style>
+    <script type="application/javascript">
+//         $(function(){
+//             showBl(1);
+//             $(".clearBtn").on("click",function(){
+//                 $(".hidebl").hide();
+//                 $(".mask_bl").hide();
+//                 $("body").css({overflow:"auto"});
+//                 $('html, body, .container').animate({scrollTop:0}, 300);
+// 				//TODO:
+// 				changeGuideStatus();
+//             })
+//         })
+
+//         function showBl(idx){
+//             var num=2;
+//             var cname="zd"
+//             var ht=0;
+//             var lt=0
+//             if(idx==1) {
+//                 lt=-2;ht=117;
+//             }
+//             if(idx==2) {
+//                 lt=4;ht=22;
+//             }
+//             var obj=$("#btn"+idx);
+//             console.log(obj)
+//             var x=obj.offset().left;
+//             var y=obj.offset().top;
+//             if(idx==1){
+//                 $(".mask_bl").css("height",($(".container").height()+$(".foot").outerHeight()+20)+"px").show();
+//                 $("body").css({overflow:"hidden"});
+//                 for(var i =0;i<num;i++){
+//                     var img=document.createElement("img");
+//                     img.src="/image/"+cname+(i+1)+".png";
+//                     $(img).addClass("hidebl bl_img_"+(i+1));
+//                     $("body").append(img);
+//                 }
+//                 var img=document.createElement("img");
+//                 img.src="/image/clear.png";
+//                 $(img).addClass("hidebl clearBtn");
+//                 $("body").append(img);
+//             }
+//             $(".hidebl").hide();
+//             $(".bl_img_"+idx).css({"left":(x-lt)+"px",top:(y-ht)+"px"}).show(100);
+//             if(idx==1){
+//                 //512 41
+//                 $(".clearBtn").css({"left":(x-lt+494)+"px",top:(y-ht+30)+"px"}).show(100);
+//             }
+//             if(idx==2){
+//                 //512 41
+//                 $(".clearBtn").css({"left":(x-lt+463)+"px",top:(y-ht+38)+"px"}).show(100);
+//             }
+//             if(idx<num){
+//                 $(".bl_img_"+idx).on("click",function(){
+//                     showBl(idx+1);
+//                 })
+//             }else{
+//                 $(".bl_img_"+idx).on("click",function(){
+//                     $(".hidebl").hide();
+//                     $(".mask_bl").hide();
+//                     $("body").css({overflow:"auto"});
+// 					//TODO:
+// 					changeGuideStatus();
+//                 })
+//             }
+//         }
+    </script>
+	#end
+	<script type="text/javascript">
+		function changeGuideStatus()
+		{
+			$.ajax({
+                url: '/changeGuideStatus.html',
+                type:"post",
+                success: function(data) {
+                	
+				}
+        	});
+		}
+    </script>
+  </head>
+ 
+  <body>
+    <div class="container">
+		<div class="mask_bl"></div>
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_purchase.vm")
+			<!--采购中心首页内容 -->
+			#parse("common/right_purchase_content.vm")
+        </div>
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+</body>
+</html>

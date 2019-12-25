@@ -1,0 +1,1053 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+   
+    <title>商品信息管理 - 我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/js/select2/select2.min.css" rel="stylesheet"/>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+ 		#parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+        #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/sales/index.html" class="color">销售中心 </a>&gt; 商品管理 &gt; 商品信息管理</p>
+                </div>
+                <div class="order_query">
+                  <form action="/sales/goods/goods_index.html" method="get" id="searchForm">
+                    <input type="hidden" name="pi" value="$!pi">
+                    <input type="hidden" name="gIds" value="" id="gIds">
+                    <input type="hidden" name="isAllChoice" value="" id="isAllChoice">
+                      <input type="hidden" name="order" value="$!order">
+                      <input type="hidden" name="word" value="$!word" >
+                    <ul>
+                    <!-- 工业 -->                
+                        <li class="li_four">
+                            <label>通用名：</label>
+                            <input class="input" name="gName" type="text" value="$!{gName}" id="gName">
+                        </li>
+                        
+                        <li class="li_four">
+                            <label>商品编码：</label>
+                            <input class="input" name="gSn" type="text" value="$!{gSn}" id="gSn">
+                        </li>                                    
+                        <!-- 商业 -->
+                        #if($user.userType==2)
+                        <li class="li_four">
+                            <label>生产厂家：</label>
+                            <input class="input" name="gManufacture" type="text" value="$!{gManufacture}" id="gManufacture">
+                        </li>
+                        <li class="li_four">
+                            <label>批准文号：</label>
+                            <input class="input" name="gLicenseNo" type="text" value="$!{gLicenseNo}">
+                        </li>
+                        <li class="li_four">
+                            <label>规格：</label>
+                            <input class="input" name="gSpecifications" type="text" value="$!{gSpecifications}" id="gSpecifications">
+                        </li>                      
+<!--                         <li class="li_four"> -->
+<!--                             <label>商品内码：</label> -->
+<!--                             <input class="input" name="gInSn" type="text" value="$!{gInSn}"> -->
+<!--                         </li> -->
+                        <li class="li_four">
+                            <label>商品类型：</label>
+                            <div class="sltitem">
+                                <span></span>
+                                <ul>
+                                    #if($user.userType==2)
+                                        <li data-value="-1"><a href="javascript:;">全部</a></li>
+##                                        <li data-value="0"><a href="javascript:;">普通</a></li>
+                                        #*     <li data-value="1"><a href="javascript:;">挂单品种</a></li> *#
+                                        <li data-value="2"><a href="javascript:;">新品上架</a></li>
+##                                        <li data-value="3"><a href="javascript:;">专供品种</a></li>
+                                        <li data-value="4"><a href="javascript:;">诊所专区推荐</a></li>
+                                        <li data-value="5"><a href="javascript:;">控销品种</a></li>
+                                        <li data-value="6"><a href="javascript:;">诊所专销</a></li>
+                                        <li data-value="7"><a href="javascript:;">预售</a></li>
+                                    #end
+                                    #if($user.userType==3)
+                                        <li data-value="0"><a href="javascript:;">普通</a></li>
+                                        <li data-value="2"><a href="javascript:;">新品上架</a></li>
+                                    #end
+                                </ul>
+                                <input type="hidden" name="gType" id="gType">
+                            </div>
+                        </li>
+                        <li class="li_four">
+                            <label>商品一级分类：</label>
+                            <div class="sltitem">
+                                <span id="sgcSltBtn"></span>
+                                <ul>
+                                    <li data-value=""><a href="javascript:;"></a></li>
+                                </ul>
+                                 <input type="hidden" name="sgcId1" id="sgcId1">
+                            </div>
+                        </li>
+                        <li class="li_four ">
+                            <label>商品二级分类：</label>
+                            <div class="sltitem">
+                                <span></span>
+                                <ul>
+                                    <li data-value=""><a href="javascript:;"></a></li>
+                                </ul>
+                                <input type="hidden" name="sgcId2" id="sgcId2">
+                            </div>
+                        </li>
+                        #end
+                        #if($user.userType==3)
+                        <li class="li_four">
+                            <label>批准文号：</label>
+                            <input class="input" name="gLicenseNo" type="text" value="$!{gLicenseNo}">
+                        </li>
+                       <li class="li_four">
+                            <label>销售区域：</label>
+                            <div class="sltitem">
+                                <span></span>
+                                <ul>
+                                       #if(!$null.isNull($!{siteFactoryList}) && ($!siteFactoryList.size()!=0))
+                                        #foreach($item in $siteFactoryList)
+                                        <li data-value="$!{item.siteId}"><a href="javascript:;">$!item.siteName</a></li>                                         
+                                        #end                              
+                                       #end 
+                                </ul>
+                                <input type="hidden" name="siteId" id="siteId">
+                            </div>
+                        </li>
+                        #end
+                        <li class="li_four">
+                            <label>商品状态：</label>
+  							<input class="radio" type="radio" name="gStatus" id="gStatus_0" #if($gStatus==0) checked="checked" #end value="0"/>
+                            <label class="radio_label" for="gStatus_0">下架</label>
+                            <input class="radio" type="radio" name="gStatus" id="gStatus_1" #if($gStatus==1) checked="checked" #end value="1"/>
+                            <label class="radio_label" for="gStatus_1">上架</label>
+                            #if($user.userType==2)
+                            <!--
+                            <input class="radio" type="radio" name="gStatus" id="gStatus_5" #if($gStatus==5) checked="checked" #end value="5"/>
+                            <label class="radio_label" for="gStatus_5">待审核</label>
+                            -->
+                            #end
+                        </li>
+                        #if($!suIsErp == 1)
+                        	<li class="">
+	                            <label>商品内码：</label>
+	                            <input type="text" style="width: 500px;" name="gInSns" placeholder="用逗号分隔多个内码“C102318,C102319”，每次最多200个" id="gInSns" onblur="checkGInSnValue('',false)" value="$!{gInSns}"/>
+	                        </li>
+                        #end
+                    </ul>
+                    <div class="btn tac">
+                      <a href="javascript:checkGInSnValue('/sales/goods/goods_index.html',false);" class="btn_query">查询</a>
+                      <a href="javascript:checkGInSnValue('/sales/goods/goods_index.html',true);" class="btn_reset btn-empty"><img src="/image/icon-refresh.png" alt="">重置筛选条件</a>
+                    </div>
+                    <div class="function">
+                    #if(!$null.isNull($supplier.suIsErp)&&$supplier.suIsErp==1)
+                    
+                    #else
+                      <a class="btn" href="/sales/goods/goods_addUI.html">添加</a>                
+                    #end  
+                    #if($user.userType==2&&!$null.isNull($supplier.suIsErp)&&$supplier.suIsErp==0)
+                      <a class="btn" href="/sales/goods/goods_downLoadTemplate" style="width:100px;">下载导入模板</a>
+                      <a class="btn" href="javascript:void(0);" id="uploadExcel" >批量导入</a> 
+<!--                       <a class="btn" href="javascript:showOut();">批量导出</a> -->
+                    #end                   
+                    #if($user.userType==2)
+                      <a class="btn" href="javascript:showOut();">批量导出</a>
+                    #end 
+                    <a class="btn" href="javascript:putaway(1);">批量上架</a>
+                    <a class="btn" href="javascript:putaway(0);">批量下架</a>
+                    #if($user.userType==2&&!$null.isNull($supplier.suIsErp)&&$supplier.suIsErp==0)
+                      <a class="btn" href="javascript:batchEditPriceStock();" style="width:135px;">批量修改价格库存</a>                
+                    #end
+                    <a class="btn" href="javascript:batchEditShopCate();"  style="width:105px;">批量修改分类</a>      
+                    </div>
+                  </form>
+                </div>
+                <div class="order_detail">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0" id="table">
+                            <thead class="head">
+                                <tr class="line">
+                                  <th width="35">全选</th>
+                                   <th><input type="checkbox" class="check"  id="chooseAll" name="chooseAll" onclick="selectAll(this);"/></th>
+                                    <th>通用名（化学名）</th>
+                                    <th width="60">商品规格</th>
+                                    #if($user.userType==2)
+                                 	    <th>生产厂家</th>
+                                  	#end
+                                  	<th>批准文号</th>
+                                  	<th>价格</th>
+                                  	<th >库存
+##                                    #if($order)
+##                                        <img src="/image/sort-$!{order}.png" alt="">
+##                                    #else
+##                                        <img src="/image/sort-def.png" alt="">
+##                                    #end
+                                    </th>
+                                    <th width="80">商品编码</th>
+                                    <th width="70">商品状态</th>
+                                    #if($user.userType==3)
+                                    <th width="100">销售区域</th>                                  
+                                    #end                   
+<!--                                     <th width="60">基本单位</th> -->
+                                  <th width="220">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                            #if(!$null.isNull($goodsWrapperList) && $goodsWrapperList.size()!=0)
+                            #foreach($goodsWrapper in $goodsWrapperList)
+                               <tr>               
+                                    <td>$!velocityCount</td>
+                                    <td><input type="checkbox" class="check"  name="choose" value="$!{goodsWrapper.goods.gId}" onclick="choiceGoods(this)"/></td>
+                                    <td>
+                                    	<a href="http://$!{domain_url}/item/$!{goodsWrapper.goods.gId}.html" target="_blank">
+                                    		<span class="con_w" title="$!{goodsWrapper.goods.gName}">$!{goodsWrapper.goods.gName}</span>
+                                    	</a>
+                                    </td>
+                                    
+                                    <td>$!{goodsWrapper.goods.gSpecifications}</td>
+                                    #if($user.userType==2)
+                                    <td><span class="con_w" title="$!{goodsWrapper.goods.gManufacture}">$!{goodsWrapper.goods.gManufacture}</span></td>
+                                    #end 
+                                    <td>$!{goodsWrapper.goods.gLicenseNo}</td>
+                                    <td>
+                                    	#if($user.userType==2)
+                                    		$!utils.priceFormart($!{goodsWrapper.goods.gBasePrice})
+                                    	#elseif($user.userType==3)
+                                    		$!utils.priceFormart($!{goodsWrapper.goods.gPrice})
+                                    	#end
+                                    </td>
+                                    <td>
+                                        $!{goodsWrapper.goods.gcn}
+##                                    	#if($user.userType==2)
+##                                    		$!{goodsWrapper.goods.gcn}
+##                                    	#elseif($user.userType==3)
+##                                    		$!{goodsWrapper.goods.gNumber}
+##                                    	#end
+                                    </td>
+                                    <td>$!{goodsWrapper.goods.gSn}</td>
+                                    <td>
+                                    #if($!{goodsWrapper.goods.gStatus} == 1)
+                                                                                                                                        上架
+                                    #end                                                                                                   
+                                    #if($!{goodsWrapper.goods.gStatus} == 5)
+                                                                                                                                        待审核                                   
+                                    #end
+                                    #if($!{goodsWrapper.goods.gStatus} == 0)
+                                                                                                                                        下架                                   
+                                    #end 
+                                    #if($!{goodsWrapper.goods.gStatus} == 3)
+                                                                                                                                        删除                                
+                                    #end
+                                    #if($!{goodsWrapper.goods.gStatus} == 4)
+                                                                                                                                       紧急下架                        
+                                    #end  
+                                    </td>
+                                    #if($user.userType==3)
+                                    <td
+                                    #if($!utils.notEmpty($!{goodsWrapper.siteList}) && ($goodsWrapper.siteList.size() != 0))
+                                    title="$!utils.siteStr($!{goodsWrapper.siteList},0)"
+                                    #end
+                                    >
+                                    #if($!utils.notEmpty($!{goodsWrapper.siteList}) && ($goodsWrapper.siteList.size() != 0))
+                                    $!utils.siteStr($!{goodsWrapper.siteList},7)
+                                    #end
+                                    </td>                                
+                                    #end
+<!--                                     <td>$!{goodsWrapper.goods.gUnit}</td> -->
+                                    <td>
+                                    	<a href="javascript:void(0);" onclick="viewGoods('ckspxq','商品详情','/sales/goods/goods_viewUI.html?gId=$!{goodsWrapper.goods.gId}&pi=$!{pi}&gIds=$!{gIds}&isAllChoice=$!{isAllChoice}&gName=$!{gName}&gSn=$!{gSn}&gManufacture=$!{gManufacture}&gLicenseNo=$!{gLicenseNo}&gSpecifications=$!{gSpecifications}&gType=$!{gType}&sgcId1=$!{sgcId1}&sgcId2=$!{sgcId2}&order=$!{order}&word=$!{word}')" class="btn-txt">查看</a>
+										<a href="/sales/goods/goods_editUI.html?gId=$!{goodsWrapper.goods.gId}&pi=$!{pi}&gIds=$!{gIds}&isAllChoice=$!{isAllChoice}&gName=$!{gName}&gSn=$!{gSn}&gManufacture=$!{gManufacture}&gLicenseNo=$!{gLicenseNo}&gSpecifications=$!{gSpecifications}&gType=$!{gType}&sgcId1=$!{sgcId1}&sgcId2=$!{sgcId2}&order=$!{order}&word=$!{word}" class="btn-txt">修改</a>
+										<!--<a href="javascript:del($!{goodsWrapper.goods.gId});" class="btn-txt">删除</a>-->
+										<a href="/sales/quality/upload.html?gId=$!{goodsWrapper.goods.gId}&gName=$!{goodsWrapper.goods.gName},$!{goodsWrapper.goods.gManufacture},$!{goodsWrapper.goods.gSpecifications}',{fstBread:'资质中心'})" onclick--="top.utils.openWithTab('zjbgdgl','质检报告单管理','/sales/quality/upload.html?gId=$!{goodsWrapper.goods.gId}&gName=$!{goodsWrapper.goods.gName},$!{goodsWrapper.goods.gManufacture},$!{goodsWrapper.goods.gSpecifications}',{fstBread:'资质中心'})"  class="btn mt5">上传质检报告单</a>
+									</td>
+                                </tr>
+                            #end 
+                            <form id="operForm" name="operForm" method="post"></form> 
+                            #else
+                              <tr><td #if($user.userType==2) colspan="13" #else colspan="14" #end>无相关数据</td></tr>
+                            #end                  
+                            </tbody>
+                        </table>
+                        <!--分页开始 -->
+                        
+                        			<!--分页开始 -->
+						 <form id="pagerForm" method="post" action="/sales/goods/goods_index.html">
+							#if($!{pagerInfo})
+								#if($!{pagerTotal} > 1)
+									#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/goods/goods_index.html",$!{pagerQueryParam})
+								#end
+							#end
+						</form>
+                                      
+                    </div>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+  <div class="mask" id="popUpMask"></div>
+	      <div class="dialog dialog_box mt20" id="popUpDIV">
+              <div style="text-align: center; padding: 30px 0">
+                  <a class="rc-btn-only" href="/sales/goods/goods_downLoadPriceStockTemplate" style="width:140px;background: #f">下载价格库存模板</a>
+                  <a class="rc-btn-only" href="javascript:void(0);" id="uploadPriceStockExcel" style="width:140px;">批量导入价格库存</a>
+              </div>
+          </div>
+    
+    <div class="mask" id="shopCatePopUpMask"></div>
+	      <div class="dialog dialog_box mt20" id="shopCatePopUpDIV" style="height:130px;width:850px;">
+              <dl class="dialog_ctn">
+               <dt>
+                 <span class="title">批量修改商品类别</span>
+                 <a href="javascript:void(0);" onclick="closePopUpDIV('shopCatePopUpDIV','shopCatePopUpMask');" class="btn_close"></a>
+               </dt>
+               <dd class="b0">
+                   <div class="order_query">
+                       <ul>
+                            <li class="li_four">
+                            <label>商品一级分类：</label>
+                            <div class="sltitem">
+                                <span></span>
+                                <ul>
+                                    <li data-value=""><a href="javascript:;"></a></li>
+                                </ul>
+                                 <input type="hidden" name="sgcId1" id="sgcId11">
+                            </div>
+                            
+                           </li>
+                            <li class="li_four li_four1">
+                            <label>商品二级分类：</label>
+                            <div class="sltitem">
+                                <span></span>
+                                <ul>
+                                    <li data-value=""><a href="javascript:;"></a></li>
+                                </ul>
+                                <input type="hidden" name="sgcId2" id="sgcId12">
+                            </div>
+                             </li>
+                        </ul> 
+                  </div>
+               </dd>
+              </dl>
+              <div class="btn">
+                <a href="javascript:void(0);" onclick="saveBatchShopCate();" class="btn">修改</a>
+                <a href="javascript:void(0);" onclick="closePopUpDIV('shopCatePopUpDIV','shopCatePopUpMask');" class="btn">关闭</a>
+              </div>
+          </div>
+  
+  
+  
+   <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+    <script src="/js/select2/select2.min.js"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script>
+
+        layui.config({
+            base:'/js/layui/extend/'
+        }).use(['layApp'],function () {
+            $(".mn-select").each(function () {
+                $(this).select2({
+                    placeholder: $(this).attr("placeholder"),
+                    tags: "true",
+                    allowClear: false,
+                    minimumResultsForSearch: -1,
+                    language: "zh-CN",
+                    width: 150
+                });
+            })
+
+        })
+
+	//省市区级联
+	$(function(){
+		$.sltitem.select("gType", "$!gType");
+		$.sltitem.select("siteId", "$!siteId");
+		#if((!$null.isNull($sgcId1)&&$null.isNull($sgcId2)))
+			loadShopGoodsGate('$!{sgcId1}','','','/sales/store/shop_goodscate_getShopGoodsCateByPid');
+			$.sltitem.setNull("sgcId2");
+		#end
+		#if((!$null.isNull($sgcId1)&&!$null.isNull($sgcId2)))
+			loadShopGoodsGate('$!{sgcId1}','$!{sgcId2}','','/sales/store/shop_goodscate_getShopGoodsCateByPid');
+		#else
+			loadShopGoodsGate('','','','/sales/store/shop_goodscate_getShopGoodsCateByPid');	
+			$.sltitem.setNull("sgcId1");
+		#end
+		#if((""==$sgcId1&&""==$sgcId1))
+		$.sltitem.setNull("sgcId1");
+		$.sltitem.setNull("sgcId2");
+		var jObject2 = $("#sgcId2").siblings("ul");  
+        jObject2.prev().text("");
+        jObject2.next().val("");
+        jObject2.empty();//清除select中的 option
+		#end
+		$("#sgcId1").change(function(){
+			var provinceId = $(this).val();
+			var townId = findShopGoodsGate($("#sgcId2"),"",provinceId,'/sales/store/shop_goodscate_getShopGoodsCateByPid');
+			loadSltitem();
+		});
+		#if($user.userType==2&&!$null.isNull($supplier.suIsErp)&&$supplier.suIsErp==0)
+		renderUploader();
+		#end
+		
+		loadShopGoodsGate1('','','','/sales/store/shop_goodscate_getShopGoodsCateByPid');
+		$("#sgcId11").change(function(){
+			var provinceId = $(this).val();
+			var townId = findShopGoodsGate($("#sgcId12"),"",provinceId,'/sales/store/shop_goodscate_getShopGoodsCateByPid');
+			loadSltitem();
+		});
+		if($isAllChoice)
+		{
+		     $("#chooseAll").prop("checked",true);
+		     $("#isAllChoice").val(true); 
+		     $("#tbody").find("input[type=checkbox]").prop("checked",true);
+		}
+
+		/*排序*/
+		$(".sort-box").each(function () {
+            $(this).on("click",function () {
+                var key = $(this).attr("data-sort-key");
+                var val = $(this).attr("data-sort-val");
+                if(key){
+                    var _sort = val?((val == "asc")?"desc":"asc"):"asc";
+                    $(this).attr("data-sort-val",_sort);
+                    $(this).find("img").attr("src","/image/sort-"+_sort+".png");
+                    var _url = editUrlParam(location.href,"word",key);
+                    _url =  editUrlParam(_url,"order",_sort);
+                    location.href = _url;
+                }
+            })
+        })
+
+	});
+
+	
+	function viewGoods(id,text,url) {
+        top.utils.openWithTab(id, text, url, {
+            fstBread: top.app.index.firstBread,
+            scdBread:{
+                text:top.app.index.secondBread,
+                url:location.href,
+                prevBread: top.app.index.firstBread
+            },
+            thirdBread:text
+        })
+    }
+
+    function editUrlParam(url,key,v) {
+        var oUrl = url.toString();
+        var re=eval('/('+key+'=)([^&]*)/gi');
+        var nUrl = oUrl.replace(re,key+'='+v);
+        if(nUrl.indexOf(key) < 0){
+            if(nUrl.indexOf("?") > -1){
+                nUrl+="&"+key +"=" +v;
+            }else{
+                nUrl+="?"+key +"=" +v;
+            }
+        }
+        return nUrl;
+    }
+	
+	function checkGInSnValue(url,type){
+		var gInSns = $("#gInSns").val();
+		if(gInSns == undefined){
+			searchPager(url,type);	
+		}else{
+			gInSns = gInSns.replace("，",",").replace(/\s+/g,"");
+			$("#gInSns").val(gInSns);
+			if(gInSns.split(",").length>200 && !type){
+				dialog({
+		            title: "提示信息",
+		            content: "Sorry,您每次最多可导入200个内码，可分多次导入商品",
+		            width: 300
+		        });
+				return ;
+			}else if(url){
+				searchPager(url,type);	
+			}
+		}
+		
+	}
+		
+	//省市区加载
+	function loadLocation(provinceId,townId,areaId,url){
+		if(provinceId){
+			findLocation($("#gcId1"),provinceId,0,url);
+			findLocation($("#gcId2"),townId,provinceId,url);
+		}else{
+			var _provinceId = findLocation($("#gcId1"),"",0,url);
+			var _townId = findLocation($("#gcId2"),"",_provinceId,url);	
+		}
+		loadSltitem();
+	}
+	
+	//object:加载对象    value:默认值  lpId:上级id , url 请求地址
+	function findLocation(object,value,lpId,url){
+		var id = 0;
+		$.ajax({
+            url: url,
+            data: {"pId": lpId},
+            type:"post",
+            async:false,
+            success: function(data) {
+				var location = data.data;
+				if(location!=''){  
+                    var jObject = $(object).siblings("ul");  
+                    jObject.prev().text("");
+                    jObject.empty();//清除select中的 option  
+                    $.each(location,function(index,item){  
+                    	if(index ==0 ){
+                    		id = item.gcId;
+                    		if(!value){
+                    			jObject.prev().text(item.gcName).removeClass("on");
+                       			jObject.next().val(item.gcId).change();
+                    		}
+                    	}
+                    	if(value == item.gcId){
+                    		jObject.prev().text(item.gcName).removeClass("on");
+                    		jObject.next().val(item.gcId);
+                    	}
+                        var opt ='<li data-value="'+item.gcId+'"><a href="javascript:;">'+item.gcName+'</a></li>'; 
+                        jObject.append(opt);  
+                    });  
+                }else{  
+                	location = '';  
+                }
+            }
+        });
+		return id;
+	}
+        
+	//省市区加载
+	function loadShopGoodsGate(provinceId,townId,areaId,url){
+		if(provinceId){
+			findShopGoodsGate($("#sgcId1"),provinceId,0,url);
+			findShopGoodsGate($("#sgcId2"),townId,provinceId,url);
+		}else{
+			var _provinceId = findShopGoodsGate($("#sgcId1"),"",0,url);
+			var _townId = findShopGoodsGate($("#sgcId2"),"",_provinceId,url);
+		}
+		loadSltitem();
+	}
+	
+		//省市区加载
+	function loadShopGoodsGate1(provinceId,townId,areaId,url){
+		if(provinceId){
+			findShopGoodsGate($("#sgcId11"),provinceId,0,url);
+			findShopGoodsGate($("#sgcId12"),townId,provinceId,url);
+		}else{
+			var _provinceId = findShopGoodsGate($("#sgcId11"),"",0,url);
+			var _townId = findShopGoodsGate($("#sgcId12"),"",_provinceId,url);
+		}
+		loadSltitem();
+	}
+	
+	//object:加载对象    value:默认值  lpId:上级id , url 请求地址
+	function findShopGoodsGate(object,value,lpId,url){
+		var id = 0;
+		$.ajax({
+            url: url,
+            data: {"pId": lpId},
+            type:"post",
+            async:false,
+            success: function(data) {
+				var location = data.data;
+				if(location!=''){  
+                    var jObject = $(object).siblings("ul");  
+                    jObject.prev().text("");
+                    jObject.empty();//清除select中的 option  
+                    $.each(location,function(index,item){  
+                    	if(index ==0 ){
+                    		id = item.sgcId;
+                    		if(!value){
+                    			jObject.prev().text(item.sgcName).removeClass("on");
+                       			jObject.next().val(item.sgcId).change();
+                    		}
+                    	}
+                    	if(value == item.sgcId){
+                    		jObject.prev().text(item.sgcName).removeClass("on");
+                    		jObject.next().val(item.sgcId);
+                    	}
+                        var opt ='<li data-value="'+item.sgcId+'"><a href="javascript:;">'+item.sgcName+'</a></li>'; 
+                        jObject.append(opt);
+                    });
+                }else{  
+                    var jObject = $(object).siblings("ul");  
+                    jObject.prev().text("");
+                    jObject.next().val("");
+                    jObject.empty();//清除select中的 option
+                    
+                }
+            }
+        });
+		return id;
+	}
+	
+	//下拉框点击事件
+	function loadSltitem(doc){
+	    doc = doc?doc:document;
+		$(".sltitem",doc).unbind("click");
+	    //自定义下拉框
+		$(".sltitem",doc).click(function(e){
+			e.stopPropagation();
+			var len = $(this).find('li').length;
+			$(this).find("span").addClass("on");
+			if(len > 6){
+				$(this).find("ul").css('height','120px').show();
+			}else{
+				$(this).find("ul").show();
+			}		
+		});
+	    
+		$(".sltitem li",doc).unbind("click");
+		$(".sltitem li",doc).click(function(e){
+			e.stopPropagation();
+			var text = $(this).text();
+			var value = $(this).data("value");
+			$(this).closest("ul").prev().text(text).removeClass("on");
+			$(this).closest("ul").next().val(value).change();
+			$(this).closest("ul").hide();
+		});
+	}
+	
+	
+        function selectAll(obj){
+		    if($(obj).prop("checked")){
+		       $("#isAllChoice").val(true);
+			   $("#tbody").find("input[type=checkbox]").prop("checked",true);
+		    }else{
+		       $("#isAllChoice").val(false);
+		       $("#tbody").find("input[type=checkbox]").prop("checked",false);
+		    }
+         }
+         
+        function choiceGoods(obj){          
+            if(!$(obj).prop("checked"))
+            {
+                $("#isAllChoice").val(false);
+                $("input[name='chooseAll']:checked").prop("checked",false);        
+            }
+        }
+ 	    function del(id){
+	    	$.showLoad();
+    	    top.ue.confirm({
+	              title: '确认',
+	              content: "您确定要删除该商品吗？",
+	              ok: function() {
+    	    	      $.showLoad();
+    	    	      $.ajaxPost("/sales/goods/goods_del.html", {"gId":id}, function(result) {
+     			           $.hideLoad();
+     			           window.location.href = "/sales/goods/goods_index.html";
+     			           return;
+     			       });
+	               }
+	            })
+	     } 
+         
+         /**
+          *勾选的商品进行上架
+          */
+        function putaway(gStatus){
+        	var text;
+        	if(1==gStatus)
+        	{
+        		text = "上架";
+        	}
+        	if(0==gStatus)
+        	{
+        		text = "下架";
+        	}
+        	var flag = $("input[name='chooseAll']:checked").prop("checked");
+        	if(flag)
+        	{
+        	   top.ue.confirm({
+ 	              title: '确认',
+ 	              content: "您确认要"+text+"吗？",
+ 	              ok: function() {
+ 	            	   var gName = $("#gName").val();
+                       var gSn = $("#gSn").val();
+                       var gManufacture = $("#gManufacture").val();
+                       var gLicenseNo = $(".gLicenseNo").val();
+                       var gSpecifications = $("#gSpecifications").val();
+                       var gType = $("#gType").val();
+                       var siteId = $("#siteId").val();
+	                   var sgcId11 = $("#sgcId11").val();
+	                   var sgcId12 = $("#sgcId12").val();
+	                   var gStatusSearch = $("input[name='gStatus']:checked").val();
+	                   var gInSns = $("#gInSns").val();
+ 	            	   $.showLoad();
+ 			           $.ajaxPost("/sales/goods/goods_putAway.html", {"gStatus":gStatus,
+ 			                "batchFlag":"true",
+	                         "gName":gName,"gSn":gSn,"gManufacture":gManufacture,"gLicenseNo":gLicenseNo,"gSpecifications":gSpecifications,
+	                         "gType":gType,"siteId":siteId,"gStatusSearch":gStatusSearch,"gInSns":gInSns
+ 			           
+ 			           }, function(result) {
+ 			                $.hideLoad();
+ 			                window.location.href = "/sales/goods/goods_index.html";
+ 			        		return;
+ 			           });
+ 	               }
+ 	           })  	
+            }else{
+         	    if($("#tbody").find("input[type=checkbox]:checked").length==0){
+         		top.ue.msg("请您先勾选"+text+"的商品");
+                 return;
+         	}
+        	    top.ue.confirm({
+ 	              title: '确认',
+ 	              content: "您确认要"+text+"吗？",
+ 	              ok: function() {
+ 	            	  var array = [];
+ 	            	  $("#table tbody tr").each(function(i, item){
+             		        var check = $(item).find("input[type='checkbox']");
+ 	            		    if($(check).prop("checked")){        			     
+ 	            			     var gId = $(check).val();
+ 	            			     array.push(gId);
+ 	            		    }
+ 	            	   });
+ 	            	   // alert($.toJSON(array));return;
+ 	            	   $.showLoad();
+ 			           $.ajaxPost("/sales/goods/goods_putAway.html", {"gIds":$.toJSON(array),"gStatus":gStatus,"batchFlag":"false"},function(result) {
+ 			                $.hideLoad();
+ 			                window.location.href = "/sales/goods/goods_index.html";
+ 			        		return;
+ 			           });
+ 	               }
+ 	            })
+         	
+         	}
+         }
+              //批量修改商品类别     
+     function batchEditShopCate(){
+         var flag = $("input[name='chooseAll']:checked").prop("checked");
+         var selections = $("#tbody").find("input[type=checkbox]:checked");
+         var mask = $("#shopCatePopUpMask");
+         var shopCateDialog = $("#shopCatePopUpDIV");
+         if (!flag) {
+             if ($("#tbody").find("input[type=checkbox]:checked").length == 0) {
+                 top.ue.msg("请您先勾选要修改类别的商品");
+                 return;
+             }
+            /* var mask = $("#shopCatePopUpMask");
+             var shopCateDialog = $("#shopCatePopUpDIV");
+//	         showPopUpDIV(shopCateDialog,mask);  */
+         }
+//         showPopUpDIV(shopCateDialog,mask);
+         top.rui.dynamic({
+             title: "批量修改分类",
+             content: shopCateDialog.html(),
+             skin: "dialog-old dialog-old-no-title",
+             area: ["600px"],
+             btn:['修改','关闭'],
+             success: function (lay, idx) {
+                 top.rui.initTools(lay);
+                 $("#sgcId11",lay).prev("ul").find("li").on("click",function(){
+                     var provinceId = $("#sgcId11",lay).val();
+                     var townId = findShopGoodsGate($("#sgcId12",lay),"",provinceId,'/sales/store/shop_goodscate_getShopGoodsCateByPid');
+                     loadSltitem(lay.find(".li_four1"));
+                 });
+             },yes:function (idx,lay) {
+                 saveBatchShopCate(idx,lay);
+             }
+         })
+       
+    }
+         
+         //商品的批量导出
+         function showOut(){
+        	var flag = $("input[name='chooseAll']:checked").prop("checked");
+      		var selections=$("#tbody").find("input[type=checkbox]:checked");
+       	 	if(flag){
+	           	 	$("#searchForm").attr("action", "/sales/goods/goods_showOut");
+	          	    $("#searchForm").submit();
+	          	    $("#searchForm").attr("action", "/sales/goods/goods_index.html");
+       	 	}else{  	 	
+       	 	     if($("#tbody").find("input[type=checkbox]:checked").length==0){
+         		    var a = dialog({
+                        title: '提示',
+                        content: "请您先勾选要导出的商品",
+                        width: 300
+                    })
+                    return;
+         	      }       	 		
+        	      top.ue.confirm({
+   	              title: '系统提示',
+   	              content: "将导出勾选的商品,继续吗？",
+   	              ok: function() {
+   	            	  var array = [];
+   	            	  $("#table tbody tr").each(function(i, item){
+               		        var check = $(item).find("input[type='checkbox']");
+   	            		    if($(check).prop("checked")){        			     
+   	            			     var gId = $(check).val();
+   	            			     array.push(gId);
+   	            		    }
+   	            	   });
+   	            	   // alert($.toJSON(array));return;
+   	            	   $.showLoad();
+   	            	   $("#gIds").val($.toJSON(array));
+   	            	   $("#searchForm").attr("action", "/sales/goods/goods_showOut2");
+   	          	       $("#searchForm").submit();
+   	          	       $("#searchForm").attr("action", "/sales/goods/goods_index.html");
+   	          	       setTimeout(function () {
+                           $.hideLoad()
+                       },2000)
+   	               }
+   	           })   	 	
+       	   }    		
+     	}
+
+     function renderUploader() {
+		var uploadPic = $("#uploadExcel");//上传商品点击按钮
+		var uploadPriceStockPic = $("#uploadPriceStockExcel");//上传价格库存点击按钮
+		var uper=new AjaxUpload(uploadPic, {
+			action : "/sales/goods/goods_uploadSave.html", //动作
+			name : 'file_path',//固定参数
+			data:{bbb:'abc'},
+			responseType:'json',
+			onSubmit : function(file, ext) {
+					if (ext && /^(xls|xlsx)$/.test(ext)) {//过滤上传文件格式
+						ext_str = ext;
+					} else {
+					     dialog({
+                           title: "系统提示",
+                           content: "非Excel文件格式,请重传",
+                           width: 300
+                        });
+						return false;
+					}
+					$.showLoad();
+				},
+			onComplete : function(file, response) {
+					if (response == "outofsize") {
+						dialog({
+                           title: "系统提示",
+                           content: "文件过大，无法上传",
+                           width: 300
+                        });
+					}
+					if (response == "error") {
+						dialog({
+                           title: "系统提示",
+                           content: "文件上传失败，请重新上传",
+                           width: 300
+                        });
+					} else {
+                        top.ue.alert({
+	                        title: '系统提示',
+	                        content: response.message,
+	                        width: 300,
+	                        okVal: "确定",
+	                        ok: function() {
+	                   	        checkGInSnValue('/sales/goods/goods_index.html',true);
+	                        }
+	                    });
+					}
+					$.hideLoad();
+				}
+		});
+		
+		var abc=new AjaxUpload(uploadPriceStockPic, {
+			action : "/sales/goods/goods_uploadPriceStockSave.html", //动作
+			name : 'file_path',//固定参数
+			data:{bbb:'abc'},
+			responseType:'json',
+			onSubmit : function(file, ext) {
+					if (ext && /^(xls|xlsx)$/.test(ext)) {//过滤上传文件格式
+						ext_str = ext;
+					} else {
+					     dialog({
+                           title: "系统提示",
+                           content: "非Excel文件格式,请重传",
+                           width: 300
+                        });
+						return false;
+					}
+					$.showLoad();
+				},
+			onComplete : function(file, response) {
+					if (response == "outofsize") {
+						dialog({
+                           title: "系统提示",
+                           content: "文件过大，无法上传",
+                           width: 300
+                        });
+					}
+					if (response == "error") {
+						dialog({
+                           title: "系统提示",
+                           content: "文件上传失败，请重新上传",
+                           width: 300
+                        });
+					} else {
+					    dialog({
+                           title: "系统提示",
+                           content: response.message,
+                           width: 300
+                        });
+					}
+					$.hideLoad();
+				}
+		});
+	}
+
+	function initFileUpload(lay) {
+        var uploadPriceStockPic = $("#uploadPriceStockExcel",lay);//上传价格库存点击按钮
+        var uper=new top.AjaxUpload(uploadPriceStockPic, {
+            action : "/sales/goods/goods_uploadPriceStockSave.html", //动作
+            name : 'file_path',//固定参数
+            data:{bbb:'abc'},
+            responseType:'json',
+            onSubmit : function(file, ext) {
+                if (ext && /^(xls|xlsx)$/.test(ext)) {//过滤上传文件格式
+                    ext_str = ext;
+                } else {
+                    dialog({
+                        title: "系统提示",
+                        content: "非Excel文件格式,请重传",
+                        width: 300
+                    });
+                    return false;
+                }
+                $.showLoad();
+            },
+            onComplete : function(file, response) {
+                if (response == "outofsize") {
+                    dialog({
+                        title: "系统提示",
+                        content: "文件过大，无法上传",
+                        width: 300
+                    });
+                }
+                if (response == "error") {
+                    dialog({
+                        title: "系统提示",
+                        content: "文件上传失败，请重新上传",
+                        width: 300
+                    });
+                } else {
+                    top.ue.alert({
+                        title: '系统提示',
+                        content: response.message,
+                        width: 300,
+                        okVal: "确定",
+                        ok: function() {
+                            checkGInSnValue('/sales/goods/goods_index.html',true);
+                        }
+                    });
+                }
+                $.hideLoad();
+            }
+        });
+    }
+	
+	function batchEditPriceStock(){
+	     var mask = $("#popUpMask");
+		 var dialog = $("#popUpDIV");
+//	     showPopUpDIV(dialog,mask);
+        top.rui.dynamic({
+            title: "批量修改价格库存",
+            content: dialog.html(),
+            skin: "dialog-old dialog-old-no-title",
+            area: ["550px"],
+            btn:false,
+            success: function (lay, idx) {
+                initFileUpload(lay);
+                top.rui.initTools(lay);
+            }
+        })
+	
+	}
+	
+	function saveBatchShopCate(idx,lay){
+	    top.ue.close(idx);
+	    var flag = $("input[name='chooseAll']:checked").prop("checked");
+        var selections=$("#tbody").find("input[type=checkbox]:checked");
+        var gName = $("#gName").val();
+        var gSn = $("#gSn").val();
+        var gManufacture = $("#gManufacture").val();
+        var gLicenseNo = $(".gLicenseNo").val();
+        var gSpecifications = $("#gSpecifications").val();
+        var gType = $("#gType").val();
+        var siteId = $("#siteId").val();
+	    var sgcId11 = $("#sgcId11",lay).val();
+	    var sgcId12 = $("#sgcId12",lay).val();
+	    var gStatus = $("input[name='gStatus']:checked").val();
+        var gInSns = $("#gInSns").val();
+	    var array = [];
+	    if(flag)
+	    {
+	        top.ue.load();
+	        $.ajaxPost("/sales/goods/goods_batchEditShopCate.html", {"batchFlag":"true","sgcId1Edit":sgcId11,"sgcId2Edit":sgcId12,
+	           "gName":gName,"gSn":gSn,"gManufacture":gManufacture,"gLicenseNo":gLicenseNo,"gSpecifications":gSpecifications,
+	           "gType":gType,"siteId":siteId,"gStatus":gStatus,"gInSns":gInSns
+	        }, function(result) {
+	            top.ue.closeLoad();
+                top.utils.iframeLoad();
+ 			                window.location.href = "/sales/goods/goods_index.html?pi=$!{pi}&gIds=$!{gIds}&isAllChoice=$!{isAllChoice}&gName=$!{gName}&gSn=$!{gSn}&gManufacture=$!{gManufacture}&gLicenseNo=$!{gLicenseNo}&gSpecifications=$!{gSpecifications}&gType=$!{gType}&sgcId1=$!{sgcId1}&sgcId2=$!{sgcId2}";
+ 			        		return;
+ 			});
+	    }else{
+	        $("#table tbody tr").each(function(i, item){
+	           var check = $(item).find("input[type='checkbox']");
+		       if($(check).prop("checked")){        			     
+			       var gId = $(check).val();
+			       array.push(gId);
+		       }
+	        });
+	    }
+	    var gIds = $.toJSON(array);
+	    top.ue.load();
+	    $.ajaxPost("/sales/goods/goods_batchEditShopCate.html", {"batchFlag":"false","sgcId1Edit":sgcId11,"sgcId2Edit":sgcId12,
+	           "gIds":gIds
+	        }, function(result) {
+	        top.ue.closeLoad();
+ 			                top.utils.iframeLoad();
+ 			                window.location.href = "/sales/goods/goods_index.html?pi=$!{pi}&gIds=$!{gIds}&isAllChoice=$!{isAllChoice}&gName=$!{gName}&gSn=$!{gSn}&gManufacture=$!{gManufacture}&gLicenseNo=$!{gLicenseNo}&gSpecifications=$!{gSpecifications}&gType=$!{gType}&sgcId1=$!{sgcId1}&sgcId2=$!{sgcId2}";
+ 			        		return;
+ 			});
+	}
+    </script>
+    
+  </body>
+</html>

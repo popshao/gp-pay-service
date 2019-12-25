@@ -1,0 +1,825 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.mph.coreapi.gp.pay.dao.read.GroundPromotionIncomeDetailReadDao">
+	<resultMap id="groundPromotionIncomeDetailResult"
+		type="com.mph.coreapi.gp.pay.entity.GroundPromotionIncomeDetail">
+		<result property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="itemName" column="item_name" />
+		<result property="type" column="type" />
+		<result property="associateType" column="associate_type" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+		<result property="amount" column="pay_desc" />
+		<result property="payStatus" column="pay_status" />
+		<result property="linkIdentity" column="link_identity" />
+		<result property="typeDetail" column="type_detail" />
+		<result property="userProvinceId" column="user_province_id" />
+		<result property="remark" column="business_type" />
+		<result property="saleAmount" column="sale_amount" />
+		<result property="saleNum" column="sale_num" />
+		<result property="displaySn" column="display_sn" />
+		<result property="operUserId" column="oper_user_id" />
+		<result property="operUserName" column="oper_user_name" />
+		<result property="dueTime" column="due_time" />
+		<result property="picUrl" column="pic_url" />
+		<result property="linkIdentity2" column="link_identity2" />
+		<result property="sourceUserName" column="source_user_name" />
+        <result property="waitingAccountAmount"
+                column="waitingAccountAmount"/>
+        <result property="odId" column="od_id" />
+	</resultMap>
+	<resultMap id="daySummaryDtoResult"
+		type="com.mph.coreapi.gp.pay.dto.DaySummaryDto">
+		<result property="quantityCount" column="queCount" />
+		<result property="queAmount" column="queAmount" />
+		<result property="date" column="date" />
+	</resultMap>
+	<resultMap id="cashFlowDetailDtoResult"
+		type="com.mph.coreapi.gp.pay.dto.CashFlowDetailDto">
+		<result property="ioType" column="ioType" />
+		<result property="taskDetailName" column="type_detail" />
+		<result property="itemName" column="item_name" />
+		<result property="createTime" column="create_time" />
+		<result property="amount" column="amount" />
+		<result property="payStatus" column="pay_status" />
+	</resultMap>
+
+	<resultMap id="vipIncomeImportResult"
+		type="com.mph.coreapi.gp.pay.entity.VipIncomeImport">
+		<result property="eId" column="e_id" />
+		<result property="amount" column="amount" />
+		<result property="userId" column="user_id" />
+		<result property="userFullName" column="user_full_name" />
+		<result property="provinceId" column="province_id" />
+		<result property="premiumEnd" column="premium_end" />
+		<result property="oSn" column="o_sn" />
+		<result property="premiumType" column="premium_type" />
+		<result property="premiumOpenTime" column="premium_open_time" />
+		<result property="userMobile" column="user_mobile" />
+		<result property="userJobType" column="user_job_type" />
+		<result property="oEName" column="o_e_name" />
+		<result property="operUserId" column="oper_user_id" />
+		<result property="operUserName" column="oper_user_name" />
+	</resultMap>
+
+
+	<sql id="baseColumns">
+		id,
+		user_id,
+		item_name,
+		`type`,
+		associate_type,
+		create_time,
+		update_time,
+		amount,
+		pay_status,
+		link_identity,
+		type_detail,
+		user_province_id,
+		remark,
+		sale_amount,
+		sale_num,
+		display_sn,
+		oper_user_id,
+		oper_user_name,
+		due_time,
+		pic_url
+	</sql>
+
+	<select id="groundPromotionIncomeDetailList"
+		resultMap="daySummaryDtoResult">
+		select DATE_FORMAT( create_time, "%Y-%m-%d" ) as date,SUM( sale_amount
+		) as queAmount,count(1) as queCount
+		from `ground_promotion_income_detail`
+		where 1=1
+		<if test="userId != null">
+			and user_id=#{userId}
+		</if>
+		<if test="userProvinceId != null">
+			and user_province_id=#{userProvinceId}
+		</if>
+		<if test="userCityId != null and userCityId!=0">
+			and user_city_id=#{userCityId}
+		</if>
+		<if test="userRegionIds != null ">
+			and user_region_id in
+			<foreach collection="userRegionIds" item="userRegionId"
+				index="index" open="(" close=")" separator=",">
+				#{userRegionId}
+			</foreach>
+		</if>
+		<if test="type != null">
+			and `type`=#{type}
+		</if>
+		<if test="queTime != null">
+			and `create_time` &gt;= #{queTime}
+		</if>
+		<if test="queEndDate != null">
+			and `create_time` &lt; #{queEndDate}
+		</if>
+		<if test="userJobType != null">
+			and user_job_type = #{userJobType}
+		</if>
+		GROUP BY DATE_FORMAT( create_time, "%Y-%m-%d" ) order BY create_time
+	</select>
+
+	<select id="listGroundPromotionIncomeDetail"
+		resultMap="groundPromotionIncomeDetailResult">
+		select
+		<include refid="baseColumns"></include>
+		from `ground_promotion_income_detail`
+		where 1=1
+		<if test="userId != null">
+			and user_id=#{userId}
+		</if>
+		<if test="DateQue != 0">
+			and create_time >(DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY))
+		</if>
+
+	</select>
+
+	<select id="listAllGroundPromotionIncomeDetail"
+		parameterType="Long" resultMap="groundPromotionIncomeDetailResult">
+		select
+		<include refid="baseColumns"></include>
+		from `ground_promotion_income_detail`
+	</select>
+
+
+	<select id="getGroundPromotionIncomeDetailListByUserIdStatus"
+		parameterType="Long" resultMap="groundPromotionIncomeDetailResult">
+		select
+		<include refid="baseColumns"></include>
+		from `ground_promotion_income_detail`
+		where 1=1 and PERIOD_DIFF( DATE_FORMAT( NOW( ) , '%Y%m' ) , DATE_FORMAT(
+		create_time, '%Y%m' ) ) =0
+		<if test="payStatus != null">
+			and pay_status=#{payStatus}
+		</if>
+		<if test="userId != null">
+			and user_id=#{userId}
+		</if>
+		<if test="type != null ">
+			<if test="type!=5">
+				and `type`=#{type} and `associate_type`=0
+			</if>
+			<if test="type==5">
+				and `associate_type`=1
+			</if>
+		</if>
+		order by create_time desc
+		<if test="start != null">
+			LIMIT #{start},#{pageSize}
+		</if>
+
+	</select>
+
+	<select id="getIOInfoList" resultMap="cashFlowDetailDtoResult">
+		SELECT * FROM (SELECT 1
+		ioType,type_detail,item_name,create_time,amount,pay_status FROM
+		ground_promotion_income_detail WHERE user_id=#{userId} and
+		PERIOD_DIFF( DATE_FORMAT( NOW( ) , '%Y%m' ) , DATE_FORMAT(
+		create_time, '%Y%m' ) ) =0
+		UNION ALL
+		SELECT 2 ioType,'取现' type_detail,'' item_name,create_time,final_amount,-1 as
+		pay_status FROM ground_promotion_pay_receipt WHERE user_id=#{userId}
+		and PERIOD_DIFF( DATE_FORMAT( NOW( ) , '%Y%m' ) , DATE_FORMAT(
+		create_time, '%Y%m' ) ) =0) AS t ORDER BY create_time desc
+		<if test="start != null">
+			LIMIT #{start},#{pageSize}
+		</if>
+	</select>
+
+	<select id="getIOInfoListCount" resultType="java.lang.Integer">
+		SELECT count(1) FROM (SELECT 1
+		ioType,type_detail,item_name,create_time,amount FROM
+		ground_promotion_income_detail WHERE user_id=#{userId} and
+		PERIOD_DIFF( DATE_FORMAT( NOW( ) , '%Y%m' ) , DATE_FORMAT(
+		create_time, '%Y%m' ) ) =0
+		UNION ALL
+		SELECT 2 ioType,'取现' type_detail,'' item_name,create_time,total_amount FROM
+		ground_promotion_pay_receipt WHERE user_id=#{userId} and PERIOD_DIFF(
+		DATE_FORMAT( NOW( ) , '%Y%m' ) , DATE_FORMAT( create_time, '%Y%m' ) )
+		=0) AS t ORDER BY create_time desc
+		<if test="start != null">
+			LIMIT #{start},#{pageSize}
+		</if>
+	</select>
+
+
+	<select id="getGroundPromotionIncomeDetailAmount"
+		resultType="java.lang.Double">
+		select IFNULL(SUM(amount),0)
+		from `ground_promotion_income_detail`
+		where `user_id` = #{userId} and pay_status=0
+	</select>
+
+	<select id="getGroundPromotionIncomeDetailCount"
+		resultType="java.lang.Double">
+
+		SELECT COUNT(1) FROM `ground_promotion_income_detail` WHERE `type`=1
+		and `user_id` = #{userId}
+	</select>
+
+
+	<select id="getGroundPromotionIncomeDetailInfo"
+		resultMap="groundPromotionIncomeDetailResult">
+		select
+		IFNULL((select sum(amount) from ground_promotion_income_detail where
+		user_id=#{userId} and pay_status=0 ),0.00) as issuedAmount,
+		IFNULL((select sum(amount) from ground_promotion_income_detail where
+		user_id=#{userId} and pay_status=1 ),0.00) as auditAmount,
+		IFNULL((select sum(amount) from ground_promotion_income_detail where
+		user_id=#{userId} and pay_status=2 ),0.00) as completeAmount,
+		IFNULL((select sum(amount) from ground_promotion_income_detail where
+		user_id=#{userId} and pay_status=3 ),0.00) as waitingAccountAmount
+	</select>
+
+	<select id="countByParam" resultType="java.lang.Integer">
+		select
+		count(1)
+		from ground_promotion_income_detail
+		where 1=1 and PERIOD_DIFF( DATE_FORMAT( NOW( ) , '%Y%m' ) , DATE_FORMAT(
+		create_time, '%Y%m' ) ) =0
+
+		<if test="payStatus != null">
+			and pay_status=#{payStatus}
+		</if>
+		<if test="userId != null">
+			and user_id=#{userId}
+		</if>
+		<if test="type != null ">
+			<if test="type!=5">
+				and `type`=#{type} and `associate_type`=0
+			</if>
+			<if test="type==5">
+				and `associate_type`=1
+			</if>
+		</if>
+		<if test="associateType != null">
+			<if test="associateType != 2">
+				and associate_type=#{associateType}
+			</if>
+		</if>
+	</select>
+
+	<select id="getGroupGroundProOrderList"
+		resultType="com.mph.coreapi.gp.pay.entity.GroundPromotionOrderDataEntity">
+		SELECT
+		user_id userId,
+		type,
+		user_province_id userProvinceId,
+		DATE_FORMAT(create_time, '%Y%m') monthDisplay,
+		SUM(amount) amount,
+		COUNT(1) quatity
+		FROM
+		ground_promotion_income_detail
+		WHERE 1=1
+		<if test="type != null">
+			and type = #{type}
+		</if>
+		<if test="userJobType != null">
+			and user_job_type = #{userJobType}
+		</if>
+		<if test="createDate != null">
+			and DATE_FORMAT(create_time, '%Y-%m') = DATE_FORMAT(#{createDate},
+			'%Y-%m')
+		</if>
+		GROUP BY user_id,TYPE,DATE_FORMAT(create_time, '%Y-%m')
+		<choose>
+			<when test="type == 2">
+				ORDER BY amount DESC
+			</when>
+			<otherwise>
+				ORDER BY quatity DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<sql id="whereByParamPageSql">
+		<if test="type != null ">
+			<if test="type!=5">
+				and `type`=#{type} and `associate_type`=0
+			</if>
+			<if test="type==5">
+				and `associate_type`=1
+			</if>
+		</if>
+		<if test="userId != null">
+			and user_id =#{userId}
+		</if>
+		<if test="provinceId != null">
+			and user_province_id =#{provinceId}
+		</if>
+		<if test="payStatus != null">
+			and pay_status =#{payStatus}
+		</if>
+		<if test="userJobType != null">
+			and user_job_type =#{userJobType}
+		</if>
+	</sql>
+
+	<select id="countByParamPage" resultType="java.lang.Integer">
+		select
+		count(1)
+		from ground_promotion_income_detail
+		where 1=1
+		<if test="userId != null">
+			and user_id =#{userId}
+		</if>
+		<if test="provinceId != null">
+			and user_province_id =#{provinceId}
+		</if>
+		<if test="cityId != null and cityId!=0">
+			and user_city_id =#{cityId}
+		</if>
+		<if test="regionIds != null ">
+			and user_region_id in
+			<foreach collection="regionIds" item="regionId" index="index"
+				open="(" close=")" separator=",">
+				#{regionId}
+			</foreach>
+		</if>
+		<if test="associateType != null">
+			<if test="associateType != 2">
+				and associate_type =#{associateType}
+			</if>
+		</if>
+		<if test="type != null">
+			and type=#{type}
+		</if>
+		<if test="userJobType != null">
+			and user_job_type = #{userJobType}
+		</if>
+	</select>
+	<!-- 业绩查询收入明细列表分页 -->
+	<select id="getByParamPage"
+		resultMap="groundPromotionIncomeDetailResult">
+		select
+		<include refid="baseColumns" />
+		from ground_promotion_income_detail
+		where 1=1
+		<if test="userId != null">
+			and user_id =#{userId}
+		</if>
+		<if test="type != null">
+			and type=#{type}
+		</if>
+		<if test="provinceId != null">
+			and user_province_id =#{provinceId}
+		</if>
+		<if test="cityId != null and cityId!=0">
+			and user_city_id =#{cityId}
+		</if>
+		<if test="regionIds != null ">
+			and user_region_id in
+			<foreach collection="regionIds" item="regionId" index="index"
+				open="(" close=")" separator=",">
+				#{regionId}
+			</foreach>
+		</if>
+		<if test="associateType != null">
+			<if test="associateType != 2">
+				and associate_type =#{associateType}
+			</if>
+		</if>
+		<if test="userJobType != null">
+			and user_job_type = #{userJobType}
+		</if>
+		order by create_time desc
+		<if test="start != null">
+			LIMIT #{start},#{pageSize}
+		</if>
+	</select>
+
+	<select id="sumAmountByCondition" resultType="java.lang.Double">
+		select
+		sum(amount)
+		from ground_promotion_income_detail
+		where 1=1
+		<include refid="whereByParamPageSql"></include>
+	</select>
+
+	<select id="listMonthSumAmount">
+		select sum(amount) amount, DATE_FORMAT(create_time, '%Y-%m') tmDisplay,
+		user_id userId from ground_promotion_income_detail
+		where user_job_type = 1 group by user_id, tmDisplay order by tmDisplay desc
+	</select>
+
+	<select id="getGroundPromotionIncomeDetailById"
+		resultMap="groundPromotionIncomeDetailResult">
+		select
+		<include refid="baseColumns"></include>
+		from `ground_promotion_income_detail`
+		where 1=1 AND pay_status=0
+		<if test="userId != null">
+			and user_id = #{userId}
+		</if>
+		<if test="idList != null">
+			and id in(${idList})
+		</if>
+
+		<if test="associateType != null">
+			and associate_type =#{associateType}
+		</if>
+		<if test="oSn != null">
+			and display_sn =#{oSn}
+		</if>
+	</select>
+
+
+	<select id="getGroundPromotionIncomeDetailByIdDate"
+		resultMap="groundPromotionIncomeDetailResult">
+		select
+		<include refid="baseColumns"></include>
+		from `ground_promotion_income_detail`
+		where 1=1
+		<if test="userId != null">
+			and user_id = #{userId}
+		</if>
+		<if test="dateFlag == 1">
+			AND pay_status=2 and DATE_FORMAT(create_time, '%Y-%m')
+			=DATE_FORMAT('2018-05-15', '%Y-%m')
+		</if>
+	</select>
+
+	<select id="listGroundPromotionIncomeDetailByDate"
+		resultMap="groundPromotionIncomeDetailResult">
+		select
+		<include refid="baseColumns"></include>
+		from `ground_promotion_income_detail`
+		where 1=1
+		<if test="type != null">
+			and type =#{type}
+		</if>
+		<if test="userId != null">
+			and user_id=#{userId}
+		</if>
+		<if test="provinceId != null">
+			and user_province_id =#{provinceId}
+		</if>
+		<if test="userJobType != null">
+			and user_job_type = #{userJobType}
+		</if>
+		<if test="date != null">
+			and DATE_FORMAT(create_time, '%Y-%m') = DATE_FORMAT(#{date}, '%Y-%m')
+		</if>
+	</select>
+
+	<select id="getVipIncomeList" resultMap="vipIncomeImportResult">
+		SELECT
+		50 AS amount,
+		gpu.user_id,
+		gpu.user_full_name,
+		gpu.user_id as oper_user_id,
+		gpu.user_full_name as oper_user_name,
+		gpu.user_mobile,
+		o.o_sn,
+		premium_open_time,
+		premium_type,
+		premium_end,
+		bel.e_id,
+		o.o_e_name,
+		gpu.province_id,
+		user_job_type
+		FROM
+		mph_order AS o
+		LEFT JOIN biz_enterprise_level AS bel
+		ON o.o_e_id = bel.e_id
+		LEFT JOIN ground_promotion_user AS gpu
+		ON bel.recommend_phone = gpu.user_mobile
+		WHERE o.pay_status = 50
+		AND o.order_type = 8
+		AND DATE_FORMAT(pay_finish_time, '%Y-%m') = DATE_FORMAT('2018-05-15',
+		'%Y-%m')
+		AND o.is_delete = 0
+		AND bel.is_premium = 1
+		AND o.o_status = 100
+		AND gpu.user_id IS NOT NULL
+		UNION
+		SELECT
+		10 AS amount,
+		t.recommand_id,
+		gpu2.user_full_name,
+		t.user_id as oper_user_id,
+		t.user_full_name as oper_user_name,
+		gpu2.user_mobile,
+		t.o_sn,
+		premium_open_time,
+		t.premium_type,
+		t.premium_end,
+		t.e_id,
+		t.o_e_name,
+		gpu2.province_id,
+		gpu2.user_job_type
+		FROM
+		ground_promotion_user AS gpu2
+		RIGHT JOIN
+		(SELECT
+		gpu.recommand_id,
+		gpu.user_id,
+		gpu.user_full_name,
+		o.o_sn,
+		premium_open_time,
+		premium_type,
+		premium_end,
+		bel.e_id,
+		o.o_e_name,
+		user_job_type
+		FROM
+		mph_order AS o
+		LEFT JOIN biz_enterprise_level AS bel
+		ON o.o_e_id = bel.e_id
+		LEFT JOIN ground_promotion_user AS gpu
+		ON bel.recommend_phone = gpu.user_mobile
+		WHERE pay_status = 50
+		AND order_type = 8
+		AND DATE_FORMAT(pay_finish_time, '%Y-%m') = DATE_FORMAT('2018-05-15',
+		'%Y-%m')
+		AND o.is_delete = 0
+		AND bel.is_premium = 1
+		AND o.o_status = 100
+		AND gpu.user_job_type=2) t
+		ON gpu2.user_id = t.recommand_id
+		WHERE gpu2.user_job_type = 1
+		AND gpu2.user_id IS NOT NULL
+	</select>
+    
+	<select id="getIncomeUserId" resultMap="vipIncomeImportResult">
+		SELECT user_id FROM `ground_promotion_income_detail`
+		WHERE DATE_FORMAT(create_time, '%Y-%m') =DATE_FORMAT('2018-05-15', '%Y-%m')
+		AND `type`=1 AND pay_status=2 GROUP BY user_id
+	</select>
+	<select id="getIncomeByUserIdoSn"
+		resultMap="vipIncomeImportResult">
+		SELECT user_id FROM `ground_promotion_income_detail`
+		WHERE 1=1
+		<if test="userId != null">
+			and user_id = #{userId}
+		</if>
+		<if test="oSn != null">
+			and display_sn = #{oSn}
+		</if>
+	</select>
+
+	<select id="listForOrderDimensionality"
+		resultType="com.mph.coreapi.gp.pay.pojo.GroundPromotionIncomeDetailForOrderDimensionality">
+		select
+		sum(amount) as incomeAmount,
+		source_user_name as sourceUserName,
+		display_sn as osn
+		from
+		ground_promotion_income_detail
+		where user_id = #{userId} and type=2
+		group by display_sn
+		limit ${offset},${limit}
+		order by display_sn desc
+	</select>
+
+	<resultMap type="com.mph.coreapi.gp.pay.dto.GroundPromotionIncomeDisplaySnDto" id="groundPromotionIncomeDisplaySnDto">
+		<result property="userId" column="user_id" />
+		<result property="type" column="type" />
+		<result property="associateType" column="associate_type" />
+		<result property="itemName" column="item_name" />
+		<result property="amount" column="pay_desc" />
+		<result property="payStatus" column="pay_status" />
+		<result property="displaySn" column="display_sn" />
+		<result property="createTime" column="create_time" />
+		<result property="operUserId" column="oper_user_id" />
+		<result property="operUserName" column="oper_user_name" />
+		<result property="sourceUserName" column="source_user_name" />
+	</resultMap>
+	
+	<select id="getPerformanceDetail" resultType="com.mph.coreapi.gp.pay.dto.PerformanceDto">
+        SELECT
+          sum(t.amount )     AS amount,
+          t.item_name   AS ruleDesc,
+          t.create_time AS createDate,
+          t.type        AS type,
+          t.pay_status  AS payStatus
+        FROM
+          ground_promotion_income_detail t
+          where t.user_id = #{userId}
+           and t.type=#{incomeType} and t.display_sn =#{key}
+           	GROUP BY
+		type, display_sn
+		order by create_time desc
+    </select>
+
+    <select id="listGroundPromotionIncomeByDisplayNo" resultMap="groundPromotionIncomeDetailResult">
+		SELECT
+		user_id,
+		type,
+		item_name,
+		pay_status,
+		display_sn,
+		amount,
+		create_time,
+		oper_user_id,
+		oper_user_name,
+        link_identity,
+        link_identity2,
+        source_user_name,
+        od_id,
+        sale_num
+		FROM
+		ground_promotion_income_detail
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="type != null">
+                AND `type` = #{type}
+            </if>
+            <if test="displaySn != null">
+                AND `display_sn` = #{displaySn}
+            </if>
+            <if test="associateType != null">
+                AND `associate_type` = #{associateType}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+	<select id="listGroundPromotionIncomeGroupByDisplayNo"
+		resultMap="groundPromotionIncomeDisplaySnDto"
+		parameterType="com.mph.coreapi.gp.pay.dao.condition.GroundPromotionIncomeDetailCondition">
+		SELECT
+		user_id,
+		type,
+		associate_type,
+		item_name,
+		pay_status,
+		display_sn,
+		SUM(amount) AS amount,
+		create_time,
+		oper_user_id,
+		oper_user_name,
+        source_user_name
+		FROM
+		ground_promotion_income_detail
+		<where>
+			<if test="userId != null">
+				AND user_id = #{userId}
+			</if>
+			<if test="types != null and types.size > 0">
+				AND `type` in
+				<foreach item="item" index="index" collection="types"
+					open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="associateType != null">
+				AND `associate_type` = #{associateType}
+			</if>
+			<if
+				test="searchCreateBeginTimeStr != null and searchCreateEndTimeStr != null">
+				AND (create_time between '${searchCreateBeginTimeStr}' and
+				'${searchCreateEndTimeStr}')
+			</if>
+		</where>
+		GROUP BY
+		type, display_sn
+		order by create_time desc
+		limit ${offset},${limit}
+	</select>
+
+	<select id="countGroundPromotionIncomeGroupByDisplayNo"
+		resultType="java.lang.Integer"
+		parameterType="com.mph.coreapi.gp.pay.dao.condition.GroundPromotionIncomeDetailCondition">
+		Select count(*) from (
+		SELECT
+		count(*)
+		FROM
+		ground_promotion_income_detail
+		<where>
+			<if test="userId != null">
+				AND user_id = #{userId}
+			</if>
+			<if test="types != null and types.size > 0">
+				AND `type` in
+				<foreach item="item" index="index" collection="types"
+					open="(" separator="," close=")">
+					${item}
+				</foreach>
+			</if>
+			<if test="associateType != null">
+				AND associate_type = #{associateType}
+			</if>
+			<if
+				test="searchCreateBeginTimeStr != null and searchCreateEndTimeStr != null">
+				AND (create_time between '${searchCreateBeginTimeStr}' and
+				'${searchCreateEndTimeStr}')
+			</if>
+		</where>
+		GROUP BY
+		type, display_sn
+		) as b
+	</select>
+
+    <select id="countPartTimeGroundPromotionIncomeGroupByDisplayNo"
+		resultType="java.lang.Integer"
+		parameterType="com.mph.coreapi.gp.pay.dao.condition.GroundPromotionIncomeDetailCondition">
+		SELECT
+			count(*)
+		FROM
+			(
+				SELECT
+					user_id,
+					type,
+					item_name,
+					pay_status,
+					display_sn,
+					SUM(amount) AS amount,
+					create_time,
+					oper_user_id,
+					oper_user_name
+				FROM
+					ground_promotion_income_detail
+				WHERE
+					user_id = #{userId} and
+					PERIOD_DIFF(
+						DATE_FORMAT(NOW(), '%Y%m'),
+						DATE_FORMAT(create_time, '%Y%m')
+					) = 0
+			  GROUP BY
+				type, display_sn
+				UNION ALL
+					SELECT
+						user_id ,
+						6 as type,
+						'' item_name,
+						-1 AS pay_status,
+						receipt_sn as display_sn,
+						final_amount as amount,
+						create_time,
+						user_id as oper_user_id,
+						user_id as oper_user_name
+					FROM
+						ground_promotion_pay_receipt
+					WHERE
+						user_id = #{userId}
+					AND PERIOD_DIFF(
+						DATE_FORMAT(NOW(), '%Y%m'),
+						DATE_FORMAT(create_time, '%Y%m')
+					) = 0
+			) AS t
+		ORDER BY
+			create_time DESC
+	</select>
+	
+	<select id="listPartTimeGroundPromotionIncomeGroupByDisplayNo"
+		resultMap="groundPromotionIncomeDisplaySnDto"
+		parameterType="com.mph.coreapi.gp.pay.dao.condition.GroundPromotionIncomeDetailCondition">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					user_id,
+					type,
+					item_name,
+					pay_status,
+					display_sn,
+					SUM(amount) AS amount,
+					create_time,
+					oper_user_id,
+					oper_user_name
+				FROM
+					ground_promotion_income_detail
+				WHERE
+					user_id = #{userId} and
+					PERIOD_DIFF(
+						DATE_FORMAT(NOW(), '%Y%m'),
+						DATE_FORMAT(create_time, '%Y%m')
+					) = 0
+			  GROUP BY
+				type, display_sn
+				UNION ALL
+					SELECT
+						user_id ,
+						6 as type,
+						'' item_name,
+						-1 AS pay_status,
+						receipt_sn as display_sn,
+						final_amount as amount,
+						create_time,
+						user_id as oper_user_id,
+						user_id as oper_user_name
+					FROM
+						ground_promotion_pay_receipt
+					WHERE
+						user_id = #{userId}
+					AND PERIOD_DIFF(
+						DATE_FORMAT(NOW(), '%Y%m'),
+						DATE_FORMAT(create_time, '%Y%m')
+					) = 0
+			) AS t
+		ORDER BY
+			create_time DESC
+		limit ${offset},${limit}
+	</select>
+</mapper>

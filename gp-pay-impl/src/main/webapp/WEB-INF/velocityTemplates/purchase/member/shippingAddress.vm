@@ -1,0 +1,581 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的收货地址-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+           
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+	   #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_purchase.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 订单中心 &gt; 我的收货地址</p>
+                </div>
+                <div class="order_query">
+                    <div class="btn mt10"><a href="javascript:;" onclick="addRess_add()" class="btn_query btn-line" id="sel-a">增加收货地址</a></div>
+                </div>
+                <div class="order_detail">
+                    <div class="table">
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th>姓名</th>
+                                    <th>手机号码</th>
+                                    <th>固定电话</th>
+                                    <th>地址</th>
+                                    <th>是否默认</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	#if(!$null.isNull($addressList) && $addressList.size()!=0)
+						            #foreach($item in $addressList)
+						            	<tr>
+		                                    <td>$!item.daPeople</td>
+		                                    <td>$!item.daTel</td>
+		                                    <td>$!item.daPhone</td>
+		                                    <td>$!item.daAddress</td>
+		                                    <td>
+		                                    	#if($!item.daDefault ==1)
+		                                    		是
+		                                    	#else
+		                                    		否
+		                                    	#end
+		                                    </td>
+		                                    <td>
+		                                    	<a href="javascript:void(0);" onclick="address_update($!item.daId);" class="btn-txt">修改</a>
+		                                    	<a href="javascript:void(0);" onclick="deleteAddress($!item.daId);" class="btn-txt color-bg">删除</a>
+		                                    </td>
+                                		</tr>
+						            #end
+						        #else
+						        <tr>
+						        	<td colspan="5">无相关数据！</td>
+						        </tr>
+					            #end
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+     #parse("common/footer.vm")
+   	<div class="mask"></div>
+    <div class="dialog w460">
+      <div class="head"><span>增加收货地址</span><a  href="javascript:void(0);" onclick="closeDialog()"  class="btn-close"></a></div>   
+      <div class="con">
+          <form action="" id="updateAddressForm">
+          	<input type="hidden" id="daId" name="daId">
+             <ul>
+                 <li>
+                     <label for="">收货人：</label>
+                     <input type="text" id="uDaPeople" name="daPeople" maxlength="11" class="txt w157">
+                     <i class="red" id="daPeople_message"></i>
+                 </li>
+                 <li>
+                     <label for="">手机号码：</label>
+                     <input type="text" id="uDaTel" placeholder="填写手机或者固话" name="daTel" maxlength="11" class="txt w157">
+                     <i class="red" id="daTel_message"></i>
+                 </li> 
+                 <li>
+                     <label for="">固定电话：</label>
+                     <input type="text" id="uDaPhone" placeholder="区号-座机号码-分机号" name="daPhone" minlength="7" maxlength="15" class="txt w157">
+                     <i class="red" id="daPhone_message"></i>
+                 </li> 
+                 <li style="margin-top: 32px;">
+                 	<label for="">收货地址：</label>
+                 	<select class="select mr5" id="province" name="daProvince"></select>
+                 	<select class="select mr5" id="town" name="daTown"></select>
+                 	<select class="select" id="area" name="daArea"></select>
+                     <i class="red"  id="daPrivince_message"></i>
+                 </li>
+                 <li style="margin-top: 32px;">
+                 	 <label for="">详细地址：</label>
+                     <input type="text" id="uDaAddress" name="daAddress" maxlength="100" class="txt w157 ml78">
+                     <i class="red" id="daAddress_message"></i>
+                 </li>
+                 <li>
+                     <label for="">默认地址：</label> 
+                     <input type="checkbox" id="uDaDefault" name="daDefault" value="" class="btn-state" >是
+                 </li>
+              </ul>
+              <div class="btn">
+              	<a href="javascript:void(0);" onclick="save()" class="btn-txt mr7">保存</a>
+              	<a href="javascript:void(0);" onclick="closeDialog()" class="btn-txt" >返回</a>
+              </div>
+          </form>
+      </div>
+    </div>
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+	<script type="text/javascript">
+		
+		//省市区级联
+		$(function(){
+
+		    liveBind();
+                
+		});
+
+		function liveBind(doc) {
+		    doc = doc?doc:document;
+            $("#province",doc).unbind("change").on("change",function(){
+                var provinceId = $(this).val();
+                $("#town option",doc).remove();
+                $("#town",doc).append("<option value=''>请选择</option>");
+                if(provinceId != 0 && provinceId!=null && provinceId!=undefined)
+                    findLocation($("#town",doc),provinceId,"");
+                var townId = $("#town",doc).val();
+                $("#area option",doc).remove();
+                $("#area",doc).append("<option value=''>请选择</option>");
+                if(townId != 0 && townId!=null && townId!=undefined)
+                    findLocation($("#area",doc),townId,"");
+            });
+            $("#town",doc).unbind("change").on("change",function(){
+                var provinceId = $(this).val();
+                $("#area option",doc).remove();
+                $("#area",doc).append("<option value=''>请选择</option>");
+                if(provinceId != 0 && provinceId!=null && provinceId!=undefined)
+                    findLocation($("#area",doc),provinceId,"");
+            });
+
+            /*JQuery 限制文本框只能输入数字和小数点*/
+            $("#uDaPhone",doc).unbind("keyup").on("keyup",function(){
+                $(this).val($(this).val().replace(/[^0-9-]/g,''));
+            }).bind("paste",function(){  //CTR+V事件处理
+                $(this).val($(this).val().replace(/[^0-9-]/g,''));
+            }).css("ime-mode", "disabled"); //CSS设置输入法不可用
+        }
+	
+		//object:加载对象    value:默认值  lpId:上级id
+		function findLocation(object,lpId,value){
+			var id = 0;
+			$.ajax({
+                url: '/location/provincialCity',
+                data: {lpid: lpId},
+                type:"post",
+                async:false,
+                success: function(data) {
+					var locationD = data.data;
+					var jObject = $(object);
+					if(locationD!=''){
+						jObject.show();
+                        jObject.empty();
+                        var opts ;
+                        opts='<option selected value="">请选择</option>';
+                        $.each(locationD,function(index,item){  
+                        	if(index == 0){
+                        		id=item.lid;
+                        	}
+                        	if(item.lid==value && value!=""){
+                        		id = value;
+                        		var opt ='<option selected value="'+item.lid+'">'+item.lname+'</option>'; 
+                        		opts += opt;
+                        	}else{
+                        		var opt ='<option value="'+item.lid+'">'+item.lname+'</option>'; 
+                        		opts += opt;
+                        	}
+                        });  
+                        jObject.html(opts);
+                        if(locationD.length == 0) {
+                        	jObject.hide();
+                        }
+                        return id;
+                    }else{  
+                    	locationD = '';  
+                    	jObject.hide();
+                    }
+                }
+            });
+			return id;
+		}
+		
+		
+		function save(idx,lay){
+			if(checkForm(idx,lay)){
+				if($("#daId",lay).val()){
+					UpdateAddRess(idx,lay);
+				}else{
+					addAddRess(idx,lay);
+				}
+			}
+		}
+		//验证表单
+		function checkForm(idx,lay){
+			var result = true;
+			var daPeople = $.trim($("#uDaPeople",lay).val());
+			if (!daPeople) {
+				showMsg($("#daPeople_message",lay), '收货人不能为空.');
+				result = false;
+			}else if(daPeople.length >11){
+				showMsg($("#daPeople_message",lay), '长度不能超过11位.');
+				result = false;
+			}else{
+				showMsg($("#daPeople_message",lay), '');
+			}
+			 
+			var mobile_phone_type = true;
+		    //验证手机号
+		    var mobile_reg = /^1[34578]\d{9}$/;
+	        var daTel = $.trim($("#uDaTel",lay).val());
+	        if (daTel) {
+	        	if (!mobile_reg.test(daTel)) {
+		            showMsg($("#daTel_message",lay), '请输入正确的手机号.');
+		            result = false;
+		            mobile_phone_type = false;
+		        }
+	        }else{
+	        	showMsg($("#daTel_message",lay), '');
+	        }
+	        
+	        //验证省市区
+	        var province=$("#province",lay).val();
+	        var town=$("#town",lay).val();
+	        var area=$("#area",lay).val();
+	        if(!province||!town){
+	        	showMsg($("#daPrivince_message",lay), '请选择收货地址');
+	        	return;
+	        }
+	        if($("#area",lay).css('display')!="none"&&!area){
+	        	showMsg($("#daPrivince_message",lay), '请选择收货地址');
+	        	return;
+	        }
+		    //验证手机号
+	        var daPhone = $.trim($("#uDaPhone",lay).val());
+	        
+	        if(!daTel && !daPhone){
+	        	showMsg($("#daPhone_message",lay), '手机号和固话，2个至少必填1项。');
+	        	result = false;
+	        }else{
+	        	showMsg($("#daPhone_message",lay), '');
+	        }
+	        		
+	        var daAddress = $.trim($("#uDaAddress",lay).val());
+			if (!daAddress) {
+				showMsg($("#daAddress_message",lay), '详细地址不能为空.');
+				result = false;
+			}else{
+				showMsg($("#daAddress_message",lay), '');
+			}
+			return result;
+		}
+		
+		//添加
+		function addRess_add(){
+			if("$addressList.size()">=10){
+			    top.ue.msg("收货地址最多10条，若有需要请删除其他地址后再重新添加");
+	            return;
+			}
+			$("#daId").val("");
+			$("#uDaPeople").val("");
+			$("#uDaTel").val("");
+			$("#uDaAddress").val("");
+			$("#uDaDefault").val("");
+			$("#uDaPhone").val("");
+			$("#uDaDefault")[0].checked = false;
+//			$("div.dialog").find("span").first().html("添加收货地址");
+			var provinceId = findLocation($("#province"),0,"");
+			/*if(provinceId != 0 && provinceId!=null && provinceId!=undefined)
+			var townId = findLocation($("#town"),provinceId,"");
+			if(townId != 0 && townId!=null && townId!=undefined)
+			findLocation($("#area"),townId,"");
+			*/
+			$("#town option").remove();
+			$("#area option").remove();
+			$("#province").append("<option value=''>请选择</option>"); 
+			$("#town").append("<option value=''>请选择</option>"); 
+			$("#area").append("<option value=''>请选择</option>"); 
+			//showPopUpDIV($(".dialog"),$(".mask"));
+            top.rui.dynamic({
+                title:"添加收货地址",
+                area:['460px'],
+                content:$(".dialog").html(),
+                skin: "dialog-old dialog-old-no-title",
+                success:function (lay,idx) {
+                    liveBind(lay);
+                },
+                yes:function (idx,lay) {
+                    save(idx,lay);
+                }
+            })
+		}
+		
+		//添加
+		function addAddRess(idx,lay){
+			var DeliveryAddress = $serializeObject($("#updateAddressForm",lay));
+			if($("#uDaDefault",lay)[0].checked){
+				DeliveryAddress.daDefault = 1;
+			}
+			var jsonParam = $.toJSON(DeliveryAddress);
+            top.ue.load();
+			$.ajax({
+                url: '/purchase/member/addshippingAddress',
+                data: {"jsonParam": jsonParam},
+                type:"post",
+                complete:function () {
+                    top.ue.closeAll("loading");
+                },
+                success: function(data) {
+					if(data.data){
+					    top.ue.close(idx);
+						 location.reload();
+					}else{
+					    top.ue.msg("添加失败");
+					}
+                }
+            });
+		}
+		
+		//修改
+		function UpdateAddRess(idx,lay){
+			var DeliveryAddress = $serializeObject($("#updateAddressForm",lay));
+			if($("#uDaDefault",lay)[0].checked){
+				DeliveryAddress.daDefault = 1;
+			}
+			var jsonParam = $.toJSON(DeliveryAddress);
+			top.ue.load();
+			$.ajax({
+                url: '/purchase/member/updateshippingAddress',
+                data: {"jsonParam": jsonParam},
+                type:"post",
+                complete:function () {
+                    top.ue.closeAll("loading");
+                },
+                success: function(data) {
+                    if(data.data){
+                        top.ue.close(idx);
+                        location.reload();
+                    }else{
+                        top.ue.msg("添加失败");
+                    }
+                }
+            });
+		}
+
+		//修改收货地址
+		function address_update(id){
+			$("#daId").val(id);
+            top.ue.load();
+			$.ajax({
+                url: '/purchase/member/shippingAddressUpdate',
+                data: {daId: id},
+                type:"post",
+				complete:function () {
+					top.ue.closeAll("loading");
+                },
+                success: function(data) {
+					var addRess = data.data;
+					if(addRess){
+						//$("div.dialog").find("span").first().html("修改收货地址");
+						top.rui.dynamic({
+							title:"修改收货地址",
+							area:['460px'],
+							content:$(".dialog").html(),
+                            skin: "dialog-old dialog-old-no-title",
+							success:function (lay,idx) {
+                                $("#uDaPeople", lay).val(addRess.daPeople);
+                                $("#uDaTel", lay).val(addRess.daTel);
+                                $("#uDaPhone", lay).val(addRess.daPhone);
+                                $("#uDaAddress", lay).val(addRess.daAddress);
+                                $("#uDaDefault", lay).val(addRess.daDefault);
+                                if (addRess.daDefault == 1) {
+                                    $("#uDaDefault", lay)[0].checked = true;
+                                } else {
+                                    $("#uDaDefault", lay)[0].checked = false;
+                                }
+
+                                findLocation($("#province", lay), 0, addRess.daProvince);
+                                if (addRess.daProvince != 0 && addRess.daProvince != null && addRess.daProvince != undefined)
+                                    findLocation($("#town", lay), addRess.daProvince, addRess.daTown);
+                                if (addRess.daTown != 0 && addRess.daTown != null && addRess.daTown != undefined)
+                                    findLocation($("#area", lay), addRess.daTown, addRess.daArea);
+                                liveBind(lay);
+                            },
+							yes:function (idx,lay) {
+								save(idx,lay);
+                            }
+						})
+					}
+                }
+            });
+			//showPopUpDIV($(".dialog"),$(".mask"));
+		}
+		
+		
+		function deleteAddress(daId){
+            var t = top.ue.confirm({
+                title: "提示信息",
+                content: "您确定要删除么？",
+                ok: function() {
+                    $.ajax({
+                        url: '/purchase/member/deleteshippingAddress',
+                        data: {daId: daId},
+                        type:"post",
+                        async:false,
+                        complete:function () {
+                            top.ue.close(t);
+                        },
+                        success: function(data) {
+                            if(data.data){
+                                top.ue.msg("操作成功",{},function () {
+                                    window.location.reload();
+                                });
+                            }
+                        }
+                    });
+                    return false;
+                }
+            });
+            return false;
+		   /*var d = dialog({
+				title: '提示信息',
+				content: "您确定要删除么？！",
+				width: 300,
+				ok: function(){
+					$.ajax({
+						url: '/purchase/member/deleteshippingAddress',
+						data: {daId: daId},
+						type:"post",
+						async:false,
+						complete:function () {
+							d.close();
+						},
+						success: function(data) {
+							if(data.data){
+								d.close();
+								window.location.reload();
+							}
+						}
+					});
+				},
+				cancelVal: "取消",
+				cancel: function() {
+				   return;
+				}
+			})*/
+		}
+		//关闭dialog
+		function closeDialog(){
+			$(".dialog").hide();
+			$(".mask").hide();
+			showMsg($("#daPeople_message"), '');
+			showMsg($("#daPrivince_message"), '');
+			showMsg($("#daTel_message"), '');
+			showMsg($("#daAddress_message"), '');
+		}
+
+	    // 错误提示
+	    var showMsg = function (obj, msg, flag) {
+	        if (flag) {
+	            obj.attr("style", "color:green;font-weigh:700;").html("&#8730;");
+	        } else if (!msg) {
+	            obj.html('');
+	        }  else {
+	            msg.length > 0 && obj.attr("style", "color:red;font-weigh:100;").html("*" + msg);
+	        }
+	    };
+	    
+	    $serializeObject = function(form) {  
+	        var o = {};  
+	        $.each(form.serializeArray(), function(index) {  
+	            if (o[this['name']]) {  
+	                o[this['name']] = o[this['name']] + "," + this['value'];  
+	            } else {  
+	                o[this['name']] = this['value'];  
+	            }  
+	        });  
+	        return o;  
+	    };  
+	    
+	    /*
+	     * jQuery placeholder, fix for IE6,7,8,9
+	     * @author JENA
+	     * @since 20131115.1504
+	     * @website ishere.cn
+	     */
+	    var JPlaceHolder = {
+	        //检测
+	        _check : function(){
+	            return 'placeholder' in document.createElement('input');
+	        },
+	        //初始化
+	        init : function(){
+	            if(!this._check()){
+	                this.fix();
+	            }
+	        },
+	        //修复
+	        fix : function(){
+	            jQuery(':input[placeholder]').each(function(index, element) {
+	                var self = $(this), txt = self.attr('placeholder');
+	                self.wrap($('<div></div>').css({position:'relative', zoom:'1', border:'none', background:'none', padding:'none', margin:'none'}));
+	                var pos = self.position(), h = self.outerHeight(true), paddingleft = self.css('padding-left');
+	                var holder = $('<span></span>').text(txt).css({position:'absolute', left:pos.left, top:pos.top, height:h, lienHeight:h, paddingLeft:paddingleft, color:'#aaa'}).appendTo(self.parent());
+	                self.focusin(function(e) {
+	                    holder.hide();
+	                }).focusout(function(e) {
+	                    if(!self.val()){
+	                        holder.show();
+	                    }
+	                });
+	                holder.click(function(e) {
+	                    holder.hide();
+	                    self.focus();
+	                });
+	            });
+	        }
+	    };
+	    //执行
+	    jQuery(function(){
+	        //JPlaceHolder.init();
+	    });
+	</script>
+    
+  </body>
+</html>

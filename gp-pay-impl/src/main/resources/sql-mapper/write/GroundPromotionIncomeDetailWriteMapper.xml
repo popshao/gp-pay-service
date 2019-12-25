@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.write.GroundPromotionIncomeDetailWriteDao">
+    <insert id="createGroundPromotionIncomeDetail" parameterType="com.mph.coreapi.gp.pay.entity.GroundPromotionIncomeDetail" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ground_promotion_income_detail (
+        user_id,
+        item_name,
+        `type`,
+        associate_type,
+        amount,
+        pay_status,
+        link_identity,
+        link_identity2,
+        type_detail,
+        user_province_id,
+        user_city_id,
+        user_region_id,
+        remark,
+        sale_amount,
+        sale_num,
+        display_sn,
+        oper_user_id,
+        <if test="createTime!=null">
+            create_time,
+        </if>
+        <if test="userJobType!=null">
+            user_job_type,
+        </if>
+        <if test="dueTime!=null">
+            due_time,
+        </if>
+        <if test="picUrl!=null">
+            pic_url,
+        </if>
+        <if test="kpiFlag!=null">
+            kpi_flag,
+        </if>
+        <if test="sourceUserId!=null">
+            source_user_id,
+        </if>
+        <if test="sourceUserName!=null">
+            source_user_name,
+        </if>
+        oper_user_name,
+        od_id
+        )
+        VALUES
+        (
+        #{userId},
+        #{itemName},
+        #{type},
+        #{associateType},
+        #{amount},
+        #{payStatus},
+        #{linkIdentity},
+        #{linkIdentity2},
+        #{typeDetail},
+        #{userProvinceId},
+        #{userCityId},
+        #{userRegionId},
+        #{remark},
+        #{saleAmount},
+        #{saleNum},
+        #{displaySn},
+        #{operUserId},
+        <if test="createTime!=null">
+            #{createTime},
+        </if>
+        <if test="userJobType!=null">
+            #{userJobType},
+        </if>
+        <if test="dueTime!=null">
+            #{dueTime},
+        </if>
+        <if test="picUrl!=null">
+            #{picUrl},
+        </if>
+        <if test="kpiFlag!=null">
+           #{kpiFlag},
+        </if>
+        <if test="sourceUserId!=null">
+            #{sourceUserId},
+        </if>
+        <if test="sourceUserName!=null">
+            #{sourceUserName},
+        </if>
+        #{operUserName},
+        #{odId}
+        )
+        <if test="type == 2 and payStatus != 3">
+        on DUPLICATE key update remark = concat('原待入账amount:', amount,',sale_amount:', sale_amount, 'sale_num:', sale_num), pay_status = 0, create_time = now(), kpi_flag = #{kpiFlag},
+            amount = #{amount}, sale_amount = #{saleAmount}, sale_num = #{saleNum}
+        </if>
+        <if test="type == 5 and payStatus != 3">
+        on DUPLICATE key update remark = concat('原待入账amount:', amount,',sale_amount:', sale_amount, 'sale_num:', sale_num), pay_status = 0, kpi_flag = #{kpiFlag},
+            amount = #{amount}, sale_amount = #{saleAmount}, sale_num = #{saleNum}
+        </if>
+    </insert>
+
+    <update id="updateGroundPromotionIncomeDetail">
+     update ground_promotion_income_detail
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="itemName != null">
+                item_name = #{itemName},
+            </if>
+            <if test="type != null">
+                `type` = #{type},
+            </if>
+            <if test="associateType != null">
+                associate_type = #{associateType},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="payStatus != null">
+                pay_status = #{payStatus},
+            </if>
+            <if test="linkIdentity != null">
+                link_identity = #{linkIdentity},
+            </if>
+            <if test="typeDetail != null">
+                type_detail = #{typeDetail},
+            </if>
+            <if test="userProvinceId != null">
+                user_province_id = #{userProvinceId},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="saleAmount != null">
+                sale_amount = #{saleAmount},
+            </if>
+            <if test="saleNum != null">
+                sale_num = #{saleNum},
+            </if>
+            update_time = NOW()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateIncomeDetailByReceiptId">
+        update ground_promotion_income_detail gpid, ground_promotion_pay_receipt_detail gprd
+        set gpid.pay_status = #{payStatus} where gpid.id = gprd.income_id and gprd.receipt_id = #{receiptId}
+    </update>
+
+</mapper>

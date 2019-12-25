@@ -1,0 +1,148 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<!--[if gte mso 9]><xml><x:ExcelWorkbook>
+<x:ExcelWorksheets><x:ExcelWorksheet><x:Name>
+</x:Name><x:WorksheetOptions><x:Selected/></x:WorksheetOptions>
+</x:ExcelWorksheet>
+</x:ExcelWorksheets></x:ExcelWorkbook></xml>
+<![endif]-->
+<style>
+.table-dotted {
+    border-collapse: collapse;
+}
+.table-dotted tbody .th {
+    border: 1px #99bbe8;
+    background-color:#8DB4E3;
+    border-spacing: 1px;
+    text-align: right;
+    font-weight: normal;
+    white-space: nowrap;
+    padding: 2px;
+    line-height:22px;
+}
+
+.table-dotted tbody .td {
+    border: 1px #99bbe8;
+    border-spacing: 1px;
+    text-align: left;
+    padding: 2px;
+    line-height:22px;
+}
+.format{
+mso-number-format:'\@';
+}
+</style>
+
+</head>
+<body leftmargin=0 topmargin=0 marginwidth=0 marginheight=0>
+<table class="table-dotted" width="100%">
+<tbody>
+	<tr>
+		<td class="th" style="text-align: center;">结算类型</td>
+		<td class="th" style="text-align: center;">单据类型</td>
+		<td class="th" style="text-align: center;">订单编号</td>
+		<td class="th" style="text-align: center;">订单ID</td>
+		<td class="th" style="text-align: center;">供应商名称</td>
+        <td class="th" style="text-align: center;">供应商订单号</td>
+		<td class="th" style="text-align: center;">采购商名称</td>
+		<td class="th" style="text-align: center;">支付方式</td>
+		<td class="th" style="text-align: center;">单据金额(元)</td>
+        <td class="th" style="text-align: center;">佣金金额(元)</td>
+        <td class="th" style="text-align: center;">结算金额(元)</td>
+        <th class="th" style="text-align: center;">订单结算单号</th>
+        <th class="th" style="text-align: center;">订单结算单生成时间</th>
+        <th class="th" style="text-align: center;">订单结算单审核时间</th>
+        <th class="th" style="text-align: center;">开票员</th>
+        <th class="th" style="text-align: center;">开票员ID</th>
+        <th class="th" style="text-align: center;">采购商内码</th>
+	</tr>
+	#if($settelmentOrderList && $!settelmentOrderList.size()!=0)
+    #foreach($item in $settelmentOrderList)
+	<tr>
+	    <td class="td" style="text-align:center;" nowrap="nowrap">                                    
+                                    #if($!item.stdType == 0)  
+						                            退款
+						            #elseif($!item.stdType == 1)  
+						                           收款
+						            #else  
+						              $!item.stdType  
+						            #end 
+		</td>
+	    <td class="td" style="text-align:center;" nowrap="nowrap">
+	                                  #if($!item.stdBillType == 0)  
+						                            退款单
+						            #elseif($!item.stdBillType == 1)  
+						                           收款单
+						            #else  
+						              $!item.stdBillType  
+						            #end 
+        </td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">								            
+		$!item.stdBillSn<span>&nbsp;</span></span>
+		</td>
+		<td class="td" style="text-align: center;" nowrap="nowrap">$!item.stdBillId</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.stdBillSeller</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.oerpSn</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.stdBillBuyer</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">                                   
+        							 #if($!item.payType == 1)  
+						                            中金
+						            #elseif($!item.payType == 2)  
+						                            民生
+						            #elseif($!item.payType == 3)  
+						                            支付宝
+						            #elseif($!item.payType == 4)  
+						                            易宝
+									#elseif($!item.payType == 5)  
+												    微信
+									#elseif($!item.payType == 6)  
+												    浦发
+									#elseif($!item.payType == 7)  
+												    闪贷
+									#elseif($!item.payType == 8)  
+												    余额
+						            #else  
+						              $!item.payType  
+						            #end </td>
+	    <td class="td" style="text-align: center;" nowrap="nowrap">$!item.stdBillAmount</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">
+			#if($!item.stdBillType == 0)
+                $!utils.priceFormart($!item.commission)
+			#elseif($!item.stdBillType == 1)
+				$!utils.priceFormart($!item.commission)
+			#else
+				$!utils.priceFormart($!item.commission)
+			#end
+		</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">
+			#set($balance=$item.stdBillAmount - $item.commission)
+			#if($!item.stdBillType == 0)
+                $!utils.priceFormart($!balance)
+			#elseif($!item.stdBillType == 1)
+				$!utils.priceFormart($!balance)
+			#else
+				$!utils.priceFormart($!ibalance)
+			#end
+        </td>
+
+        <td class="td" style="text-align: center;" nowrap="nowrap">$!item.stSn</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$utils.formatDate($!{item.stAddTime},"yyyy-MM-dd HH:mm:ss")</td>
+        <td class="td" style="text-align: center;" nowrap="nowrap">$utils.formatDate($!{item.stAuditTime},"yyyy-MM-dd HH:mm:ss")</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.drawerName}</td>
+        <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+			#if($!item.drawerId != 0)
+                $!{item.drawerId}
+            #end</td>
+        <td class="td" Class="format" style="text-align: center;"  nowrap="nowrap">$!item.oSeInternalCode</td>
+     </tr>
+     #end
+     #end
+</tbody>
+</table>
+
+</body>
+</html>

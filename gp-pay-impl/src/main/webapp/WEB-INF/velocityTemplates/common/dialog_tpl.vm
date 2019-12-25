@@ -1,0 +1,786 @@
+#*所有全局弹窗在前端完成后都必须以模板的形式加入此文件*#
+
+<!--添加商品 TPL-->
+<script type="text/html" id="addGoodsTpl">
+    <div class="user-dialog-box user-dialog-box-950 no-border">
+    #*<a href="javascript:;" class="btn-close"></a>
+    <div class="udb-title">添加商品</div>*#
+        <div class="user-query" style="padding: 0">
+            <form class="query-form-dlg">
+                <table class="uq-table" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        #if($!userType == 2)
+                            <td class="tar" width="90" style="text-align: center;">商品名称：</td>
+                            <td width="120">
+                                <input name="gName" class="input input-110" type="text"/>
+                            </td>
+                            <td class="tar" width="80">商品内码：</td>
+                            <td width="120">
+                                <input name="gInSn" class="input input-110" type="text"/>
+                            </td>
+
+                            <td class="tar" width="80">生产厂家：</td>
+                            <td width="120">
+                                <input name="gManufacture" class="input input-110" type="text"/>
+                            </td>
+
+                            <td class="tar" width="80">商品编码：</td>
+                            <td width="120">
+                                <input name="gSn" class="input input-110" type="text"/>
+                            </td>
+                        #else
+                            <td class="tar" width="80">商品名称：</td>
+                            <td width="210">
+                                <input name="gName" class="input" type="text" style="width: 210px"/>
+                            </td>
+                            <td class="tar" width="80">商品内码：</td>
+                            <td width="130">
+                                <input name="gInSn" class="input" type="text" style="width: 130px"/>
+                            </td>
+                            <td class="tar" width="80">商品编码：</td>
+                            <td width="130">
+                                <input name="gSn" class="input" type="text" style="width: 130px"/>
+                            </td>
+                        #end
+                        <td width="auto">
+                            <a href="javascript:;" class="f-none btn-query">查询</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <div class="user-form mt10  t-body-scroll-tb" style="height: 320px;">
+            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                <tbody class="thead">
+                <tr>
+                    <th><input type="checkbox" class="check sel-all"/></th>
+                    <th>商品编码</th>
+                    <th>商品名称</th>
+                    <th>批准文号</th>
+                    <th>生产厂家</th>
+                    <th>规格</th>
+                    <th>零售价</th>
+                    #if($!userType == 2)
+                        <th>基价</th>
+                    #end
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tbody>
+                <tbody id="goodsList" class="tbody">
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="rocky-page" id="goodsListPage">
+        </div>
+    </div>
+</script>
+
+#*商品列表*#
+<script type="text/html" id="goodsListTpl">
+    {{# for(var i=0;i<d.length;i++){ }}
+    <tr>
+        <td><input type="checkbox" class="check sel-rows" data-good='{{JSON.stringify(d[i])}}'/></td>
+        <td>{{utils.notNull(d[i].goods.gsn)}}</td>
+        <td id="goodsSelTpls-{{d[i].goods.gid}}">{{utils.notNull(d[i].goods.gname)}}</td>
+        <td>{{utils.notNull(d[i].goods.glicenseNo)}}</td>
+        <td>{{utils.notNull(d[i].goods.gmanufacture)}}</td>
+        <td>{{utils.notNull(d[i].goods.gspecifications)}}</td>
+        <td>{{d[i].goods.gprice}}</td>
+        #if($!userType == 2)
+            <td>{{d[i].goods.gbasePrice}}</td>
+        #end
+        <td></td>
+        <td></td>
+    </tr>
+    {{# } }}
+    {{# if(d.error == 1){ }}
+    <tr>
+        <td colspan="10">根据您的查询条件，没有找到相关商品，请您调整查询条件后重试。</td>
+    </tr>
+    {{# } }}
+</script>
+
+
+#*新版 商品 弹窗 UI*#
+<script type="text/html" id="addGoodsTplNewUI">
+    <div class="user-dialog-box user-dialog-box-950 no-border">
+    #*<a href="javascript:;" class="btn-close"></a>
+    <div class="udb-title">添加商品</div>*#
+        <div class="user-query" style="padding: 0">
+            <form class="query-form-dlg">
+                <div class="xjgl-search-box">
+                    <ul class="xsb-wrap cc">
+                        <li class="xsb-item">
+                            <span class="s-tit">商品信息：</span>
+                            <input class="s-input s-input-420" name="searchKey" type="text" placeholder="商品通用名／商品编码／商品内码／批准文号／生产厂家／商品助记码">
+                        </li>
+                        <li class="xsb-item">
+                            <span class="s-tit s-tit-95">旗舰店分类：</span>
+                            <select class="s-select s-select-type1" name="sgcId1" placeholder="一级分类">
+                                <option value="">一级分类</option>
+                            </select>
+                            <select class="s-select s-select-type2" name="sgcId2" placeholder="二级分类">
+                                <option value="">二级分类</option>
+                            </select>
+                        </li>
+                        <li class="xsb-item">
+                            <span class="s-tit">商品内码：</span>
+                            <input class="s-input s-input-420" name="gInSn" type="text" placeholder="用逗号分隔多个商品内码，例如：C102318，每次最多支持200个同时查询">
+                        </li>
+                        <div style="clear: both;"></div>
+                    </ul>
+                    <div class="xsb-btn">
+                        <a href="javascript:void(0)" class="btn-query">查询</a>
+                        <a href="javascript:void(0)" class="btn-reset"><img src="http://user.mypharma.com/image/icon-refresh.png" alt="">清空查询条件</a>
+                        <div class="b-text">
+                            <i class="b-t-ps">*</i> 本次搜索结果共 <i class="b-t-ps total-count">0</i> 个商品，您可以“<a href="javascript:void(0)" data-click="0"  class="b-t-link batch-btn batch-add-goods">批量添加</a>”这些商品
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="user-form mt10  t-body-scroll-tb" style="height: 320px;">
+            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                <tbody class="thead">
+                <tr>
+                    <th><input type="checkbox" class="check sel-all"/></th>
+                    <th>商品名称</th>
+                    <th>商品内码</th>
+                    <th>批准文号</th>
+                    <th>生产厂家</th>
+                    <th>规格</th>
+                    #if($!userType == 2)
+                        <th>基价</th>
+                    #else <th>零售价</th>
+                    #end
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tbody>
+                <tbody id="goodsList" class="tbody">
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="rocky-page" id="goodsListPage">
+        </div>
+    </div>
+</script>
+
+#*新版 商品列表*#
+<script type="text/html" id="goodsListTplNewUI">
+    {{# var gs = d.data; }}
+    {{# for(var i=0;i<gs.length;i++){ var good = gs[i]; var $index = (i + 1) + (d.pi-1)*d.ps; }}
+        {{# if($.inArray(good.goods.gid,top.utils.nowSelGoods) > -1){   }}
+        <tr class="tr-dis">
+            <td><input disabled type="checkbox" checked class="check sel-rows" data-good='{{JSON.stringify(good)}}'/>{{$index}}</td>
+            <td class="sel" id="goodsSelTpls-{{good.goods.gid}}">[已添加]{{utils.notNull(good.goods.gname)}}</td>
+            <td >{{utils.notNull(good.goods.ginSn)}}</td>
+            <td>{{utils.notNull(good.goods.glicenseNo)}}</td>
+            <td>{{utils.notNull(good.goods.gmanufacture)}}</td>
+            <td>{{utils.notNull(good.goods.gspecifications)}}</td>
+            #if($!userType == 2)
+                <td>{{good.goods.gbasePrice}}</td>
+            #else <td>{{good.goods.gprice}}</td>
+            #end
+            <td></td>
+            <td></td>
+        </tr>
+        {{# }else { }}
+        <tr>
+            <td><input type="checkbox" class="check sel-rows" data-good='{{JSON.stringify(good)}}'/>{{$index}}</td>
+            <td id="goodsSelTpls-{{good.goods.gid}}">{{utils.notNull(good.goods.gname)}}</td>
+            <td >{{utils.notNull(good.goods.ginSn)}}</td>
+            <td>{{utils.notNull(good.goods.glicenseNo)}}</td>
+            <td>{{utils.notNull(good.goods.gmanufacture)}}</td>
+            <td>{{utils.notNull(good.goods.gspecifications)}}</td>
+            #if($!userType == 2)
+                <td>{{good.goods.gbasePrice}}</td>
+            #else <td>{{good.goods.gprice}}</td>
+            #end
+            <td></td>
+            <td></td>
+        </tr>
+        {{# } }}
+    {{# } }}
+    {{# if(d.error == 1){ }}
+    <tr>
+        <td colspan="10">根据您的查询条件，没有找到相关商品，请您调整查询条件后重试。</td>
+    </tr>
+    {{# } }}
+</script>
+
+<!--选择客户 TPL-->
+<script type="text/html" id="selectCsTpl">
+    <div class="user-dialog-box user-dialog-box-950 no-border">
+    #*<a href="javascript:;" class="btn-close"></a>
+    <div class="udb-title">选择客户</div>*#
+
+        <div class="user-query">
+            <form class="query-form-dlg">
+                <table class="uq-table" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        #if($!userType==2)
+                            <td class="tar" width="80">业务分组：</td>
+                            <td width="130">
+                                <div class="sltitem" style="width: 140px">
+                                    <span>请选择</span>
+                                    <ul style="width: 138px;" id="yewuList">
+                                        <li data-value="">全部分组</li>
+                                    </ul>
+                                    <input type="hidden" name="selectType">
+                                </div>
+                            </td>
+                            <td class="tar" width="80">区域分组：</td>
+                            <td width="130">
+                                <div class="sltitem" style="width: 140px">
+                                    <span>请选择</span>
+                                    <ul style="width: 138px;" id="quyuList">
+                                        <li data-value="">全部区域</li>
+                                    </ul>
+                                    <input type="hidden" name="selectRegion">
+                                </div>
+                            </td>
+                        #else
+                            <td class="tar" width="80">企业编码：</td>
+                            <td width="130">
+                                <input class="input" type="text" style="width: 130px"/>
+                            </td>
+                            <td class="tar" width="80">企业内码：</td>
+                            <td width="130">
+                                <input class="input" type="text" style="width: 130px"/>
+                            </td>
+                        #end
+                        <td class="tar" width="80">企业名称：</td>
+                        <td width="210">
+                            <input class="input" type="text" name="smName" style="width: 130px"/>
+                        </td>
+                        <td width="auto" class="tac">
+                            <a href="javascript:;" class="f-none btn-query">查询</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <div class="user-form mt10  t-body-scroll-tb" style="height: 320px">
+            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                <tbody class="thead">
+                <tr>
+                    <th><input type="checkbox" class="check sel-all"/></th>
+                    <th>企业ID</th>
+                    <th>企业编码</th>
+                    #if($!userType==2)#else
+                        <th>企业内码</th>#end
+                    <th>企业名称</th>
+                    <th>企业地址</th>
+                </tr>
+                </tbody>
+                <tbody id="customerList" class="tbody">
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="rocky-page" id="customerListPage"></div>
+
+    #*<div class="udb-btn">
+        <a href="javascript:;" class="btn btn-save">保存</a>
+        <a href="javascript:;" class="btn btn-cancel">取消</a>
+    </div>*#
+    </div>
+</script>
+
+#*业务分组 tpl*#
+<script type="text/html" id="yewuTpl">
+    {{# for(var i=0;i<d.customerType.length;i++){ }}
+    <li data-value="{{d.customerType[i].shopCustomerType.sctId}}"><a href="javascript:;">{{d.customerType[i].shopCustomerType.sctName}}</a>
+    </li>
+    {{# } }}
+</script>
+#*区域分组 tpl*#
+<script type="text/html" id="quyuTpl">
+    {{# for(var i=0;i
+    <d.region.length;i++){ }}
+    <li data-value="{{d.region[i].supplierRegion.regionId}}"><a href="javascript:;">{{d.region[i].supplierRegion.regionName}}</a>
+    </li>
+    {{# } }}
+</script>
+
+
+#*客户列表 TPL*#
+<script type="text/html" id="customerListTpl">
+    {{# for(var i=0;i<d.length;i++){ }}
+    <tr>
+        <td><input type="checkbox" class="check sel-rows" data-smlist='{{JSON.stringify(d[i])}}'/></td>
+        <td>{{utils.notNull(d[i].eid)}}</td>
+        <td>{{utils.notNull(d[i].smCode)}}</td>
+        #if($!userType==2)#else
+            <td></td>#end
+        <td>{{utils.notNull(d[i].smName)}}</td>
+        <td>{{utils.notNull(d[i].smAddress)}}</td>
+    </tr>
+    {{# } }}
+    {{# if(d.error == 1){ }}
+    <tr>
+        #if($!userType==2)
+            <td colspan="6">根据您的查询条件，没有找到相关客户，请您调整查询条件后重试。</td>
+        #else
+            <td colspan="6">根据您的查询条件，没有找到相关客户，请您调整查询条件后重试。</td>
+        #end
+    </tr>
+    {{# } }}
+</script>
+
+
+#*新版 客户 弹窗 UI *#
+<script type="text/html" id="selectCsTplNewUI">
+<div class="user-dialog-box user-dialog-box-950 no-border">
+
+    <div class="user-query">
+        <form class="query-form-dlg">
+            <div class="xjgl-search-box">
+                <ul class="xsb-wrap cc">
+                    <li class="xsb-item">
+                        <span class="s-tit">客户信息：</span>
+                        <input class="s-input s-input-420" name="searchKey" type="text" placeholder="客户名称／企业编号／客户联系人／客户联系人手机号／企业注册号">
+                    </li>
+                    <li class="xsb-item">
+                        <span class="s-tit">企业类型：</span>
+                        <select class="s-select" name="eType" placeholder="全部" >
+                            <option selected="" value=" ">全部</option>
+                            <option value="1">单体药房</option>
+                            <option value="2">连锁药店总店</option>
+                            <option value="3">连锁药店分店（直营店）</option>
+                            <option value="4">连锁加盟店</option>
+                            <option value="6">医院</option>
+                            <option value="7">诊所</option>
+                        </select>
+                    </li>
+                    <li class="xsb-item">
+                        <span class="s-tit s-tit-95">客户业务分组：</span>
+                        <select class="s-select" name="sctId" placeholder="全部" id='sctSelect'>
+                            <option value="">全部</option>
+                        </select>
+                    </li>
+                    <li class="xsb-item">
+                        <span class="s-tit">企业内码：</span>
+                        <input class="s-input s-input-420" name="smInternalCode" type="text" placeholder="用逗号分隔多个企业内码，例如：C102318，每次最多支持200个同时查询">
+                    </li>
+                    <li class="xsb-item">
+                        <span class="s-tit">客户地区：</span>
+                        <select class="s-select" id='province' name="ePeovince" placeholder="选择省">
+                            <option  value="">选择省</option>
+                        </select>
+                        <select class="s-select" id='city'  name="eCity" placeholder="选择市">
+                            <option  value="">选择市</option>
+                        </select>
+                        <select class="s-select" id='region' name="eRegion"  placeholder="选择地区">
+                            <option  value="">选择地区</option>
+                        </select>
+                    </li>
+                    <div style="clear: both;"></div>
+                </ul>
+                <div class="xsb-btn">
+                    <a href="javascript:void(0)" class="btn-query">查询</a>
+                    <a href="javascript:void(0)" class="btn-reset"><img src="http://user.mypharma.com/image/icon-refresh.png" alt="">清空查询条件</a>
+                    <div class="b-text">
+                        <i class="b-t-ps">*</i> 本次搜索结果共 <i class="b-t-ps total-count">0</i> 个客户，您可以“<a href="javascript:void(0)" data-click="0" class="b-t-link  batch-btn batch-add-cts">批量添加</a>”这些客户
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="user-form mt10  t-body-scroll-tb" style="height: 320px">
+        <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+            <tbody class="thead">
+            <tr>
+                <th><input type="checkbox" class="check sel-all"/></th>
+                <th>客户名称</th>
+                <th>企业内码</th>
+                <th>业务分组</th>
+                <th>企业地址</th>
+                <th>联系人</th>
+                <th>手机号</th>
+            </tr>
+            </tbody>
+            <tbody id="customerList" class="tbody">
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="rocky-page" id="customerListPage"></div>
+</div>
+
+</script>
+
+#*客户列表 TPL*#
+<script type="text/html" id="customerListTplNewUI">
+    {{# var gs = d.data; }}
+    {{# for(var i=0;i<gs.length;i++){ var cts = gs[i]; var $index = (i + 1) + (d.pi-1)*d.ps; }}
+        {{# if($.inArray(cts.eid,top.utils.nowSelCts) > -1){  }}
+        <tr class="tr-dis">
+            <td><input type="checkbox" disabled class="check sel-rows" data-smlist='{{JSON.stringify(cts)}}'/>{{$index}}</td>
+            <td class="sel" id="ctsSelTpls-{{cts.eid}}">[已添加]{{utils.notNull(cts.smName)}}</td>
+        {{# }else { }}
+        <tr >
+            <td><input type="checkbox" class="check sel-rows" data-smlist='{{JSON.stringify(cts)}}'/>{{$index}}</td>
+            <td id="ctsSelTpls-{{cts.eid}}">{{utils.notNull(cts.smName)}}</td>
+        {{# } }}
+            <td>{{utils.notNull(cts.smInternalCode)}}</td>
+            <td>{{utils.notNull(cts.sctName)}}</td>
+            <td>{{utils.notNull(cts.eProvinceName)}}
+                {{# if(cts.eProvinceName){ }}
+                    {{utils.notNullBeforePix(cts.eCityName,' - ')}}
+                {{# }else{ }}
+                    {{utils.notNull(cts.eCityName)}}
+                {{# } }}
+                {{# if(cts.eCityName){ }}
+                    {{utils.notNullBeforePix(cts.eRegionName,' - ')}}
+                {{# }else{ }}
+                    {{utils.notNull(cts.eRegionName)}}
+                {{# } }}
+            </td>
+            <td>{{utils.notNull(cts.eContactor)}}</td>
+            <td>{{utils.notNull(cts.eMobile)}}</td>
+        </tr>
+    {{# } }}
+    {{# if(d.error == 1){ }}
+    <tr>
+        <td colspan="7">根据您的查询条件，没有找到相关客户，请您调整查询条件后重试。</td>
+    </tr>
+    {{# } }}
+</script>
+
+#*客户列表 TPL*#
+<script type="text/html" id="customerListTpl">
+    {{# for(var i=0;i<d.length;i++){ }}
+    <tr>
+        <td><input type="checkbox" class="check sel-rows" data-smlist='{{JSON.stringify(d[i])}}'/></td>
+        <td>{{utils.notNull(d[i].eid)}}</td>
+        <td>{{utils.notNull(d[i].smCode)}}</td>
+        #if($!userType==2)#else
+            <td></td>#end
+        <td>{{utils.notNull(d[i].smName)}}</td>
+        <td>{{utils.notNull(d[i].smAddress)}}</td>
+    </tr>
+    {{# } }}
+    {{# if(d.error == 1){ }}
+    <tr>
+        #if($!userType==2)
+            <td colspan="6">暂无数据</td>
+        #else
+            <td colspan="6">暂无数据</td>
+        #end
+    </tr>
+    {{# } }}
+</script>
+
+
+#*批量添加商品或者客户*#
+<script type="text/html" id="batchAddGoodsOrCtsTpl">
+    <div class="user-dialog-ctn user-dialog-ctn-965" style="width: 930px">
+        <div class="udc-batch-info">请单独输入需要添加的{{d.mType}}的内码，每行一个码，每次最多添加500个{{d.mType}}，可多次添加;</div>
+        <div class="udc-batch-tips">提示：获得以上数据字段信息可在"{{d.mType}}信息管理"页面导出{{d.mType}}所有详细信息进行筛选查看。</div>
+        <div class="udc-batch-ctn cc">
+            <div class="c-left fl">
+                <textarea class="textarea" name="ids"></textarea>
+                #*<form class="user-custom-form">
+                    <fieldset class="radios">
+                        <label for="radio-09" class="label_radio">
+                            <input type="radio" value="1" id="radio-09" name="radio"/>导入商品编码
+                        </label>
+                        <label for="radio-10" class="label_radio">
+                            <input type="radio" value="1" id="radio-10" name="radio"/>导入商品内码
+                        </label>
+                        <label for="radio-11" class="label_radio">
+                            <input type="radio" value="1" id="radio-11" name="radio"/>导入商品ID
+                        </label>
+                    </fieldset>
+                </form>*#
+            </div>
+            <div class="c-right fl">
+                <div class="c-r-title">添加{{d.mType}}结果</div>
+                <div class="c-r-result">
+                    <span class="text">输入总数：<i id="totalDataSize"></i></span>
+                    <span class="text">成功：<i id="okDataSize"></i></span>
+                    <span class="text">失败：<i id="failDataSize"></i></span>
+                </div>
+                <div class="c-r-title">识别失败{{d.mType}}清单</div>
+                <div class="c-r-list cc">
+                    <div class="l-left fl">查无此码：</div>
+                    <div class="l-right fl" id="hasNoCodeList"></div>
+                    <div class="clear-fixed"></div>
+                </div>
+                <div class="c-r-list cc">
+                    <div class="l-left fl">导入重复：</div>
+                    <div class="l-right fl" id="hasRepeatDataList"></div>
+                    <div class="clear-fixed"></div>
+                </div>
+                <input type="hidden" id="okDataList">
+                <div class="c-r-tips">识别失败{{d.mType}}将不会自动添加到活动列表</div>
+            </div>
+        </div>
+    </div>
+</script>
+
+#**#
+
+
+#*发票－采购商列表 TPL*#
+<script type="text/html" id="invoiceBuyListTplNewUI">
+<div class='user-dialog-box user-dialog-box-950 no-border'>
+    <div class="xjgl-search-box">
+        <form class="query-form-dlg">
+            <ul class="xsb-wrap cc">
+                <li class="xsb-item">
+                    <span class="s-tit s-tit-60">采购商：</span>
+                    <input class="s-input s-input-420" type="text" name="eName" placeholder="采购商名称">
+                </li>
+                <li class="xsb-item">
+                    <span class="s-tit s-tit-60">业务分组：</span>
+                    <select class="s-select" name="smCustomerType" placeholder="全部" id="customerType">
+                        <option value=" ">全部</option>
+                    </select>
+                </li>
+                <li class="xsb-item">
+                    <span class="s-tit s-tit-60">区域分组：</span>
+                    <select class="s-select" name="regionId" placeholder="全部" id="regionType">
+                        <option value=" ">全部</option>
+                    </select>
+                </li>
+                <div style="clear: both;"></div>
+            </ul>
+            <div class="xsb-btn">
+                <a href="javascript:void(0)" class="btn-query">查询</a>
+                <a href="javascript:void(0)" class="btn-reset"><img src="http://user.mypharma.com/image/icon-refresh.png" alt="">清空查询条件</a>
+            </div>
+        </form>
+    </div>
+
+   
+
+    <div class="user-form  user-sheet-box user-sheet-purchaser-data mt10  t-body-scroll-tb" style="height: 320px">
+        <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+            <tbody class="thead">
+            <tr>
+                <th width="139">采购商名称</th>
+                <th width="139">联系方式</th>
+                <th width="139">
+                    可开票订单数
+                    <span class='user-sort-unit'>
+                        <em class='up'></em>
+                        <em class='down'></em>
+                    </span>
+                </th>
+                <th width="139">可开票金额</th>
+                <th width="139">最后下单时间</th>
+                <th width="145">操作</th>
+            </tr>
+            </tbody>
+            <tbody id="invoiceBuyList" class="tbody">
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="rocky-page" id="invoiceBuyListPage"></div>
+</div>
+</script>
+
+<script type="text/html" id="invoiceBuyListTpl">
+    {{# if(d && d.list && d.list.length){ }}
+    {{# $.each(d.list,function(index,item){  var item = item; var $index = (index + 1) + (d.pageNo-1)*d.pageSize }}
+    <tr>
+        <td width="139">{{utils.notNull(item.eName,'--')}}</td>
+        <td width="139">{{utils.notNull(item.eMobile,'--')}}／{{utils.notNull(item.eContactor,'--')}}</td>
+        <td width="139">{{utils.notNull(item.notInvocieOrderNum,'--')}}</td>
+        <td width="139">{{utils.notNullPrice(item.notInvoiceOrderAmount,'--')}}</td>
+        <td width="139">{{utils.dateFmt(item.lastOrderTime)}}</td>
+        <td width="145">
+            <a href="javascript:void(0)" class="user-link">选择</a>
+        </td>
+    </tr>
+    {{# }); }}
+
+    {{# }else{ }}
+    <tr>
+        <td colspan="9">
+            <div class="t-none">暂无数据</div>
+        </td>
+    </tr>
+    {{# } }}
+
+</script>
+#**#
+
+
+
+#*发票－订单列表 TPL*#
+<script type="text/html" id="ordersTplNewUI">
+<div class='user-dialog-box user-dialog-box-950 no-border'>
+    <div class="xjgl-search-box">
+        <form class="query-form-dlg">
+            <ul class="xsb-wrap cc">
+                <li class="xsb-item">
+                    <span class="s-tit s-tit-60">订单编号：</span>
+                    <input class="s-input s-input-420" type="text" name="oSnOrOMName" placeholder="订单编号">
+                </li>
+                <li class="xsb-item">
+                    <span class="s-tit s-tit-60">结算状态：</span>
+                    <select class="s-select" name="accountsStatus" placeholder="全部" id="accountsStatus">
+                        <option value=" ">全部</option>
+                        <option value="0">未生成</option>
+                        <option value="10">待结算</option>
+                        <option value="50">已结算</option>
+                    </select>
+                </li>
+                <li class="xsb-item">
+                    <span class="s-tit s-tit-60">订单类型：</span>
+                    <select class="s-select" name="orderType" placeholder="全部" id="orderType">
+                        <option value=" ">全部</option>
+                        <option value="0">普通订单</option>
+                        #*<option value="1">团购订单</option>*#
+                        <option value="5">预售订单</option>
+                    </select>
+                </li>
+                <div style="clear: both;"></div>
+            </ul>
+            <div class="xsb-btn">
+                <a href="javascript:void(0)" class="btn-query">查询</a>
+                <a href="javascript:void(0)" class="btn-reset"><img src="http://user.mypharma.com/image/icon-refresh.png" alt="">清空查询条件</a>
+            </div>
+        </form>
+    </div>
+
+   
+
+    <div class="user-form  user-sheet-box user-sheet-purchaser-data mt10 t-body-scroll-tb" style="height: 320px">
+        <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+            <tbody class="thead">
+            <tr>
+                <th width="100">
+                    <div class="user-custom-form">
+                        <fieldset class="checkboxes">
+                            <label for="checkbox-all" class="label_check c_on">
+                                <input type="checkbox" value="3" id="checkbox-all" name=""  class="check sel-all">全选
+                            </label>
+                        </fieldset>
+                    </div>
+                </th>
+                <th>订单编号</th>
+                <th>订单金额</th>
+                <th>发货商品金额</th>
+                <th>实收金额</th>
+                <th>
+                    订单收货时间
+                    <span class='user-sort-unit'>
+                        <em class='up'></em>
+                        <em class='down'></em>
+                    </span>
+                </th>
+            </tr>
+            </tbody>
+            <tbody id="selectOrderList" class="tbody">
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="rocky-page" id="selectOrderListPage"></div>
+</div>
+</script>
+
+<script type="text/html" id="selectOrderListTpl">
+    {{# if(d && d.list && d.list.length){ }}
+    {{# $.each(d.list,function(index,item){  var item = item; var $index = (index + 1) + (d.pageNo-1)*d.pageSize }}
+    {{# if($.inArray(item.oId,top.utils.nowSelOids) > -1){  }}
+    <tr class="tr-dis">
+        <td>
+            <div class="user-custom-form">
+                <fieldset class="checkboxes">
+                    <label for="checkbox-0{{$index}}" class="label_check">
+                        <input type="checkbox" disabled value="{{item.oId}}" id="checkbox-0{{$index}}" name="sample-checkbox"  data-smlist='{{JSON.stringify(item)}}' class="check sel-rows">
+                    </label>
+                </fieldset>
+            </div>
+        </td>
+        <td id='orderSelTpls-{{item.oId}}'>[已选择]{{utils.notNull(item.oSn)}}</td>
+    {{# }else { }}
+    <tr>
+        <td>
+            <div class="user-custom-form">
+                <fieldset class="checkboxes">
+                    <label for="checkbox-0{{$index}}" class="label_check">
+                        <input type="checkbox" value="{{item.oId}}" id="checkbox-0{{$index}}" name="sample-checkbox"  data-smlist='{{JSON.stringify(item)}}' class="check sel-rows">
+                    </label>
+                </fieldset>
+            </div>
+        </td>
+        <td id='orderSelTpls-{{item.oId}}'>{{utils.notNull(item.oSn)}}</td>
+    {{# } }}
+
+        <td>{{utils.notNullPrice(item.oTotalPrice)}}</td>
+        <td>{{utils.notNullPrice(item.sendPrice)}}</td>
+        <td>{{# if(item.receivePrice==0){ }}--{{# }else if(item.oaAddTime){ }}{{utils.notNullPrice(item.receivePrice)}}{{# }else{ }}--{{# } }}</td>
+        <td>{{# if(item.oaAddTime){ }}{{utils.dateFmt(item.oaAddTime)}}{{# }else{ }}--{{# } }}</td>
+    </tr>
+    {{# }); }}
+
+    {{# }else{ }}
+    <tr>
+        <td colspan="9">
+            <div class="t-none">暂无数据</div>
+        </td>
+    </tr>
+    {{# } }}
+
+</script>
+#**#
+
+
+#*商品设置税号*#
+<script type="text/html" id="setGoodsTex">
+    <div class='user-dialog-box user-dialog-box-950 no-border'>
+
+        <div class="user-form  user-sheet-box user-sheet-purchaser-data mt10 t-body-scroll" style="height: 320px">
+            <table class="uf-table" border="0" cellpadding="0" cellspacing="0" style="background: #eef9ff;">
+                <thead>
+                <tr>
+                    <th style="border-bottom: 1px solid #d3d7da" >商品名称</th>
+                    <th style="border-bottom: 1px solid #d3d7da" width="100">规格</th>
+                    <th style="border-bottom: 1px solid #d3d7da" width="200">生产厂家</th>
+                    <th style="border-bottom: 1px solid #d3d7da" width="200">税收分类编码</th>
+                </tr>
+                </thead>
+                <tbody id="">
+                {{# if(d.length){ }}
+                    {{# for(var i=0;i<d.length;i++){ var good = d[i]; }}
+                    {{# if(good){ }}
+                    <tr style="background: #fff">
+                        <td >{{good.gname}}</td>
+                        <td width="100">{{good.gspecifications}}</td>
+                        <td width="200">{{good.gmanufacture}}</td>
+                        <td width="200"><input data-gid="{{good.gid}}" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="text" oninput="if(value.length>19)value=value.slice(0,19)" style="width: 90%; text-indent: 5px;"></td>
+                    <tr>
+                    {{# }else{ }}
+                    <tr style="background: #fff">
+                        <td colspan="4">商品信息有误</td>
+                    <tr>
+                    {{# } }}
+                    {{# } }}
+                {{# } }}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</script>

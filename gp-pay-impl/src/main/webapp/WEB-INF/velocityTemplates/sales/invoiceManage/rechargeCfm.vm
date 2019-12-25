@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 余额管理</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+
+</head>
+<body>
+
+<!--页面主体 -->
+<div class="c-box c-box-invoice-recharge">
+
+    <div class="user-fp-cz-box">
+
+        <div class="user-form-table">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                    <td class="tar" width="100">企业名称：</td>
+                    <td width="auto">
+                        #if($!user)
+                            #if($!{user.ename} && $!{user.ename}!='')
+                                $!{user.ename}
+                            #else
+                                $!{user.mname}
+                            #end
+                        #end
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tar">企业类型：</td>
+                    <td>
+                        #if($!user.eType == 1) 单体药房 #end
+                        #if($!user.eType == 2) 连锁药店总店 #end
+                        #if($!user.eType == 3) 连锁药店分店（直营店） #end
+                        #if($!user.eType == 4) 连锁加盟店 #end
+                        #if($!user.eType == 5) 商业公司 #end
+                        #if($!user.eType == 6) 医院 #end
+                        #if($!user.eType == 7) 诊所 #end
+                        #if($!user.eType == 8) 工业公司 #end
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tar" valign="top">选择充值金额：</td>
+                    <td>
+                        <div class="user-recharge-choose">
+                            <ul id="monyList">
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" style="padding-top:40px;">
+                        <a href="javascript:void(0);" style="padding: 0 35px" class="user-btn-n" id="gotoSbumit" >充值</a>
+                    </td>
+                </tr>
+                <!--
+                <tr style="display: none">
+                    <td class="tar" valign="top">选择支付方式：</td>
+                    <td>
+                        <div class="user-custom-form">
+                            <fieldset class="radios">
+                                <label for="radio-01" class="label_radio r_on">
+                                    <input type="radio" checked="" value="1" id="radio-01" name="sample-radio">扫码支付
+                                </label>
+                                <label for="radio-02" class="label_radio">
+                                    <input type="radio" value="1" id="radio-02" name="sample-radio">对公支付
+                                </label>
+                            </fieldset>
+                        </div>
+                        <div class="user-two-code fl mt10">
+                            <img src="image/img_two_code.jpg">
+                            <a href="javascript:void(0)" class="utc-link">刷新二维码</a>
+                        </div>
+                        <div class="user-payment-box fl">
+                            <div class="upb-icon">
+                                <img class="img" src="image/icon_pay_01.png">
+                                <img class="img" src="image/icon_pay_02.png">
+                            </div>
+                            <div class="upb-text">
+                                <i class="user-t-red">＊</i>请使用<i class="user-t-black">微信</i>或<i class="user-t-black">支付宝</i>扫码支付。
+                            </div>
+                        </div>
+                    </td>
+                </tr>-->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/html" id="monyListTpl">
+    {{# $.each(d,function(i,m){ }}
+    <li data-val="{{m.configId}}">
+        <span class="c-number">{{m.payMoney}}元</span>
+        <span class="c-text">{{m.exchangeNum}}张{{# if(m.saveMoney){ }}<i>(省{{m.saveMoney}}元)</i>{{# } }}</span>
+    </li>
+    {{# }); }}
+</script>
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>
+<script>
+
+
+    var layer,laypage,laytpl;
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage'],function () {
+        layer = layui.layer, laypage = layui.laypage , laytpl = layui.laytpl;
+        getPageData();
+
+        $("#gotoSbumit").on("click",function () {
+            var _configId = $("#monyList li.selected").data("val");
+            if(!_configId){
+                top.ue.msg("请选择充值金额");
+                return false;
+            }
+            top.utils.ajax({
+                url: '/invoice/invoiceSubmit',
+                async:false,
+                data: {
+                    configId: _configId
+                },
+                success: function (orderId) {
+                    top.utils.open('http://$!{wwwHostAndPort}/walletOrder.html?sn='+orderId,'_blank');
+                    top.ue.msg("已跳转充值收银台",{time:5000});
+                    $("#monyList li.selected").toggleClass("selected");
+                }
+            })
+        })
+    })
+
+
+    function getPageData() {
+        $.ajax({
+            url: '/invoice/rechargeConfig',
+            type:'get',
+            success:function (res) {
+                if(res && res.code == 0 && res.data){
+                    $("#monyList").html(laytpl($('#monyListTpl').html()).render(res.data));
+                    bindInvoice();
+                }
+            }
+        })
+    }
+</script>
+
+</body>
+</html>

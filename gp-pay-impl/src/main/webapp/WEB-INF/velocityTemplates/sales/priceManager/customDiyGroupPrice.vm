@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 客户分组定价</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+
+</head>
+<body>
+
+<!--页面主体 -->
+<div class="c-box">
+
+    <div class="user-prompt" id="grpCounts"></div>
+    <script type="text/html" id="grpCountsTpl">提示：您共有上架商品<em class='fc-red' >{{d.goodsCount}}</em>个，目前有<em class='fc-red' >{{d.fullCusCount}}</em>个商品已完成客户业务分组定价，<em class='fc-red' >{{d.noFullCusCount}}</em>个商品未设满，<em class='fc-red'>{{d.noCusCount}}</em>个商品未设置；<a href="javascript:void(0);" onclick="top.utils.open('https://cms.mypharma.com/info/533','_blank')" class="up-link" style="cursor: pointer;">了解客户分组定价&gt;&gt;</a></script>
+
+    <div class="user-search-box mt10">
+        <form id="searchForm">
+            <input type="hidden" name="gbasePrice">
+            <input type="hidden" name="cusType">
+            <input type="hidden" name="gStatus">
+            <ul class="usb-wrap cc">
+                <li class="usb-item">
+                    <span class="s-tit">商品信息：</span>
+                    <input name="key" class="s-input s-input-445" type="text" placeholder="商品通用名／商品编码／商品内码／批准文号／生产厂家／商品助记码">
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit">商品类型：</span>
+                    <select class="s-select2 usb-select2" name="gType" placeholder="全部">
+                        <option value=" ">全部</option>
+                        <option value="0">普通</option>
+                 <!--        <option value="1">挂单商品</option> -->
+                        <option value="2">新品</option>
+                       <!--  <option value="3">专供品种</option> -->
+                    </select>
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit s-tit-95">旗舰店分类：</span>
+                    <select class="s-select2 usb-select2-s spc" name="sgcId1" placeholder="一级分类">
+                        <option value="">一级分类</option>
+                    </select>
+                    <select class="s-select2 usb-select2-s spcc" name="sgcId2" placeholder="二级分类">
+                        <option value="">二级分类</option>
+                    </select>
+                </li>
+               
+            </ul>
+        </form>
+        <div class="usb-btn">
+            <a href="javascript:void(0)" class="btn-query">查询</a>
+            <a href="javascript:void(0)" class="btn-reset"><img src="/image/icon-refresh.png" alt="">清空查询条件</a>
+            <div class="b-text query-num-box" style="display: none">
+                 <span id="totalTips"><i class="b-t-ps">*</i> 您一共有<i class="b-t-ps" id="totalNum"></i> 个商品，您可以对这些商品</span>
+                <span id="queryTips" style='display:none;'><i class="b-t-ps">*</i> 本次搜索结果共 <i class="b-t-ps" id="queryNum"></i> 个商品，您可以对这些商品</span>
+                <a href="javascript:void(0)" class="b-t-link" onclick="gotoNewTab('/sales/priceManager/goodsGroupPriceDetail.html?pathName='+location.href+'&titleBack=客户分组定价','批量设置客户分组定价',1)">"批量设置客户分组定价"</a>
+                
+            </div>
+            <div class="b-text query-no-box" style="display: none">
+                <span id="totalTips"><i class="b-t-ps">*</i>根据您的查询条件，没有找到相关商品，请您调整查询条件后重试。</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="user-btn mt20 cc">
+        <div class="user-custom-form fl">
+            <fieldset class="checkboxes">
+                <label for="checkbox-p" class="label_check check-box-prt">
+                    <input type="checkbox" value="" id="checkbox-p"  name="sample-checkbox-p" />全选
+                </label>
+            </fieldset>
+        </div>
+        <a href="javascript:void(0)" class="btn btn-auto fl btn-bind-sw" onclick="gotoNewTab('/sales/priceManager/goodsGroupPriceDetail.html?pathName='+location.href+'&titleBack=客户分组定价','批量设置客户分组定价',0)">批量设置客户分组定价</a>
+        <div class="b-text fl ml10"  style="margin-left:15px;max-width: 600px;padding-left: 10px;position: relative; line-height: 1.2">
+            <p><i class="b-t-ps">*</i> 客户分组定价：<i class="i-red">5/10</i>,表示您有<i class="i-red">10</i>个客户业务分组，其中<i class="i-red">5</i>个组已经设置组定价；</p>
+            <p><i class="i-red">红色表示未设满</i>，您将会有部分客户不能购买，<i class="i-blue">蓝色表示已设满</i></p>
+        </div>
+    </div>
+
+    <div class="user-form user-sheet-box mt10">
+        <table class="uf-table" border="0" cellpadding="0" cellspacing="0"  style="min-height: 150px;">
+            <thead>
+            <tr>
+                <th width="100"></th>
+                <th width="220">商品信息</th>
+                <th width="100" >规格</th>
+                <th width="100" >分类</th>
+                <th width="100" >内码</th>
+                <th width="160" class="t-select">
+                    <div class="t-select-box" id='gbasePriceSelect'>
+                        <div class="tsb-title">基价<i class="img"></i></div>
+                        <div class="tsb-list">
+                            <a class="tsb-link" href="javascript:void(0)">默认排序</a>
+                            <a class="tsb-link" href="javascript:void(0)">由高到低</a>
+                            <a class="tsb-link" href="javascript:void(0)">由低到高</a>
+                            <a class="tsb-link" href="javascript:void(0)">未设置基价</a>
+                        </div>  
+                    </div>
+                </th>
+                <th width="200" class="t-select" id='cusTypeSelect'>
+                    <div class="t-select-box">
+                        <div class="tsb-title">客户分组定价<i class="img"></i></div>
+                        <div class="tsb-list">
+                            <a class="tsb-link" href="javascript:void(0)">全部</a>
+                            <a class="tsb-link" href="javascript:void(0)">已设满</a>
+                            <a class="tsb-link" href="javascript:void(0)">未设满</a>
+                            <a class="tsb-link" href="javascript:void(0)">未设置</a>
+                        </div>
+                    </div>
+                </th>
+                <th width="120" class="t-select" id='gStatusSelect'>
+                    <div class="t-select-box">
+                        <div class="tsb-title">状态<i class="img"></i></div>
+                        <div class="tsb-list">
+                            <a class="tsb-link" href="javascript:void(0)">全部</a>
+                            <a class="tsb-link" href="javascript:void(0)">上架商品</a>
+                            <a class="tsb-link" href="javascript:void(0)">下架商品</a>
+                        </div>
+                    </div>
+                </th>
+                <th width="60" >操作</th>
+            </tr>
+            </thead>
+            <tbody id="listBox">
+            </tbody>
+        </table>
+    </div>
+
+    <script type="text/html" id="listTpl">
+        {{# if(d && !d.error && d.datas.length){ }}
+        {{# $.each(d.datas,function(index,item){ var good = item; var $index = (index + 1) + (d.pi-1)*d.ps }}
+        {{# var gId=good.gId,_a=good.cusCount,_b=good.customerTypeNum,_c=good.groupPriceMin,_d=good.groupPriceMax;}}
+        <tr>
+            <td>
+                <div class="user-custom-form fl ml10">
+                    <fieldset class="checkboxes">
+                        <label for="checkbox-0{{$index}}" class="label_check check-box-child" style="vertical-align: middle;display: inline-block;">
+                            <input data-good='{{JSON.stringify(item)}}' type="checkbox"  value="{{good.gId}}" id="checkbox-0{{$index}}" data-gid="{{good.gId}}" name="sample-checkbox-0{{$index}}" />
+                        </label>
+                        <span style="vertical-align: middle; line-height:20px; margin-left:5px;display: inline-block;">{{$index}}</span>
+                    </fieldset>
+                </div>
+            </td>
+            <td>
+                <div class="t-img">
+                    {{# if(item.defaultPic){ }}
+                    <img src="{{item.defaultPic}}" onclick="gotoDetail('dspkhfzdj','/sales/priceManager/singleGoodGroupPrice.html?gId={{good.gId}}&totalGroupCount={{top.utils.notNull(item.cusCount,0)}}&hasSetCount={{top.utils.notNull(item.customerTypeNum,0) - top.utils.notNull(item.cusCount,0)}}&pathName='+location.href+'&titleBack=客户分组定价','商品客户分组定价');">
+                    {{# }else{ }}
+                    <img src="/image/default.jpg" onclick="gotoDetail('dspkhfzdj','/sales/priceManager/singleGoodGroupPrice.html?gId={{good.gId}}&totalGroupCount={{top.utils.notNull(item.cusCount,0)}}&hasSetCount={{top.utils.notNull(item.customerTypeNum,0) - top.utils.notNull(item.cusCount,0)}}&pathName='+location.href+'&titleBack=客户分组定价','商品客户分组定价');">
+                    {{# } }}
+                </div>
+                <div class="t-info cursor-point"  onclick="gotoDetail('dspkhfzdj','/sales/priceManager/singleGoodGroupPrice.html?gId={{good.gId}}&totalGroupCount={{top.utils.notNull(item.cusCount,0)}}&hasSetCount={{top.utils.notNull(item.customerTypeNum,0) - top.utils.notNull(item.cusCount,0)}}&pathName='+location.href+'&titleBack=客户分组定价','商品客户分组定价');">
+                    <div class="t-name">{{good.gName}}</div>
+                    <div class="t-size">{{good.gLicenseNo}}</div>
+                    <div class="t-company">{{good.gManufacture}}</div>
+                </div>
+            </td>
+            <td>{{good.gSpecifications}}</td>
+            <td>
+                {{# if(good.goodsCate){ }}
+                {{good.goodsCate}}
+                {{# }else{ }}
+                {{top.utils.notNull(good.sgcId1Name)}}-{{top.utils.notNull(good.sgcId2Name)}}
+                {{# } }}
+            </td>
+            <td>{{good.gInSn}}</td>
+           
+            <td class='state_td'><span id="basePrice-{{good.gId}}">{{top.utils.notNullPrice(good.gBasePrice,'--')}}</span><br><a class='t-blue edit-bp' href='javascript:void(0)' style="display: none;"  onclick='reviseBasePrice({{good.gId}},$("#basePrice-{{good.gId}}"))'>修改</a></td>
+            
+            <td class='money-td'>
+                {{# if(item.cusCount < item.customerTypeNum ){ }}
+                    <span class="t-red cursor-point"  onclick="gotoDetail('dspkhfzdj','/sales/priceManager/singleGoodGroupPrice.html?gId={{good.gId}}&totalGroupCount={{top.utils.notNull(item.cusCount,0)}}&hasSetCount={{top.utils.notNull(item.customerTypeNum,0) - top.utils.notNull(item.cusCount,0)}}&pathName='+location.href+'&titleBack=客户分组定价','商品客户分组定价');">{{top.utils.notNull(item.cusCount,'0')}}/{{top.utils.notNull(item.customerTypeNum,'0')}}</span><br>
+                {{# } else{ }}
+                    <span class="t-blue cursor-point"  onclick="gotoDetail('dspkhfzdj','/sales/priceManager/singleGoodGroupPrice.html?gId={{good.gId}}&totalGroupCount={{top.utils.notNull(item.cusCount,0)}}&hasSetCount={{top.utils.notNull(item.customerTypeNum,0) - top.utils.notNull(item.cusCount,0)}}&pathName='+location.href+'&titleBack=客户分组定价','商品客户分组定价');">{{top.utils.notNull(item.cusCount,'0')}}/{{top.utils.notNull(item.customerTypeNum,'0')}}</span>
+                {{# } }}
+
+                {{# if(item.groupPriceMin ==null && item.groupPriceMin==null){ }}
+                {{# }else{ }}
+                    <br>
+                    {{# if(item.groupPriceMin == item.groupPriceMax ){ }}
+                        {{top.utils.notNullPrice(item.groupPriceMin,'--')}}
+                    {{# } else{ }}
+                        {{# if(item.groupPriceMin || item.groupPriceMin==0){ }} {{top.utils.notNullPrice(item.groupPriceMin)}}<br><p>～</p>{{# } }} {{top.utils.notNullPrice(item.groupPriceMax,'--')}}
+                    {{# } }}
+                {{# } }}
+                
+            </td>
+            <td>
+                <span>
+                    {{# if(good.gStatus == 1){ }}<em style="color: green;">上架</em>{{# }else{ }}<em class='fc-red'>下架</em>{{# } }}</span>
+            </td>
+            <td>
+                <a href="javascript:void(0)" class="t-link"  onclick="gotoDetail('dspkhfzdj','/sales/priceManager/singleGoodGroupPrice.html?gId={{good.gId}}&totalGroupCount={{top.utils.notNull(item.cusCount,0)}}&hasSetCount={{top.utils.notNull(item.customerTypeNum,0) - top.utils.notNull(item.cusCount,0)}}&pathName='+location.href+'&titleBack=客户分组定价','商品客户分组定价');">编辑</a>
+
+            </td>
+        </tr>
+        {{# }); }}
+
+        {{# }else{ }}
+        <tr><td colspan="12" class="t-disable">根据您的查询条件，没有找到相关商品，请您调整查询条件后重试。</td></tr>
+        {{# } }}
+
+    </script>
+
+    <div class="user-btn mt10 cc addSelBox">
+        <div class="user-custom-form fl">
+            <fieldset class="checkboxes">
+                <label for="checkbox-p-1" class="label_check check-box-prt" style="padding-left:25px;">
+                    <input type="checkbox" value="" id="checkbox-p-1"  name="sample-checkbox-p" />全选
+                </label>
+            </fieldset>
+        </div>
+        <a href="javascript:void(0)" class="btn btn-auto fl mr10" onclick="gotoNewTab('/sales/priceManager/goodsGroupPriceDetail.html?pathName='+location.href+'&titleBack=客户分组定价','批量设置客户分组定价',0)">批量设置客户分组定价</a>
+
+        <div class="page rocky-page" style="text-align: right;">
+        </div>
+    </div>
+
+</div>
+
+<style type="text/css">
+    
+    @media (max-width: 1620px) {
+        .c-box .user-sheet-box .uf-table td .t-info{
+            width:97px;
+        }
+     }
+</style>
+    #parse("common/header_js_new.vm")
+    <script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+
+<script>
+    var d = {
+        gbasePrice : 0,
+        khType : 0,
+        cusType : 0,
+        gStatus: 0
+    }
+    //t-select-box下拉
+    $(".t-select-box").mouseenter(function(){
+        $(this).addClass("t-select-box-on");
+    });
+
+    $(".t-select-box").mouseleave(function(){
+        $(this).removeClass("t-select-box-on");
+    });
+
+    $('.t-select').each(function(index, el) {
+        var i = $(this).index() - 5;   //  列表td筛选第一个开始   5 6 7 8
+        $(this).find('.tsb-link').click(function(event) {
+            var $ind = $(this).index();
+            d = {
+                gbasePrice : '',
+                cusType : '',
+                gStatus: ''
+            };
+            if(i == 0) {
+                d.gbasePrice = $ind;
+                $("[name=gbasePrice]").val($ind);
+            }
+            if(i == 1) {
+                d.cusType = $ind;
+                $("[name=cusType]").val($ind);
+            }
+            if(i == 2) {
+                d.gStatus = $ind;
+                $("[name=gStatus]").val($ind);
+            }
+            searchReqs = $("#searchForm").serializeJson();
+            getData({},function (res) {
+                if(res && res.data) {
+                    $("#totalTips").hide();
+                    var _total = res.data.list.length;
+                    if(_total){
+                        setTextDisable(false);
+                        $(".query-no-box").hide();
+                        $(".query-num-box").show().find("#queryTips").show().find("#queryNum").text(res.data.totalCount);
+                    }else{
+                        setTextDisable(true);
+                        $(".query-no-box").show();
+                        $(".query-num-box").hide()
+                    }
+                }
+                else $(".query-num-box").hide()
+            },true)
+        });
+    });
+  
+    var layer,laypage,laytpl, searchReqs = {};
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage','laytpl'],function () {
+        layer = layui.layer,laypage = layui.laypage ,laytpl = layui.laytpl;
+        $(function(){
+            $('body').addClass('user-has-js');
+
+            initSelect();
+
+            $(".btn-reset").on("click",function () {
+                $("#searchForm").get(0).reset();
+                $("[type=hidden]").val(null);
+                $(".usb-select2,.usb-select2-s").each(function () {
+                    $(this).select2("destroy");
+                    initSelect();
+                })
+                searchReqs = $("#searchForm").serializeJson();
+             //   $('.btn-query').trigger("click");
+                d = {gbasePrice : '',khType : '',cusType : '',gStatus: ''};
+                getData({},function (res) {
+                    if(res && res.data) {
+                        $("#totalTips").show();
+                        $(".query-num-box").show();
+                        $(".query-num-box").find("#queryTips").hide();
+                        $(".query-no-box").hide();
+
+                        var _total = res.data.list.length;
+                        if(_total){
+                            setTextDisable(false);
+                        }else{
+                            setTextDisable(true);
+                        }
+                    }
+                    else $(".query-num-box").hide()
+                });
+
+            })
+
+            $('.btn-query').on("click",function () {
+                searchReqs = $("#searchForm").serializeJson();
+                getData(d,function (res) {
+                    if(res && res.data) {
+                       $("#totalTips").hide();
+                        var _total = res.data.list.length;
+                        if(_total){
+                            setTextDisable(false);
+                            $(".query-no-box").hide();
+                            $(".query-num-box").show().find("#queryTips").show().find("#queryNum").text(res.data.totalCount);
+                        }else{
+                            setTextDisable(true);
+                            $(".query-no-box").show();
+                            $(".query-num-box").hide()
+                        }
+                   }
+                   else $(".query-num-box").hide()
+                });
+            })
+
+            $(".check-box-prt").each(function () {
+                $(this).on("click",function () {
+                    var _check = $(this).find("input:checkbox").prop("checked") || false;
+                    $(".check-box-prt").not($(this)).find("input:checkbox").prop("checked",!_check);
+                })
+            })
+
+            setTimeout(function () {
+                searchReqs = $("#searchForm").serializeJson();
+               getData(d);
+            },300);
+
+            top.utils.ajax({
+                url:"/api/commodityPricing/getNumbers",
+                success:function (data,res) {
+                    $("#grpCounts").html(laytpl($("#grpCountsTpl").html()).render(data));
+                }
+            })
+
+        });
+    })
+
+    var nowPage = 1;
+    function getData(d,cb,q) {
+        top.utils.pageList({
+            first:true,
+            url:'/api/commodityPricing/getCommodityPricingList',
+            dom:$('#listBox'),
+            tpl:$("#listTpl"),
+            isAdd:true,
+            data:d,
+            filter:'#searchForm',
+            doc:document.body,
+            win: window,
+            laypage:laypage,
+            complete:function (res) {
+                var _q = q?"#queryNum":"#totalNum"
+                if(res && res.data) $(".query-num-box").show().find(_q).text(res.data.totalCount);
+                else $(".query-num-box").hide()
+
+                $("#totalTips").hide();
+                var _total = res.data.list.length;
+                if(_total){
+                    $(".query-no-box").hide();
+                    $(".query-num-box").show().find("#queryTips").show().find("#queryNum").text(res.data.totalCount);
+                }else{
+                    $(".query-no-box").show();
+                    $(".query-num-box").hide()
+                }
+                bindEvt();
+            },rendered:function (res,settings) {
+                nowPage = settings.data.pi;
+                bindEvt();
+                $(".check-box-prt").each(function () {
+                    $(this).on("click",function () {
+                        var _check = $(this).find("input:checkbox").prop("checked") || false;
+                        $(".check-box-prt").not($(this)).find("input:checkbox").prop("checked",!_check);
+                    })
+                })
+                if(cb) cb(res)
+            }
+        })
+    }
+
+
+    function gotoNewTab(url,text,isSearch) {
+        var data = "" , q = "?";
+        if(url.indexOf("?") > -1) q = "&";
+        if(isSearch){
+            data = searchReqs;
+            data.ajaxUrl='/api/commodityPricing/getCommodityPricingList'
+            q+="forms="+JSON.stringify(data);
+        }else{
+            data = getSelIds('#listBox');
+            if(!data || !data.length){
+                layer.msg("请先选择商品");
+                return false;
+            }
+            q+="gids="+data;
+            top.app["GoodsPriceSSData"] = getSelDatas("#listBox","good");
+        }
+        top.utils.openWithTab(top.utils.getRandom(), text, url+q, {
+            fstBread: top.app.index.firstBread,
+            scdBread:{
+                text:top.app.index.secondBread,
+                url:location.href,
+                prevBread: top.app.index.firstBread
+            },
+            thirdBread:text
+        })
+    }
+
+    /*修改基价*/
+    function reviseBasePrice(gid,bPriceDom) {
+
+        var bPrice = $(bPriceDom).text().replace(/¥/g,'');
+        var modelText = '<div class="dialog" id="modelText"><div class="xdc-form cc" style="margin:0 auto;"><span class="text">输入基价：</span><input class="input" maxlength="11" type="text" name="basePrice" ><span class="text">元</span></div></div>';
+
+        top.rui.dynamic({
+            title: '设置基价',
+            content: modelText,
+            skin: "dialog-old dialog-old-no-title xjgl-dialog-ctn",
+            area: ['400px', '200px'],
+            btn: ['保存'],
+            success: function (lay, idx) {
+                bindEvt(lay);
+
+                $(".check-box-prt").each(function () {
+                    $(this).on("click",function () {
+                        var _check = $(this).find("input:checkbox").prop("checked") || false;
+                        $(".check-box-prt").not($(this)).find("input:checkbox").prop("checked",!_check);
+                    })
+                })
+                lay.find('input[name="basePrice"]').val(bPrice);
+            },
+            yes: function (idx, lay) {
+                var basePrice = parseFloat($('input[name="basePrice"]', lay).val()).toFixed(2);
+                if(basePrice <= 0 || !basePrice || basePrice=='NaN') {
+                    top.layer.msg('基价须大于0');
+                    return false;
+                }
+                $.ajax({
+                    url: "/api/priceManage/updateGoodsGBasePrice",
+                    data: {gid: gid, gBasePrice: basePrice},
+                    type: 'get',
+                    success: function (res) {
+                        if (res.code != 0) {
+                            top.layer.msg(res.message);
+                        }
+                        else {
+                            $("#basePrice-"+gid).html("&yen;"+basePrice);
+                            top.ue.close(idx);
+                            top.layer.msg('基价修改成功');
+                            getData({pi:nowPage})
+                            return;
+                        }
+                    }
+                })
+            }
+        })
+    }
+</script>
+
+</body>
+</html>

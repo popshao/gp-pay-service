@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>我的医药网 - 销售中心 - 专供控销</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}"/>
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+    <!-- user_新样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}">
+    <script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="scripts/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+
+    <style>
+
+    </style>
+
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="c-box">
+                    <div class="user-path"><a href="/sales/index.html" class="spc-blue">销售中心</a> &gt; 销价管理 &gt; <a
+                            href="/sales/control/sale_group_main.html" class="spc-blue">专供控销</a> &gt; <i class="up-h">专供控销申请审核</i>
+                    </div>
+                    <div class="user-query">
+                        <form action="list_sale_control.html" method="post" id="searchForm">
+                            <input type="hidden" name="pi" value="$!pi">
+                            <table class="uq-table" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td width="90">
+                                        <input class="input" type="text" name="searchKey" value="$!{searchKey}"
+                                               placeholder="企业名称/商品组名称"/>
+                                    </td>
+                                    <td class="tar" width="80">处理状态：</td>
+                                    <td width="100">
+                                        <div class="sltitem sltitem-90" id="value">
+                                            <span>请选择</span>
+                                            <ul>
+                                                <li data-value="0"><a href="javascript:;">未通过</a></li>
+                                                <li data-value="1"><a href="javascript:;">已通过</a></li>
+                                                <li data-value="2"><a href="javascript:;">未处理</a></li>
+                                            </ul>
+                                            <input type="hidden" value="" name="scaState"
+                                                   id="scaState"/>
+                                        </div>
+                                    </td>
+                                    <td class="tar" width="80">控销类型：</td>
+                                    <td width="150">
+                                        <div class="sltitem sltitem-140" id="value">
+                                            <span>请选择</span>
+                                            <ul>
+                                                <li data-value=""><a href="javascript:;">全部申请</a></li>
+                                                <li data-value="1"><a href="javascript:;">控销区申请</a></li>
+                                                <li data-value="2"><a href="javascript:;">诊所专供申请</a></li>
+                                            </ul>
+                                            <input type="hidden" value="" name="scgType"
+                                                   id="scgType"/>
+                                        </div>
+                                    </td>
+                                    <td class="tar" width="80">申请日期：</td>
+                                    <td width="auto">
+                                        <input class="input input-date input-110" type="text" name="scaAddStartTime"
+                                               id="scaAddStartTime" value="$!scaAddStartTime"
+                                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D('+'\\'+'\'scaAddEndTime'+'\\'+'\')}'})"
+                                               class="w-txt w-150">
+                                        <i class="to">至</i>
+                                        <input class="input input-date input-110" type="text" name="scaAddEndTime"
+                                               id="scaAddEndTime" value="$!scaAddEndTime"
+                                               onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D('+'\\'+'\'scaAddStartTime'+'\\'+'\')}'})"
+                                               class="w-txt w-150">
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td colspan="7" class="tac">
+                                        <a href="javascript:search('/sales/sale_control/list_sale_control.html',false);"
+                                           class="f-none mt20 btn-query">查询</a>
+                                        <a href="javascript:search('/sales/sale_control/list_sale_control.html',true);"
+                                           class="f-none mt20 btn-reset"><i class="icon"></i>重置筛选条件</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+
+                    #if(!$null.isNull($list) && $list.size()!=0)
+                        <div class="user-btn mt10">
+                            <input class="checkbox" type="checkbox" onclick="checkAll(this,'checkedName')">
+                            <a href="javascript:deleteAll('checkedName')" class="btn-l btn-120">批量删除</a>
+                        </div>
+                        #foreach($salcapp in $list)
+                            <div class="user-kxzq-group cc">
+                                <div class="ukg-right">
+                                    #if($salcapp.scaState!=2)
+                                        <span class="time">申请时间：$utils.formatDate($!salcapp.scaAddTime,
+                                            "yyyy-MM-dd HH:mm:ss")</span>
+                                        #if($!salcapp.scaAuditTime)
+                                            <span class="time">处理时间：$utils.formatDate($!salcapp.scaAuditTime,
+                                                "yyyy-MM-dd HH:mm:ss")</span>
+                                        #end
+                                    #end
+                                    #if($salcapp.scaState==2)
+                                        <span class="time">申请时间：$utils.formatDate($!salcapp.scaAddTime,
+                                            "yyyy-MM-dd HH:mm:ss")</span>
+                                        <a href="javascript:audit($!{salcapp.scaId},1,'$!{salcapp.scgName}','$!{salcapp.scgId}','$!{salcapp.eId}','$!{salcapp.eName}')"
+                                           class="btn">审核</a>
+                                    #end
+                                </div>
+                                <input class="checkbox" type="checkbox" id="$salcapp.scgId" name="checkedName"
+                                       id="checkedName_$!{salcapp.scaId}" value="$!{salcapp.scaId}">
+                                <div class="ukg-ctn">
+                                    <div class="ukg-top">
+                                        #if($salcapp.eName&&$salcapp.eName!="")
+                                            <b class="ukg-t-title">$salcapp.eName</b>
+                                        #end
+                                        #if($salcapp.scaState==2)
+                                            <i class="wcl">未处理</i>
+                                        #end
+                                        #if($salcapp.scaState==1)
+                                            <i class="tg">已通过</i>
+                                        #end
+                                        #if($salcapp.scaState==0)
+                                            <i class="btg">不通过</i>
+                                        #end
+                                    </div>
+                                    <div class="ukg-address">地址：$salcapp.eProvince
+                                        #if($salcapp.eCity.indexOf("北京")==-1||$salcapp.eCity.indexOf(
+                                            "重庆")==-1||$salcapp.eCity.indexOf("上海")==-1||$salcapp.eCity.indexOf(
+                                            "天津")==-1)
+                                            $salcapp.eCity
+                                        #end
+                                        #if($salcapp.eRegion)
+                                            $salcapp.eRegion
+                                        #end
+                                        #if($salcapp.eAddress)
+                                            $salcapp.eAddress
+                                        #end
+                                    </div>
+                                    #if($salcapp.scaState==0)
+                                        <div class="ukg-info">不通过原因:
+                                            #if($salcapp.auditRefuseReason==2)
+                                                建议申请其他区域
+                                            #end
+                                            #if($salcapp.auditRefuseReason==1)
+                                                该控销区客户已满建
+                                            #end
+                                            #if($salcapp.auditRefuseReason==3)
+                                                其他
+                                            #end
+                                            $salcapp.auditRefuseRemark</div>
+                                    #end
+                                    <div class="ukg-title"><b>$!{salcapp.scgName}</b>(商品明细:共$salcapp.list.size()个)</div>
+                                    <div class="ukg-detail ukg-detail-hide">
+                                        <div class="ukg-height">
+                                            #if(!$null.isNull($salcapp.list) && $salcapp.list.size()!=0)
+                                                #foreach($goods in $salcapp.list)
+                                                    $goods.gName
+                                                    #if($!{velocityCount}<$salcapp.list.size())
+                                                        、
+                                                    #end
+                                                #end
+                                            #end
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        #end
+                        <div class="page">
+                            <!--分页开始 -->
+                            #if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+                                #pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/sale_control/list_sale_control.html")
+                            #end #end
+                            <!--分页结束 -->
+                        </div>
+                    #else
+                        <div class="user-form mt20">
+                            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                <tbody>
+                                <tr>
+                                    <td colspan="7">没有查询到数据</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    #end
+                </div>
+                <!-- 用户中心_主体内容_E -->
+
+            </div>
+
+        </div>
+    </div>
+</div>
+    #parse("/common/footer.vm")
+<div class="user-dialog-box user-dialog-860" id="audit" style="display: none;position: relative;>
+ 			<input type=" hidden
+" value="" id="">
+<input type="hidden" value="" id="scgId">
+<input type="hidden" value="" id="eId">
+<input type="hidden" value="" id="scaId">
+<div class="udb-ctn">
+    <div class="udb-c-top"><span class="red" id="a_ename"></span> 申请采购<span class="red" id="scg_ename"></span>下所有控销商品
+    </div>
+    <div class="udb-c-form cc mt10">
+        <span id="a_info"></span>
+    </div>
+    <div class="udb-c-form cc mt10" id="div_select">
+    </div>
+    <div id="div_goods" style="margin-top: 15px;">
+    </div>
+</div>
+<div class="udb-btn" style=" position: absolute; bottom: 40px;">
+    <div class="udb-b-tips" id="tips" style="display: none">您还未将该客户设置在对应的控销客户组中</div>
+    <a href="javascript:audit_yes('');" class="btn">通过</a>
+    <a href="javascript:audit_no('');" class="btn no">不通过</a>
+    <a href="javascript:audit_close('');" class="btn btn-s-none">关闭</a>
+</div>
+</div>
+
+<div class="user-dialog-box user-dialog-575" id="no_audit" style="display: none">
+    <div class="udb-ctn">
+        <div class="udb-c-title">请选择不通过原因</div>
+        <div class="udb-c-form cc mt20">
+            <input class="radio" type="radio" name="radio" id="radio_01" value="1">
+            <label class="label" for="radio_01">该控销区客户已满</label>
+            <input class="radio" type="radio" name="radio" id="radio_02" value="2">
+            <label class="label" for="radio_02">建议申请其他区域</label>
+            <input class="radio" type="radio" name="radio" id="radio_03" value="3">
+            <label class="label" for="radio_03">其他</label>
+        </div>
+        <textarea class="textarea mt20" placeholder="可输入不通过原因描述" id="no_reason"></textarea>
+    </div>
+    <div class="udb-btn">
+        <a href="javascript:audit_no_apply('');" class="btn">确认</a>
+        <a href="javascript:audit_close('');" class="btn btn-none">关闭</a>
+    </div>
+</div>
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/jquery.SuperSlide.js"></script>
+<script src="/js/layui/layui.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/publish.js"></script>
+<script>
+    var one;
+    var two;
+
+    var layAlert;
+    layui.config({
+        base: '/js/layui/extend/'
+    }).use(['layApp'], function () {
+        $(".mn-select").each(function () {
+            $(this).select2({
+                placeholder: $(this).attr("placeholder"),
+                tags: "true",
+                allowClear: false,
+                minimumResultsForSearch: -1,
+                language: "zh-CN"
+            });
+        })
+        layAlert = layui.layApp.alert;
+    })
+    $(function () {
+        <!-- uf-table表格最后一列无下边框 -->
+        $.sltitem.select("scaState", "$!scaState");
+        $.sltitem.select("scgType", "$!scgType");
+        $(".uf-table").find("tr:last td").css("border-bottom", "none");
+
+        <!-- 商品明细-展开按钮-隐藏 -->
+        $(".ukg-ctn").each(function (i, n) {
+            var listbox = $(n).find(".ukg-detail");
+            var list = $(n).find(".ukg-height");
+            if (listbox.height() < list.height()) {
+                $(n).append('<a href="javascript:;" class="btn-pack-up"></a>');
+            }
+        });
+
+        //审核不通过原因-radio选中显示DIV
+        $("#DepartureTime input:radio").click(function () {
+            var STime = $('input:radio[id="radio_03"]:checked').val();
+            if (STime) {
+                $("#SpecificTime").show();//选中时显示
+            }
+            if (STime == null) {
+                $("#SpecificTime").hide();//为空时隐藏
+            }
+        });
+
+        <!-- 商品明细-展开&收起效果 -->
+        $(".btn-pack-up").click(function () {
+            if ($(this).hasClass("btn-open-up")) {
+                $(this).removeClass("btn-open-up");
+                $(this).parents(".ukg-ctn").find(".ukg-detail-hide").css("height", "20px");
+            }
+            else {
+                $(this).addClass("btn-open-up");
+                $(this).parents(".ukg-ctn").find(".ukg-detail-hide").css("height", "auto");
+            }
+        });
+
+        <!-- 商品明细-展开&收起效果 -->
+        $(".btn no").click(function () {
+            top.ue.msg("");
+        });
+
+    })
+
+    function deleteAll(cName) {
+        var j = 0;
+        var scaId = "";
+        var checkboxs = document.getElementsByName(cName);
+        for (var i = 0; i < checkboxs.length; i += 1) {
+            if (checkboxs[i].checked == true) {
+                scaId = scaId + "," + checkboxs[i].value;
+                j++;
+            }
+        }
+
+        if (j == 0 || j == null) {
+            top.ue.msg("请选择要删除的记录");
+            return;
+        } else {
+            top.ue.confirm({
+                content: "确定删除选中记录",
+                ok: function () {
+                    scaId = scaId.substring(1, scaId.length);
+                    top.ue.load();
+                    $.ajax({
+                        url: '/sales/sale_control/delete_sale_control_apply.html',
+                        data: {"scaId": scaId},
+                        type: 'POST',
+                        dataType: 'json',
+                        complete:function(){
+                            top.ue.closeLoad();
+                        },
+                        success: function (result) {
+                            if (result.data == true) {
+                                top.ue.msg("删除成功");
+                                $("#searchForm").submit();
+                                //layer.alert("删除记录成功",{function:$("#searchForm").submit()});
+                            } else {
+                                top.ue.msg("删除记录失败");
+                            }
+                        }
+                    });
+                }
+            })
+        }
+    }
+
+    function audit_no() {
+        layer.close(one);
+        two = layer.open({
+            area: '583px',
+            title: ['审核不通过原因', 'font-size:18px;text-align:center;background-color:#ffffff;border-bottom:none'],
+            content: $("#no_audit"),
+            type: 1
+        });
+    }
+
+    function audit_yes() {
+        var scaId = $("#scaId").val();
+        var scg_id = $("#scgId").val();
+        var scgg_id = $("#o_select").val();
+        var e_id = $("#eId").val();
+        if (scgg_id == 0 || scgg_id == null || scgg_id == '请选择') {
+            $("#tips").show();
+            top.ue.msg("请选择控销组");
+            return;
+        } else {
+            $.ajax({
+                url: '/sales/sale_control/update_sale_control_apply_status.html',
+                data: {
+                    "scaIdStr": scaId,
+                    "scgId": scg_id,
+                    "scggId": scgg_id,
+                    "eId": e_id,
+                    "scaState": "1"
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.data == 1) {
+                        layer.closeAll();
+                        $("#searchForm").submit();
+                    } else {
+                        top.ue.msg("申请审核失败，请稍后重试");
+                    }
+                }
+            });
+        }
+    }
+
+    function audit_no_apply() {
+        var scaId = $("#scaId").val();
+        var no_reason = $("#no_reason").val();
+        var radio = $('input:radio:checked').val();
+        if (radio == 0 || radio == null) {
+            top.ue.msg("请选择拒绝理由");
+            return;
+        } else {
+            $.ajax({
+                url: '/sales/sale_control/update_sale_control_apply_status.html',
+                data: {
+                    "scaIdStr": scaId,
+                    "auditRefuseReason": radio,
+                    "auditRefuseRemark": no_reason,
+                    "scaState": "0"
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.data == 1) {
+                        layer.closeAll();
+                        $("#searchForm").submit();
+                    } else {
+                        top.ue.msg("申请审核失败，请稍后重试");
+                    }
+                }
+            });
+        }
+    }
+
+    function checkAll(obj, cName) {
+        var checkboxs = document.getElementsByName(cName);
+        for (var i = 0; i < checkboxs.length; i += 1) {
+            checkboxs[i].checked = obj.checked;
+        }
+    }
+
+    function search(url, type) {
+        searchPager(url, type);
+    }
+
+    function audit_close() {
+        $("#tips").hide();
+        layer.closeAll();
+        $("#audit").hide();
+    }
+
+    function audit_create(scgId) {
+        layer.close(one);
+        $("#tips").hide();
+        //window.open("/sales/control/sale_group_edit.html?scgId="+scgId);
+        top.utils.openWithTab('spjx', '专供控销', '/sales/control/sale_group_edit.html?scgId=' + scgId, {
+            fstBread: '销价管理'
+        })
+        $("#audit").hide();
+    }
+
+    //请选择控销客户组
+    function kx_sel_group(t) {
+        for (var i = 1; i < t.length; i++) {
+            document.getElementById(t.options[i].value).style.display = "none";
+        }
+        if (t.value != "请选择") {
+            $("#tips").hide();
+            document.getElementById(t.value).style.display = "block";
+        }
+    }
+
+    function audit(scaId, status, scgName, scgId, eId, eName) {
+        if (scaId == 0 || scaId == null) {
+            top.ue.msg("请选择要审核的记录");
+            return;
+        } else {
+            $.ajax({
+                url: '/sales/sale_control/update_sale_control_apply_prev.html',
+                data: {
+                    "scgId": scgId,
+                    "scaIdStr": scaId,
+                    "eId": eId,
+                    "scaState": status
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
+                    if (result.data != '-1') {
+                        var temp = result.data.toString();
+                        var obj = jQuery.parseJSON(temp);
+                        var url = "<a href='javascript:audit_create(" + scgId + ");'  class='link ml10'>新增控销客户组</a>";
+                        $("#a_ename").html(eName);
+                        if (scgName != '') {
+                            $("#scg_ename").html(scgName);
+                        } else {
+                            $("#scg_ename").html("本控销区");
+                        }
+                        $("#a_info").html("企业信息:" + obj.bizInfo);
+                        $("#div_select").html(obj.select + url);
+                        $("#div_goods").html(obj.goods);
+                        $("#scaId").val(scaId);
+                        $("#scgId").val(scgId);
+                        $("#eId").val(eId);
+                        $("#audit").show();
+                        one = layer.open({
+                            type: 1,
+                            area: ['870px', '350px'],
+                            title: ['控销申请审核', 'font-size:18px;text-align:center;background-color:#ffffff;border-bottom:none'],
+                            content: $("#audit"),
+                            success: function (lay, idx) {
+                                lay.find(".layui-layer-content").css("overflow", "hidden");
+                                var _lpH = lay.find("#audit").parent().height();
+                                lay.find("#audit").height(_lpH - 20);
+                                if (lay.find("#div_goods").height() > 300) {
+                                    lay.find("#div_goods").css({
+                                        "max-height": "290px",
+                                        "overflow-y": "scroll",
+                                        "overflow-x": "hidden"
+                                    })
+                                } else {
+                                    lay.find("#div_goods").css({
+                                        "max-height": "inherit",
+                                        "overflow-y": "inherit",
+                                        "overflow-x": "inherit"
+                                    })
+                                }
+                                var _top = lay.css("top");
+                                lay.find("#o_select").on("change", function () {
+                                    var _h = lay.find("#" + $(this).val()).height();
+                                    if (_h > 0) {
+                                        var wH = $(window).height() - 20;
+                                        layer.style(idx, {
+                                            height: wH,
+                                            top: 10
+                                        })
+                                        var _maxH = lay.find(".layui-layer-content").height() - 250;
+                                        var _lpH = lay.find("#audit").parent().height();
+                                        lay.find("#audit").height(_lpH - 20);
+                                        if (lay.find("#div_goods").height() > _maxH) {
+                                            lay.find("#div_goods").css({
+                                                "max-height": _maxH + "px",
+                                                "overflow-y": "scroll",
+                                                "overflow-x": "hidden"
+                                            })
+                                        } else {
+                                            lay.find("#div_goods").css({
+                                                "max-height": "auto",
+                                                "overflow-y": "hidden",
+                                                "overflow-x": "hidden"
+                                            })
+                                        }
+                                    } else {
+                                        layer.style(idx, {
+                                            height: 350,
+                                            top: _top
+                                        })
+                                        var _lpH = lay.find("#audit").parent().height();
+                                        lay.find("#audit").height(_lpH - 30);
+                                        if (lay.find("#div_goods").height() > 300) {
+                                            lay.find("#div_goods").css({
+                                                "max-height": "290px",
+                                                "overflow-y": "scroll",
+                                                "overflow-x": "hidden"
+                                            })
+                                        } else {
+                                            lay.find("#div_goods").css({
+                                                "max-height": "auto",
+                                                "overflow-y": "hidden",
+                                                "overflow-x": "hidden"
+                                            })
+                                        }
+                                    }
+                                })
+                            },
+                            end: function (index, layero) {
+                                $("#tips").hide();
+                                $("#audit").hide();
+                            }
+                        });
+                    } else {
+                        top.ue.msg("申请审核失败，请稍后重试");
+                    }
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

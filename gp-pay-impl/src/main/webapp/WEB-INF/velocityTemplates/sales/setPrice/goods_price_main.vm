@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>销价管理-我的医药网</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content=""/>
+	<meta name="description" content=""/>
+	<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css" />
+	<link rel="stylesheet" type="text/css" href="/css/index.css" />
+	<link rel="stylesheet" type="text/css" href="/css/order.css" /> 
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="../scripts/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm") #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><span class="color">销售中心</span>&gt; 销价管理 &gt; 商品定价情况（试）</p>
+                </div>
+                <h3 class="xjgl-title cc">
+                    <span class="title fl">商品定价情况</span>
+                </h3>
+                <div class="order_query">
+                	<form action="/sales/goods_price_set/main.html" method="post" id="searchForm">
+                	<input type="hidden" name="pi" value="$!pi">
+                    <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td class="tar" width="80">商品名称：</td>
+                        <td width="180"><input id="gName" name ="gName" value="$!gName" type="text" class="input-170" placeholder="商品名称/助记码" /></td>
+                        <td class="tar" width="75">上架状态：</td>
+                        <td class="td_type" width="auto">
+                            <div class="sltitem sltitem_top">
+                                <span>全部</span>
+                                <ul>
+                                	<li data-value=""><a href="javascript:;">全部</a></li>
+                                    <li data-value="1"><a href="javascript:;">上架</a></li>
+                                    <li data-value="2"><a href="javascript:;">未上架</a></li>
+                                </ul>
+                                <input type="hidden" value="" name="gStatus" id="gStatus"/>
+                            </div>
+                        </td>
+                        <td class="tar" width="80">商品编码：</td>
+                        <td width="180"><input id="gSn" name ="gSn" value="$!gSn" class="input-170" type="text" /></td>
+                        <td class="tar">生产厂家：</td>
+                        <td class="td_type"><input id="gManufacture" name ="gManufacture" value="$!gManufacture" class="input-170" type="text" placeholder="生产厂家/助记码" /></td>
+                        <td class="tar">&nbsp;</td>
+                        <td class="td_type">&nbsp;</td>
+                      </tr>
+                    </table>
+                    </form>
+
+                    <div class="btn cc">
+                       <a href="javascript:searchPager('/sales/goods_price_set/main.html',false);" class="fr btn_query">查询</a>
+                    </div>
+
+                    <div class="xjgl-data-ctn">
+                       <ul class="cc">
+                           <li>
+                               <p class="amount color01">$!goodsNumber</p>
+                               <p class="text">上架商品数</p>
+                           </li>
+                           <li>
+                               <p class="amount color02">$!customerNumber</p>
+                               <p class="text">通过审核客户数</p>
+                           </li>
+                           <li>
+                               <p class="amount color04">$!noPriceNumber</p>
+                               <p class="text">未定价商品数量</p>
+                           </li>
+                       </ul>
+                    </div>
+
+               </div>
+                    
+               <div class="order_detail">
+
+                    <div class="table table-top">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                	#if($!suIsErp == 1)
+                                    <th class="b-l">商品ERP编码</th>
+                                    #end
+                                    <th>商品名称</th>
+                                    <th>规格</th>
+                                    <th>生产厂家</th>
+                                    <th><a href="javascript:;" class="link" id="priceSum">近7日销额 ↓</a></th>
+                                    <th>基价</th>
+                                    <th>上架状态</th>
+                                    <th class="b-r">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            	#if(!$null.isNull($spdjList) && $spdjList.size()!=0) 
+								#foreach($goods in $spdjList)
+									<tr>
+										#if($!suIsErp == 1)
+	                                    <td>$!goods.gInSn</td>
+	                                    #end
+	                                    <td><a class="a-text" href="/sales/goods_price_set/detail.html?gId=$!{goods.gId}">$!goods.gName</a></td>
+	                                    <td>$!goods.gSpecifications</td>
+	                                    <td>$!goods.gManufacture</td>
+	                                    <td>$!goods.priceSum</td>
+	                                    <td>￥$!goods.gBasePrice</td>
+	                                    <td>
+	                                    	#if($!goods.gStatus == 1)
+	                                    		上架
+	                                    	#else
+	                                    		未上架
+	                                    	#end
+	                                    </td>
+	                                    <td><a target="_blank" href="/sales/set_price/single_add.html?gId=$!{goods.gId}" class="btn">创建价格组</a></td>
+                                	</tr>
+								#end
+								#else
+								<tr>
+									<td colspan="10">无相关数据 </td>
+								</tr>
+								#end
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!--分页开始 -->
+						#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+						#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/set_price/list.html")
+						#end #end
+					<!--分页结束 -->
+
+               </div>
+                      
+            </div>
+
+            <!-- 用户中心_主体内容_E -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?version=201612090950"></script>
+    <script src="/js/publish.js"></script>
+    <script src="/js/dragDrop.js"></script>
+    <script src="/js/dialog/dialog.js"></script>
+    <script type="text/javascript" src="/js/pager.js"></script>
+    #parse("common/common_script.vm")
+    <script src="/js/load.js" type="text/javascript"></script>
+    
+    <script>
+		$(function() {
+			//初始化上架状态
+			$.sltitem.select("gStatus","$!{gStatus}");
+			//初始化定价覆盖率过滤条件
+			$.sltitem.select("djRateStatus","$!{djRateStatus}");
+			//定价覆盖率排序
+			$('#djRate').bind('click', function() {
+				var gName = $('#gName').val();
+				var gStatus = $('#gStatus').val();
+				var gSn = $('#gSn').val();
+				var gManufacture = $('#gManufacture').val();
+				var djRateStatus = $('#djRateStatus').val();
+				var suId = '$!suId';
+				window.location.href = "/sales/goods_price_set/main.html?order1=1&gName="+gName+"&gStatus="+gStatus+"&gSn="+gSn+"&gManufacture="+gManufacture+"&suId="+suId+"&djRateStatus="+djRateStatus;
+			});
+			//近七日销额排序
+			$('#priceSum').bind('click', function() {
+				var gName = $('#gName').val();
+				var gStatus = $('#gStatus').val();
+				var gSn = $('#gSn').val();
+				var gManufacture = $('#gManufacture').val();
+				var djRateStatus = $('#djRateStatus').val();
+				var suId = '$!suId';
+				window.location.href = "/sales/goods_price_set/main.html?order2=1&gName="+gName+"&gStatus="+gStatus+"&gSn="+gSn+"&gManufacture="+gManufacture+"&suId="+suId+"&djRateStatus="+djRateStatus;
+			});
+		})
+	</script>
+  </body>
+</html>

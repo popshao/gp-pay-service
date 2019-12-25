@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{{d.title}}</title>
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/js/select2/select2.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/front/css/xjgl_spdj_style.css"/>
+    {{# if(d.skin){ }}
+    <link rel="stylesheet" type="text/css" href="/front/css/tpl_{{d.skin}}.css?v=$!{jscss_version}"/>
+    {{# } }}
+
+</head>
+<body>
+
+<!--页面主体 -->
+<div class="c-box">
+
+    <div class="user-search-box mt10">
+        <form id="searchForm">
+            <ul class="usb-wrap cc">
+                <li class="usb-item">
+                    <span class="s-tit" >商品信息：</span>
+                    <input name="keys" class="s-input s-input-445" type="text" placeholder="商品通用名／商品编码／商品内码／批准文号／生产厂家／商品助记码">
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit">商品状态：</span>
+                    <select class="s-select2 usb-select2" name="g_status" placeholder="全部">
+                        <option value=" ">全部</option>
+                        <option value="1" >上架</option>
+                        <option value="0" >下架</option>
+                    </select>
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit">商品类型：</span>
+                    <select class="s-select2 usb-select2" name="g_type" placeholder="全部">
+                        <option value=" ">全部</option>
+                        <option value="0">普通</option>
+                        <!--    <option value="1">挂单商品</option> -->
+                        <option value="2">新品</option>
+                        <!-- <option value="3">专供品种</option> -->
+                    </select>
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit s-tit-95">旗舰店分类：</span>
+                    <select class="s-select2 usb-select2-s spc" name="gc_id1" placeholder="一级分类">
+                        <option value="">一级分类</option>
+                    </select>
+                    <select class="s-select2 usb-select2-s spcc" name="gc_id2" placeholder="二级分类">
+                        <option value="">二级分类</option>
+                    </select>
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit">基价：</span>
+                    <select class="s-select2 usb-select2" name="g_base_price" placeholder="全部">
+                        <option value=" ">全部</option>
+                        <option value="1">已设置</option>
+                        <option value="2">未设置</option>
+                    </select>
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit s-tit-105">客户分组定价：</span>
+                    <select class="s-select2 usb-select2" name="groupFlag" placeholder="全部">
+                        <option value=" ">全部</option>
+                        <option value="1">已设满</option>
+                        <option value="2">未设满</option>
+                        <option value="3">未设置</option>
+                    </select>
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit">客户定价：</span>
+                    <select class="s-select2 usb-select2" name="clientFlag" placeholder="全部">
+                        <option value=" ">全部</option>
+                        <option value="1">已设置</option>
+                        <option value="2">未设置</option>
+                    </select>
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit">促销：</span>
+                    <select class="s-select2 usb-select2" name="promotionFlag" placeholder="全部">
+                        <option value=" ">全部</option>
+                        <option value="1">已参与</option>
+                        <option value="2">未参与</option>
+                    </select>
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit s-tit-95">控销：</span>
+                    <select class="s-select2 usb-select2" name="controlFlag" placeholder="全部">
+                        <option value=" ">全部</option>
+                        <option value="1">已设置</option>
+                        <option value="2">未设置</option>
+                    </select>
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit">协议价：</span>
+                    <select class="s-select2 usb-select2" name="is_agreement" placeholder="全部">
+                        <option value=" ">全部</option>
+                        <option value="1">已设置</option>
+                        <option value="2">未设置</option>
+                    </select>
+                </li>
+                <li class="usb-item">
+                    <span class="s-tit">预售：</span>
+                    <select class="s-select2 usb-select2" name="presaleFlag" placeholder="全部">
+                        <option value=" ">全部</option>
+                        <option value="1">已设置</option>
+                        <option value="2">未设置</option>
+                    </select>
+                </li>
+            </ul>
+        </form>
+        <div class="usb-btn">
+            <a href="javascript:void(0)" class="btn-query">查询</a>
+            <a href="javascript:void(0)" class="btn-reset"><img src="/image/icon-refresh.png" alt="">清空查询条件</a>
+            <div class="b-text query-num-box" style="display: none">
+                <span id="totalTips"><i class="b-t-ps">*</i> 您一共有 <i class="b-t-ps" id="totalNum"></i> 个商品，您可以对这些商品“</span><span id="queryTips" style="display: none"><i class="b-t-ps">*</i> 本次搜索结果共 <i class="b-t-ps" id="queryNum"></i> 个商品，您可以对这些商品“</span><a href="javascript:void(0)" class="b-t-link"  onclick="gotoNewTab('/sales/priceManager/goodsGroupPriceDetail.html?pathName='+location.href+'&titleBack=商品价格','批量设置客户分组定价',0,1)">批量设置客户分组定价</a>”或“<a href="javascript:void(0)" class="b-t-link" onclick="gotoNewTab('/sales/priceManager/customSetDiyBatchPrice.html?pathName='+location.href+'&titleBack=商品价格','批量增加客户定价',1,1)">批量添加客户定价</a>”
+            </div>
+            <div class="b-text query-no-box" style="display: none">
+                <span id="totalTips"><i class="b-t-ps">*</i>根据您的查询条件，没有找到相关商品，请您调整查询条件后重试。</span>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<!-- 脚本 -->
+<script src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/select2/select2.min.js?v=$!{jscss_version}"></script>
+<script>
+    var layer,laypage , layTable;
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage','table'],function () {
+        layer = layui.layer,laypage = layui.laypage , layTable = layui.table;
+
+    })
+</script>
+
+</body>
+</html>

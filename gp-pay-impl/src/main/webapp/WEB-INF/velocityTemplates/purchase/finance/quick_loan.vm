@@ -1,0 +1,541 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>闪贷管理 - 我的医药网</title>
+    
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+	<link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}" />
+	       
+	<script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>
+      <style type="text/css">
+          .clearfix:before,.clearfix:after{display:table; content: " "; clear: both;}
+          .disableBtn {
+              color: rgb(0,0,0,0.6)
+          }
+          .ui-dialog-close{
+          	display:none!important;
+          }
+          .member li label.left{
+          	width:120px;
+          }
+          /*.aplyBtn{
+              background-color: #ccc!important;
+          }*/
+          .aplyBtn{
+              background-color: #0f94a5!important;
+          }
+        .hi{ background-color: #0f94a5!important;}
+         .useableCursor{
+             cursor: pointer!important;
+         }
+         .unuseableCursor{
+             cursor:default!important;
+         }
+      </style>
+     <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/validate-methods.js?v=$!{jscss_version}" type="text/javascript"></script>	
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>	
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/public.js?v=$!{jscss_version}"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+ 	<script type="text/javascript">
+ 	
+ 	function loadPic(){
+	 		var eStatus="$!{enterprise.eStatus}";
+	 		var eType="$!{enterprise.eType}";
+	 		
+	 		
+	 		//显示企业类型非医院和诊所(必填资质)和企业类型非医院和诊所(非必填资质)
+	 			if(eType=='6' || eType=='7'){
+		 			$("#box13").show();
+		 			$("#box26").show();
+		 			$("#box27").show();
+		 			uploadPic(13);
+	 			}else{
+		 			$("#box1").show();
+		 			$("#box2").show();
+		 			$("#box3").show();
+		 			//初始化上传图片方法
+		 			for(var i=1;i<=3;i++){
+						uploadPic(i);
+					}
+	 			}
+	 			uploadPic(26);
+	 			uploadPic(27);
+		}
+		//下拉框点击事件
+		function loadSltitem(){
+			$(".sltitem").unbind("click");
+		    //自定义下拉框
+			$(".sltitem").click(function(e){
+				e.stopPropagation();
+				var len = $(this).find('li').length;
+				$(this).find("span").addClass("on");
+				if(len > 6){
+					$(this).find("ul").css('height','120px').show();
+				}else{
+					$(this).find("ul").show();
+				}		
+			});
+		    
+			$(".sltitem li").unbind("click");
+			$(".sltitem li").click(function(e){
+				e.stopPropagation();
+				var text = $(this).text();
+				var value = $(this).data("value");
+				$(this).closest("ul").prev().text(text).removeClass("on");
+				$(this).closest("ul").next().val(value).change();
+				$(this).closest("ul").hide();
+			});
+		}
+
+	 	function toAdd(){
+            var checked = $("#agree").is(":checked");
+                if (!checkInputs()){
+                    return;
+                }
+                $.ajax({
+                    type: 'post',
+                    url: '/purchase/finance/quick_loan_submit.html',
+                    //data: $("form").serialize(),
+                     data: {
+		 			    		"quickLoanEnterpriseWapper":$.toJSON($("#form").serializeJson())
+		 			    	},
+		 			    dataType: 'json',
+                    success: function(data) {
+	                    top.ue.alert({
+			            	content:"申请成功",
+							title:"提示",
+			            	ok: function(){
+			            		window.location.reload();
+			            	}
+			            })
+                    }
+                });
+	 	}
+
+        function customizeAlert(msg) {
+            top.ue.msg(msg);
+        }
+
+        function blankAlert(itemName) {
+            customizeAlert(itemName + "未填写，请填写后再操作");
+        }
+
+        function formatAlert(itemName) {
+            customizeAlert(itemName + "格式不正确");
+        }
+
+	 	function submitForm(){
+	 		$('#form').submit();
+	 	}
+
+        $("#agree").click(function () {
+            var checked = $(this).is(":checked");
+            if (checked){
+                $(this).removeClass("disableBtn");
+            } else {
+                $(this).addClass("disableBtn");
+            }
+        });
+	function uploadPic(picId){
+			   var uploadPic = $("#uploadPic"+picId);
+		        new AjaxUpload(uploadPic,{
+		            action: "/cdn/imageInfo_upload.html?type=1&parse=1&pcId="+picId,
+		            name: 'file_path',
+		            responseType:"json",
+		            onSubmit : function(file, ext){
+		            	if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+		                    ext_str = ext;
+		                } else {
+		                	top.ue.msg("非图片文件格式,请重传！");
+		                    return false;
+		                }
+		                $.showLoad();
+		            },
+		            onComplete: function(file, result){
+		            	$.hideLoad();
+		            	if (result.success == false) {
+		            		if(result.message == "outofsize"){
+		            			top.ue.msg("文件过大，无法上传！");
+		            		}else if(result.message == "error"){
+		            			top.ue.msg("文件过大，无法上传！");
+		            		}
+		            		return false;
+		            		
+		            	}else{
+		            		if(picId==1 || picId==2 || picId==3 || picId==13 || picId==26 || picId==27){
+		            			picSign=1;
+		            		}
+		            		$("#saImgPath"+picId).val(result.data.id);//response返回的是mogoDB记录id
+// 		                	$('#showPic'+picId).attr("src",result.data.picUrl+result.data.id+result.data.picSize);
+		                	$('#showPic'+picId).attr("src",result.data.picUrl.replace("&amp;","&"));
+		                	$("#bucket_key"+picId).val(result.data.id);
+		                	if($("#epNo"+picId).val()==''||$("#epNo"+picId).val()=='undefind'){
+		                		$("#epNo"+picId).val(result.data.cerNo);
+		                	}
+		                	if($("#epStartTime"+picId).val()==''||$("#epStartTime"+picId).val()=='undefind'){
+		                		$("#epStartTime"+picId).val(result.data.startTime);
+		                	}
+		                	if($("#epEndTime"+picId).val()==''||$("#epEndTime"+picId).val()=='undefind'){
+		                		$("#epEndTime"+picId).val(result.data.endTime);
+		                	}
+		                	$("#imageInfo"+picId).val($.toJSON(result.data.imageInfo));
+		            	}
+		                $.hideLoad();
+		            }
+		        });
+		   }
+        $(function(){
+            $.sltitem.select("qlLoanPeriod", "$!quickLoanEnterprise.qlLoanPeriod");
+            #if($authFlashLoan==false)
+            top.ue.confirm({
+            	content:"闪贷不适用于当前账户类型，请选择其它金融产品",
+            	ok: function(idx){
+            		//window.location.href ="http://$!redirectUrl";
+					top.utils.open("http://$!redirectUrl","_self");
+                    top.ue.close(idx);
+            	},
+                btn2: function(idx){
+            		//window.location.href ="http://$!redirectUrl";
+                    top.utils.open("http://$!redirectUrl","_self");
+                    top.ue.close(idx);
+            	}
+            }).reset();
+            #end
+            
+            #if($!auth == false)
+            top.ue.confirm({
+            	content:"请您先完成企业认证，认证后才能进行其他操作",
+				title:"提示",
+            	ok: function(idx,lay){
+                   top.ue.close(idx):
+            		//window.location = "$!redirectUrl";
+            		//top.utils.openWithTab();
+            		//top.utils.openWithTab（"唯一ID","tab名","url",{fstBread:"二级面包屑名"}
+            		top.utils.open("$!redirectUrl","_self");
+            	},
+                btn2: function(idx,lay){
+                    top.ue.close(idx):
+            		top.utils.open("$!redirectUrl","_self");
+            	}
+            }).reset();
+            
+            #end
+        })
+
+        function checkInputs() {
+            //var reg = /[a-z0-9\u4E00-\u9FFF]/g;
+            if ($.trim($("#qlName").val()).length == 0){
+                blankAlert("企业名称");
+                return false;
+            }
+
+            if ($.trim($("#qlContactor").val()).length == 0){
+                blankAlert("法人姓名");
+                return false;
+            }
+            if ($.trim($("#qlLegalNo").val()).length == 0){
+                blankAlert("法人身份证号");
+                return false;
+            }
+
+            var reg_tel = /^1[34578][0-9]{9}$/;
+            if ($.trim($("#qlMobile").val()).length == 0){
+                blankAlert("手机号码");
+                return false;
+            }
+
+            if (!reg_tel.test($.trim($("#qlMobile").val()))){
+                formatAlert("手机号码");
+                return false;
+            }
+            if ($("#qlLoanPeriod").val() == '0' || $("#qlLoanPeriod").val() == ""){
+                blankAlert("贷款期限");
+                return false;
+            }
+//企业类型非医院和诊所(必填资质)和企业类型非医院和诊所(非必填资质)
+	 			//验证必填的图片是否上传
+	 			#if($!enterprise.eType==13)
+	 			var saImgPath13=$("#saImgPath13").val();
+	 			var saImgPath26=$("#saImgPath26").val();
+ 	 			var saImgPath27=$("#saImgPath27").val();
+	 			if(saImgPath13=="" || saImgPath26=="" || saImgPath27==""){
+	 				top.ue.msg("必填资质图片必须上传！");
+	 				return;
+	 			}
+	 			var epNo13=$("#epNo13").val();
+	 			
+	 			if( epNo13==""){
+	 				top.ue.msg("必须填写证件号码！");
+	 				return;
+	 			}
+	 			#else
+	 			
+	 			 var saImgPath1=$("#saImgPath1").val();
+	 			var saImgPath2=$("#saImgPath2").val();
+	 			var saImgPath3=$("#saImgPath3").val();
+	 			var saImgPath26=$("#saImgPath26").val();
+ 	 			var saImgPath27=$("#saImgPath27").val();
+	 			if(saImgPath1=="" || saImgPath2=="" || saImgPath3=="" || saImgPath26=="" || saImgPath27==""){
+	 				top.ue.msg("必填资质图片必须上传！");
+	 				return;
+	 			}
+	 			var epNo1=$("#epNo1").val();
+	 			var epNo2=$("#epNo2").val();
+	 			var epNo3=$("#epNo3").val();
+	 			
+	 			if(epNo1=="" || epNo2=="" || epNo3==""){
+	 				top.ue.msg("必须填写证件号码！");
+	 				return;
+	 			}
+	 			
+	 			#end
+	 			 return true;
+        }
+        	//查看范例图片
+		function showImage(img) {
+            var imgUrl = "/image/zizhi/img" + img + ".jpg";
+            var content = '<img src="' + imgUrl + '" height="400px;" width="750px;"/>';
+            top.utils.showImg(imgUrl);
+        }
+	 	
+		//查看大图
+		function showBIgImage(img){
+            var str = "#showPic" + img;
+            var url = $(str).attr("src");
+			var picurl = "/purchase/account/enterprise_open.html?picurl=" + encodeURIComponent(url);
+			window.open(picurl);
+		}
+ 	</script>
+
+	 <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+	</head>
+  <body onload="loadPic()">
+    <div class="container">
+      #parse("common/header_top.vm")
+      #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #if($!position == 1)
+          #parse("common/left_menu_purchase.vm")
+          #else
+          #parse("common/left_menu_sales.vm")
+          #end
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            	<div class="path">
+                    <p class="fl"><a href="/purchase/index.html" class="color">
+                    #if($!position == 1)
+                        采购中心
+                    #else
+                        销售中心
+                    #end
+                    </a> &gt; 金融产品 &gt; 闪贷管理</p>
+                </div>
+
+                <form method="post" id="form">
+
+				<!-- 保存的同时即为待审核状态 -->
+                <input type="hidden" name="qlId" id="qlId" value="$!{quickLoanEnterprise.qlId}"/>
+                <input type="hidden" name="enterpriseAddTime" id="enterpriseAddTime" value="$utils.formatDate($!{quickLoanEnterprise.enterpriseAddTime},"yyyy-MM-dd HH:mm:ss")"/>
+                <dl class="path_hide">
+                <dd>
+                <div class="order_query order member" style="position: relative;margin-top:10px;">
+                        <ul class="clearfix">
+                            <li class="one">
+                                <label class="left">企业名称<i>*</i>：</label>
+                                <input name="qlName" id="qlName" type="text" class="w-txt" value="$!{quickLoanEnterprise.qlName}" maxlength="50">
+                             #if("$!statusText" != "")
+		                            <p><b style="padding-left: 17px;">审核状态：</b>$!{statusText}
+                                        #if($!{statusText} == "审核通过")
+                                            <b style="font-weight:normal; margin-left:10px; color: grey;">（使用闪贷下单请下载"我的医药APP"手机客户端 <a style="color: #0f93ce;" href="http://act.mypharma.com/v1_15_10.html" target="_blank">马上下载>> </a>）</b>
+										#end
+									</p>
+		                        #end
+                            </li>
+                             <li class="one">
+                                <label class="left">法人姓名<i>*</i>：</label>
+                                <input name="qlContactor" id="qlContactor" type="text" class="w-txt" value="$!{quickLoanEnterprise.qlContactor}"  maxlength="45">
+                            </li>
+                             <li class="one">
+                                <label class="left">法人身份证号<i>*</i>：</label>
+                                <input name="qlLegalNo" id="qlLegalNo" type="text" class="w-txt" value="$!{quickLoanEnterprise.qlLegalNo}"  maxlength="19">
+                            </li>
+                           
+                            <li class="one">
+                                <label class="left">手机号码<i>*</i>：</label>
+                                <input name="qlMobile" id="qlMobile" type="text" class="w-txt" value="$!{quickLoanEnterprise.qlMobile}">
+                            </li>
+
+                            <li class="one">
+                                <label class="left">法人住址：</label>
+                                <input name="qlLegalRpeRdd" id="qlLegalRpeRdd" type="text" class="w-txt" value="$!{quickLoanEnterprise.qlLegalRpeRdd}"  maxlength="100">
+                            </li>
+
+                            <li class="one">
+                                <label class="left">经营地址：</label>
+                                <input name="qlActualRdd" id="qlActualRdd" type="text" class="w-txt" value="$!{quickLoanEnterprise.qlActualRdd}">
+                            <h2 style="font-size: 14px;color: red;">请保持与GSP证书的地址一致</h2>
+                            </li>
+
+                            <li class="one">
+                                <label class="left">贷款期限<i>*</i>：</label>
+                                <div class="sltitem sltitem-top w150">
+                                    <span style="width:318px ">待选择</span>
+                                    <ul style="display: none;">
+                                        <li data-value="0"><a href="javascript:void(0);">待选择</a></li>
+                                        <li data-value="30"><a href="javascript:void(0);">30天</a></li>
+                                        <li data-value="60"><a href="javascript:void(0);">60天</a></li>
+                                        <li data-value="90"><a href="javascript:void(0);">90天</a></li>
+                                    </ul>
+                                    <input type="hidden" name="qlLoanPeriod" id="qlLoanPeriod" value="$!quickLoanEnterprise.qlLoanPeriod">
+                                </div>
+                            </li>
+                        </ul>
+					    <div class="image-upload-box">
+                    	<div class="project_box mt10" id="reqInfoBtn">
+                        	<span class="caption">
+                        		资质信息
+                        	</span>
+                        </div>
+                        <div id="reqInfoBtnInfo">
+	                        #foreach($picNotNull in $bizEnterprisePicList)
+	                        <div   class="box" id="box$!{picNotNull.epType}">
+	                            <div class="cc">
+	                                <div class="img-box">
+	                                	#if($!{picNotNull.epType}==2 || $!{picNotNull.epType}==3 || $!{picNotNull.epType}==1 || $!{picNotNull.epType}==26 || $!{picNotNull.epType}==27 || $!{picNotNull.epType}==13)<!--1.企业营业执照，2药品经营许可证.3.gsp证书-->
+		                                    	#if($!{picNotNull.epPic})
+		                                    			<h5>
+														<a title="查看大图" href="javascript:showBIgImage($!{picNotNull.epType});" style="color:#47b7c5;">$!{picNotNull.epName}<i>(必填项)</i>：</a>
+														</h5>
+												#else
+													<h5>$!{picNotNull.epName}<i>(必填项)</i>：</h5>
+												#end
+		                                    #else
+		                                    	#if($!{picNotNull.epPic})
+		                                    			<h5>
+														<a title="查看大图" href="javascript:showBIgImage($!{picNotNull.epType});" style="color:#47b7c5;">$!{picNotNull.epName}：</a>
+														</h5>
+												#else
+													<h5>$!{picNotNull.epName}：</h5>
+												#end
+		                                    #end
+	                                    <input type="hidden" value="$!{picNotNull.epType}" name="epType$!{picNotNull.epType}"/>
+	                                    <input type="hidden" value="$!{picNotNull.epId}" name="epId$!{picNotNull.epType}"/>
+	                                    <div class="img-file" id="uploadPic$!{picNotNull.epType}">
+	                                    			#if($!{picNotNull.epPic})
+			                                       		<img id="showPic$!{picNotNull.epType}" src="$!{picNotNull.imgUrl}" height="139px;" width="139px;"/>
+			                                       	#else
+			                                       		<img id="showPic$!{picNotNull.epType}" height="139px;" width="139px;"/>
+			                                       	#end
+			                                       <input type="hidden" value="$!{picNotNull.epPic}" id="saImgPath$!{picNotNull.epType}" name="epPic$!{picNotNull.epType}">
+			                                       <input type="hidden" id="bucket_key$!{picNotNull.epType}" name="bucket_key$!{picNotNull.epType}" value="$!{picNotNull.bucket_key}">
+		                                           <input type="hidden" id="imageInfo$!{picNotNull.epType}" name="imageInfo$!{picNotNull.epType}">
+			                            </div>
+	                                </div>
+	                                <div class="form-group">
+	                                	<div>
+	                                		#if($!{picNotNull.epPic})
+	                                			<a href="javascript:showBIgImage($!{picNotNull.epType});"><i></i>查看大图</a>
+	                                		#end
+	                                    	<a href="javascript:showImage($!{picNotNull.epType});"><i></i>查看范例</a>
+	                                    </div>
+	                                    #if($!{picNotNull.epType}==1 || $!{picNotNull.epType}==2 || $!{picNotNull.epType} ==3 || $!{picNotNull.epType}==13)
+		                                    <label>证照号码：</label>
+		                                    <div class="control-item">
+		                                        <input type="text" class="form-control" value="$!{picNotNull.epNo}" id="epNo$!{picNotNull.epType}" placeholder="" name="epNo$!{picNotNull.epType}">
+		                                    </div>
+		                                    <label>证件有效期：</label>
+		                                    <div class="control-item">
+		                                        <input type="text" id="epStartTime$!{picNotNull.epType}" value="$utils.formatDate($!{picNotNull.epStartTime},"yyyy-MM-dd")" name="epStartTime$!{picNotNull.epType}"  class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'epEndTime$!{picNotNull.epType}\')}'})">
+		                                    </div>
+		                                    <label>至</label>
+		                                    <div class="control-item">
+		                                        <input type="text" id="epEndTime$!{picNotNull.epType}" value="$utils.formatDate($!{picNotNull.epEndTime},"yyyy-MM-dd")" name="epEndTime$!{picNotNull.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'epStartTime$!{picNotNull.epType}\')}',maxDate:'2099-12-31'})">
+		                                    </div>
+	                                    #end
+	                                </div>
+	                            	#if($!{picNotNull.epType} == 1)
+	                                <div class="info-box">
+	                                注意事项：<br/>
+ 									1.企业名称需要与营业执照名称保持一致<br/>
+ 									2.三证合一的企业请在证照号码处填写“全国统一社会信用代码”<br/>
+ 									3.证照起止日期为必填，若为长期终止时间可不填                                                     
+	                                </div>
+	                                #elseif($!{picNotNull.epType} == 2)
+	                                <div class="info-box">
+	                               	注意事项：<br/>
+ 									1.证号必须清晰可见<br/>
+ 									2.仓库地址默认为收货地址<br/>
+ 									3.有效期务必清晰可见并在有效期内
+ 									</div>
+	                                #elseif($!{picNotNull.epType} == 3)
+	                                <div class="info-box">
+	                                 注意事项：<br/>
+ 									1.认证地址务必保持与收货地址一致<br/>
+ 									2.有效期必须清晰可见并且必须在有效期内
+ 									</div>
+	                                #end
+	                            </div>
+	                            
+	                        </div>
+	                        #end
+                        </div>
+                     </div>
+					#if($!enterprise.eType == 2 || $!enterprise.eType ==5 || $!enterprise.eType == 1 ||$!enterprise.eType == 3 || $!enterprise.eType == 4 ||$!enterprise.eType == 6 || $!enterprise.eType == 7)
+                        #if($!quickLoanEnterprise.qlStatus == -1 || $!quickLoanEnterprise.qlStatus==2)
+                            <div class="btn" style="padding-left: 120px;"><a href="javascript:void(0);"  onclick="toAdd();" class="aplyBtn">提交申请</a></div>
+                            #else
+                                <div class="btn" style="padding-left: 120px;"><a disabled href="javascript:void(0);" style="display:none; background:#f4f4f4;color:#666;border:1px solid #ccc; cursor:not-allowed;">提交申请</a></div>
+                        #end
+                    #else
+                    <div class="btn" style=" padding-left: 120px;"><a disabled href="javascript:void(0);" style="display:none; background:#f4f4f4;color:#666;border:1px solid #ccc; cursor:not-allowed;">提交申请</a></div>
+                    #end
+                </div>
+                </dd>
+                </dl>
+                </form>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+   #parse("/common/footer.vm")
+  </body>
+</html>

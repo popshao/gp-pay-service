@@ -1,0 +1,496 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>客服管理 -我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/validate.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/sales/index.html" class="color">销售中心</a> &gt; 商城管理 &gt; 客服管理</p>
+                    </div>
+                    <!--                 <div class="order_query order"> -->
+                    <!--                    <form action="" method="get" id="order_form"> -->
+                    <!--                         <ul>                         -->
+                    <!--                             <li> -->
+                    <!--                                 <label>坐席名称：</label> -->
+                    <!--                                  <input name="name" type="text" value="" class="w-txt w130"> -->
+                    <!--                             </li> -->
+                    <!--                             <li> -->
+                    <!--                                 <label>客服名称：</label> -->
+                    <!--                                  <input name="name" type="text" value="" class="w-txt w130"> -->
+                    <!--                             </li> -->
+                    <!--                             <li> -->
+                    <!--                                 <label>QQ号码：</label> -->
+                    <!--                                  <input name="name" type="text" value="" class="w-txt w130"> -->
+                    <!--                             </li> -->
+                    <!--                             <li> -->
+                    <!--                                 <label>排序：</label> -->
+                    <!--                                 <input name="name" type="text" value="" class="w-txt w26"> -->
+                    <!--                                 <i class="slt_t">至</i> -->
+                    <!--                                  <input name="name" type="text" value="" class="w-txt w26"> -->
+                    <!--                             </li> -->
+                    <!--                         </ul> -->
+                    <!--                        <div class="btn"><a href="javascript:;" class="btn_query">查询</a></div>                     -->
+                    <!--                     </form> -->
+                    <!--                 </div> -->
+                    <div class="order_detail">
+                        <div class="btn-box mt19">
+                            #if(!$null.isNull($shopCuntomerList) && $shopCuntomerList.size()<6)
+                                <a href="javascript:editItem('','add');" class="btn_add btn-line" id="sel-a">添加</a>
+                            #end
+                            <!--                     <a href="javascript:delBatch();" class="btn_delete">删除</a> -->
+                        </div>
+                        <div class="table">
+                            <table cellpadding="0" cellspacing="0">
+                                <thead class="head">
+                                <tr class="line">
+                                    <th>坐席名称</th>
+                                    <th>客服名称</th>
+                                    <th width="80px">QQ号码</th>
+                                    <th width="50px">排序</th>
+                                    <th width="50px">状态</th>
+                                    <th width="150px">创建时间</th>
+                                    <th width="150px">上次编辑时间</th>
+                                    <th width="150px">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    #if(!$null.isNull($shopCuntomerList) && $shopCuntomerList.size()!=0)
+                                        #foreach($shopCustomer in $!shopCuntomerList)
+                                        <tr>
+                                            <td>$!{shopCustomer.scsName}</td>
+                                            <td>$!{shopCustomer.scsPeople}</td>
+                                            <td>$!{shopCustomer.scsQq}</td>
+                                            <td>$!{shopCustomer.scsOrder}</td>
+                                            <td>#if($!{shopCustomer.scsStatus} == 1)启用#else停用#end</td>
+                                            <td>$utils.formatDate($!{shopCustomer.scsAddTime},
+                                                "yyyy-MM-dd HH:mm:ss")</td>
+                                            <td>$utils.formatDate($!{shopCustomer.scsEditTime},
+                                                "yyyy-MM-dd HH:mm:ss")</td>
+                                            <td><a href="javascript:view($!{shopCustomer.scsId});"
+                                                   class="btn-txt">查看</a>
+                                                <a href="javascript:editItem($!{shopCustomer.scsId},'edit');"
+                                                   class="btn-txt">修改</a>
+                                                <a href="javascript:delCustomer($!{shopCustomer.scsId});"
+                                                   class="btn-txt color-bg">删除</a></td>
+                                        </tr>
+                                        #end
+                                    #else
+                                    <tr>
+                                        <td colspan="9">无相关数据！</td>
+                                    </tr>
+                                    #end
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- 用户中心_主体内容_E -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 添加修改页面 -->
+<div class="mask" id="popUpMask"></div>
+<div class="dialog w460" id="popUpDIV">
+    <div class="head"><span class="dialog-title">添加</span><a href="javascript:closePopUpDIV('popUpDIV','popUpMask');"
+                                                             class="btn-close"></a></div>
+    <div class="con">
+        <form id="editCusForm">
+            <input type="hidden" name="scsId" id="scsId"/>
+            <table cellpadding="0" cellpacing="0" border="0" class="table-box">
+                <tbody>
+                <tr>
+                    <td class="table-tit">坐席名称<i>*</i>：</td>
+                    <td><input type="text" name="scsName" id="scsName" maxlength="20" class="txt"></td>
+                </tr>
+                <tr>
+                    <td class="table-tit">客服名称<i>*</i>：</td>
+                    <td><input type="text" name="scsPeople" id="scsPeople" maxlength="20" class="txt"></td>
+                </tr>
+                <tr>
+                    <td class="table-tit">QQ号码<i>*</i>：</td>
+                    <td><input type="text" name="scsQq" id="scsQq" maxlength="11" class="txt"></td>
+                </tr>
+                <tr>
+                    <td class="table-tit">排序<i>*</i>：</td>
+                    <td><input type="text" name="scsOrder" id="scsOrder" min="0" max="99999" maxlength="5" class="txt">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table-tit">状态：</td>
+                    <td><input type="radio" name="scsStatus" id="scsStatus_1" value="1" class="btn-state"
+                               checked="checked">启用 <input type="radio" id="scsStatus_0" name="scsStatus" value="0"
+                                                           class="btn-state ml21">停用
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn"><a href="javascript:saveCus();" class="btn-txt mr7">保存</a><a
+                    href="javascript:closePopUpDIV('popUpDIV','popUpMask');" class="btn-txt">关闭</a></div>
+        </form>
+    </div>
+</div>
+
+<!-- 查看页面 -->
+<div class="mask" id="popUpMaskQ"></div>
+<div class="dialog w460" id="popUpDIVQ">
+    <div class="head"><span class="dialog-title">添加</span><a href="javascript:closePopUpDIV('popUpMaskQ','popUpDIVQ');"
+                                                             class="btn-close"></a></div>
+    <div class="con">
+        <form>
+            <ul>
+                <li>
+                    <label for="">坐席名称<i>*</i>：</label><span id="scsNameQ"></span>
+                </li>
+                <li>
+                    <label for="">客服名称<i>*</i>：</label><span id="scsPeopleQ"></span>
+                </li>
+                <li>
+                    <label for="">QQ号码<i>*</i>：</label><span id="scsQqQ"></span>
+                </li>
+                <li>
+                    <label for="">排序<i>*</i>：</label><span id="scsOrderQ"></span>
+                </li>
+                <li>
+                    <label for="">状态：</label><span id="scsStatusQ"></span>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+    #parse("/common/footer.vm")
+
+<!-- mypharma_脚本 -->
+<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+<script>
+    function saveCus() {
+        $('#editCusForm').submit();
+    }
+
+    function checkForm(lay) {
+        $("#editCusForm",lay).validate({
+            submitHandler: saveItem, //如果验证通过的回调函数
+            rules: {
+                scsName: {
+                    required: true
+                },
+                scsPeople: {
+                    required: true
+                },
+                scsQq: {
+                    required: true,
+                    digits: true
+                },
+                scsOrder: {
+                    required: true,
+                    digits: true
+                }
+            },
+            messages: {
+                scsName: {
+                    required: "请输入坐席名称"
+                },
+                scsPeople: {
+                    required: "请输入客服姓名"
+                },
+                scsQq: {
+                    required: "请输入QQ号码",
+                    digits: "请输入整数"
+                },
+                scsOrder: {
+                    required: "请输入排序",
+                    digits: "请输入整数"
+                }
+            }
+
+        });
+    }
+
+    //查看详情
+    function view(id) {
+        var mask = $("#popUpMaskQ");
+        var dialog = $("#popUpDIVQ");
+        top.ue.load();
+        $.ajax({
+            url: "/sales/store/cus_editUI.html",
+            type: "POST",
+            data: {"id": id},
+            cache: false,
+            complete:function () {
+                top.ue.closeAll("loading");
+            },
+            success: function (result) {
+                if (result.success == false) {
+                    top.ue.msg(result.message)
+                } else {
+                    /*//显示弹出层与遮照层
+                    showPopUpDIV(dialog, mask);
+                    //给弹出层表单设值
+                    setViewFormValue(result.data);
+                    //设置弹出层标题
+                    dialog.find('.dialog-title').text("查看详情");*/
+                    top.rui.dynamic({
+                        title: "查看详情",
+                        content: dialog.html(),
+                        skin: "dialog-old dialog-old-no-title",
+                        area: ["460px"],
+                        btn:false,
+                        success: function (lay, idx) {
+                            setViewFormValue(result.data,lay);
+                            top.rui.initTools(lay);
+                        },
+                    })
+                }
+            }
+        });
+
+    }
+
+    //增加与编辑，mode值有：add与edit
+    function editItem(id, mode) {
+        var mask = $("#popUpMask");
+        var dialog = $("#popUpDIV");
+        if (mode == "edit") {
+            top.ue.load();
+            $.ajax({
+                url: "/sales/store/cus_editUI.html",
+                type: "POST",
+                data: {"id": id},
+                cache: false,
+                complete: function () {
+                    top.ue.closeAll("loading");
+                },
+                success: function (result) {
+                    if (result.success == false) {
+                        top.ue.msg(result.message);
+                    } else {
+                        /*//显示弹出层与遮照层
+                        showPopUpDIV(dialog,mask);
+                        //给弹出层表单设值
+                        setFormValue(result.data);
+                        //设置弹出层标题
+                        dialog.find('.dialog-title').text("编辑客服");
+                        //清除错误信息
+                        $(".error").parent().find("label").remove();
+                        //验证表单
+                        checkForm(lay);*/
+                        top.rui.dynamic({
+                            title: "编辑客服",
+                            content: dialog.html(),
+                            skin: "dialog-old dialog-old-no-title",
+                            area: ["460px"],
+                            success: function (lay, idx) {
+                                $(".error", lay).parent().find("label").remove();
+                                setFormValue(result.data, lay);
+                                checkForm(lay);
+                                top.rui.initTools(lay);
+                            },
+                            yes: function (idx, lay) {
+                                $('#editCusForm', lay).attr("data-did", idx).submit();
+                            }
+                        })
+                    }
+                }
+            });
+        } else {
+            /*//显示弹出层与遮照层
+            showPopUpDIV(dialog,mask);
+            //设值弹出层表单值
+            setFormValue();
+            //设置弹出层标题
+            dialog.find('.dialog-title').text("添加客服");
+            //清除错误信息
+            $(".error").parent().find("label").remove();
+            //验证表单
+            checkForm();*/
+            top.rui.dynamic({
+                title: "添加客服",
+                content: dialog.html(),
+                skin: "dialog-old dialog-old-no-title",
+                area: ["460px"],
+                success: function (lay, idx) {
+                    $(".error", lay).parent().find("label").remove();
+                    setFormValue(null, lay);
+                    checkForm(lay);
+                    top.rui.initTools(lay);
+                },
+                yes: function (idx, lay) {
+                    $('#editCusForm', lay).attr("data-did", idx).submit();
+                }
+            })
+        }
+    }
+
+    //给查看详情弹出层表单设值
+    function setViewFormValue(obj,lay) {
+        if (obj) {
+            $('#scsNameQ', lay).text(obj.scsName);
+            $('#scsPeopleQ', lay).text(obj.scsPeople);
+            $('#scsQqQ', lay).text(obj.scsQq);
+            $('#scsOrderQ', lay).text(obj.scsOrder);
+            if (obj.scsStatus == 1) {
+                $('#scsStatusQ', lay).text("启用");
+            } else {
+                $('#scsStatusQ', lay).text("停用");
+            }
+        }
+    }
+
+
+    //给弹出层表单设值
+    function setFormValue(obj, lay) {
+        if (obj) {
+            $('#scsId', lay).val(obj.scsId);
+            $('#scsName', lay).val(obj.scsName);
+            $('#scsPeople', lay).val(obj.scsPeople);
+            $('#scsQq', lay).val(obj.scsQq);
+            $('#scsOrder', lay).val(obj.scsOrder);
+            if (obj.scsStatus == 1) {
+                $('#scsStatus_1', lay).prop("checked", true);
+            } else {
+                $('#scsStatus_0', lay).prop("checked", true);
+            }
+        } else {
+            $('#scsId', lay).val("");
+            $('#scsName', lay).val("");
+            $('#scsPeople', lay).val("");
+            $('#scsQq', lay).val("");
+            $('#scsOrder', lay).val("");
+            $('#scsStatus_1', lay).prop("checked", true);
+        }
+    }
+
+    //增加或修改保存
+    function saveItem(obj) {
+        var idx = $(obj).attr("data-did");
+        var lay = top.$("#layui-layer" + idx);
+        var url = null;
+        var flag = true;
+        var id = $("#editCusForm", lay).find("#scsId").val();
+        if (!isEmpty(id)) {
+            url = "/sales/store/cus_edit.html";
+            flag = false;
+        } else {
+            url = "/sales/store/cus_add.html";
+        }
+
+        var cusObj = {};
+        cusObj.scsId = $("#scsId", lay).val();
+        cusObj.scsName = $("#scsName", lay).val();
+        cusObj.scsPeople = $("#scsPeople", lay).val();
+        cusObj.scsQq = $("#scsQq", lay).val();
+        cusObj.scsOrder = $("#scsOrder", lay).val();
+        cusObj.scsStatus = $("input[name='scsStatus']:checked", lay).val();
+        var data = $.toJSON(cusObj);
+        top.ue.load();
+        $.ajax({
+            url: url,
+            data: {"jsonParam": data},
+            type: 'POST',
+            dataType: 'json',
+            complete: function () {
+                top.ue.closeAll("loading");
+            },
+            success: function (result) {
+
+                if (result.success == false) {
+                    top.ue.msg(result.message);
+                } else {
+                    top.ue.close(idx);
+                    var content = flag ? "添加客服成功" : "修改客服成功";
+                    top.ue.alert({
+                        title: '提示信息',
+                        content: content,
+                        end: function () {
+                            window.location.reload(true);
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+
+    function delCustomer(value) {
+        top.ue.confirm({
+            title: "提示信息",
+            content: "你确定要删除该条记录吗？",
+            ok: function (idx,lay) {
+                top.ue.close(idx);
+                top.ue.load();
+                $.ajax({
+                    url: '/sales/store/cus_del.html',
+                    data: {"id": value},
+                    type: 'POST',
+                    dataType: 'json',
+                    complete:function () {
+                        top.ue.closeAll("loading");
+                    },
+                    success: function (result) {
+                        if (result.data == true) {
+                            top.ue.alert({
+                                title: '提示信息',
+                                content: "删除客服成功",
+                                end: function () {
+                                    window.location.reload(true);
+                                }
+                            })
+
+                        } else {
+                            top.ue.msg("删除客服失败");
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+</script>
+
+
+</body>
+</html>

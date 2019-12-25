@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.write.AccountCardWriteDao">
+	<resultMap id="accountCardResult" type="com.mph.coreapi.gp.pay.entity.AccountCard" >
+		<id column="ac_id" property="acId" />
+		<result column="su_id" property="suId" />
+		<result column="e_id" property="eId" />
+		<result column="pay_bank_id" property="payBankId" />
+		<result column="bank_name" property="bankName" />
+		<result column="branch_name" property="branchName" />
+		<result column="card_no" property="cardNo" />
+		<result column="cp_no" property="cpNo" />
+		<result column="account_name" property="accountName" />
+		<result column="card_type" property="cardType" />
+		<result column="id_no" property="idNo" />
+		<result column="apply_status" property="applyStatus" />
+		<result column="refuse_reason" property="refuseReason" />
+		<result column="mobile" property="mobile" />
+		<result column="is_default" property="isDefault" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+		<result column="province" property="province" />
+		<result column="town" property="town" />
+		<result column="bank_detail_name" property="bankDetailName" />
+		<result column="ep_pic" property="epPic" />
+		<result column="pay_bank_id1" property="payBankId1" />
+		<result column="pay_bank_id2" property="payBankId2" />
+		<result column="yibao_city_id" property="yibaoCityId" />
+		<result column="yibao_province_id" property="yibaoProvinceId" />
+		<result column="bucket_key" property="bucket_key" />
+		<result column="is_pay_onlie_com" property="isPayOnlieCom" />
+		<result column="is_pay_onlie_self" property="isPayOnlieSelf" />
+	</resultMap>
+	<insert id="insertAccountCard" parameterType="com.mph.coreapi.gp.pay.entity.AccountCard" useGeneratedKeys="true" keyProperty="acId">
+		insert into mph_account_card
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="suId != null" >
+				su_id,
+			</if>
+			<if test="eId != null" >
+				e_id,
+			</if>
+				pay_bank_id,
+			<if test="bankName != null" >
+				bank_name,
+			</if>
+			<if test="branchName != null" >
+				branch_name,
+			</if>
+			<if test="cardNo != null" >
+				card_no,
+			</if>
+			<if test="cpNo != null" >
+				cp_no,
+			</if>
+			<if test="accountName != null" >
+				account_name,
+			</if>
+			<if test="cardType != null" >
+				card_type,
+			</if>
+			<if test="idNo != null" >
+				id_no,
+			</if>
+			<if test="applyStatus != null" >
+				apply_status,
+			</if>
+			<if test="refuseReason != null" >
+				refuse_reason,
+			</if>
+			<if test="mobile != null" >
+				mobile,
+			</if>
+			<if test="isDefault != null" >
+				is_default,
+			</if>
+			<if test="createTime != null" >
+				create_time,
+			</if>
+			<if test="updateTime != null" >
+				update_time,
+			</if>
+			<if test="province != null" >
+				province,
+			</if>
+			<if test="town != null" >
+				town,
+			</if>
+			<if test="bankDetailName != null" >
+				bank_detail_name,
+			</if>
+			<if test="epPic != null" >
+				ep_pic,
+			</if>
+			<if test="payBankId1 != null" >
+				pay_bank_id1,
+			</if>
+			<if test="payBankId2 != null" >
+				pay_bank_id2,
+			</if>
+			<if test="yibaoCityId != null" >
+				yibao_city_id,
+			</if>
+			<if test="yibaoProvinceId != null" >
+				yibao_province_id,
+			</if>
+			<if test="bucket_key != null" >
+				bucket_key,
+			</if>
+			<if test="isPayOnlieCom != null" >
+				is_pay_onlie_com,
+			</if>
+			<if test="isPayOnlieSelf != null" >
+				is_pay_onlie_self,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="suId != null" >
+				#{suId},
+			</if>
+			<if test="eId != null" >
+				#{eId},
+			</if>
+				'',
+			<if test="bankName != null" >
+				#{bankName},
+			</if>
+			<if test="branchName != null" >
+				#{branchName},
+			</if>
+			<if test="cardNo != null" >
+				#{cardNo},
+			</if>
+			<if test="cpNo != null" >
+				#{cpNo},
+			</if>
+			<if test="accountName != null" >
+				#{accountName},
+			</if>
+			<if test="cardType != null" >
+				#{cardType},
+			</if>
+			<if test="idNo != null" >
+				#{idNo},
+			</if>
+			<if test="applyStatus != null" >
+				#{applyStatus},
+			</if>
+			<if test="refuseReason != null" >
+				#{refuseReason},
+			</if>
+			<if test="mobile != null" >
+				#{mobile},
+			</if>
+			<if test="isDefault != null" >
+				#{isDefault},
+			</if>
+			<if test="createTime != null" >
+				#{createTime},
+			</if>
+			<if test="updateTime != null" >
+				#{updateTime},
+			</if>
+			<if test="province != null" >
+				#{province},
+			</if>
+			<if test="town != null" >
+				#{town},
+			</if>
+			<if test="bankDetailName != null" >
+				#{bankDetailName},
+			</if>
+			<if test="epPic != null" >
+				#{epPic},
+			</if>
+			<if test="payBankId1 != null" >
+				#{payBankId1},
+			</if>
+			<if test="payBankId2 != null" >
+				#{payBankId2},
+			</if>
+			<if test="yibaoCityId != null" >
+				#{yibaoCityId},
+			</if>
+			<if test="yibaoProvinceId != null" >
+				#{yibaoProvinceId},
+			</if>
+			<if test="bucket_key != null" >
+				#{bucket_key},
+			</if>
+			<if test="isPayOnlieCom != null" >
+				#{isPayOnlieCom},
+			</if>
+			<if test="isPayOnlieSelf != null" >
+				#{isPayOnlieSelf},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateAccountCard" parameterType="com.mph.coreapi.gp.pay.entity.AccountCard">
+		update mph_account_card
+		<set >
+			<if test="suId != null" >
+				su_id = #{suId},
+			</if>
+			<if test="eId != null" >
+				e_id = #{eId},
+			</if>
+			<if test="payBankId != null" >
+				pay_bank_id = #{payBankId},
+			</if>
+			<if test="bankName != null" >
+				bank_name = #{bankName},
+			</if>
+			<if test="branchName != null" >
+				branch_name = #{branchName},
+			</if>
+			<if test="cardNo != null" >
+				card_no = #{cardNo},
+			</if>
+			<if test="cpNo != null" >
+				cp_no = #{cpNo},
+			</if>
+			<if test="accountName != null" >
+				account_name = #{accountName},
+			</if>
+			<if test="cardType != null" >
+				card_type = #{cardType},
+			</if>
+			<if test="idNo != null" >
+				id_no = #{idNo},
+			</if>
+			<if test="applyStatus != null" >
+				apply_status = #{applyStatus},
+			</if>
+			<if test="refuseReason != null" >
+				refuse_reason = #{refuseReason},
+			</if>
+			<if test="mobile != null" >
+				mobile = #{mobile},
+			</if>
+			<if test="isDefault != null" >
+				is_default = #{isDefault},
+			</if>
+			<if test="createTime != null" >
+				create_time = #{createTime},
+			</if>
+			<if test="updateTime != null" >
+				update_time = #{updateTime},
+			</if>
+			<if test="province != null" >
+				province = #{province},
+			</if>
+			<if test="town != null" >
+				town = #{town},
+			</if>
+			<if test="bankDetailName != null" >
+				bank_detail_name = #{bankDetailName},
+			</if>
+			<if test="epPic != null" >
+				ep_pic = #{epPic},
+			</if>
+			<if test="payBankId1 != null" >
+				pay_bank_id1 = #{payBankId1},
+			</if>
+			<if test="payBankId2 != null" >
+				pay_bank_id2 = #{payBankId2},
+			</if>
+			<if test="yibaoCityId != null" >
+				yibao_city_id = #{yibaoCityId},
+			</if>
+			<if test="yibaoProvinceId != null" >
+				yibao_province_id = #{yibaoProvinceId},
+			</if>
+			<if test="bucket_key != null" >
+				bucket_key = #{bucket_key},
+			</if>
+			<if test="isPayOnlieCom != null" >
+				is_pay_onlie_com = #{isPayOnlieCom},
+			</if>
+			<if test="isPayOnlieSelf != null" >
+				is_pay_onlie_self = #{isPayOnlieSelf},
+			</if>
+		</set>
+		where ac_id = #{acId}
+	</update>
+
+    <update id="updateBizEnterprisePic" parameterType="com.mph.coreapi.gp.pay.entity.AccountCard">
+        update `biz_enterprise_pic`
+        set
+        <if test="epPic != null and epPic != ''">
+            `ep_pic`=#{epPic},
+        </if>
+        `ep_add_time`=now()
+        where
+        `ep_type`=11 and `e_id` = #{eId}
+    </update>
+</mapper>

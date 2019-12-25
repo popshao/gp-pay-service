@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+       	#if($!{userInfos.email}=="")
+	    <title>绑定邮箱 - 我的医药网</title>
+	    #else
+	    <title>修改邮箱 - 我的医药网</title>
+	    #end
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+     <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}"/>
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+  	#parse("common/common_script.vm")
+  </head>
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+      #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+        
+        	#parse("common/left_menu_purchase.vm")
+        	
+        	<div class="user_right fl">
+	            <!-- 用户中心_主体内容_S -->
+	            <div class="indmain">
+	            	
+	            	<div class="path">
+	                    <p><a href="/purchase/index.html" class="color">采购中心</a>&gt; 账户中心 &gt;<a href="/purchase/account/account_toEdit.html" class="color">账号信息管理</a>&gt; #if($!{userInfos.email}=="")
+													  绑定邮箱
+													    #else
+													    修改邮箱
+			    				#end</p>
+	                </div>
+
+		
+		            <div class="order-zhsz-box">
+		
+		                <div class="order-zhsz-progress-bar">
+		                    <ul class="bar-ls cc">
+		                        <li class="bar-li current">
+		                            <i class="number">1</i>
+		                            <span class="text">验证身份</span>
+		                        </li>
+		                        <li class="bar-li">
+		                            <i class="number">2</i>
+		                            <span class="text">#if($!{userInfos.email}=="")
+													   绑定邮箱
+													    #else
+													    修改邮箱
+			    				#end</span>
+		                        </li>
+		                        <li class="bar-li">
+		                            <i class="number">3</i>
+		                            <span class="text">完成</span>
+		                        </li>
+		                    </ul>
+		                </div>
+		
+		                <div class="order-zhsz-table">
+		
+		                    <table border="0" cellpadding="0" cellspacing="0">
+		                        <tr>
+		                            <td class="tar title" width="260" valign="top">手机号码：</td>
+		                            <td width="auto">
+		                                <b class="text-title">$!{userInfos.mobile}</b>
+		                                <span class="ml10">如手机号已停用，先修改</span>
+		                                <a class="link ml10" href="../../purchase/edit_mobile.html">去修改</a>
+		                                <div class="tips-text">
+		                                <a class="btn-yzm" data-able="true" id="sendMobileCodeBtn" href="javascript:void(0)">点击获取验证码</a>
+		                                </div>
+		                            </td>
+		                        </tr>
+		                        <tr>
+		                            <td class="tar title">短信验证码：</td>
+		                            <td>
+		                                <input class="input input-yzm" type="text" placeholder="" id="smsCode" name="smsCode"/>
+		                                <div class="tips-error ml10 fn_smsCode" style="display: none;">短信验证码错误</div>
+		                            </td>
+		                        </tr>
+		                        <tr>
+		                            <td class="tar title"></td>
+		                            <td><a href="javascript:;" class="btn">提交</a></td>
+		                        </tr>
+		                    </table>
+		
+		                </div>
+		            
+		            </div>
+            
+	            </div>
+	            <!-- 用户中心_主体内容_E -->
+        	</div>
+            
+        </div>
+      </div>
+    </div>
+    
+    #parse("/common/footer.vm")
+    
+	<script type="text/javascript" src="/js/login.js?v=$!{jscss_version}"></script>
+    <script>
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+            handler:function (btn) {
+                location.href = "/purchase/account/account_toEdit.html";
+            }
+        })
+    $(".btn").click(function() {
+    	
+	var smsCode = $("#smsCode").val();
+	if(smsCode == ""){
+		show_error(".fn_smsCode","请输入短信验证码");
+		return false;
+	}
+	var params = {
+			smsCode		: smsCode
+		};	
+		$.ajax({
+			url: "/purchase/check_mobile_editemail.html",
+			type: "post",
+			dataType: "json",
+			data: params,
+			success: function(data) {
+				if(data.success){
+					if(data.data==null){
+						window.location.href = "/purchase/edit_email_update.html";
+					}else{
+						if (data.data.status == "1") {
+							show_error(".fn_smsCode","短信验证码错误");
+							$("#smsCode").val("");
+						}else{
+							show_error(".fn_smsCode","系统错误，请重试");
+						}
+					}
+				}
+			}
+		});
+		return false;
+	})
+	function show_error(fun,mes){
+		$(fun).html(mes).show();
+	}
+    
+    $('#sendMobileCodeBtn').click(function(){
+    	
+    	if($(this).attr("data-able") == "false"){
+    		return false;
+    	}
+    	
+    	var mask_captahs = $.trim($("#smsCode").val());
+    	 if(!smsCode){
+	   		 $("#smsCode").blur();
+	   	 }
+    	 if(!smsCode){
+    		 return false;
+    	 }
+    	 
+    	 $(this).attr("data-able","false");
+    	 
+    	 timeout = 60;
+         $("#sendMobileCodeBtn").show();
+         $("#sendMobileCodeBtn").html("正在发送");
+         $.ajax({
+             url: '/purchase/sendModtifyEmailSmsCode.html',
+             type: "post",
+             data: {"tel": ""},
+             success: function(data) {
+             	if (data.data) {
+                     smsClock();
+                 } else {
+                     $("#sendMobileCodeBtn").html('发送验证码');      
+                     timeout = 0;         
+                 };
+             },
+             error: function() {
+                 $("#sendMobileCodeBtn").html('发送验证码');
+                 timeout = 0;
+             }
+         });
+    });
+    
+    var smsClock = function() {
+        if (timeout <= 0) {
+        	 $(this).attr("data-able","true");
+            $("#sendMobileCodeBtn").html('发送验证码');
+            timeout = 0;
+        } else {
+            $("#sendMobileCodeBtn").html(timeout-- + ' 秒后重新获取');
+            setTimeout(function(){
+                smsClock();
+            }, 1000);
+        }
+    };
+    
+	$("input[name=smsCode]").keyup(function() {
+		var smsCode = $("#smsCode").val();
+		var params = {
+			smsCode : smsCode,
+			type:"1"
+		};
+		if (smsCode.length >= 6) {
+			$.ajax({
+				url : "/purchase/check_mobile_editemail.html",
+				type : "post",
+				dataType : "json",
+				data : params,
+				success : function(data) {
+					if (data.success) {
+						if (data.data == null) {
+						}else{
+							show_error(".fn_smsCode", data.data.msg);
+							$("#smsCode").val("");
+						}
+					}
+				}
+			});
+		}
+	})
+    
+    </script>
+    
+  </body>
+</html>

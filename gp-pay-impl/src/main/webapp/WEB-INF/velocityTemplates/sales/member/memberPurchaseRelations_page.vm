@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>客户申请审核 - 我的医药网</title>
+
+<!-- mypharma_公共资源 -->
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+
+<!-- mypharma_样式 -->
+<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+   
+<!--PNG格式图片兼容IE6解决方案 -->
+<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+
+</head>
+
+<body>
+	<div class="container">
+		#parse("common/header_top.vm") #parse("common/header.vm")
+		<div class="content">
+			<div class="wrap cc">
+				#parse("common/left_menu_sales.vm")
+				<div class="user_right fl">
+					<!-- 用户中心_主体内容_S -->
+					<div class="indmain">
+						<div class="path">
+							<p>
+								<a class="color" href="/sales/index.html">销售中心</a>&gt; 客户管理 &gt;
+								客户申请审核
+							</p>
+						</div>
+						<div class="order_query order">
+							<form action="/sales/member/member_check.html" method="post"
+								id="searchForm">
+								<input type="hidden" name="pi" value="$!pi" />
+								<ul>
+									<li><label>客户账号：</label> <input name="mName" type="text"
+										value="$!mName" class="w-txt w130" /></li>
+									<li><label>企业名称：</label> <input name="eName" type="text"
+										value="$!eName" class="w-txt w130" /></li>
+									<li><label>企业注册号：</label> <input name="eLicenseNo"
+										type="text" value="$!eLicenseNo" class="w-txt w130" /></li>
+									<li><label>电子邮箱：</label> <input name="mEmail" type="text"
+										value="$!mEmail" class="w-txt w130" /></li>
+									<li><label>申请时间：</label> 
+										<input type="text" id="mprAddStartTime" class="w-txt w130" name="mprAddStartTime" value="$!mprAddStartTime" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'mprAddEndTime\')}'})" />
+										<i style="color:black;float:left; margin-right:5px;">至</i> 
+										<input type="text" id="mprAddEndTime" class="w-txt w130" name="mprAddEndTime" value="$!mprAddEndTime" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'mprAddStartTime\')}'})" /></li>
+									<li><label>状态：</label>
+										<div class="isHIS">
+											<label> #if($!mprStatus == 2) <input type="radio"
+												name="mprStatus" value="2" checked="checked" />待审核 #else <input
+												type="radio" name="mprStatus" value="2" />待审核 #end
+											</label> <label> #if($!mprStatus == 1) <input type="radio"
+												name="mprStatus" value="1" checked="checked" />通过 #else <input
+												type="radio" name="mprStatus" value="1" />通过 #end
+											</label> <label> #if($!mprStatus == -1) <input type="radio"
+												name="mprStatus" value="-1" checked="checked" />未通过 #else <input
+												type="radio" name="mprStatus" value="-1" />未通过 #end
+											</label>
+										</div></li>
+								</ul>
+								<div class="btn tac">
+									<a
+										href="javascript:searchPager('/sales/member/member_check.html',false);"
+										class="btn_query">查询</a><a
+										href="javascript:searchPager('/sales/member/member_check.html',true);"
+										class="btn_query btn_export btn-empty"><img src="/image/icon-refresh.png" alt="">清空查询条件</a>
+								</div>
+							</form>
+						</div>
+						<div class="order_detail">
+							<div class="table">
+								<table cellpadding="0" cellspacing="0">
+									<thead class="head">
+										<tr class="line">
+											<th>客户账号</th>
+											<th>企业名称</th>
+<!-- 											<th>企业注册号</th> -->
+<!-- 											<th>电子邮箱</th> -->
+											<th width="70px">当前状态</th>
+											<th width="150px">申请时间</th>
+											<th width="150px">审核时间</th>
+											<th width="120">操作</th>
+										</tr>
+									</thead>
+									<tbody>
+										#if(!$null.isNull($memberPurchaseRelationsList) && $memberPurchaseRelationsList.size()!=0)
+										#foreach($memberPurchaseRelations in $memberPurchaseRelationsList)
+										<tr id="$!{memberPurchaseRelations.eId}">
+											#if($!{memberPurchaseRelations.mprStatus} == 2)
+												<td><b>$!memberPurchaseRelations.mName</b></td>
+												<td><b>$!memberPurchaseRelations.eName<b></td>
+											#else
+												<td>$!memberPurchaseRelations.mName</td>
+												<td>$!memberPurchaseRelations.eName</td>
+											#end
+											
+<!-- 											<td>$!memberPurchaseRelations.eLicenseNo</td> -->
+<!-- 											<td>$!memberPurchaseRelations.mEmail</td> -->
+											<td>#if($!{memberPurchaseRelations.mprStatus} == 2)<b>待审核 </b>
+												#elseif ($!{memberPurchaseRelations.mprStatus} == 1) <font color="green">审核通过</font>
+												#elseif ($!{memberPurchaseRelations.mprStatus} == 0) 未提交
+												#elseif ($!{memberPurchaseRelations.mprStatus} == -1) <font color="red">审核不通过</font>
+												#elseif ($!{memberPurchaseRelations.mprStatus} == 3) <font color="green">审核通过</font>
+												#end
+											</td>
+											#if($!{memberPurchaseRelations.mprStatus} == 2)
+												<td><b>$utils.formatDate($!memberPurchaseRelations.mprAddTime,"yyyy-MM-dd
+												HH:mm:ss")</b></td>
+											#else
+												<td>$utils.formatDate($!memberPurchaseRelations.mprAddTime,"yyyy-MM-dd
+												HH:mm:ss")</td>
+											#end
+											<td>$utils.formatDate($!memberPurchaseRelations.mprActionTime,"yyyy-MM-dd
+												HH:mm:ss")</td>
+											<td>
+												 <a href="javascript:void(0);" onclick="downLoadPic($!{memberPurchaseRelations.eId})" class="btn color-bg">下载资质</a>
+												#if($!{memberPurchaseRelations.mprStatus} == 2)
+													<a href="javascript:examine($!{memberPurchaseRelations.mprId},$!{memberPurchaseRelations.suId},'$!utils.getJM($!utils.getCS($!request))')"
+													class="btn-txt color-bg">审核</a>
+                                                    <a href="javascript:rebut($!{memberPurchaseRelations.mprId},$!{memberPurchaseRelations.suId},'$!utils.getJM($!utils.getCS($!request))')"
+                                                       class="btn-txt color-bg">驳回</a>
+												#end
+											</td>
+										</tr>
+										#end
+										#else
+										<tr>
+											<td colspan="8">无相关数据</td>
+										</tr>
+										#end
+									</tbody>
+								</table>
+								<!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/member/memberPurchaseRelations_page.html")
+								#end #end
+							</div>
+						</div>
+					</div>
+					<!-- 用户中心_主体内容_E -->
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("/common/footer.vm")
+
+	##审核快速驳回
+    <script type="text/html" id="rebut">
+        <div class="user-dialog-ctn" style="width: 700px;">
+            <div class="c-box" style="position: relative; height:300px;">
+                <div class="user-form udc-form-box fl" style="margin-top:80px;">
+                        <tbody>
+                                <p class="t-gray"><textarea name="reason" id="reason" style="width:700px;height:100px;" placeholder="请填写驳回原因"></textarea></p>
+                        </tbody>
+                </div>
+                <div class="udc-btn tac" style="position: absolute; width: 100%; bottom: 0">
+                    <a href="javascript:void(0)" class="btn" id="CloseModify" style="color:#0f93ce;background: none;border: 1px solid #0f93ce;">取消</a>
+                    <a href="javascript:void(0)" class="btn" id="SaveModify">确定</a>
+                </div>
+            </div>
+        </div>
+    </script>
+
+	<!-- mypharma_脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}"/>
+    <script src="/js/layui/layui.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+	#parse("common/common_script.vm")
+	<script>
+		function query() {
+			$("#order_form").submit();
+		}
+
+		function reset() {
+			window.location.href = "/sales/member/member_check.html";
+		}
+
+		function examine(mprId, suId, str) {
+			window.location.href = "/sales/member/memberPurchase_examine.html?mprId="
+					+ mprId + "&suId=" + suId + "&jm=" + str;
+		}
+
+        function rebut(mprId, suId, str){
+            top.rui.dynamic({
+                title:"驳回原因",
+                area:['740px','400px'],
+                btn:false,
+                content:$('#rebut').html(),
+                success:function (lay,idx) {
+                    lay.find("#SaveModify").on("click",function () {
+                        var reason =$("[name='reason']",lay).attr("value");
+                        if(reason==""){
+                            top.ue.msg("请填写驳回原因");
+                            return;
+                        }
+                        $.ajaxPost(
+							"/sales/member/updateMemberPurchaseAudit.html", {
+								"reason": reason,
+                                    "mprId":mprId,
+									"suId":suId
+							},function(result) {
+								top.ue.closeLoad();
+								var obj = eval("(" + result + ")");
+								if(obj){
+									top.layer.close(idx);
+                                    window.location.href = "/sales/member/member_check.html?$!{returnPageParam}";
+								}else{
+									top.ue.msg("驳回失败");
+									return true;
+								}
+							}
+                        );
+                    })
+
+                    lay.find("#CloseModify").on("click",function () {
+                        top.layer.close(idx);
+                    })
+
+                }
+            })
+        }
+
+
+        function checkZz(eId){
+			  var flag = 0;
+			  $.ajax({
+				  url: '/sales/member/checkZz.html',
+				   data: {"eId":eId},
+				   type: 'POST',
+				   dataType: 'json',
+				   async: false,
+				   success: function(result) {
+
+					   if (result.data == true) {
+						   flag = 0;
+					   }else{
+						   if(result.message=="1"){
+								flag=1;
+						   }else{
+								flag = 2;
+						   }
+					   }
+				   }
+			  });
+			  return flag;
+	  	}
+		function downLoadPic(eId){
+			 var flag=checkZz(eId);
+
+			 if(flag==1){
+				 top.ue.msg("一分钟之内只能下载一次");
+			 }else if(flag==0){
+				 top.ue.msg("该企业没有资质，暂时不能下载");
+			 }else if(flag==2){
+				 window.location.href="/sales/member/downLoadAllPic.html?eId="+eId+"";
+			 }
+		}
+	</script>
+
+</body>
+
+</html>

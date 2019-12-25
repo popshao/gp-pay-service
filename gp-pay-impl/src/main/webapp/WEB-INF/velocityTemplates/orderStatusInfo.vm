@@ -1,0 +1,997 @@
+<script>
+var _rcTimer = null,_isClick = false;
+	$(function(){
+		$(".btn-djwl").on("click",function(){
+			/*layer.open({
+				type:1,
+				title:null,
+				area:"565px",
+				closeBtn:false,
+				content:$(".dialog_box_kd")
+			})*/
+
+
+			top.rui.dynamic({
+				title:"登记物流信息",
+                content:$(".dialog_box_kd").html(),
+                skin: "dialog-old dialog-old-no-title",
+				area:['600px'],
+				success:function (lay,idx) {
+				    bindEvt(lay);
+                    $("#inpRocky",lay).on("keyup",function(){
+                        var _text = $.trim($(this).val());
+                        if(_text){
+                            var _dom = $("#slRocky ul");
+                            var _li = _dom.find("li");
+                            var _arr = new Array();
+                            _dom.find("li").each(function(j,e){
+                                var _t = $(this).text();
+                                if(_t.indexOf(_text) > -1){
+                                    $(this).show();
+                                }else{
+                                    $(this).hide();
+                                }
+                            })
+                            //$("#slRocky").trigger("click");
+                        }else{
+                            $("#slRocky ul li").show();
+                        }
+                    })
+                    $(".inp-onum",lay).on("input",function(){
+                        var _this = $(this);
+                        if(_rcTimer) clearTimeout(_rcTimer);
+                        _rcTimer = setTimeout(function(){
+                            rcGetData($.trim(_this.val()),lay);
+                        },300)
+                    })
+                },
+				yes:function (idx,lay) {
+                    saveLogistics(idx,lay);
+                }
+			})
+		})
+		
+		$(".inp-onum").on("input",function(){
+			var _this = $(this);
+			if(_rcTimer) clearTimeout(_rcTimer);
+			_rcTimer = setTimeout(function(){
+				rcGetData($.trim(_this.val()));
+			},300)
+		})
+		
+		$("#inpRocky").on("keyup",function(){
+			var _text = $.trim($(this).val());
+			if(_text){
+				var _dom = $("#slRocky ul");
+				var _li = _dom.find("li");
+				var _arr = new Array();
+				_dom.find("li").each(function(j,e){
+					var _t = $(this).text();
+					if(_t.indexOf(_text) > -1){
+						$(this).show();
+					}else{
+						$(this).hide();
+					}
+				})
+				//$("#slRocky").trigger("click");
+			}else{
+				$("#slRocky ul li").show();
+			}
+		})
+		
+		rcGetData($.trim($(".inp-onum").val()));
+	})
+	
+	function bindEvt(doc){
+        doc = doc || document;
+		$("#slRocky li",doc).each(function(){
+			$(this).unbind("click").on("click",function(){
+				var _v = $(this).attr("data-value");
+				var _t =  $(this).text();
+				$("#inpRocky",doc).val(_t);
+				$("#hideVal",doc).val(_v);
+			})
+			
+		})
+	}
+	
+	function rcGetData(num,doc){
+	    doc = doc || document.body;
+		if(!num) num = "";
+		var _dom = $("#slRocky ul",doc);
+		_dom.html("");
+        $("#slRocky span",doc).text("请选择");
+        $("#hideVal",doc).val("");
+		$.ajax({
+			url:"/orderLogistics/logisticsList.html",
+			data:{number:num},
+			success:function(res){
+				if(res && res.data && res.data.length > 0){
+					var _li = '<li data-value="{{mldCode}}"><a href="javascript:;">{{mldCompany}}</a></li>';
+					for(var i in res.data){
+						var _data =res.data[i]
+						_dom.append(_li.replace(/{{mldCode}}/g,_data.mldCode).replace(/{{mldCompany}}/g,_data.mldCompany));
+					}
+                    top.rui.initTools(doc);
+					bindEvt(doc);
+				}
+			}
+		})
+	}
+	
+	function saveLogistics(idx,lay){
+		layer.load(0, {shade: false,shade:.3});
+		if(_isClick) return false;
+		var _n = $.trim($(".inp-onum",lay).val());
+		var _c = $.trim($("#hideVal",lay).val());
+		var oId=$!order.oId;
+		if(!_n || !_c){
+            top.ue.msg("请完善物流信息");
+			return false;
+		}else{
+			_isClick = true;
+			top.ue.load();
+			$.ajax({
+				url:"/orderLogistics/addLogistics.html",
+				data:{number:_n,logistics_com_num:_c,oId:oId},
+				complete:function(){
+					top.ue.closeLoad();
+					_isClick = false;
+				},
+				success:function(res){
+					if(res.data){
+                        top.ue.msg("操作成功",{},function(){
+							window.location.href="/sales/order/ddxq.html?oId="+oId + "&backUrl=" + encodeURIComponent("$!{backUrl}") + "&returnPageParam=$!{returnPageParam2}";
+						});
+					}else{
+                        top.ue.msg("操作失败,请检查您填写的物流单号是否正确");
+					}
+				},error:function(err){
+                    top.ue.msg("服务器异常");
+				}
+			})
+		}
+		
+	}
+</script>
+
+
+<div class="dialog_box_kd" style="display:none;">
+    <dl class="dialog_ctn">
+        #*<dt>
+            <span class="title">登记物流信息</span>
+            <a href="javascript:;" class="btn_close" onclick="layer.closeAll();"></a>
+        </dt>*#
+        <dd style="border: 0 none;">
+
+            <div class="order_query">
+
+                <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td class="tar" width="100">运单号码：</td>
+                    <td width="auto"><input type="text" class="input-396 inp-onum"  value="" placeholder="" /></td>
+                  </tr>
+                  <tr>
+                    <td class="tar" style="padding-bottom: 40px;">物流公司：</td>
+                    <td class="td_kd" style="padding-bottom: 40px;">
+                        <div class="sltitem" id="slRocky" >
+                        	<input type="hidden" id="hideVal" />
+                            <span><input  id="inpRocky"   style="width:100%; border:0 none;" type="text" placeholder="请选择"></span>
+                            <ul style="height: 60px!important; max-height: 60px;">
+                            </ul>
+                        </div>
+                    </td>
+                  </tr>
+                </table>
+                
+           </div>
+
+            #*<div class="dialog_btn">
+                <a href="javascript:saveLogistics();" class="btn-confirm">保存</a>
+            </div>*#
+
+        </dd>
+    </dl>
+</div>
+
+<div class="order_detail mt10">
+#if($!order.oPaymentMethod==1)
+<div class="table-kd">
+   <table border="0" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+           <th width="270">
+                                 订单号：$!order.oSn 
+                                 #if($!order.orderType==5)
+                                 <i class="pre-sell-user-detail">[预售]</i>
+                                 #end
+           #* 菲加云订单图标加tips效果 *#
+           #if ($!order.sourceCode == "saas" || $!order.sourceCode == "saas-cp")
+           <i class="order-tips-fjy" data-tips-style="{color:'#000'}" data-tips="true" data-tips-title="此订单来源于菲加云"></i>
+           #end
+           </th>
+           <th class="tac" width="auto"><b>在线支付</b></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+           <td class="left">
+           <p class="b-blue">
+                 #if($!order.oStatus == -90)
+		                            已取消
+		            #elseif($!order.oStatus == -21 || $!order.oStatus == -22)
+		                             已取消
+		            #elseif($!order.oStatus == -10)
+		                            已驳回
+		            #elseif($!order.oStatus == 0)
+		                            待审核
+		            #elseif($!order.oStatus == 10)
+		            #if($!order.payStatus != 50)
+		                            待支付
+		            #else
+		                           待发货             
+		            #end
+		            #elseif($!order.oStatus == 30)
+		            #if($!order.payStatus != 50)
+		                            待支付
+		            #else
+		                           待发货             
+		            #end
+		            #elseif($!order.oStatus == 90)
+		                            已发货
+		            #elseif($!order.oStatus == 100)
+		                            买家已签收
+		         #else
+		            $!order.oStatus
+		         #end
+                </p>
+                #if($!salesOrderFlag!=1 && "$!order.autoReceiptTips" != "")
+					$!order.autoReceiptTips
+            	#end
+           </td>
+           <td>
+            	<div class="order-pay-progress">
+                	<div class="process">
+                    	<div class="img img-on">提交订单</div>
+                        <p class="text">
+                            $utils.formatDate($!order.oAddTime,"yyyy-MM-dd HH:mm:ss")
+                        </p>
+                    </div>
+					#if($!order.oStatus == -21 || $!order.oStatus == -22 || $!order.oStatus == -10)
+						#if($!order.payStatus == 50)
+                            <div class="line line-on"></div>
+                            <div class="process">
+                                <div class="img img-on">支付</div>
+                                <p class="text">
+									$utils.formatDate($!order.payFinishTime,"yyyy-MM-dd HH:mm:ss")
+                                </p>
+                            </div>
+						#end
+                        <div class="line line-on"></div>
+                        <div class="process">
+                            <div class="img img-on">#if($!order.oStatus == -10) 驳回订单 #else 取消订单 #end</div>
+                            <p class="text">
+								$utils.formatDate($!cancelTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#else
+                        <div class="line #if($!order.payStatus==50) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.payStatus==50) img-on #end">支付</div>
+                            <p class="text">
+								$utils.formatDate($!order.payFinishTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+                        <div class="line #if($!order.oStatus>=90) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus>=90) img-on #end">发货</div>
+                            <p class="text">
+                            #if($!order.oStatus>=0 && $!order.oStatus<90&&$!order.orderType==5)
+										$!order.pdSaleTimeStr
+								#end
+								$utils.formatDate($!sendTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+                        <div class="line #if($!order.oStatus==100) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus==100) img-on #end">确认收货</div>
+                            <p class="text">
+								$utils.formatDate($!acceptTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#end
+                </div>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+#end
+
+#if($!order.oPaymentMethod==2)                    
+<div class="table-kd mt10">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th width="270">
+                                 订单号：$!order.oSn
+                                  #if($!order.orderType==5)
+                                 <i class="pre-sell-user-detail">[预售]</i>
+                                 #end
+           #* 菲加云订单图标加tips效果 *#
+           #if ($!order.sourceCode == "saas" || $!order.sourceCode == "saas-cp")
+           <i class="order-tips-fjy" data-tips-style="{color:'#000'}" data-tips="true" data-tips-title="此订单来源于菲加云"></i>
+           #end
+           </th>
+            <th class="tac" width="auto"><b>账期支付</b></th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="left">
+            	<p class="b-blue">
+                 #if($!order.oStatus == -90)
+		                            已取消
+		            #elseif($!order.oStatus == -21 || $!order.oStatus == -22)
+		                           已取消
+		            #elseif($!order.oStatus == -10)
+		                            已驳回
+		            #elseif($!order.oStatus == 0)
+		                            待审核
+		            #elseif($!order.oStatus == 10)
+		                            待发货
+		            #elseif($!order.oStatus == 30)
+		                            待发货
+		            #elseif($!order.oStatus == 90)
+		                            已发货
+		            #elseif($!order.oStatus == 100)
+		                            买家已签收
+		         #else
+		            $!order.oStatus
+		         #end
+                </p>
+                #if($!salesOrderFlag!=1 && "$!order.autoReceiptTips" != "")
+                    $!order.autoReceiptTips
+                #end
+            </td>
+            <td>
+            	<div class="order-pay-progress">
+                	<div class="process">
+                    	<div class="img img-on">提交订单</div>
+                        <p class="text">
+                             $utils.formatDate($!order.oAddTime,"yyyy-MM-dd HH:mm:ss")
+                        </p>
+                    </div>
+					#if($!order.oStatus == -21 || $!order.oStatus == -22 || $!order.oStatus == -10)
+						<div class="line line-on"></div>
+						<div class="process">
+							<div class="img img-on">#if($!order.oStatus == -10) 驳回订单 #else 取消订单 #end</div>
+							<p class="text">
+								$utils.formatDate($!cancelTime,"yyyy-MM-dd HH:mm:ss")
+							</p>
+						</div>
+					#else
+                        <div class="line #if($!order.oStatus>=90) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus>=90) img-on #end">发货</div>
+                            <p class="text">
+                            #if($!order.oStatus>=0 && $!order.oStatus<90&&$!order.orderType==5)
+										$!order.pdSaleTimeStr
+								#end
+								$utils.formatDate($!sendTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+                        <div class="line #if($!order.oStatus==100) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus==100) img-on #end">确认收货</div>
+                            <p class="text">
+								$utils.formatDate($!acceptTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#end
+                </div>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+#end
+
+#if($!order.oPaymentMethod==3)                    
+<div class="table-kd mt10">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th width="270">
+                                 订单号：$!order.oSn
+                                  #if($!order.orderType==5)
+                                 <i class="pre-sell-user-detail">[预售]</i>
+                                 #end
+           #* 菲加云订单图标加tips效果 *#
+           #if ($!order.sourceCode == "saas" || $!order.sourceCode == "saas-cp")
+           <i class="order-tips-fjy" data-tips-style="{color:'#000'}" data-tips="true" data-tips-title="此订单来源于菲加云"></i>
+           #end
+           </th>
+            <th class="tac" width="auto"><b>线下付款</b></th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="left">
+            	<p class="b-blue">
+                 #if($!order.oStatus == -90)
+		                            已取消
+		            #elseif($!order.oStatus == -21 || $!order.oStatus == -22)
+		                             已取消
+		            #elseif($!order.oStatus == -10)
+		                            已驳回
+		            #elseif($!order.oStatus == 0)
+		                            待审核
+		            #elseif($!order.oStatus == 10)
+		                            待发货
+		            #elseif($!order.oStatus == 30)
+		                            待发货
+		            #elseif($!order.oStatus == 90)
+		                            已发货
+		            #elseif($!order.oStatus == 100)
+		                            买家已签收
+		         #else
+		            $!order.oStatus
+		         #end
+                </p>
+				#if($!salesOrderFlag!=1 && "$!order.autoReceiptTips" != "")
+					$!order.autoReceiptTips
+				#end
+            </td>
+            <td>
+            	<div class="order-pay-progress">
+                	<div class="process">
+                    	<div class="img img-on">提交订单</div>
+                        <p class="text">
+                             $utils.formatDate($!order.oAddTime,"yyyy-MM-dd HH:mm:ss")
+                        </p>
+                    </div>
+					#if($!order.oStatus == -21 || $!order.oStatus == -22 || $!order.oStatus == -10)
+                        <div class="line line-on"></div>
+                        <div class="process">
+                            <div class="img img-on">#if($!order.oStatus == -10) 驳回订单 #else 取消订单 #end</div>
+                            <p class="text">
+								$utils.formatDate($!cancelTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#else
+                        <div class="line #if($!order.oStatus>=90) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus>=90) img-on #end">发货</div>
+                            <p class="text">
+                            #if($!order.oStatus>=0 && $!order.oStatus<90&&$!order.orderType==5)
+										$!order.pdSaleTimeStr
+								#end
+								$utils.formatDate($!sendTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+                        <div class="line #if($!order.oStatus==100) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus==100) img-on #end">确认收货</div>
+                            <p class="text">
+								$utils.formatDate($!acceptTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#end
+                </div>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+#end
+
+#if($!order.oPaymentMethod==4)
+<div class="table-kd mt10">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th width="270">
+                                 订单号：$!order.oSn
+                                  #if($!order.orderType==5)
+                                 <i class="pre-sell-user-detail">[预售]</i>
+                                 #end
+           #* 菲加云订单图标加tips效果 *#
+           #if ($!order.sourceCode == "saas" || $!order.sourceCode == "saas-cp")
+           <i class="order-tips-fjy" data-tips-style="{color:'#000'}" data-tips="true" data-tips-title="此订单来源于菲加云"></i>
+           #end
+           </th>
+            <th class="tac" width="auto"><b>药白条</b></th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="left">
+            	<p class="b-blue">
+                 #if($!order.oStatus == -90)
+		                            已取消
+		            #elseif($!order.oStatus == -21 || $!order.oStatus == -22)
+		                            已取消
+		            #elseif($!order.oStatus == -10)
+		                            已驳回
+		            #elseif($!order.oStatus == 0)
+		                            待审核
+		            #elseif($!order.oStatus == 10)
+		            #if($!order.payStatus != 50)
+		                            待支付
+		            #else
+		                           待发货             
+		            #end
+		            #elseif($!order.oStatus == 30)
+		            #if($!order.payStatus != 50)
+		                            待支付
+		            #else
+		                           待发货             
+		            #end
+		            #elseif($!order.oStatus == 90)
+		                            已发货
+		            #elseif($!order.oStatus == 100)
+		                            买家已签收
+		         #else
+		            $!order.oStatus
+		         #end
+                </p>
+				#if($!salesOrderFlag!=1 && "$!order.autoReceiptTips" != "")
+					$!order.autoReceiptTips
+				#end
+            </td>
+            <td>
+            	<div class="order-pay-progress">
+                	<div class="process">
+                    	<div class="img img-on">提交订单</div>
+                        <p class="text">
+                            $utils.formatDate($!order.oAddTime,"yyyy-MM-dd HH:mm:ss")
+                        </p>
+                    </div>
+					#if($!order.oStatus == -21 || $!order.oStatus == -22 || $!order.oStatus == -10)
+						#if($!order.payStatus == 50)
+                            <div class="line line-on"></div>
+                            <div class="process">
+                                <div class="img img-on">支付</div>
+                                <p class="text">
+									$utils.formatDate($!order.payFinishTime,"yyyy-MM-dd HH:mm:ss")
+                                </p>
+                            </div>
+						#end
+                        <div class="line line-on"></div>
+                        <div class="process">
+                            <div class="img img-on">#if($!order.oStatus == -10) 驳回订单 #else 取消订单 #end</div>
+                            <p class="text">
+								$utils.formatDate($!cancelTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#else
+                        <div class="line #if($!order.payStatus==50) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.payStatus==50) img-on #end">支付</div>
+                            <p class="text">
+								$utils.formatDate($!order.payFinishTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+                        <div class="line #if($!order.oStatus>=90) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus>=90) img-on #end">发货</div>
+                            	#if($!order.oStatus>=0 && $!order.oStatus<90&&$!order.orderType==5)
+										$!order.pdSaleTimeStr
+								#end
+                            <p class="text">
+								$utils.formatDate($!sendTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+                        <div class="line #if($!order.oStatus==100) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus==100) img-on #end">确认收货</div>
+                            <p class="text">
+								$utils.formatDate($!acceptTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#end
+                </div>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+#end
+
+#if($!order.oPaymentMethod==5)                    
+<div class="table-kd mt10">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+           <th width="270">
+                                 订单号：$!order.oSn
+                                  #if($!order.orderType==5)
+                                 <i class="pre-sell-user-detail">[预售]</i>
+                                 #end
+           #* 菲加云订单图标加tips效果 *#
+           #if ($!order.sourceCode == "saas" || $!order.sourceCode == "saas-cp")
+           <i class="order-tips-fjy" data-tips-style="{color:'#000'}" data-tips="true" data-tips-title="此订单来源于菲加云"></i>
+           #end
+           </th>
+            <th class="tac" width="auto"><b>帮你付</b></th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="left">
+            	<p class="b-blue">
+                 #if($!order.oStatus == -90)
+		                            已取消
+		            #elseif($!order.oStatus == -21 || $!order.oStatus == -22)
+		                            已取消
+		            #elseif($!order.oStatus == -10)
+		                            已驳回
+		            #elseif($!order.oStatus == 0)
+		                            待审核
+		            #elseif($!order.oStatus == 10)
+		                            待发货
+		            #elseif($!order.oStatus == 30)
+		                            待发货
+		            #elseif($!order.oStatus == 90)
+		                            已发货
+		            #elseif($!order.oStatus == 100)
+		                            买家已签收
+		         #else
+		            $!order.oStatus
+		         #end
+                </p>
+				#if($!salesOrderFlag!=1 && "$!order.autoReceiptTips" != "")
+					$!order.autoReceiptTips
+				#end
+            </td>
+            <td>
+            	<div class="order-pay-progress">
+                	<div class="process">
+                    	<div class="img img-on">提交订单</div>
+                        <p class="text">
+                             $utils.formatDate($!order.oAddTime,"yyyy-MM-dd HH:mm:ss")
+                        </p>
+                    </div>
+					#if($!order.oStatus == -21 || $!order.oStatus == -22 || $!order.oStatus == -10)
+                        <div class="line line-on"></div>
+                        <div class="process">
+                            <div class="img img-on">#if($!order.oStatus == -10) 驳回订单 #else 取消订单 #end</div>
+                            <p class="text">
+								$utils.formatDate($!cancelTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#else
+                        <div class="line #if($!order.oStatus>=90) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus>=90) img-on #end">发货</div>
+                            <p class="text">
+                            	#if($!order.oStatus>=0 && $!order.oStatus<90&&$!order.orderType==5)
+										$!order.pdSaleTimeStr
+								#end
+								$utils.formatDate($!sendTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+                        <div class="line #if($!order.oStatus==100) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus==100) img-on #end">确认收货</div>
+                            <p class="text">
+								$utils.formatDate($!acceptTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#end
+                </div>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+#end
+
+#if($!order.oPaymentMethod==6)
+<div class="table-kd mt10">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th width="270">
+                                 订单号：$!order.oSn
+                                  #if($!order.orderType==5)
+                                 <i class="pre-sell-user-detail">[预售]</i>
+                                 #end
+           #* 菲加云订单图标加tips效果 *#
+           #if ($!order.sourceCode == "saas" || $!order.sourceCode == "saas-cp")
+           <i class="order-tips-fjy" data-tips-style="{color:'#000'}" data-tips="true" data-tips-title="此订单来源于菲加云"></i>
+           #end
+           </th>
+            <th class="tac" width="auto"><b>闪贷</b></th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="left">
+            	<p class="b-blue">
+                 #if($!order.oStatus == -90)
+		                            已取消
+		            #elseif($!order.oStatus == -21 || $!order.oStatus == -22)
+		                            已取消<br>
+		                            #if($order.remark&&$order.remark!="")
+		                           <font color="#000000"  size="1">($!order.remark)</font>
+		                           #end
+		            #elseif($!order.oStatus == -10)
+		                            已驳回
+		            #elseif($!order.oStatus == 0)
+		                            待审核
+		            #elseif($!order.oStatus == 10)
+		            #if($!order.payStatus != 50)
+		                            待支付
+		            #else
+		                           待发货             
+		            #end
+		            #elseif($!order.oStatus == 30)
+		            #if($!order.payStatus != 50)
+		                            待支付
+		            #else
+		                           待发货             
+		            #end
+		            #elseif($!order.oStatus == 90)
+		                            已发货
+		            #elseif($!order.oStatus == 100)
+		                            买家已签收
+		         #else
+		            $!order.oStatus
+		         #end
+                </p>
+				#if($!salesOrderFlag!=1 && "$!order.autoReceiptTips" != "")
+					$!order.autoReceiptTips
+				#end
+            </td>
+            <td>
+            	<div class="order-pay-progress">
+                	<div class="process">
+                    	<div class="img img-on">提交订单</div>
+                        <p class="text">
+                            $utils.formatDate($!order.oAddTime,"yyyy-MM-dd HH:mm:ss")
+                        </p>
+                    </div>
+					#if($!order.oStatus == -21 || $!order.oStatus == -22 || $!order.oStatus == -10)
+						#if($!order.payStatus == 50)
+                            <div class="line line-on"></div>
+                            <div class="process">
+                                <div class="img img-on">支付</div>
+                                <p class="text">
+									$utils.formatDate($!order.payFinishTime,"yyyy-MM-dd HH:mm:ss")
+                                </p>
+                            </div>
+						#end
+                        <div class="line line-on"></div>
+                        <div class="process">
+                            <div class="img img-on">#if($!order.oStatus == -10) 驳回订单 #else 取消订单 #end</div>
+                            <p class="text">
+								$utils.formatDate($!cancelTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#else
+                        <div class="line #if($!order.payStatus==50) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.payStatus==50) img-on #end">支付</div>
+                            <p class="text">
+								$utils.formatDate($!order.payFinishTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+                        <div class="line #if($!order.oStatus>=90) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus>=90) img-on #end">发货</div>
+                            <p class="text">
+                            	#if($!order.oStatus>=0 && $!order.oStatus<90&&$!order.orderType==5)
+										$!order.pdSaleTimeStr
+								#end
+								$utils.formatDate($!sendTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+                        <div class="line #if($!order.oStatus==100) line-on #end"></div>
+                        <div class="process">
+                            <div class="img #if($!order.oStatus==100) img-on #end">确认收货</div>
+                            <p class="text">
+								$utils.formatDate($!acceptTime,"yyyy-MM-dd HH:mm:ss")
+                            </p>
+                        </div>
+					#end
+                </div>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+#end
+
+#####add by shijun.gong  余额支付
+#if($!order.oPaymentMethod==7)
+	<div class="table-kd">
+		<table border="0" cellpadding="0" cellspacing="0">
+			<thead>
+			<tr>
+				<th width="270">
+					订单号：$!order.oSn
+					 #if($!order.orderType==5)
+                     <i class="pre-sell-user-detail">[预售]</i>
+                     #end
+				#* 菲加云订单图标加tips效果 *#
+					#if ($!order.sourceCode == "saas" || $!order.sourceCode == "saas-cp")
+						<i class="order-tips-fjy" data-tips-style="{color:'#000'}" data-tips="true" data-tips-title="此订单来源于菲加云"></i>
+					#end
+				</th>
+				<th class="tac" width="auto"><b>余额支付</b></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td class="left">
+					<p class="b-blue">
+						#if($!order.oStatus == -90)
+							已取消
+						#elseif($!order.oStatus == -21 || $!order.oStatus == -22)
+							已取消
+						#elseif($!order.oStatus == -10)
+							已驳回
+						#elseif($!order.oStatus == 0)
+							待审核
+						#elseif($!order.oStatus == 10)
+							#if($!order.payStatus != 50)
+								待支付
+							#else
+								待发货
+							#end
+						#elseif($!order.oStatus == 30)
+							#if($!order.payStatus != 50)
+								待支付
+							#else
+								待发货
+							#end
+						#elseif($!order.oStatus == 90)
+							已发货
+						#elseif($!order.oStatus == 100)
+							买家已签收
+						#else
+							$!order.oStatus
+						#end
+					</p>
+					#if($!salesOrderFlag!=1 && "$!order.autoReceiptTips" != "")
+						$!order.autoReceiptTips
+					#end
+				</td>
+				<td>
+					<div class="order-pay-progress">
+						<div class="process">
+							<div class="img img-on">提交订单</div>
+							<p class="text">
+								$utils.formatDate($!order.oAddTime,"yyyy-MM-dd HH:mm:ss")
+							</p>
+						</div>
+						#if($!order.oStatus == -21 || $!order.oStatus == -22 || $!order.oStatus == -10)
+							#if($!order.payStatus == 50)
+								<div class="line line-on"></div>
+								<div class="process">
+									<div class="img img-on">支付</div>
+									<p class="text">
+										$utils.formatDate($!order.payFinishTime,"yyyy-MM-dd HH:mm:ss")
+									</p>
+								</div>
+							#end
+							<div class="line line-on"></div>
+							<div class="process">
+								<div class="img img-on">#if($!order.oStatus == -10) 驳回订单 #else 取消订单 #end</div>
+								<p class="text">
+									$utils.formatDate($!cancelTime,"yyyy-MM-dd HH:mm:ss")
+								</p>
+							</div>
+						#else
+							<div class="line #if($!order.payStatus==50) line-on #end"></div>
+							<div class="process">
+								<div class="img #if($!order.payStatus==50) img-on #end">支付</div>
+								<p class="text">
+									$utils.formatDate($!order.payFinishTime,"yyyy-MM-dd HH:mm:ss")
+								</p>
+							</div>
+							<div class="line #if($!order.oStatus>=90) line-on #end"></div>
+							<div class="process">
+								<div class="img #if($!order.oStatus>=90) img-on #end">发货</div>
+								<p class="text">
+									#if($!order.oStatus>=0 && $!order.oStatus<90&&$!order.orderType==5)
+										$!order.pdSaleTimeStr
+									#end
+									$utils.formatDate($!sendTime,"yyyy-MM-dd HH:mm:ss")
+								</p>
+							</div>
+							<div class="line #if($!order.oStatus==100) line-on #end"></div>
+							<div class="process">
+								<div class="img #if($!order.oStatus==100) img-on #end">确认收货</div>
+								<p class="text">
+									$utils.formatDate($!acceptTime,"yyyy-MM-dd HH:mm:ss")
+								</p>
+							</div>
+						#end
+					</div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+#end
+                    
+<div class="table-kd mt10">
+    <table border="0" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            #if($!salesOrderFlag==1)
+            <th width="250"><b>采购商信息</b></th>
+            #else
+            <th width="250"><b>供应商信息</b></th>
+            #end
+            <th class="tac" width="auto"><b>物流信息</b>
+            #if($!salesOrderFlag==1&&$!logisticsFlag&&$!logisticsSendFlag)
+            <a href="javascript:;" class="fr btn btn-djwl" title="您可在订单发货24小时内修改补充运单号">登记物流</a>
+            <!-- 
+            <img src="/image/msg.png" data-tips="您可在订单发货24小时内修改补充运单号" class="img-tips" width="20" height="20"/>
+             -->
+            #end
+            #if($!salesOrderFlag==1&&!$!logisticsFlag&&$!logisticsSendFlag)
+            <a href="javascript:;"  title="您可在订单发货24小时内修改补充运单号"  class="fr btn"  style="background:#bbb6b6;" > 登记物流</a>
+            #end
+            </th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td valign="top" class="left">
+	            #if($!salesOrderFlag==1)
+	            <div class="cc">
+	            	<div class="fl text-left">采购商：</div><div class="fl text-right"><b>$!order.oEName</b></div>
+	            </div>
+	            #else
+	            <div class="cc">
+	            	<div class="fl text-left">供应商：</div><div class="fl text-right"><b>$!order.oSellerName</b></div>
+	            </div>
+	            #end
+	            <div class="cc">
+                	<div class="fl text-left">送货方式：</div><div class="fl text-right">
+                	#if($!orderLogistics.logisticsType==1)
+                	自有物流配送
+                	#elseif($!orderLogistics.logisticsType==2)
+                	物流公司配送
+                	#end
+                	</div>
+                </div>
+                <div class="cc">
+                	<div class="fl text-left">物流公司：</div><div class="fl text-right">$!orderLogistics.logisticsCom</div>
+                </div>
+                <div class="cc">
+                	<div class="fl text-left">运单号：</div><div class="fl text-right">$!orderLogistics.logisticsNum</div>
+                </div>
+                <div class="cc">
+                	<div class="fl text-left">收货人：</div><div class="fl text-right">$!order.oPeople</div>
+                </div>
+                <div class="cc">
+                	<div class="fl text-left">联系电话：</div><div class="fl text-right">#if($!order.oTel!="")$!{order.oTel}#else$!{order.oPhone}#end</div>
+                </div>
+                <div class="cc">
+                	<div class="fl text-left">收货地址：</div><div class="fl text-right">$!order.oProvince $!order.oTown $!order.oArea $!order.oAddress</div>
+            	</div>
+            </td>
+            <td>
+            	<div class="order-pay-scrollbar">
+            	#if($!olList.size()!=0)
+                #foreach($item in $olList)
+                #if($!velocityCount==1)
+                	<p class="tips"> $utils.formatDate($!item.molTime,"yyyy-MM-dd HH:mm:ss")  $!item.molContent</p>
+                #else 	
+                    <p>$utils.formatDate($!item.molTime,"yyyy-MM-dd HH:mm:ss")   $!item.molContent</p>
+                #end
+                #end
+                #end    
+                </div>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+                    

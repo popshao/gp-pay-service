@@ -1,0 +1,1312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>客户信息添加 - 我的医药网</title>
+
+<!-- mypharma_公共资源 -->
+<meta name="keywords" content=""/>
+<meta name="description" content=""/>
+<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico"/>
+
+<!-- mypharma_样式 -->
+<link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+<link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}" />
+<link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}" />
+   
+<script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+			render:true,
+            handler:function (btn) {
+                location.href = document.referrer;
+            }
+        })
+
+    </script>
+<!--PNG格式图片兼容IE6解决方案 -->
+<!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+
+	<style>
+    	.member li.one label.error {
+			width: 100%;
+			margin-left: 0px;
+			padding-left: 0px;	
+			text-align:left;
+			line-height: 32px;
+		}
+    </style>
+</head>
+
+<body onload="loadPic()">
+	<div class="container">
+		#parse("common/header_top.vm") #parse("common/header.vm")
+		<div class="content">
+			<div class="wrap cc">
+				#parse("common/left_menu_sales.vm")
+				<div class="user_right fl">
+					<!-- 用户中心_主体内容_S -->
+					<div class="indmain">
+						<div class="path">
+							<p class="fl"><a class="color" href="/sales/index.html">销售中心</a> &gt; 客户管理 &gt; 客户信息添加</p>
+							<div class="prompt fl">您添加的客户账号登录密码默认为：888888，建议客户及时修改默认密码。</div>
+						</div>
+						<div class="order_query order member" style="clear:both;">
+							<form id="submitForm" method="post">
+								<div class="image-upload-box error-ms">
+									<ul>
+										<li>
+											<label>客户账号<i>*</i>：</label> 
+											<input name="mName" id="mName" type="text" value="" class="w-txt">
+										</li>
+										<li>
+											<label>企业名称<i>*</i>：</label> 
+											<input id="eName" name="eName" type="text" value="" class="w-txt">
+										</li>
+										<li style="position:relative;">
+											<label>企业工商注册号<i>*</i>：</label> 
+											<input name="eLicenseNo" data-place="非盈利机构可填写医疗机构执业许可证号"  id="eLicenseNo" type="text" value="" class="w-txt">
+										</li>
+										<li>
+											<label>企业编码：</label> 
+											<input id="smCode" name="smCode" type="text" value="" class="w-txt">
+										</li>
+										<li>
+											<label>企业内码：</label> 
+											<input id="smInternalCode" name="smInternalCode" type="text" value="" class="w-txt">
+										</li>
+										<li>
+											<label>主营业务：</label> 
+											<input name="smMain" id="smMain" type="text" value="" class="w-txt">
+										</li>
+										<li>
+											<label>会员联系方式：</label> 
+											<input id="mTel" name="mTel" type="text" value="" class="w-txt">
+										</li>
+										<li>
+											<label>企业地址：</label> 
+											<input id="eAddress" name="eAddress" type="text" value="" class="w-txt">
+										</li>
+										<li>
+											<label>会员邮箱：</label> 
+											<input id="mEmail" name="mEmail" type="text" value="" class="w-txt">
+										</li>
+										<li>
+											<label>业务分组<i>*</i>：</label>
+											<div class="sltitem w348 z-index" id="cate" style="z-index: 11">
+												<span class="">请选择</span>
+												<ul style="display: none;">
+													#foreach($shopCustomerType in $!shopCustomerTypes)
+													<li data-value="$!{shopCustomerType.sctId},$!{shopCustomerType.sctPriceField},$!{shopCustomerType.sctNumberField}">
+														<a href="javascript:;">$!{shopCustomerType.sctName}</a>
+													</li> 
+													#end
+												</ul>
+												<input type="hidden" value="" name="smCustomerType" id="smCustomerType"/>
+											</div>
+										</li>
+										<li>
+											<label>区域分组：</label>
+											<div class="sltitem w348 z-index-t" id="" style="z-index: 10">
+												<span class="">请选择</span>
+												<ul style="display: none;">
+													#foreach($supplierRegion in $!{supplierRegions})
+													<li data-value="$!{supplierRegion.regionId}">
+														<a href="javascript:;">$!{supplierRegion.regionName}</a>
+													</li> 
+													#end
+												</ul>
+												<input id="regionId" name="regionId" type="hidden" value="" />
+											</div>
+										</li>
+										<li>
+											<label>企业类型<i>*</i>：</label>
+											<div class="sltitem w348 z-index-t" id="value" style="z-index: 10">
+												<span class="">请选择</span>
+												<ul>
+													<li data-value="1"><a href="javascript:;">单体药房</a></li>
+													<li data-value="2"><a href="javascript:;">连锁药店总店</a></li>
+													<li data-value="3"><a href="javascript:;">连锁药店分店（直营店）</a></li>
+													<li data-value="4"><a href="javascript:;">连锁加盟店</a></li>
+													<li data-value="6"><a href="javascript:;">医院</a></li>
+													<li data-value="7"><a href="javascript:;">诊所</a></li>
+												</ul>
+												<input type="hidden" value="" name="eType" id="eType" onchange="changeEType();">
+											</div>
+										</li>
+										<li style="width:100%;">
+											<label>企业所属区域：</label> 
+											<div class="sltitem sltitem_area" style="width:152px;">
+												<span class="">请选择</span>
+												<ul style="width:150px;">
+<!-- 													<li data-value="0"><a href="javascript:;"></a></li> -->
+												</ul>
+												<input name="eProvince" id="eProvince" type="hidden"/>
+											</div>
+											<div class="sltitem sltitem_area" style="width:152px;">
+												<span class="">请选择</span>
+												<ul style="width:150px;">
+<!-- 													<li data-value="0"><a href="javascript:;"></a></li> -->
+												</ul>
+												<input name="eCity" id="eCity" type="hidden"/>
+											</div>
+											<div class="sltitem sltitem_area" style="width:152px;">
+												<span class="">请选择</span>
+												<ul style="width:150px;">
+<!-- 													<li data-value="0"><a href="javascript:;"></a></li> -->
+												</ul>
+												<input name="eRegion" id="eRegion" type="hidden"/>
+											</div>
+										</li>
+										<li>
+											<label>企业联系人<i>*</i>：</label> 
+											<input id="eContactor" name="eContactor" type="text" value="" class="w-txt"/>
+										</li>
+										<li>
+											<label>企业联系人手机号码：</label> 
+											<input id="eMobile" name="eMobile" type="text" value="" class="w-txt"/>
+										</li>
+										<li>
+											<label>企业联系人固定电话：</label> 
+											<input id="eTel" name="eTel" type="text" value="" class="w-txt"/>
+										</li>
+										<li><label>经营区域<i class="order-tips" data-tips="true" data-tips-title="
+											经营区域设置：<br>
+											区域内：经营区域为“区域内”的客户可购买内外销类型为“内销、不限”的商品<br>
+											区域外：经营区域为“区域外”的客户可购买内外销类型为“外销、不限”的商品
+											"></i>：</label>
+											<div class="sltitem w348 z-index-tr" id="">
+												<span class="">区域内</span>
+												<ul style="display: none;">
+													<li data-value="1"><a href="javascript:;">区域内</a></li>
+													<li data-value="2"><a href="javascript:;">区域外</a></li>
+												</ul>
+												<input id="smArea" name="smArea" type="hidden" value="1" />
+											</div>
+										</li>
+										<!-- 2016.5.25 张青伟修改支付方式为多选-->
+										<li id="pay_select" class="one">
+										<label>支付方式<i>*</i>：</label>
+											<div class="fl">
+												#if($!status == 10)
+												   	<input type="checkbox" class="pay-bank-check-box" id="pay1" name="smManyPayMethod" value="1" />&nbsp;在线支付--买家先付款卖家再发货，货款由第三方银行管理，买家确认收货后，结算货款给卖家，确保买卖双方的交易安全。<a  target="_blank" href="http://$!{wwwHostAndPort}/service/financial/yfb"><span  style="color:rgb(0, 0, 255)"><u>了解更多</u></span></a>；<br/>
+												  	<input type="checkbox" class="pay-bank-check-box" id="pay2" name="smManyPayMethod" value="2" />&nbsp;账期付款--在MPH下完订单，在双方约定的账期到期前通过平台支付货款；
+												  	信用额度：<input class="w112" name="smCreditLimit" id="smCreditLimit" type="text" value="" readonly="readonly"/>
+												  	账期：<input class="w112" name="smAccountPeriod" id="smAccountPeriod" type="text" value="" readonly="readonly"/>天<br/>
+												#end
+												    <input type="checkbox" class="pay-bank-check-box" id="pay3" name="smManyPayMethod" value="3" />&nbsp;线下付款--在MPH下订单，不通过平台支付货款，双方线下结算；
+											</div>
+										</li>
+<!-- 										<li> -->
+<!-- 											<div id="pay_ctn_date" div style="display:none"> -->
+<!-- 												<label style="padding-right:8px">信用额度：</label><input name="smCreditLimit" id="smCreditLimit" type="text" value="$!utils.priceFormart($!supplierMember.smCreditLimit)" class="w-txt w70" />  -->
+<!-- 												<label style="padding-right:12px; width:auto;"><input id="checkSmAccountPeriod" onclick="checkSmAccountPeriod1();" type="checkbox" class="check-box" />协议期限</label> <label style="width:auto;padding-right:8px;">账期：</label><input name="smAccountPeriod" id="smAccountPeriod" type="text" readOnly="true" value="$!{supplierMember.smAccountPeriod}" class="w-txt w37" />天 -->
+<!-- 											</div> -->
+<!-- 										</li> -->
+<!-- 										<li class="pay_box" id="pay_box"> -->
+<!-- 										#if($!status == 10) -->
+<!-- 											<p class="pay_ctn" id="pay_desc1"> -->
+<!-- 												在线支付--买家先付款卖家再发货，货款由第三方银行管理，买家确认收货后，结算货款给卖家，确保买卖双方的交易安全。<a  target="_blank" href="http://$!{wwwHostAndPort}/service/financial/yfb"><span  style="color:rgb(0, 0, 255)"><u>了解更多</u></span></a>； -->
+<!-- 											</p> -->
+<!-- 											<p class="pay_ctn" id="pay_desc2"> -->
+<!-- 												账期付款--在MPH下完订单，在双方约定的账期到期前通过平台支付货款； -->
+<!-- 											</p> -->
+<!-- 										#end -->
+<!-- 											<p class="pay_ctn" id="pay_desc3"> -->
+<!-- 												线下付款--在MPH下订单，不通过平台支付货款，双方线下结算； -->
+<!-- 											</p> -->
+<!-- 										</li> -->
+<!-- 										<li> -->
+<!-- 											<label>退货周期：</label>  -->
+<!-- 											<input name="smRejectedPeriod" type="text" id="smRejectedPeriod" value="" class="w-txt w37" />天 -->
+<!-- 										</li> -->
+									</ul>
+								</div>
+
+								<!--上传图片-->
+                    <div class="image-upload-box">
+                    	<div class="project_box mt10" id="reqInfoBtn">
+                        	<span class="caption">资质信息</span>
+                            <a href="javascript:;" class="btn_pack_up"></a>
+                        </div>
+                        <div id="reqInfoBtnInfo">
+                        	#foreach($picNotNull in $bizEnterprisePics)
+	                        <div class="box" style="display: none;" id="box$!{picNotNull.epType}">
+	                            <div class="cc">
+	                                <div class="img-box">
+	                                	#if($!{picNotNull.epType}==1 || $!{picNotNull.epType}==2 || $!{picNotNull.epType}==3 || $!{picNotNull.epType}==13)
+	                                    	<h5>$!{picNotNull.epName}<i>(必填项)</i>：</h5>
+	                                    #else
+	                                    	<h5>$!{picNotNull.epName}：</h5>
+	                                    #end
+	                                    <input type="hidden" value="$!{picNotNull.epType}" name="epType$!{picNotNull.epType}"/>
+	                                    <div class="img-file" id="uploadPic$!{picNotNull.epType}">
+			                                       <img id="showPic$!{picNotNull.epType}" height="139px;" width="139px;"/>
+			                                       <input type="hidden" id="saImgPath$!{picNotNull.epType}" name="epPic$!{picNotNull.epType}">
+			                                       <input type="hidden" id="bucket_key$!{picNotNull.epType}" name="bucket_key$!{picNotNull.epType}">
+		                                           <input type="hidden" id="imageInfo$!{picNotNull.epType}" name="imageInfo$!{picNotNull.epType}">
+			                            </div>
+	                                </div>
+	                                <div class="form-group">
+	                                	<div>
+	                                    	<a href="javascript:showImage($!{picNotNull.epType});"><i></i>查看范例</a>
+	                                    </div>
+	                                    #if($!{picNotNull.epType}!=8 && $!{picNotNull.epType}!=9&& $!{picNotNull.epType}!=10)
+		                                    <label>证照号码：</label>
+		                                    <div class="control-item">
+		                                        <input type="text" class="form-control" placeholder="" id="epNo$!{picNotNull.epType}" name="epNo$!{picNotNull.epType}">
+		                                    </div>
+		                                    <label>证件有效期：</label>
+		                                    <div class="control-item">
+		                                        <input type="text" id="epStartTime$!{picNotNull.epType}" name="epStartTime$!{picNotNull.epType}"  class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'epEndTime$!{picNotNull.epType}\')}'})">
+		                                    </div>
+		                                    <label>至</label>
+		                                    <div class="control-item">
+		                                        <input type="text" id="epEndTime$!{picNotNull.epType}" name="epEndTime$!{picNotNull.epType}" class="form-control" placeholder="" onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'epStartTime$!{picNotNull.epType}\')}'})">
+		                                    </div>
+	                                    #end
+	                                </div>
+	                                <div class="ctn-box" id="typeShow" style="display:none;">如为盈利性机构，请上传营业执照</div>
+	                            </div>
+	                             #if($!{picNotNull.epType}==4 || $!{picNotNull.epType}==5)
+	                            <span style="color: red;">非三证合一,此项为必填</span>
+	                            #end
+	                            
+	                            #if($!{picNotNull.epType}==8)
+		                            <div class="ctn-box">与法人授权委托书2选1必填</div>
+		                        #end
+		                            
+	                            #if($!{picNotNull.epType}==9)
+	                            	<div class="ctn-box">与法人身份证2选1必填</div>
+	                            #end
+	                            
+	                            #if($!{picNotNull.epType} == 1)
+	                                <div class="info-box">
+	                                                                                                注意事项：<br/>
+ 									1.企业名称需要与营业执照名称保持一致<br/>
+ 									2.三证合一的企业请在证照号码处填写“全国统一社会信用代码”<br/>
+ 									3.证照起止日期为必填，若为长期终止时间可不填                                                     
+	                                </div>
+	                                #elseif($!{picNotNull.epType} == 2)
+	                                <div class="info-box">
+	                               	注意事项：<br/>
+ 									1.证号必须清晰可见<br/>
+ 									2.仓库地址默认为收货地址<br/>
+ 									3.有效期务必清晰可见并在有效期内
+ 									</div>
+	                                #elseif($!{picNotNull.epType} == 3)
+	                                <div class="info-box">
+	                                                                                                注意事项：<br/>
+ 									1.认证地址务必保持与收货地址一致<br/>
+ 									2.有效期必须清晰可见并且必须在有效期内
+ 									</div>
+	                                #elseif($!{picNotNull.epType} == 9)
+	                                <div class="info-box">
+	                                                                                                注意事项：<br/>
+ 									1.受委托人的姓名与身份证号须清晰可见<br/>
+ 									2.需注明授权有效期<br/>
+ 									3.需法定代表人签字盖章
+ 									</div>
+	                                #elseif($!{picNotNull.epType} == 8)
+	                                <div class="info-box">
+	                             	注意事项：<br/>
+ 								    1.身份证需包含正反两面<br/>
+									2.身份证须在有效期内
+									</div>
+	                            #end
+	                        </div>
+	                        #end
+                        </div>
+                    </div>
+							</form>
+								<div class="tips">
+									<div class="line line-n cc">
+										<span class="fl">经营范围</span>
+										<span class="fl text ml10">当前采购状态</span>
+					                    <div class="fl jsje-ctn">
+						                    <div class="fl jsje-tips-img jsje-tips-show">
+						                        <div class="jsje-tips">
+						                            <div class="jsje-tips-top"></div>
+						                            <div class="jsje-tips-ctn">采购权限控制开关，若勾选“禁止采购所有药品”，即使下方已经配置了采购权限目录，客户也不能采购药品。</div>
+						                        </div>
+						                    </div>
+						                </div>
+										<label class="fl label"><input type="radio" class="fl" id="smStatusYes" name="smStatus" checked="checked" value="1" onclick="setSmStatus();"/>允许采购授权目录药品</label>
+										<label class="fl ml10 label"><input type="radio" class="fl" id="smStatusNo" name="smStatus"value="0" onclick="setSmStatus();"/>禁止采购所有药品</label>
+										<input id="smStatus" name="smStatus" value="1" type="hidden"/>
+									</div>
+								</div>
+								<div class="order_query order manage">
+									<ul>
+										<li class="manage-item cc"><label class="text-l">全局经营期限
+										</label> <input class="input fl" id="all_beginTime"
+											name="all_beginTime" type="text"
+											onchange="selectAllStarttime();"
+											onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'all_endTime\')}'})" />
+											<i class="slt_t">至</i> <input class="input fl"
+											id="all_endTime" name="all_endTime" type="text"
+											onchange="selectAllEndtime();"
+											onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'all_beginTime\')}'})" />
+										</li> 
+										#foreach($shopPurview in $shopPurviewMap.entrySet())
+										<li class="manage-item">
+											<div class="manage-top">
+												<input type="checkbox" class="check" onclick="checkAll(this)" />$!utils.subStr($!{shopPurview.key})
+											</div> 
+											#foreach($item in $!{shopPurview.value})
+												#set($checked = "unchecked")
+												#foreach($shopPurview in $!{applicationShopPurviews})
+	                               	  					#if($!{item.spId} == $!{shopPurview.spId})
+	                               	  						#set($checked = "checked")
+	                               	  					#end
+												#end
+											<div class="manage-con" name=purDiv>
+												<input id="${item.spId}" title="${item.spName}" name="selck" #if($!checked=="checked")checked="checked"#end
+													type="checkbox" class="check fl" onclick="checkOne(this);" /> <label
+													class="text-l w-text mr10">${item.spName} 经营期限 </label> <input
+													class="input fl" id="${item.spId}_beginTime"
+													name="${item.spId}_beginTime" type="text" other_name="1"
+													onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', maxDate:'#F{$dp.$D(\'${item.spId}_endTime\')}'})" />
+												<i class="slt_t">至</i> <input class="input fl"
+													other_name="2" id="${item.spId}_endTime"
+													name="${item.spId}_endTime" type="text"
+													onfocus="WdatePicker({skin : 'whyGreen', dateFmt : 'yyyy-MM-dd', minDate:'#F{$dp.$D(\'${item.spId}_beginTime\')}'})" />
+											</div> 
+											#end
+										</li> 
+										#end
+									</ul>
+								</div>
+							<div class="btn tac">
+								<a href="javascript:addSubmit();" class="btn-save">保存</a>
+								<a href="/sales/member/member_info.html" onclick="top.utils.frameBackDel();" class="btn-close">返回</a>
+							</div>
+						</div>
+					</div>
+					<!-- 用户中心_主体内容_E -->
+				</div>
+			</div>
+		</div>
+	</div>
+	#parse("/common/footer.vm")
+
+	<!-- 脚本 -->
+	<script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+	<script src="/js/publish.js?v=$!{jscss_version}"></script>
+	<script type="text/javascript" src="/js/pager.js?v=$!{jscss_version}"></script>
+	<script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+	<script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+	<script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/validate-methods.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<!-- 脚本 -->
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/public/public.js?v=$!{jscss_version}"></script>
+	<script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+	#parse("common/common_script.vm")
+	<script>
+
+        /*设置框架返回按钮*/
+        top.utils.frameBack({
+            handler:function (btn) {
+                location.href = document.referrer;
+            }
+        })
+
+	$(function() {
+		$("#box1").show();
+		$("#box2").show();
+		$("#box3").show();
+		$("#box4").show();
+		$("#box5").show();
+		$("#box6").show();
+		$("#box7").show();
+		$("#box8").show();
+		$("#box9").show();
+		$("#box10").show();
+		$("#box13").show();
+		
+		$("#notReqInfoBtn").click(function(){
+			if($(this).attr("isHidden") == undefined  || $(this).attr("isHidden") == "1"){
+				$(this).attr("isHidden","0");
+				$("#notReqInfoBtnInfo").hide();	
+				$(this).find("a").removeClass("btn_open_up").addClass("btn_pack_up");
+			}else{
+				$(this).attr("isHidden","1");
+				$("#notReqInfoBtnInfo").show();
+				$(this).find("a").addClass("btn_open_up").removeClass("btn_pack_up");
+			}
+		});
+		
+		$("#reqInfoBtn").click(function(){
+			if($(this).attr("isHidden") == undefined  || $(this).attr("isHidden") == "1"){
+				$(this).attr("isHidden","0");
+				$("#reqInfoBtnInfo").hide();	
+				$(this).find("a").removeClass("btn_open_up").addClass("btn_pack_up");
+			}else{
+				$(this).attr("isHidden","1");
+				$("#reqInfoBtnInfo").show();
+				$(this).find("a").addClass("btn_open_up").removeClass("btn_pack_up");
+			}
+		});
+		
+		$("#pay2").click(function(){
+			var va = $("#pay2")[0].checked;
+			if(!va){
+				$("#smCreditLimit").val("");
+				$("#smAccountPeriod").val("");
+				$("#smCreditLimit").attr("readonly","readonly");
+				$("#smAccountPeriod").attr("readonly","readonly");
+			}else{
+				$("#smCreditLimit").removeAttr("readonly");
+				$("#smAccountPeriod").removeAttr("readonly");
+			}
+		});
+		
+		$(".jsje-tips-show").mouseenter(function(){
+            $(this).find(".jsje-tips").show();
+        });
+
+        $(".jsje-tips-show").mouseleave(function(){
+            $(this).find(".jsje-tips").hide();
+        });
+		
+		//支付方式默认为线下支付-线下支付（货到付款）
+		$("#default").show();
+		
+// 		$(function() {
+			$("#submitForm").validate(
+							{
+								submitHandler : addSave, //如果验证通过的回调函数
+								ignore: ':hidden',
+								rules : {
+									mName : {
+										required : true,
+										isChinese: true,
+										remote : {
+											type : "post",
+											url : "/sales/member/supplierMember_validateUsername.html",
+											data : {
+												mName : function() {
+													return $("#mName").val();
+												}
+											},
+											dataType: "json",
+					                        dataFilter: function(dataXML) {
+					                        	var result = dataXML;
+					                            if (result=="true")
+					                                return false;
+					                            else
+					                                return true;
+					                        }
+										}
+									},
+									mEmail : {
+										isEmail: true,
+										maxlength: 30,
+										remote : {
+											type : "post",
+											url : "/sales/member/supplierMember_validateEmail.html",
+											data : {
+												mEmail : function() {
+													return $("#mEmail").val();
+												}
+											},
+											dataType : "json",
+											dataFilter : function(dataXML) {
+												var result = dataXML;
+												if (result == "true")
+													return false;
+												else
+													return true;
+											}
+										}
+									},
+									mTel : {
+										isMobile: true,
+										remote : {
+											type : "post",
+											url : "/sales/member/supplierMember_validateMobile.html",
+											data : {
+												mTel : function() {
+													return $("#mTel").val();
+												}
+											},
+											dataType : "json",
+											dataFilter : function(dataXML) {
+												var result = dataXML;
+												if (result == "true")
+													return false;
+												else
+													return true;
+											}
+										}
+									},
+									eLicenseNo : {
+										required : true,
+										remote : {
+											type : "post",
+											url : "/sales/member/supplierMember_validateEnterPrise.html",
+											data : {
+												eLicenseNo : function() {
+													return $("#eLicenseNo")
+															.val();
+												}
+											},
+											dataType : "json",
+											dataFilter : function(dataXML) {
+												var result = dataXML;
+												if (result == "true")
+													return false;
+												else
+													return true;
+											}
+										}
+									},
+									eName : {
+										required : true,
+										maxlength: 50
+									},
+									eType : {
+										required : true
+									},
+									smCustomerType : {
+										required : true
+									},
+									smManyPayMethod: {
+										required : true
+									},
+									eMobile : {
+										isMobile: true
+									},
+									eTel : {
+										isTelephone:true,
+										maxlength: 16
+									},
+									eContactor : {
+										required : true
+									},
+									smCode : {
+										maxlength: 100
+									},
+									smInternalCode : {
+										maxlength: 100
+									},
+									smMain : {
+										maxlength: 50
+									},
+									eAddress : {
+										maxlength: 50
+									},
+									smRejectedPeriod : {
+										smRejectedPeriodCheck: true
+									}
+								},
+								messages : {
+									mName : {
+										remote : "该会员名已存在"
+									},
+									mEmail : {
+										remote : "该邮箱已存在"
+									},
+									mTel : {
+										remote : "该电话号码已存在"
+									},
+									eLicenseNo : {
+										remote : "该企业工商注册号已存在"
+									}
+								},
+					              errorPlacement: function(error, element) {
+					                   error.appendTo(element.parent());
+					               }
+							});
+// 		});
+		
+		//检查账期
+		jQuery.validator.addMethod("smAccountPeriodCheck", function(value, element) {
+			if(value == ""){
+				return true;
+			}else{
+				var aint=parseInt(value);
+				return aint>=0 && (aint+"")==value && aint<=365;   
+			}
+		  }, "请输入0到365整数");   
+		//检验信用额度
+		jQuery.validator.addMethod("smCreditLimitCheck", function(value, element) {
+			if(value == ""){
+				return true;
+			}else{
+				var aint=parseInt(value);
+				return aint>=0 && (aint+"")==value ;   
+			}
+		  }, "请输入0或正整数");   
+		//退货周期
+		jQuery.validator.addMethod("smRejectedPeriodCheck", function(value, element) {
+			if(value == ""){
+				return true;
+			}else{
+				var aint=parseInt(value);
+				return aint>0 && (aint+"")==value ;   
+			}
+		  }, "退货周期：请输入正整数"); 
+	});
+	
+	function checkAll(obj) {
+		var f = obj.checked;
+		$(obj).parents(".manage-item").find("input[name='selck']:checkbox").each(function() {
+			$(this)[0].checked = f;
+            $(obj).closest(".manage-item").find(".manage-con").each(function () {
+                if(f){
+                    $($(this).find(".input").get(0)).val($("#all_beginTime").val())
+                    $($(this).find(".input").get(1)).val($("#all_endTime").val())
+                }else{
+                    $($(this).find(".input").get(0)).val("")
+                    $($(this).find(".input").get(1)).val("")
+                }
+            })
+		});
+	}
+
+	function checkOne(obj) {
+		var f = obj.checked;
+        if(f){
+            $($(obj).closest(".manage-con").find(".input").get(0)).val($("#all_beginTime").val());
+            $($(obj).closest(".manage-con").find(".input").get(1)).val($("#all_endTime").val());
+            var _len = $(obj).closest(".manage-item").find(".manage-con").find("input[type=checkbox]").length;
+            var _selLen = $(obj).closest(".manage-item").find(".manage-con").find("input[type=checkbox]:checked").length;
+            if(_len == _selLen){
+                $(obj).closest(".manage-item").find(".manage-top").find("input[type=checkbox]").prop("checked",true).attr("checked",true);
+			}else{
+                $(obj).closest(".manage-item").find(".manage-top").find("input[type=checkbox]").prop("checked",false).removeAttr("checked");
+			}
+        }else{
+            $($(obj).closest(".manage-con").find(".input").get(0)).val("");
+            $($(obj).closest(".manage-con").find(".input").get(1)).val("");
+            $(obj).closest(".manage-item").find(".manage-top").find("input[type=checkbox]").prop("checked",false).removeAttr("checked");
+        }
+    }
+
+	function selectAllStarttime() {
+		var starttime = $("#all_beginTime").val();
+		$("div[name=purDiv]").each(function(i, item) {
+			if ($(item).find("input[type='checkbox']")[0].checked == true) {
+				$(item).find("input[other_name='1']").val(starttime);
+			}
+		});
+	}
+
+	function selectAllEndtime() {
+		var endtime = $("#all_endTime").val();
+		$("div[name=purDiv]").each(function(i, item) {
+			if ($(item).find("input[type='checkbox']")[0].checked == true) {
+				$(item).find("input[other_name='2']").val(endtime);
+			}
+		});
+	}
+	
+	//图片上传
+	function loadPic() {
+		//初始化上传图片方法
+		for(var i=1;i<=10;i++){
+			uploadPic(i);
+		}
+		uploadPic(13);
+	}
+	//图片上传
+	function uploadPic(picId) {
+		var uploadPic = $("#uploadPic" + picId);
+		new AjaxUpload(uploadPic, {
+            action: "/cdn/imageInfo_upload.html?type=1&parse=1&pcId="+picId,
+			name : 'file_path',
+			responseType : "json",
+			onSubmit : function(file, ext) {
+				if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+					ext_str = ext;
+				} else {
+					dialog({
+						title : "提示信息",
+						content : "非图片文件格式,请重传",
+						width : 300
+					});
+					return false;
+				}
+				$.showLoad();
+			},
+			onComplete : function(file, result) {
+				if (result.success == false) {
+					$.hideLoad();
+					if (result.message == "outofsize") {
+						dialog({
+							title : "提示信息",
+							content : "文件过大，无法上传",
+							width : 300
+						});
+					} else if (result.message == "error") {
+						dialog({
+							title : "提示信息",
+							content : "文件过大，无法上传",
+							width : 300
+						});
+					}
+					return false;
+
+				} else {
+					$("#saImgPath" + picId).val(result.data.id);//response返回的是mogoDB记录id
+// 					$('#showPic' + picId).attr(
+// 							"src",
+// 							result.data.picUrl + result.data.id
+// 									+ result.data.picSize);
+					$('#showPic'+picId).attr("src",result.data.picUrl.replace("&amp;","&"));
+                	$("#bucket_key"+picId).val(result.data.id);
+                	if($("#epNo"+picId).val()==''||$("#epNo"+picId).val()=='undefind'){
+                		$("#epNo"+picId).val(result.data.cerNo);
+                	}
+                	if($("#epStartTime"+picId).val()==''||$("#epStartTime"+picId).val()=='undefind'){
+                		$("#epStartTime"+picId).val(result.data.startTime);
+                	}
+                	if($("#epEndTime"+picId).val()==''||$("#epEndTime"+picId).val()=='undefind'){
+                		$("#epEndTime"+picId).val(result.data.endTime);
+                	}
+                	$("#imageInfo"+picId).val($.toJSON(result.data.imageInfo));
+				}
+				$.hideLoad();
+			}
+		});
+	}
+    <!-- 绑定事件要写在被绑定对象的后面 -->
+//     $("#pay2").bind("click", function(event) { $("#pay_ctn_date").toggle();$("#pay_desc2").toggle()});
+//     $("#pay1").bind("click", function(event) { $("#pay_desc1").toggle()});
+//     $("#pay3").bind("click", function(event) { $("#pay_desc3").toggle()});
+    
+	//三级联动
+	//省市区级联
+	$(function() {
+		$("#eProvince").change(function(){
+			var provinceId = $(this).val();
+			var townId = findLocation($("#eCity"),"",provinceId);
+//				findLocation($("#eRegion"),"",townId);
+//				var _townId = findLocation($("#eCity"),"","");
+			findLocation($("#eRegion"),"","");
+			
+			$("#eCity").val("");
+			$("#eRegion").val("");
+			loadSltitem();
+		});
+		$("#eCity").change(function(){
+			var provinceId = $(this).val();
+			findLocation($("#eRegion"),"",provinceId);
+			
+			$("#eRegion").val("");
+			loadSltitem();
+		});
+		$("#eRegion").change(function(){
+			loadSltitem();
+		});
+		loadLocation();
+	});
+
+	//省市区加载
+	function loadLocation(provinceId,townId,areaId){
+		if(provinceId){
+			findLocation($("#eProvince"),provinceId,0);
+			if(townId != ""){
+				findLocation($("#eCity"),townId,provinceId);
+				if(areaId != ""){
+					findLocation($("#eRegion"),areaId,townId);
+				}
+			}
+		}else{
+			var _provinceId = findLocation($("#eProvince"),"",0);
+//				var _townId = findLocation($("#eCity"),"",_provinceId);
+//				findLocation($("#eRegion"),"",_townId);
+			var _townId = findLocation($("#eCity"),"","");
+			findLocation($("#eRegion"),"","");
+		}
+		loadSltitem();
+	}
+
+	//object:加载对象    value:默认值  lpId:上级id
+	function findLocation(object,value,lpId){
+		var id = 0;
+		$.ajax({
+            url: '/location/provincialCity',
+            data: {lpid: lpId},
+            type:"post",
+            async:false,
+            success: function(data) {
+				var location = data.data;
+				if(location!=''){  
+                    var jObject = $(object).siblings("ul");  
+                    jObject.prev().text("");
+                    jObject.empty();//清除select中的 option  
+                    $.each(location,function(index,item){  
+                    	if(index ==0 ){
+                    		id = item.lid;
+                    		if(!value){
+                    			jObject.prev().text("请选择").removeClass("on");
+                    		}
+                    	}
+                    	if(value == item.lid){
+                    		jObject.prev().text(item.lname).removeClass("on");
+                    		jObject.next().val(item.lid);
+                    	}
+                        var opt ='<li data-value="'+item.lid+'"><a href="javascript:;">'+item.lname+'</a></li>'; 
+                        jObject.append(opt);  
+                    });  
+                }else{  
+                	location = '';  
+                	 var jObject = $(object).siblings("ul");  
+                     jObject.prev().text("请选择");
+                     jObject.empty();//清除select中的 option  
+                     jObject.prev().text("请选择").removeClass("on");
+                }
+            }
+        });
+		return id;
+	}
+
+	//下拉框点击事件
+	function loadSltitem() {
+		$(".sltitem").unbind("click");
+		//自定义下拉框
+		$(".sltitem").click(function(e) {
+			e.stopPropagation();
+			var len = $(this).find('li').length;
+			$(this).find("span").addClass("on");
+			if (len > 6) {
+				$(this).find("ul").css('height', '120px').show();
+			} else {
+				$(this).find("ul").show();
+			}
+		});
+
+		$(".sltitem li").unbind("click");
+		$(".sltitem li").click(function(e) {
+			e.stopPropagation();
+			var text = $(this).text();
+			var value = $(this).data("value");
+			$(this).closest("ul").prev().text(text).removeClass("on");
+			$(this).closest("ul").next().val(value).change();
+			$(this).closest("ul").hide();
+		});
+		
+		//支付方式绑定点击事件
+// 		$("#pay_select ul>li").click(function(){
+// 			var index = $("#pay_select ul>li").index(this);
+// 			$("#pay_box>p").hide().eq(index).show();
+// 			if(index==1){
+// 				$("#pay_ctn_2").show();
+// 			}else{
+// 				$("#pay_ctn_2").hide();
+// 			}
+// 		});
+		//支付方式绑定点击事件
+	}
+	
+	//启用中绑定事件
+	function setSmStatus(){
+		   if($("#smStatusYes")[0].checked == true){
+				$("#smStatus").val(1);
+			}
+		   if($("#smStatusNo")[0].checked == true){
+				$("#smStatus").val(0);
+			}
+	}
+	
+	function addSave() {
+		var status = "$!status";
+		if(status === "10"){
+			//检查账期和信用额度
+			var va = $("#pay2")[0].checked;
+			if(va){
+				var smAccountPeriod = $("#smAccountPeriod").val();
+				var smCreditLimit = $("#smCreditLimit").val();
+				if(smAccountPeriod == ""){
+					dialog({
+						title : "提示信息",
+						content : "账期不能为空",
+						width : 300
+					});
+					return false;
+				}
+				if(smCreditLimit == "信用额度不能为空"){
+					dialog({
+						title : "提示信息",
+						content : "请选择所属省",
+						width : 300
+					});
+					return false;
+				}
+				if(!(smAccountPeriod >= 0 && (smAccountPeriod+"").indexOf(".") == -1)){
+					dialog({
+						title : "提示信息",
+						content : "账期必须为大于等于0的正整数",
+						width : 300
+					});
+					return false;
+				}
+				if(!(smCreditLimit >= 0 && (smCreditLimit+"").indexOf(".") == -1)){
+					dialog({
+						title : "提示信息",
+						content : "信用额度必须为大于等于0的正整数",
+						width : 300
+					});
+					return false;
+				}
+			}
+		}
+		
+		//检验省  市  区  必填
+ 		var eProvince = $("#eProvince").val();
+ 		var eCity = $("#eCity").val();
+ 		if(eProvince == ""){
+ 			dialog({
+				title : "提示信息",
+				content : "请选择所属省",
+				width : 300
+			});
+			return false;
+ 		}
+ 		if(eCity == ""){
+ 			dialog({
+				title : "提示信息",
+				content : "请选择所属市",
+				width : 300
+			});
+			return false;
+ 		}
+ 		var eType=$("#eType").val();
+ 	   	if(eType==""){
+ 		   dialog({
+ 				title : '提示信息',
+ 				content : "请选择企业类型",
+ 				width : 300
+ 			})
+ 			return;
+ 	   	}
+ 		//8-身份证和9-法人授权委托书两者必填其一
+// 		var saImgPath8=$("#saImgPath8").val();
+// 		var saImgPath9=$("#saImgPath9").val();
+// 		if(saImgPath8 == "" && saImgPath9 == ""){
+// 			dialog({
+//               title: "提示信息",
+//               content: "身份证和法人授权委托书两者必填其一！",
+//               width: 300
+//           });
+// 			return;
+// 		}
+	    //判断企业类型进行remove元素
+		//序列化表单
+		var supplierMemberWrapper = $("#submitForm").serializeJson();
+	    //企业类型非医院和诊所(必填资质)和企业类型非医院和诊所(非必填资质)
+			//验证必填的图片是否上传
+ 			var saImgPath1=$("#saImgPath1").val();
+ 			var saImgPath2=$("#saImgPath2").val();
+			var saImgPath3=$("#saImgPath3").val();
+			
+			var epStartTime1=$("#epStartTime1").val();
+			var epStartTime2=$("#epStartTime2").val();
+			var epStartTime3=$("#epStartTime3").val();
+			var epStartTime13=$("#epStartTime13").val();
+			
+			var epEndTime1=$("#epEndTime1").val();
+			var epEndTime2=$("#epEndTime2").val();
+			var epEndTime3=$("#epEndTime3").val();
+			var epEndTime13=$("#epEndTime13").val();
+			if(saImgPath1!=""&&saImgPath2!=""&&saImgPath3!=""){
+				supplierMemberWrapper.picStatus = 3;
+			}
+ 			if(saImgPath1!=""){
+// 				if(epStartTime1==""||epEndTime1==""){
+//					dialog({
+//	                       title: "提示信息",
+//	                       content: "必须填写企业营业执照有效期",
+//	                       width: 300
+//	                   });
+//	 				return;
+// 				}
+ 			}
+ 			if(saImgPath2!=""&&eType!=6 && eType!=7){
+// 				if(epStartTime2==""||epEndTime2==""){
+//					dialog({
+//	                       title: "提示信息",
+//	                       content: "必须填写药品经营许可证有效期",
+//	                       width: 300
+//	                   });
+//	 				return;
+// 				}
+ 			}
+ 			
+ 			if(saImgPath3!=""){
+// 				if(epStartTime3==""||epEndTime3==""){
+//					dialog({
+//	                       title: "提示信息",
+//	                       content: "必须填写GSP证书有效期",
+//	                       width: 300
+//	                   });
+//	 				return;
+// 				}
+ 			}
+		//企业类型是医院和诊所(必填资质)和企业类型非医院和诊所(非必填资质)
+		if(eType==6 || eType==7){
+			
+		var saImgPath13=$("#saImgPath13").val();
+			
+ 			if(saImgPath13!=""){
+// 				if(epStartTime13==""||epEndTime13==""){
+//					dialog({
+//	                       title: "提示信息",
+//	                       content: "必须填写医疗机构执业许可证有效期",
+//	                       width: 300
+//	                   });
+//	 				return;
+// 				}
+ 			}
+			
+			$("#box2").remove();
+			$("#box3").remove();
+			$("#box6").remove();
+			$("#box7").remove();
+			if(saImgPath13!=""){
+				supplierMemberWrapper.picStatus = 3;
+			}
+		}
+
+		supplierMemberWrapper.smStatus = $("#smStatus").val();
+		//资质审核状态
+		var userEname = "$!userEname";
+		if(eType==6 || eType==7){
+			var saImgPath1=$("#saImgPath1").val();
+			var saImgPath4=$("#saImgPath4").val();
+			var saImgPath5=$("#saImgPath5").val();
+			var saImgPath8=$("#saImgPath8").val();
+			var saImgPath9=$("#saImgPath9").val();
+			var saImgPath13=$("#saImgPath13").val();
+		}else{
+			var saImgPath1=$("#saImgPath1").val();
+			var saImgPath2=$("#saImgPath2").val();
+			var saImgPath3=$("#saImgPath3").val();
+			var saImgPath4=$("#saImgPath4").val();
+			var saImgPath5=$("#saImgPath5").val();
+			var saImgPath6=$("#saImgPath6").val();
+			var saImgPath7=$("#saImgPath7").val();
+			var saImgPath8=$("#saImgPath8").val();
+			var saImgPath9=$("#saImgPath9").val();
+		}
+   		supplierMemberWrapper.uploadEnterprise = userEname;
+		//权限
+		var flag = false;
+		var purs = "";
+		var purviews = new Array;
+		$("input[name^='selck']").each(function(i, o) {
+					if (flag) {
+						return;
+					}
+					if (o.checked) {
+						var beginTime = $('#' + o.id + "_beginTime").val();
+						if (!beginTime) {
+							dialog({
+								title : '提示信息',
+								content : "请选择【" + o.title + "】经营期限开始时间",
+								width : 300
+							})
+							flag = true;
+							return;
+						}
+						var endTime = $('#' + o.id + "_endTime").val();
+						if (!endTime) {
+							dialog({
+								title : '提示信息',
+								content : "请选择【" + o.title + "】经营期限结束时间",
+								width : 300
+							})
+							flag = true;
+							return;
+						}
+						flag = false;
+						if (purs != "") {
+							purs += ",";
+						}
+						purs += o.id;
+						var purobj = {
+							spId : o.id,
+							smpStartTime : beginTime,
+							smpEndTime : endTime
+						};
+						purviews.push(purobj);
+					}
+				});
+				if (flag) {
+					return;
+				}
+
+				if (purs == "") {
+					dialog({
+						title : '提示信息',
+						content : "请选择采购权限",
+						width : 300
+					})
+					return;
+				}
+		//参数
+		var eType = $("#eType").val();
+		var roleCode = '';
+		if(eType == 1){
+			roleCode = 'sys004';
+		}else if(eType == 2){
+			roleCode = 'sys001';
+		}else if(eType == 3){
+			roleCode = 'sys002';
+		}else if(eType == 4){
+			roleCode = 'sys003';
+		}else if(eType == 5){
+			roleCode = 'sys008';
+		}else if(eType == 6){
+			roleCode = 'sys005';
+		}else if(eType == 7){
+			roleCode = 'sys006';
+		}
+		var purviewsParam = $.toJSON(purviews);
+		$.showLoad();
+		$.ajax({
+			type : 'post',
+			url : '/sales/member/supplierMember_addSave.html',
+			data : {
+				"supplierMemberWrapper" : $.toJSON(supplierMemberWrapper),
+				"purviews" : purviewsParam,
+				"roleCode" : roleCode
+			},
+			dataType : 'json',
+            complete:function () {
+                $.hideLoad();
+            },
+			success : function(data) {
+				if (data) {
+					top.ue.alert({
+						title : '提示信息',
+						content : "保存成功",
+						end : function() {
+                            top.utils.frameBackDel();
+                            location = "/sales/member/member_info.html";
+						}
+					})
+				} else {
+					top.ue.msg("保存失败");
+				}
+			}
+		});
+	}
+	
+	function addSubmit(){
+		$("#submitForm").submit();
+	}
+	
+	//查看范例图片
+	function showImage(img) {
+			var imgUrl ="/image/zizhi/img"+img+".jpg";
+			var content = '<img src="'+imgUrl+'" height="400px;" width="750px;"/>';
+        top.utils.showImg(imgUrl);
+	}
+	
+	// 协议期限
+	function checkSmAccountPeriod1(){
+		if($("#checkSmAccountPeriod")[0].checked == true){
+			$("#smAccountPeriod").attr("readOnly",false);
+		}else{
+			$("#smAccountPeriod").attr("readOnly",true);
+		}
+	}
+	
+	//企业类型切换来变幻企业的资质
+ 	function changeEType(){
+ 		var eType=$("#eType").val();
+ 		if(eType==6||eType==7){
+			$("#eLicenseNo").attr("placeholder",$("#eLicenseNo").attr("data-place"));
+		}else{
+			$("#eLicenseNo").attr("placeholder","");
+		}
+ 		//显示企业类型非医院和诊所(必填资质)和企业类型非医院和诊所(非必填资质)
+ 		if(eType==1 || eType==2 || eType==3 || eType==4 || eType==5){
+ 			$("#box1").show();
+ 			$("#box2").show();
+ 			$("#box3").show();
+ 			$("#box8").show();
+ 			$("#box4").show();
+ 			$("#box5").show();
+ 			$("#box6").show();
+ 			$("#box7").show();
+ 			$("#box9").show();
+ 			$("#box10").show();
+ 			$("#box13").hide();
+ 		}
+ 		//显示企业类型是医院和诊所(必填资质)和企业类型非医院和诊所(非必填资质)
+ 		if(eType==6 || eType==7){
+ 			$("#box1").show();
+ 			$("#box8").show();
+ 			$("#box13").show();
+ 			$("#box4").show();
+ 			$("#box5").show();
+ 			$("#box9").show();
+ 			$("#box2").hide();
+ 			$("#box3").hide();
+ 			$("#box6").hide();
+ 			$("#box7").hide();
+ 			$("#box10").hide();
+ 		}
+ 		
+ 		//医院和诊所时 企业营业执照必填 其他类型为非必填
+ 		if(eType==6 || eType==7){
+ 			$("#box1").find("h5").find("i").remove();
+ 		}
+ 		if(eType==1 || eType==2 || eType==3 || eType==4 || eType==5){
+ 			$("#box1").find("h5").find("i").remove();
+ 			$("#box1").find("h5").html("企业营业执照<i>(必填项)</i>：");
+ 		}
+ 		//医院和诊所时 企业营业执照必填 其他类型为非必填
+//  		if(eType==6 || eType==7){
+//  			$("#epNo1").rules("remove"); 
+//  			$("#epStartTime1").rules("remove"); 
+//  			$("#epEndTime1").rules("remove"); 
+//  		}
+//  		if(eType==1 || eType==2 || eType==3 || eType==4 || eType==5){
+//  			$("#epNo1").rules("remove"); 
+//  			$("#epStartTime1").rules("remove"); 
+//  			$("#epEndTime1").rules("remove"); 
+//  			$("#epNo1").rules("add", {  
+//  				required: true,
+//             }); 
+//  			$("#epStartTime1").rules("add", {  
+//  				required: true,
+//             }); 
+//  			$("#epEndTime1").rules("add", {  
+//  				required: true,
+//             }); 
+//  		}
+ 		//医院和诊所时 企业营业执照  如为盈利性机构，请上传营业执照
+ 		if(eType==6 || eType==7){
+ 			$("#typeShow").css("display","block");
+ 		}
+ 		if(eType==1 || eType==2 || eType==3 || eType==4 || eType==5){
+ 			$("#typeShow").css("display","none");
+ 		}
+ 	}
+	</script>
+</body>
+
+</html>

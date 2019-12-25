@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>查看明细-结算信息汇总-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/load.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/rc-jsxxmx.css?v=$!{jscss_version}">
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+    <script type="text/javascript">
+        DD_belatedPNG.fix('*');
+    </script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="container">
+    #parse("common/header_top.vm")
+    #parse("common/header.vm")
+    <div class="content">
+        <div class="wrap cc">
+            #parse("common/left_menu_sales.vm")
+            <div class="user_right fl">
+                <!-- 用户中心_主体内容_S -->
+                <div class="indmain">
+                    <div class="path">
+                        <p><a href="/purchase/index.html" class="color">销售中心</a>&gt; 财务模块 &gt;<a href="/sales/settlement/settlementSummary.html?resourceId=942" class="color">结算信息汇总</a>&gt; 查看明细</p>
+                    </div>
+                    <div class="rocky-jsxxhz">
+                       #parse("settlement/settlementOrderSummaryCommon.vm")
+						<form action="" method="post" id="searchForm" name="searchForm">
+                                <input type="hidden" name="pi" value="$!pi">
+						</form>
+                        
+                        <div class="rc-table-box">
+                            <div class="rc-tab">
+                                <a href="/sales/settlement/summyOrderDetail.html?amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{settlementStatis})})&$!{commonUrl}" class="active">订单明细</a>
+                                <a href="/sales/settlement/summyOrderGoodsDetail.html?amountJson=$!utils.urlEncode($!{utils.getJsonStr($!{settlementStatis})})&$!{commonUrl}">商品明细</a>
+                                <p>＊金额单位均为人民币（元）</p>
+                                <div class="clear-fix"></div>
+                            </div>
+                            <div class="scroller-box" >
+                                <div class="scroller-box-bb">
+                                    <div class="rc-content show">  ##订单明细
+                                        <table>
+                                            <tr class="thead">
+                                                <th class="short">订单号</th>
+                                                <th class="short">下单时间</th>
+                                                <th class="short">采购商</th>
+                                                <th class="short">支付方式</th>
+                                                <th class="mid-long">供应商订单号</th>
+                                                <th class="short">订单商品<br/>结算金额</th>
+                                                <th class="mid-long">优惠券平台<br/>应补贴金额</th>
+                                                <th class="mid-long">随机立减平台<br/>应补贴金额</th>
+                                                <th class="mid-long">订单应结算</br>总金额</th>
+                                                <th class="short">订单<br/>金额</th>
+                                                <th class="long">订单使用优惠券金<br/>额-平台承担部分</th>
+                                                <th class="long">订单使用优惠券金<br/>额-供应商承担部分</th>
+                                                <th class="long">订单享受随机立减<br/>金额-平台承担部分</th>
+                                                <th class="long">订单享受随机立减金<br/>额-供应商承担部分</th>
+                                                <th class="long">采购商线上<br/>付款金额</th>
+                                                <th class="short">佣金金额</th>
+                                                <th class="long">驳回商品实际<br/>退款金额</th>
+                                                <th class="long">驳回商品分摊的平台<br/>承担优惠券金额</th>
+                                                <th class="long">驳回商品分摊的供应<br/>商承担优惠券金额</th>
+
+                                                <th class="long">驳回商品分摊的平台<br/>承担随机立减金额</th>
+                                                <th class="long">驳回商品分摊的供应<br/>商承担随机立减金额</th>
+                                                <th class="short">驳回佣金金额</th>
+                                                <th class="mid-long">退货退款<br/>金额</th>
+                                                <th class="long">退货商品分摊的平<br/>台承担优惠券金额</th>
+                                                <th class="long">退货商品分摊的供<br/>应商承担优惠券金额</th>
+
+                                                <th class="long">退货商品分摊的平台<br/>承担随机立减金额</th>
+                                                <th class="long">退货商品分摊的供应<br/>商承担随机立减金额</th>
+                                                <th class="short">退货佣金金额</th>
+                                                <th class="short">签收时间</th>
+                                                <th class="long">订单结算单生成时间</th>
+                                                <th class="long">订单结算单审核时间</th>
+
+                                                <th class="long">随机立减结算单生成时间</th>
+                                                <th class="long">随机立减结算单审核时间</th>
+                                                <th class="long">优惠券结算单生成时间</th>
+                                                <th class="long">优惠券结算单审核时间</th>
+
+                                                <th class="long">订单结算单号</th>
+                                                <th class="long">优惠券结算单号</th>
+                                                <th class="long">随机立减结算单号</th>
+
+                                                <th class="long">开票员</th>
+                                                <th class="long">开票员ID</th>
+                                            </tr>
+                                            <tbody>
+												#if($settlementList && $!settlementList.size()!=0)
+                                                    #set($colorType = 4)
+                                                #foreach($item in $settlementList)
+                                            	<tr>
+                                                    <td class="left">$!{item.orderSn}</td>
+                                                    <td >$utils.formatDate($!{item.createTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                                    <td >$!{item.buyerName}</td>
+                                                    <td >$!{item.platformDes}</td>
+                                                    <td ></td>
+                                                    <td #if($stype==1) style="color:red" #end #if($colorType==4)class="bg-green" #end>$!utils.priceFormart($!{item.buyerFinalAmount})</td>
+                                                    <td #if($stype==2) style="color:red" #end #if($colorType==4)class="bg-green" #end>$!utils.priceFormart($!{item.finalPlatformCouponAmount})</td>
+                                                    <td #if($stype==3) style="color:red" #end #if($colorType==4)class="bg-green" #end>$!utils.priceFormart($!{item.platformPromotionAmount})</td>
+                                                    <td #if($colorType==4)class="bg-green" #end>$!utils.priceFormart($!{item.supplierFinalAmount})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.orderPrePrice})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.platformCouponAmount})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.supplierCouponAmount})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.platformOriPromotionAmount})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.supplierOriPromotionAmount})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.payPrice})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.commission})</td>
+
+                                                    <td #if($colorType==4)class="bg-green" #end>$!utils.priceFormart($!{item.actualRebutPrice})</td>
+                                                    <td #if($colorType==4)class="bg-green" #end>$!utils.priceFormart($!{item.rebutPlatformCouponAmount})</td>
+                                                    <td #if($colorType==4)class="bg-green" #end>$!utils.priceFormart($!{item.rubutSupplierCouponAmount})</td>
+
+                                                    <td #if($colorType==4)class="bg-green" #end>$!utils.priceFormart($!{item.rebutPlatformPromotionAmount})</td>
+                                                    <td #if($colorType==4)class="bg-green" #end>$!utils.priceFormart($!{item.rebutSupplierPromotionAmount})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.rebutCommission})</td>
+
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.actualBackPrice})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.backPlatformCouponAmount})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.backSupplierCouponAmount})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.backPlatformPromotionAmount})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.backSupplierPromotionAmount})</td>
+                                                    <td #if($colorType==4)class="bg-pink" #end>$!utils.priceFormart($!{item.backCommission})</td>
+													<td class="bg-green">$utils.formatDate($!{item.receiveTime},"yyyy-MM-dd HH:mm:ss")</td>
+													<td class="bg-green">$utils.formatDate($!{item.staddTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                                    <td class="bg-green">$utils.formatDate($!{item.stAuditTime},"yyyy-MM-dd HH:mm:ss")</td>
+
+                                                    <td class="bg-green">$utils.formatDate($!{item.pstAddTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                                    <td class="bg-green">$utils.formatDate($!{item.pstAuditTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                                    <td class="bg-green">$utils.formatDate($!{item.cstAddTime},"yyyy-MM-dd HH:mm:ss")</td>
+                                                    <td class="bg-green">$utils.formatDate($!{item.cstAuditTime},"yyyy-MM-dd HH:mm:ss")</td>
+
+                                                    <td class="bg-green">$!{item.stsn}</td>
+                                                    <td class="bg-green">$!{item.mcsSn}</td>
+                                                    <td class="bg-green">$!{item.pstsn}</td>
+
+                                                    <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">$!{item.drawerName}</td>
+                                                    <td class="td" Class="format" style="text-align:center;" nowrap="nowrap">
+                                                        #if($!item.drawerId != 0)
+                                                            $!{item.drawerId}
+                                                        #end
+                                                    </td>
+                                                 </tr>
+                                                 #end
+		                             #else    
+			                            <tr>
+			                              <td colspan="22">无相关数据！</td>
+			                            </tr>
+		                             #end
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/jsdgl.html")
+								#end #end
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+                    #parse("/common/footer.vm")
+
+                    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/jquery.nicescroll.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script type="text/javascript" src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+                    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    <script src="/js/ajax.js?v=$!{jscss_version}" type="text/javascript"></script>
+                    #parse("common/common_script.vm")
+                    <script type="text/javascript">
+                        var _timer = null;
+                        $(function () {
+
+                            $(".rc-content").each(function () {
+                                var _w = 0;
+                                _w += $(this).find(".thead th.short").width(90).length * 90;
+                                _w += $(this).find(".thead th.mid-long").width(100).length * 100;
+                                _w += $(this).find(".thead th.long").width(135).length * 135;
+                                $(this).css("width", _w + "px");
+                            })
+
+                            //本页初始化滚动条
+                            $(".scroller-box").niceScroll({
+                                cursorcolor: '#0f93ce',
+                                autohidemode: false,
+                                background: "#ffffff",
+                                cursorborderradius: "2px"
+                            });
+                            resetScroll();
+
+                            //tab切换
+                            $(".rc-tab a").each(function (i,e) {
+                                $(this).on("click",function () {
+                                    if(!$(this).hasClass("active")){
+                                        $(".nicescroll-rails-hr").css("visibility","hidden");
+                                        $(this).addClass("active").siblings().removeClass("active");
+                                        $($(this).parents(".rc-table-box").find(".rc-content").get(i)).show().siblings().hide();
+                                        resetScroll();
+                                    }
+                                })
+                            })
+                        })
+
+                        $(window).on("resize",function () {
+                            resetScroll();
+                        })
+
+                        function resetScroll() {
+                            clearTimeout(_timer);
+                            _timer = setTimeout(function () {
+                                _scroll = $(".nicescroll-rails-hr");
+                                var _left = parseInt(_scroll.css("left")),_top = parseInt(_scroll.css("top"));
+                                _scroll.css({"left":(_left-1)+"px","top":(_top+20)+"px","visibility":"visible"});
+                                $(".nicescroll-rails-vr").remove();
+                            },500);
+                        }
+                    </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+	#if($!user && $!{user.appId} == 10)
+		<link rel="stylesheet" href="/css/index/css-header-wanjia.css?v=$!{jscss_version}" type="text/css">
+		<link rel="stylesheet" href="/css/index/css-footer-wanjia.css?v=$!{jscss_version}" type="text/css">
+	
+	
+<!-- 	获取购物车数量 -->
+	<script type="text/javascript">
+		getCartCountByMid("$!{wwwHostAndPort}");
+		function getCartCountByMid(wwwUrl){
+			$.ajax({
+				url: "http://"+wwwUrl+"/cart/getCartCountByMid.html",
+				type: "get",
+				dataType: "jsonp",
+				jsonp: 'jsoncallback',
+				success: function(data) {
+					if(data.success){
+						//--新版头尾购物车数量------
+						if(data.data > 99){
+							$("#shopping-amount").text("99+");
+						}else{
+							$("#shopping-amount").text(data.data);
+						}
+					}else{
+						$("#shopping-amount").text(0);
+					}
+				}
+			});
+		}
+	
+</script>
+	#end
+
+
+    #*<script>
+        var eid;
+        $(function () {
+            #if($!user)
+                eid = $!user.eid;
+            	if(!eid||eid==0){
+            		return;
+            	}
+                if(window.layer){
+                    $.ajax({
+                        dataType:"jsonp",
+                        type:"get",
+                        data:{eid:eid},
+                        url:"https://$!{wwwHostAndPort}/vouchers/notice.do",
+                        success:function (res) {
+                            if(res && res.success && res.result){
+                                showCouponModal(res.result,eid);
+                            }
+                        }
+                    })
+                }else{
+                    var head = document.getElementsByTagName('head')[0];
+                    var script = document.createElement('script');
+                    script.src = "/h5/res/layer2/layer.js";
+                    script.type = 'text/javascript';
+                    head.appendChild(script);
+                    $(script).on('load',function () {
+                        var link = document.createElement('link');
+                        link.href = "/h5/res/layer2/skin/layer.css";
+                        link.rel = 'stylesheet';
+                        link.type = 'text/css';
+                        head.appendChild(link);
+                        $.ajax({
+                            dataType:"jsonp",
+                            type:"get",
+                            data:{eid:eid},
+                            url:"https://$!{wwwHostAndPort}/vouchers/notice.do",
+                            success:function (res) {
+                                if(res && res.success && res.result){
+                                    showCouponModal(res.result,eid);
+                                }
+                            }
+                        })
+                    })
+                }
+            #end
+        })
+
+        /**
+         * 右下角弹出优惠券提示框
+         */
+        function showCouponModal(num,eid) {
+            var _html = '<div style="background: white; height: 100%">' +
+                    '<div style="font-size: 16px;height: 100%;background: url(/image/yhq-bg.png) no-repeat center 10px; text-align: center; position: relative;" >' +
+                    '<a href="javascript:void(0);" class="close-yhq-btn" style="right: 10px; top: 10px; position: absolute;"><img src="/image/yhq-close.png" alt=""></a>' +
+                    '<p style=" height: 50px; color: #666666; padding-top:120px; font-weight:bold;">恭喜您,您收到<span style="color: #e35c5c">'+num+'</span>张优惠券</p>' +
+                    '<p style="height: 50px;"><a data-goto="true" href="/purchase/member/vouchers.html" class="read-voucher" target="_blank" style="color: #ffffff; background: #e35c5c; padding: 10px 25px;">查看优惠券</a></p>'
+            '</div> ' +
+            '</div>'
+            var hasScroll = false;
+            layer.open({
+                type:1,
+                area:['320px','230px'],
+                title:false,
+                content:_html,
+                closeBtn:0,
+                shade:0,
+                success:function (lay,idx) {
+                    lay.find(".close-yhq-btn,.read-voucher").on("click",function () {
+                        var _goto = $(this).attr("data-goto");
+                        //TODO  执行关闭逻辑
+                        $.ajax({
+                            dataType:"jsonp",
+                            type:"get",
+                            data:{eid:eid},
+                            url:"https://$!{wwwHostAndPort}/vouchers/read",
+                            complete:function () {
+                                layer.close(idx);
+                            },
+                            success:function (res) {
+                            }
+                        })
+                    })
+                    var _x = lay.css("left") , _y = lay.css("top");
+                    layer.style(idx,{"left":parseInt(_x) - 10,"top" : parseInt(_y) - 20});
+                    $("body").scrollTop(1);
+                    if($("body").scrollTop()){
+                        hasScroll = false;
+                    }else{
+                        hasScroll = true;
+                    }
+                    setTimeout(function () {
+                        $("body").scrollTop(1);
+                        if($("body").scrollTop() && hasScroll){ //页面加载导致出现滚动条后要去除滚动条的宽度
+                            var _x = lay.css("left") , _y = lay.css("top");
+                            layer.style(idx,{"left":parseInt(_x) - 17});
+                        }
+                    },500);
+                },
+                offset: 'rb'
+            })
+        }
+    </script>*#

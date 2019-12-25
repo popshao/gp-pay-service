@@ -1,0 +1,158 @@
+#if($!utils.isRequestFromSaas($!request))
+ <!-- Saas请求访问页面，不显示菜单栏 -->
+ #else
+<!--工业销售中心左侧菜单栏-->
+<div class="leftmenu fl">
+    <div class="cnt">
+    	#if(!$null.isNull($resources) && $resources.size()!=0)	
+    		#foreach($resource in $!resources)
+    		    #foreach($ch in $!resource.childResource)
+    		     #if($ch.parentId == 251)
+    		     	#if($!userType == 1) <!-- 终端账号 -->
+		    			<dl>
+				            <dt id="btn1" class="toggleID" data-id="$!{ch.resourceId}"><i></i>$!{ch.resourceName}</dt>
+				            	#if($!{isChild} != 1) <!-- 主帐号 -->
+					            	#foreach($childResource in $!ch.childResource)
+					            		#if($!{childResource.resourceId} == $!resourceId)
+							            <dd>
+							            	#if($!utils.checkUrl($!{childResource.resourceLink}))<!-- 判断url是否含有参数 如果含有则用&不含有则用？ -->
+							            		#if($!{childResource.resourceId} == 203 || $!{childResource.resourceId} == 207 || $!{childResource.resourceId} == 902 || $!{childResource.resourceId} == 906)
+													<a href="$!{childResource.resourceLink}" target="_blank">$!{childResource.resourceName}</a><!-- 203 我的进货单 207 快速采购   不需要显示选中着色 直接调转到新开窗口 -->
+												#else
+													<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" class="on">$!{childResource.resourceName}</a>	
+												#end	
+							            	#else
+							            		#if($!{childResource.resourceId} == 203 || $!{childResource.resourceId} == 207 || $!{childResource.resourceId} == 902 || $!{childResource.resourceId} == 906)
+							            			<a href="$!{childResource.resourceLink}" target="_blank">$!{childResource.resourceName}</a><!-- 203 我的进货单 207 快速采购   不需要显示选中着色 直接调转到新开窗口 -->
+							            		#else
+							            			<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" class="on">$!{childResource.resourceName}</a>
+							            		#end
+							            	#end
+							            </dd>
+							            #else
+							            <dd>
+							            	#if($!utils.checkUrl($!{childResource.resourceLink}))<!-- 判断url是否含有参数 如果含有则用&不含有则用？ -->
+							            		#if($!{childResource.resourceId} == 203 || $!{childResource.resourceId} == 207 || $!{childResource.resourceId} == 902 || $!{childResource.resourceId} == 906)
+													<a href="$!{childResource.resourceLink}" target="_blank">$!{childResource.resourceName}</a>
+							            		#else
+							            			<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}">$!{childResource.resourceName}</a>
+							            		#end
+							            	#else
+							            		#if($!{childResource.resourceId} == 203 || $!{childResource.resourceId} == 207 || $!{childResource.resourceId} == 902 || $!{childResource.resourceId} == 906)
+							            			<a href="$!{childResource.resourceLink}" target="_blank">$!{childResource.resourceName}</a>
+							            		#else
+							            			<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}">$!{childResource.resourceName}</a>
+							            		#end
+							            	#end
+							            </dd>
+							            #end
+						            #end
+						        #else <!-- 子帐号 -->
+						        	#foreach($childResource in $!ch.childResource)
+						        		#if($!{childResource.resourceId} != 213 && $!{childResource.resourceId} != 254)
+						            		#if($!{childResource.resourceId} == $!resourceId)
+								            <dd>
+								            	#if($!utils.checkUrl($!{childResource.resourceLink}))<!-- 判断url是否含有参数 如果含有则用&不含有则用？ -->
+								            		#if($!{childResource.resourceId} == 203 || $!{childResource.resourceId} == 207 || $!{childResource.resourceId} == 902 || $!{childResource.resourceId} == 906)
+														<a href="$!{childResource.resourceLink}" target="_blank">$!{childResource.resourceName}</a><!-- 203 我的进货单 207 快速采购   不需要显示选中着色 直接调转到新开窗口 -->
+								            		#else
+								            			<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" class="on">$!{childResource.resourceName}</a>
+								            		#end
+								            	#else
+								            		#if($!{childResource.resourceId} == 203 || $!{childResource.resourceId} == 207 || $!{childResource.resourceId} == 902 || $!{childResource.resourceId} == 906)
+								            			<a href="$!{childResource.resourceLink}" target="_blank">$!{childResource.resourceName}</a><!-- 203 我的进货单 207 快速采购   不需要显示选中着色 直接调转到新开窗口 -->
+								            		#else
+								            			<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" class="on">$!{childResource.resourceName}</a>
+								            		#end
+								            	#end
+								            </dd>
+								            #else
+								            <dd>
+								            	#if($!utils.checkUrl($!{childResource.resourceLink}))<!-- 判断url是否含有参数 如果含有则用&不含有则用？ -->
+								            		#if($!{childResource.resourceId} == 203 || $!{childResource.resourceId} == 207 || $!{childResource.resourceId} == 902 || $!{childResource.resourceId} == 906)
+														<a href="$!{childResource.resourceLink}" target="_blank">$!{childResource.resourceName}</a><!-- 203 我的进货单 207 快速采购   不需要显示选中着色 直接调转到新开窗口 -->
+								            		#else
+								            			<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}">$!{childResource.resourceName}</a>
+								            		#end
+								            	#else
+								            		#if($!{childResource.resourceId} == 203 || $!{childResource.resourceId} == 207 || $!{childResource.resourceId} == 902 || $!{childResource.resourceId} == 906)
+								            			<a href="$!{childResource.resourceLink}" target="_blank">$!{childResource.resourceName}</a><!-- 203 我的进货单 207 快速采购   不需要显示选中着色 直接调转到新开窗口 -->
+								            		#else
+								            			<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}">$!{childResource.resourceName}</a>
+								            		#end
+								            	#end
+								            </dd>
+								            #end
+							            #end
+						            #end
+						        #end    
+		        		</dl>
+	        		#else <!-- 商业账号 -->
+	        			<dl>
+	        				#if($!{ch.resourceId} != 210) <!-- 排除 -->
+				            <dt id="btn1" class="toggleID" data-id="$!{ch.resourceId}"><i></i>$!{ch.resourceName}</dt>
+				            	#if($!{isChild} != 1) <!-- 主帐号 -->
+					            	#foreach($childResource in $!ch.childResource)
+					            		#if($!{childResource.resourceId} == $!resourceId)
+							            <dd>
+							            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+											<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" class="on">$!{childResource.resourceName}</a>
+							            	#else
+							            	<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" class="on">$!{childResource.resourceName}</a>
+							            	#end
+							            </dd>
+							            #else
+							            <dd>
+							            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+											<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}">$!{childResource.resourceName}</a>
+							            	#else
+							            	<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}">$!{childResource.resourceName}</a>
+							            	#end
+							            </dd>
+							            #end
+						            #end
+						        #else <!-- 子帐号 -->
+						        	#foreach($childResource in $!ch.childResource)
+						        		#if($!{childResource.resourceId} != 213 && $!{childResource.resourceId} != 254)
+						            		#if($!{childResource.resourceId} == $!resourceId)
+								            <dd>
+								            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+												<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}" class="on">$!{childResource.resourceName}</a>
+								            	#else
+								            	<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}" class="on">$!{childResource.resourceName}</a>
+								            	#end
+								            </dd>
+								            #else
+								            <dd>
+								            	#if($!utils.checkUrl($!{childResource.resourceLink}))
+												<a href="$!{childResource.resourceLink}&resourceId=$!{childResource.resourceId}">$!{childResource.resourceName}</a>
+												#else
+												<a href="$!{childResource.resourceLink}?resourceId=$!{childResource.resourceId}">$!{childResource.resourceName}</a>
+												#end
+								            </dd>
+								            #end
+							            #end
+						            #end
+						        #end 
+						    #end       
+		        		</dl>
+	        		#end
+        		#end
+        	  #end	
+    		#end
+    		<!-- 报告单 -->
+    		#if($!{user.eid} != 0 && $!{user.estatus} == 1)
+    			#if($!user && $!{utils.containSuId($!user)} == "wh" && $!userType == 1)
+    				<dd>
+    					<a href="http://wh-report.mypharma.com">新龙报告单查询</a>
+    				</dd>
+    			#elseif($!user && $!{utils.containSuId($!user)} == "bj" && $!userType == 1)
+    				<dd>
+    					<a href="http://bj-report.mypharma.com">新龙报告单查询</a>
+    				</dd>
+    			#end
+			#end   
+    	#end
+    </div>
+  </div>
+  #end

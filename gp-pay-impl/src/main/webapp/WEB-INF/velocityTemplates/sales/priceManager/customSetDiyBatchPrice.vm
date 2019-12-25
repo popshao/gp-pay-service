@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 批量增加客户定价</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+
+</head>
+<body>
+
+<!--页面主体 -->
+<div class="c-box">
+
+    <div class="user-prompt">提示：可以对同一个客户同一个商品多次设置定价，系统会覆盖之前的设置，只执行最近的一次定价设置。</div>
+
+    <div class="user-btn mt20 cc">
+        <div class="b-text fl">
+            选择商品
+        </div>
+        <a href="javascript:void(0)" class="btn btns fl mr10" id="addGoods">+添加商品</a>
+        <a href="javascript:void(0)" class="btn btn-auto fl  " id="batchUploadGoods">批量导入商品</a>
+        <a href="/sales/goods_price/download_goods" class="btn btn-link fl ">下载商品模板</a>
+        <div class="b-text" style="color: #888">
+            <i class="b-t-ps">*</i>提示：如果您想“批量导入商品”，请先“下载商品模板”，再通过模板批量导入，最多能导入10000个商品。
+        </div>
+    </div>
+
+    <div class="user-form user-sheet-box mt10" style="margin-bottom:15px;">
+        <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>商品信息</th>
+                <th>规格</th>
+                <th>商品分类</th>
+                <th>商品内码</th>
+                <th>商品编码</th>
+                <th>商品基价</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="goodsBox">
+            <tr>
+                <td colspan="8">
+                    <div class="t-none">暂未添加商品，请添加您要定价的商品  <a href="javascript:void(0)" onclick="$('#addGoods').trigger('click')" class="t-link">马上添加>></a></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="page rocky-page" style="text-align: center; margin-top:0;"></div>
+
+    <div class="user-btn mt20 cc">
+        <div class="b-text fl">
+            <i class="b-t-ps">*</i> 目前您已经添加了<i class="b-t-ps" id="ctsCount">0</i>个客户，您可以对这些客户“<a href="javascript:void(0)" class="b-t-link t-disable" id="batchCtsBtn" onclick="batchAddPrice();">批量填写定价</a>”
+        </div>
+        <a href="javascript:void(0)" class="btn btn-auto btn-blue fr "  id="addCustom">+增加客户</a>
+    </div>
+
+    <div class="user-form user-sheet-box mt10">
+        <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+            <tr>
+                <th width="50" align="center">
+                    <div class="user-custom-form fl">
+                        <fieldset class="checkboxes">
+                            <label for="checkbox-p" class="label_check check-box-prt">
+                                <input type="checkbox" value="" id="checkbox-p"  name="sample-checkbox-p" />
+                            </label>
+                        </fieldset>
+                    </div>
+                </th>
+                <th width="200">客户名称</th>
+                <th>企业内码</th>
+                <th>业务分组</th>
+                <th>企业联系人</th>
+                <th>客户地区</th>
+                <th>定价 <a href="javascript:void(0);" onclick="top.utils.open('https://cms.mypharma.com/info/531','_blank')" style="color: #0E92CE; font-size:10px;"><span class="question">?</span>填写说明</a></th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="customerList">
+            <tr>
+                <td colspan="9">
+                    <div class="t-none">暂未添加客户，请添加您要定价的客户  <a href="javascript:void(0)" class="t-link" onclick="$('#addCustom').trigger('click');" >马上添加>></a></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="user-btn mt10 cc addSelBox " style="display: none;">
+            <div class="user-custom-form fl">
+
+                <fieldset class="checkboxes">
+                    <label for="checkbox-p-1" class="label_check check-box-prt" style="padding-left:25px;">
+                        <input type="checkbox" value="" id="checkbox-p-1"  name="sample-checkbox-p" />全选
+                    </label>
+                </fieldset>
+            </div>
+            <a href="javascript:void(0)" class="btn btn-auto fl mr10" onclick="batchAddPrice(1);">批量填写定价</a>
+            <a href="javascript:void(0)" class="btn btn-auto fl" id="batchDelBtn">批量删除</a>
+
+            <div class="page rocky-page1" style="text-align: right;"></div>
+        </div>
+
+        <div class="b-text addSelBox" style="margin-top:10px; display: none">
+            （<i style="color: #ff0000; font-style: normal">提示</i>：重新设置后会覆盖原有的定价，请保证本次填写正确即可。）
+        </div>
+
+    </div>
+
+    <div class="user-btn tac mt20">
+        <a href="javascript:void(0)" class="btn btn-conserve btn-bind-sw t-disable-bg " id="saveBtn"  onclick="saveGGP();" >保存</a>
+        <a href="javascript:void(0)" class="btn btn-138" onclick="top.utils.closeTopTab();">取消</a>
+    </div>
+
+</div>
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+
+
+<script type="text/html" id="goodsListTpl">
+    {{# if(d && !d.error && d.datas.length){ }}
+    {{# $.each(d.datas,function(index,item){ var good = item.goods;  var $index = (index + 1) + (d.pi-1)*d.ps }}
+    <tr data-gid="{{good.gid}}">
+        <td>{{$index}}</td>
+        <td>
+            <div class="t-img">
+                {{# if(item.defaultPic){ }}
+                <img src="{{item.defaultPic}}">
+                {{# }else if(good.defaultPic){ }}
+                <img src="{{good.defaultPic}}">
+                {{# }else if(good.gdefaultPic){ }}
+                <img src="{{good.gdefaultPic}}">
+                {{# }else{ }}
+                <img src="/image/default.jpg">
+                {{# } }}
+            </div>
+            <div class="t-info">
+                <div class="t-name">{{good.gname}}</div>
+                <div class="t-size">{{top.utils.notNull(good.glicenseNo)}}</div>
+                <div class="t-company">{{top.utils.notNull(good.gmanufacture)}}</div>
+            </div>
+        </td>
+        <td>{{top.utils.notNull(good.gspecifications)}}</td>
+        <td>
+            {{# if(item.goodsCate ){ }}
+                {{item.goodsCate}}
+            {{# }else{ }}
+                {{top.utils.notNull(item.sgcId1Name)}}-{{top.utils.notNull(item.sgcId2Name)}}
+            {{# } }}
+        </td>
+        <td>{{top.utils.notNull(good.gInSn)}}</td>
+        <td>{{top.utils.notNull(good.gSn)}}</td>
+        <td class='state_td'><span id="basePrice-{{good.gid}}">{{top.utils.notNullPrice(good.gbasePrice,'--')}}</span><br><a class='t-blue' href='javascript:void(0)' style="display: none;"  onclick='reviseBasePrice({{good.gid}},$("#basePrice-{{good.gid}}"))'>修改</a>
+        </td>
+        <td>
+            <a href="javascript:void(0)" class="t-link del-good">删除</a>
+        </td>
+    </tr>
+    {{# }); }}
+
+    {{# }else{ }}
+    <tr>
+        <td colspan="8">
+            <div class="t-none">暂未添加商品，请添加您要定价的商品  <a href="javascript:void(0)" class="t-link"  onclick="$('#addGoods').trigger('click')" >马上添加>></a></div>
+        </td>
+    </tr>
+    {{# } }}
+</script>
+
+<script type="text/html" id="ctsListTpl">
+    {{# if(d && !d.error && d.datas.length){ }}
+    {{# $.each(d.datas,function(index,item){  var $index = (index + 1) + (d.pi-1)*d.ps; }}
+    <tr data-eid="{{item.eid}}">
+        <td>
+            <div class="user-custom-form fl ml10">
+                <fieldset class="checkboxes">
+                    <label for="checkbox-0{{$index}}" class="label_check check-box-child" style="vertical-align: middle;">
+                        <input data-good='{{JSON.stringify(item)}}' type="checkbox"  value="{{item.eid}}" id="checkbox-0{{$index}}" data-eid="{{item.eid}}" name="sample-checkbox-0{{$index}}" />
+                    </label>
+                </fieldset>
+            </div>
+        </td>
+        <td>{{top.utils.notNull(item.smName)}}</td>
+        <td>{{top.utils.notNull(item.smInternalCode)}}</td>
+        <td>{{top.utils.notNull(item.sctName)}}</td>
+        <td>
+            <div class="price-multi">
+                {{item.eContactor}}<br>{{item.eMobile}}
+            </div>
+        </td>
+        <td>
+            {{top.utils.notNull(item.eProvinceName)}}
+            {{# if(item.eProvinceName){ }}
+            {{top.utils.notNullBeforePix(item.eCityName,' - ')}}
+            {{# }else{ }}
+            {{top.utils.notNull(item.eCityName)}}
+            {{# } }}
+            {{# if(item.eCityName){ }}
+            {{top.utils.notNullBeforePix(item.eRegionName,' - ')}}
+            {{# }else{ }}
+            {{top.utils.notNull(item.eRegionName)}}
+            {{# } }}
+        </td>
+        </td>
+        <td>
+            {{# if(item.priceFloat != "" && item.priceFloat != null){ }}
+            <div class="user-custom-form user-choose-form">
+                <fieldset class="radios">
+                    <label for="radio-{{index}}-1" class="label_radio">
+                        <input type="radio" checked  value="1" id="radio-{{index}}-1" name="radio-{{index}}" />在“基价”基础上：<i class="fl-t">{{# if(item.priceFloat>0){ }}上浮{{# }else if(item.priceFloat==0){ }}浮动{{# }else if(item.priceFloat<0){ }}下浮{{# }else{  }}浮动{{# } }}</i>
+                    </label>
+                    <div class="user-choose-amount fl">
+                        <input class="amount percent" type="text" value="{{top.utils.notNull(item.priceFloat)}}" >
+                        <a href="javascript:void(0)" class="down count-up"></a>
+                        <a href="javascript:void(0)" class="up count-down"></a>
+                    </div>
+                    <span class='r-text fl'>%；</span>
+                    <span class="r-text fl drt-text" {{# if(GoodLists.length != 1 && (item.priceFloat != "" && item.priceFloat != null)){ }}style="display: none;"{{# } }}>售价：&yen;<b class="float-price">{{# if(GoodLists.length == 1){ }}{{(GoodLists[0].gBasePrice+GoodLists[0].gBasePrice*item.priceFloat/100).toFixed(2)}}{{# } }}</b></span>
+                </fieldset>
+            </div>
+            <div class="user-custom-form user-choose-form set-single-price">
+                <fieldset class="radios">
+                    <label for="radio-{{index}}-2" class="label_radio">
+                        <input type="radio"  value="2" id="radio-{{index}}-2" name="radio-{{index}}" />直接输入销售价格
+                    </label>
+                    <span class="r-text fl ml13">¥</span>
+                    <input  maxlength="11" class="c-input dirctPrice" readonly  type="text" value="{{top.utils.notNull(item.groupPrice)}}"  >#*c-input-error  错误样式*#
+                    <span class="r-text fl">元</span>
+                </fieldset>
+            </div>
+            {{# }else if(item.groupPrice){ }}
+            <div class="user-custom-form user-choose-form">
+                <fieldset class="radios">
+                    <label for="radio-{{index}}-1" class="label_radio">
+                        <input type="radio"  value="1" id="radio-{{index}}-1" name="radio-{{index}}" />在“基价”基础上：<i class="fl-t">浮动</i>
+                    </label>
+                    <div class="user-choose-amount fl">
+                        <input class="amount percent" readonly type="text" value="" >
+                        <a href="javascript:void(0)" class="down count-up"></a>
+                        <a href="javascript:void(0)" class="up count-down"></a>
+                    </div>
+                    <span class='r-text fl'>%；</span>
+                    <span class="r-text fl drt-text" style="display: none;">{{# if(GoodLists.length == 1){ }}售价：&yen;<b class="float-price">{{(GoodLists[0].gBasePrice+GoodLists[0].gBasePrice*item.priceFloat/100).toFixed(2)}}</b>{{# } }}</span>
+                </fieldset>
+            </div>
+            <div class="user-custom-form user-choose-form set-single-price">
+                <fieldset class="radios">
+                    <label for="radio-{{index}}-2" class="label_radio">
+                        <input type="radio" checked  value="2" id="radio-{{index}}-2" name="radio-{{index}}" />直接输入销售价格
+                    </label>
+                    <span class="r-text fl ml13">¥</span>
+                    <input  maxlength="11" class="c-input dirctPrice"  type="text" value="{{top.utils.notNull(item.groupPrice)}}"  >#*c-input-error  错误样式*#
+                    <span class="r-text fl">元</span>
+                </fieldset>
+            </div>
+            {{# }else{ }}
+            <div class="user-custom-form user-choose-form">
+                <fieldset class="radios">
+                    <label for="radio-{{index}}-1" class="label_radio">
+                        <input type="radio" checked  value="1" id="radio-{{index}}-1" name="radio-{{index}}" />在“基价”基础上：<i class="fl-t">{{# if(item.priceFloat>0){ }}上浮{{# }else if(item.priceFloat==0){ }}浮动{{# }else if(item.priceFloat<0){ }}下浮{{# }else{  }}浮动{{# } }}</i>
+                    </label>
+                    <div class="user-choose-amount fl">
+                        <input class="amount percent" type="text" value="{{top.utils.notNull(item.priceFloat)}}" >
+                        <a href="javascript:void(0)" class="down count-up"></a>
+                        <a href="javascript:void(0)" class="up count-down"></a>
+                    </div>
+                    <span class='r-text fl'>%；</span>
+                    <span class="r-text fl drt-text" style="display: none;">{{# if(GoodLists.length == 1){ }}售价：&yen;<b class="float-price">{{(GoodLists[0].gBasePrice+GoodLists[0].gBasePrice*item.priceFloat/100).toFixed(2)}}</b>{{# } }}</span>
+                </fieldset>
+            </div>
+            <div class="user-custom-form user-choose-form set-single-price">
+                <fieldset class="radios">
+                    <label for="radio-{{index}}-2" class="label_radio">
+                        <input type="radio"  value="2" id="radio-{{index}}-2" name="radio-{{index}}" />直接输入销售价格
+                    </label>
+                    <span class="r-text fl ml13">¥</span>
+                    <input  maxlength="11" class="c-input dirctPrice" readonly  type="text" value="{{top.utils.notNull(item.groupPrice)}}"  >#*c-input-error  错误样式*#
+                    <span class="r-text fl">元</span>
+                </fieldset>
+            </div>
+            {{# } }}
+        </td>
+        <td>
+            <a href="javascript:void(0)" class="t-link del-cts" >删除</a>
+        </td>
+    </tr>
+    {{# }); }}
+
+    {{# }else{ }}
+    <tr>
+        <td colspan="9">
+            <div class="t-none">暂未添加客户，请添加您要定价的客户  <a href="javascript:void(0)" class="t-link" onclick="$('#addCustom').trigger('click');" >马上添加>></a></div>
+        </td>
+    </tr>
+    {{# } }}
+
+</script>
+
+<script type="text/html" id="batchAddPriceTpl">
+    <div class="xjgl-dialog-ctn">
+        <div class="xdc-text">您正在对<i class="d-red">{{d.cCount}}</i>个客户批量设置定价</div>
+        <div class="user-custom-form user-choose-form"  style="margin-top:10px;">
+            <fieldset class="radios">
+                <label for="radio-s-1" class="label_radio">
+                    <input type="radio"  value="1" id="radio-s-1" name="radio-s" />在“基价”基础上：<i class="fl-t">浮动</i>
+                </label>
+                <div class="user-choose-amount fl">
+                    <input class="amount percent" type="text" readonly >
+                    <a href="javascript:void(0)" class="down count-up"></a>
+                    <a href="javascript:void(0)" class="up count-down"></a>
+                </div>
+                <span class='r-text fl'>%；</span>
+                <span class="r-text fl drt-text" style="display: none;">{{# if(GoodLists.length == 1){ }}售价：&yen;<b class="float-price"></b>{{# } }}</span>
+            </fieldset>
+        </div>
+        <div class="user-custom-form user-choose-form set-single-price" style="margin-top:10px;">
+            <fieldset class="radios">
+                <label for="rradio-s-1" class="label_radio">
+                    <input type="radio" value="2" id="radio-s-1" name="radio-s" />直接输入销售价格
+                </label>
+                <span class="r-text fl ml13">¥</span>
+                <input  maxlength="11" class="c-input dirctPrice" readonly type="text" >#*c-input-error  错误样式*#
+                <span class="r-text fl">元</span>
+            </fieldset>
+        </div>
+        <div class="xdc-btn tac" style="text-align: center; margin:15px;">
+            <a href="javascript:void(0)" class="btn">保存填写</a>
+        </div>
+        <div class="xdc-info">
+            重要提示：<br>
+            1、浮动框可输入：+, －正负的整数  或  0；<br>
+            2、0为按照基价销售，正数为上浮，负数为下浮；<br>
+            3、直接定价时请输入大于0的数字，可保留两位小数；<br>
+            4、多个商品时，不可直接输入销售价格；
+        </div>
+    </div>
+</script>
+
+<script>
+    var layer,laypage,laytpl,GoodLists = [], CtsLists = [], nowPage = 1;
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage','laytpl'],function () {
+        layer = layui.layer,laypage = layui.laypage , laytpl = layui.laytpl;
+        $(function(){
+            $('body').addClass('user-has-js');
+
+            $(".btn-reset").on("click",function () {
+                $("#searchForm").get(0).reset();
+                $(".usb-select2,.usb-select2-s").each(function () {
+                    $(this).select2("destroy");
+                    initSelect();
+                })
+            })
+
+            bindEvt();
+            initUploadGoods();
+
+            $("#addGoods").on("click",function () {
+                var _sels = [];
+                $.each(GoodLists,function (i,e) {
+                    _sels.push(e.goods.gid);
+                })
+                top.ue.getGoodsModal({
+                    hasSels:_sels,
+                    newUI:true,
+                    yes: function (idx, lay, selDatas) {
+                        selDatas.push.apply(selDatas,GoodLists);
+                        GoodLists = selDatas;
+                        setDisableOrOpen();
+                        getGoodsFromSession();
+                        if(GoodLists.length>1)
+                        {
+                          $("#customerList").find(".drt-text").hide();
+                        } else{
+                          if($("#customerList").length==1) {
+                              $("#customerList tr").each(function () {
+                                  var _v = $(this).find(".percent").val();
+                                  if(_v!=""){
+                                      $(this).find(".drt-text").show().find(".float-price").text((GoodLists[0].gBasePrice+GoodLists[0].gBasePrice*_v/100).toFixed(2))
+                                  }
+                              })
+                          }
+                        }
+                        bindEvt();
+                        return true;
+                    }
+                });
+            })
+
+            $("#addCustom").on("click",function () {
+                var _sels = [];
+                $.each(CtsLists,function (i,e) {
+                    _sels.push(e.eid);
+                })
+                top.ue.getCustomersModal({
+                    hasSels:_sels,
+                    newUI:true,
+                    yes: function (idx, lay, selDatas) {
+                        selDatas.push.apply(selDatas,CtsLists);
+                        CtsLists = selDatas;
+                        if(CtsLists.length){
+                            setTextDisable(false);
+                        }else{
+                            setTextDisable(true);
+                        }
+                        getCtsFromAdd();
+                        return true;
+                    }
+                });
+            })
+
+            $("#batchDelBtn").on("click",function () {
+                var _sels = getSelIds("#customerList","eid");
+                if(_sels.length){
+                    top.rui.dynamic({
+                        title:"",
+                        skin: "dialog-old dialog-old-no-title",
+                        content:"<p style='margin: 40px auto 0;text-align: center;'>您正在删除"+_sels.length+"个客户，是否确定删除？</p>",
+                        area:['420px','220px'],
+                        yes:function (idx,lay) {
+                            top.ue.close(idx);
+                            $.each(_sels,function (i,e) {
+                                $("#customerList").find("[data-eid="+e+"]").remove();
+                                remCtsData(e);
+                            });
+                            $(".check-box-prt").each(function () {
+                                $(this).find(":checkbox").prop("checked",false);
+                            })
+                            getCtsFromAdd(nowPage);
+                        }
+                    })
+                }else{
+                    layer.msg("请先选择客户");
+                    return false;
+                }
+            })
+
+            $(".check-box-prt").each(function () {
+                $(this).on("click",function () {
+                    var _check = $(this).find("input:checkbox").prop("checked") || false;
+                    $(".check-box-prt").not($(this)).find("input:checkbox").prop("checked",!_check);
+                })
+            })
+
+        });
+
+        setTimeout(function () {
+            var q = getUrlParam("forms");
+            if(q){
+                getGoodsFromSearch(JSON.parse(q));
+            }else{
+                if(top.app.GoodsPriceSDData){
+                    GoodLists = top.app.GoodsPriceSDData;
+                    setDisableOrOpen();
+                    getGoodsFromSession();
+                }
+            }
+        },300)
+
+
+    })
+
+    /*根据url所带参数查询商品列表*/
+    function getGoodsFromSearch(q) {
+        q.ps = 1000000000;
+        top.utils.pageList({
+            first:true,
+            url: q.ajaxUrl ? q.ajaxUrl:'/api/priceManage/list',
+            dom:$('#goodsBox'),
+            tpl:$("#goodsListTpl"),
+            isAdd:true,
+            data:q,
+            doc:document.body,
+            win: window,
+            laypage:laypage,
+            noRender:true,
+            complete:function (res) {
+                if(res && res.code == 0 && res.data){
+                    GoodLists = res.data.list;
+                    getGoodsFromSession();
+                }else{
+                    GoodLists = [];
+                    getGoodsFromSession();
+                }
+                setDisableOrOpen();
+            }
+        })
+    }
+
+    /*根据上级页面缓存数据实现商品列表*/
+    function getGoodsFromSession(cpi) {
+        if(!GoodLists.length) {
+            $("#goodsBox").html(laytpl($("#goodsListTpl").html()).render({error:true}));
+            bindEvt()
+            return false;
+        }
+
+        $.each(GoodLists,function (i,g) {
+            if(!g.goods.gInSn) g.goods.gInSn = g.goods.ginSn;
+            if(!g.goods.gSn) g.goods.gSn = g.goods.gsn;
+            if(!g.gBasePrice) g.gBasePrice = g.goods.gbasePrice;
+        })
+
+        cpi = cpi || 1;
+        var _ps = 5 ,_pages = parseInt((GoodLists.length + _ps - 1)/_ps);
+        if(cpi > _pages) cpi = _pages;
+        laypage({
+            cont: $(".rocky-page",document.body), //容器。值支持id名、原生dom对象，jquery对象,
+            pages: _pages, //总页数
+            skin: "#0f93ce",
+            skip:true,
+            curr:cpi,
+            groups: 5 //连续显示分页数 总页数少于此数时不显示第一页和最后一页
+            ,jump:function (obj,first) {
+                var _page = obj.curr , _lPage = $(obj.cont,document.body);
+                nowPage = _page;
+                if(_page > 9 && _page < 100){
+                    _lPage.addClass("two");
+                }else if(_page > 99){
+                    _lPage.addClass("three");
+                }else{
+                    _lPage.addClass("one");
+                }
+                _lPage.find(".layui-laypage-total").css("color","#333").prepend("<b style='font-weight: 100; margin-right: 10px; color: #333;'>共"+_pages+"页/"+GoodLists.length+"条数据</b>");
+                var _start = (obj.curr - 1) * _ps;
+                var _data = GoodLists.slice(_start,_start + _ps);
+
+                var _alert = alert;
+                alert = function () {
+                    
+                };
+                $("#goodsBox").html(laytpl($("#goodsListTpl").html()).render({datas:_data,pi:obj.curr,ps:_ps}));
+                bindEvt()
+                alert = _alert;
+                $("#goodsBox").find(".del-good").each(function () {
+                    $(this).unbind("click").on("click",function () {
+                        $(this).closest("tr").remove();
+                        remGoodData($(this).closest("tr").data("gid"));
+                        getCtsFromAdd(nowPage);
+                    })
+                })
+                bindEvt();
+            }
+        });
+
+        bindEvt();
+    }
+
+
+    /*根据添加的客户重新生成分页列表*/
+    var _cPs = 10;
+    function getCtsFromAdd(cpi) {
+        $("#ctsCount").text(CtsLists.length);
+        if(!CtsLists.length) {
+            $("#customerList").html(laytpl($("#ctsListTpl").html()).render({error:true}));
+            return false;
+        }
+
+        cpi = cpi || 1;
+        var _pages = parseInt((CtsLists.length + _cPs - 1)/_cPs);
+        if(cpi > _pages) cpi = _pages;
+        laypage({
+            cont: $(".rocky-page1",document.body), //容器。值支持id名、原生dom对象，jquery对象,
+            pages: _pages, //总页数
+            skin: "#0f93ce",
+            skip:true,
+            curr:cpi,
+            groups: 5 //连续显示分页数 总页数少于此数时不显示第一页和最后一页
+            ,jump:function (obj,first) {
+                var _page = obj.curr , _lPage = $(obj.cont,document.body);
+                nowPage = _page;
+                if(_page > 9 && _page < 100){
+                    _lPage.addClass("two");
+                }else if(_page > 99){
+                    _lPage.addClass("three");
+                }else{
+                    _lPage.addClass("one");
+                }
+                _lPage.find(".layui-laypage-total").css("color","#333").prepend("<b style='font-weight: 100; margin-right: 10px; color: #333;'>共"+_pages+"页/"+CtsLists.length+"条数据</b>");
+                var _start = (obj.curr - 1) * _cPs;
+                var _data = CtsLists.slice(_start,_start + _cPs);
+
+                $("#customerList").html(laytpl($("#ctsListTpl").html()).render({datas:_data,pi:obj.curr,ps:_cPs}));
+
+                setDisableOrOpen();
+                bindEvt();
+
+                $("#customerList").find(".del-cts").each(function () {
+                    $(this).unbind("click").on("click",function () {
+                        var _this = $(this);
+                        top.rui.dynamic({
+                            title:"",
+                            skin: "dialog-old dialog-old-no-title",
+                            content:"<p style='margin: 40px auto 0;text-align: center;'>您正在删除1个客户，是否确定删除？</p>",
+                            area:['420px','220px'],
+                            yes:function (idx,lay) {
+                                top.ue.close(idx);
+                                _this.closest("tr").remove();
+                                remCtsData(_this.closest("tr").data("eid"));
+                                getCtsFromAdd(nowPage);
+                            }
+                        })
+                    })
+                })
+            }
+        });
+    }
+
+    /*删除指定商品行的数据*/
+    function remGoodData(gid) {
+        $.each(GoodLists,function (i,e) {
+            if(e && e.goods.gid == gid){
+                GoodLists.splice($.inArray(e,GoodLists),1);
+                setDisableOrOpen();
+            }
+        })
+        getGoodsFromSession();
+    }
+
+    /*删除指定行的客户数据*/
+    function remCtsData(eid) {
+        $.each(CtsLists,function (i,e) {
+            if(e && e.eid == eid){
+                CtsLists.splice($.inArray(e,CtsLists),1);
+                setDisableOrOpen();
+            }
+        })
+        if(CtsLists.length){
+            setTextDisable(false);
+        }else{
+            setTextDisable(true);
+        }
+
+        $("#ctsCount").text(CtsLists.length)
+    }
+
+    function setDisableOrOpen(doc) {
+        doc = doc || document.body;
+        if(GoodLists.length == 1){
+            $(".set-single-price",doc).find(".radios").removeClass("disable").find("input:text").prop("disabled",false);
+            $(".set-single-price",doc).find(".label_radio").removeClass("disable");
+            $(".set-single-price",doc).find(".radios").css('color', '');
+            $(".set-single-price",doc).find("input").css('background-color', '');
+        }else{
+            $(".set-single-price",doc).find(".radios").addClass("disable").find("input:text").prop("disabled",true);
+            $(".set-single-price",doc).find(".label_radio").addClass("disable");
+            $(".set-single-price",doc).prev(".user-choose-form").find("label").click();
+            $(".set-single-price",doc).find(".radios").css('color', '#ccc');
+            $(".set-single-price",doc).find("input").css('background-color', '#f5f5f5');
+        }
+    }
+
+    /**
+     * 批量设置分组价格
+     */
+    function batchAddPrice(isSpc) {
+        if(!GoodLists.length) {
+            layer.msg("请先选择商品！");
+            return;
+        }
+        if($("#batchCtsBtn").hasClass("b-disabled")){
+            return false;
+        }
+        if(!CtsLists.length){
+            top.ue.msg("请先添加客户");
+            return false;
+        }
+        var _sels = getSelIds("#customerList","eid");
+        _d = {
+            gCount: GoodLists.length,
+            cCount: CtsLists.length
+        }
+        if(isSpc){
+            if(_sels.length){
+                _d.cCount = _sels.length;
+            }else{
+                layer.msg("请先选择客户");
+                return false;
+            }
+        }
+        top.rui.dynamic({
+            title:"设置定价",
+            skin:"new_dialog_ui",
+            content:laytpl($("#batchAddPriceTpl").html()).render(_d),
+            area:['600px'],
+            btn:false,
+            success:function (lay,idx) {
+                bindEvt(lay);
+                setDisableOrOpen(lay);
+                lay.find(".btn").on("click",function () {
+                    var _per = $(lay).find(".percent").val() , _dp = $(lay).find(".dirctPrice").val();
+                    if(_per == "" && _dp == ""){
+                        top.ue.msg("请您输入定价");
+                        return false;
+                    }
+                    var v = lay.find(":radio:checked").val();
+                    var _base = GoodLists[0].goods.gbasePrice || 0;
+                    var _floatPrice = top.utils.toFixed(_base + _base*_per/100,2);
+                    if(isSpc){
+                        $.each(_sels,function (i,e) {
+                            var _tr = $("#customerList").find("tr[data-eid="+e+"]");
+                            _tr.find(".percent").val(_per);
+                            _tr.find(".dirctPrice").val(_dp);
+                            _tr.find(".label_radio :radio[value="+v+"]").click();
+
+                            if(GoodLists.length == 1 && _per){
+                                _tr.find(".drt-text").show().find(".float-price").text(_floatPrice);
+                                if(_per<0){
+                                    _tr.find(".fl-t").text('下浮');
+                                }else _tr.find(".fl-t").text('上浮');
+                            }else{
+                                _tr.find(".drt-text").hide()
+                            }
+                        })
+                    }else{
+                        $(".percent").val(_per);
+                        $(".dirctPrice").val(_dp);
+                        $(".percent").val(_per);
+                        $(".dirctPrice").val(_dp);
+                        $(".label_radio :radio[value="+v+"]").click();
+                        if(GoodLists.length == 1 && _per){
+                            $(".drt-text").show().find(".float-price").text(_floatPrice);
+                            if(_per<0){
+                                $(".fl-t").text('下浮');
+                            }else $(".fl-t").text('上浮');
+                        }else{
+                            $(".drt-text").hide()
+                        }
+                    }
+
+                    $.each(CtsLists,function (i,cts) {
+                        if(isSpc){
+                            if($.inArray(cts.eid,_sels) > -1){
+                               if(v ==1){
+                                   CtsLists[i].priceFloat = _per;
+                                   CtsLists[i].groupPrice = null;
+                               }else{
+                                   CtsLists[i].priceFloat = null;
+                                   CtsLists[i].groupPrice = _dp;
+                               }
+                            }
+                        }else{
+                            if(v ==1){
+                                CtsLists[i].priceFloat = _per;
+                                CtsLists[i].groupPrice = null;
+                            }else{
+                                CtsLists[i].priceFloat = null;
+                                CtsLists[i].groupPrice = _dp;
+                            }
+                        }
+                    })
+
+                    top.ue.close(idx);
+                })
+                $(".check-box-prt").each(function () {
+                    $(this).on("click",function () {
+                        var _check = $(this).find("input:checkbox").prop("checked") || false;
+                        $(".check-box-prt").not($(this)).find("input:checkbox").prop("checked",!_check);
+                    })
+                })
+            }
+        })
+    }
+
+
+    /**
+     * 保存
+     * @returns {boolean}
+     */
+    function saveGGP() {
+        if($("#saveBtn").hasClass("btn-disabled")){
+            return false;
+        }
+
+        var _data = {
+            gids:[]
+        };
+        $.each(GoodLists,function (i,good) {
+            _data.gids.push(good.goods.gid);
+        })
+        if(!_data.gids.length){
+            top.ue.msg("请先添加商品");
+            return false;
+        }
+        var _empArr = [];
+        var _groupPriceArray = [];
+        $.each(CtsLists,function (i,e) {
+            var _cts = {
+                eId:e.eid,
+                priceFloat:"",
+                price:""
+            };
+            if(GoodLists.length == 1){
+                if(e.priceFloat || e.groupPrice){
+                    _cts.priceFloat = e.priceFloat;
+                    _cts.price = e.groupPrice;
+                }else  _empArr.push(i+1);
+            }else{
+                if(e.priceFloat){
+                    _cts.priceFloat = e.priceFloat;
+                }else _empArr.push(i+1);
+            }
+            _groupPriceArray.push(_cts);
+        })
+        if(!_groupPriceArray.length){
+            top.ue.msg("请先添加客户并设置客户定价");
+            return false;
+        }
+        if(_empArr.length){
+            top.ue.msg("还有 "+_empArr.length+" 个客户尚未设置定价");
+            return false;
+        }
+        _data.gids = _data.gids.join(",");
+        var groupPriceVo = {};
+        groupPriceVo.goodsPrices = _groupPriceArray;
+        var groupPriceJson = $.toJSON(groupPriceVo);
+        top.utils.ajax({
+            url:"/api/customerGoodsPriceManage/price/batchSave/batchSaveGoodsPrices",
+            data:{
+                "gids" : _data.gids,
+                "goodsPrices" : groupPriceJson,
+                "flag" : 1
+            },
+            success:function (data,res) {
+                top.ue.alert({
+                    content:"成功对<em style='color: red'>"+_groupPriceArray.length+"</em>个客户设置定价",
+                    ok:function (idx) {
+                      /* var pathName= getUrlParam("pathName") || location.href;
+                       var titleBack= getUrlParam("titleBack") || '';
+
+                       top.utils.iframeLoad();
+                       top.utils.closeTopTab(null,true,function(){
+                           top.utils.openWithTab('khdj', '客户定价',pathName, {refresh: true,fstBread:'销价管理',scdBread:'客户定价'});
+                       })*/
+                      top.ue.close(idx);
+                        top.utils.closeExitsTab(top.utils.getActTab().dom);
+                    }
+                })
+            },error:function () {
+                top.ue.alert({
+                    content:"抱歉，客户定价设置失败"
+                })
+            }
+        })
+    }
+
+    /*修改基价*/
+    function reviseBasePrice(gid,bPriceDom) {
+
+        var bPrice = $(bPriceDom).text().replace(/¥/g,'');
+        var modelText = '<div class="dialog" id="modelText"><div class="xdc-form cc" style="margin:0 auto;"><span class="text">输入基价：</span><input class="input" maxlength="11" type="text" name="basePrice" ><span class="text">元</span></div></div>';
+
+        top.rui.dynamic({
+            title: '设置基价',
+            content: modelText,
+            skin: "dialog-old dialog-old-no-title xjgl-dialog-ctn",
+            area: ['400px', '200px'],
+            btn: ['保存'],
+            success: function (lay, idx) {
+                bindEvt(lay);
+
+                $(".check-box-prt").each(function () {
+                    $(this).on("click",function () {
+                        var _check = $(this).find("input:checkbox").prop("checked") || false;
+                        $(".check-box-prt").not($(this)).find("input:checkbox").prop("checked",!_check);
+                    })
+                })
+                lay.find('input[name="basePrice"]').val(bPrice);
+            },
+            yes: function (idx, lay) {
+                var basePrice = parseFloat($('input[name="basePrice"]', lay).val()).toFixed(2);
+                if(basePrice <= 0 || !basePrice || basePrice=='NaN') {
+                    top.layer.msg('基价须大于0');
+                    return false;
+                }
+                $.ajax({
+                    url: "/api/priceManage/updateGoodsGBasePrice",
+                    data: {gid: gid, gBasePrice: basePrice},
+                    type: 'get',
+                    success: function (res) {
+                        if (res.code != 0) {
+                            top.layer.msg(res.message);
+                        }
+                        else {
+                            $("#basePrice-"+gid).html("&yen;"+basePrice);
+                            if(GoodLists.length == 1){
+                                updateBaseIns(basePrice);
+                            }
+                            top.ue.close(idx);
+                            top.ue.msg("修改基价成功");
+                            return;
+                        }
+                    }
+                })
+            }
+        })
+    }
+</script>
+
+</body>
+</html>

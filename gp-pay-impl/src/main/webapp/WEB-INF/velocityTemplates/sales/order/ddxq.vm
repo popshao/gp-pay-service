@@ -1,0 +1,466 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>订单详情-我的医药网</title>
+
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+       
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script type="text/javascript" src="/js/layui/layui.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/dragDrop.js"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script type="text/javascript">
+    var layer;
+    layui.config({
+        base: '/js/layui/extend/'
+    }).use(['layApp','layer','form'], function () {
+        layer = layui.layer;
+    })
+    
+        function showPromotion(o,valid,tit,txt,url){
+        	if(valid==1){
+        		$(o).append('<div class="cxbox"><a target="_blank" href="'+url+'">去抢购&gt;&gt;</a><h5>'+tit+'</h5><p>'+txt+'</p></div>');
+        	}else{
+        		$(o).append('<div class="cxbox"><h5>'+tit+'</h5><p>'+txt+'</p></div>');
+        	}
+        }
+        
+        function removePromotion(o){
+        	$(o).find('.cxbox').remove();
+        }
+
+        $(function(){
+       	
+	       	$(".img-tips-rc").each(function(){
+	       		$(this).on("mouseenter",function(){
+	       			var _this = $(this);
+	       			layer.tips("<img style='max-width:450px;max-height:400px;' src='"+_this.attr("data-src-ignore")+"'>",_this,{
+	       				tips: [1, '#fff'],
+	       				time:9999999999999,
+	       				success:function(lay){
+	       					lay.find("img").on('load',function(){
+	       						var _w = $(this).width() + 20;
+	       						var _h = $(this).height() + 20;
+	       						lay.css({"width":_w+"px","height":_h+"px"})
+	       					})
+	       				}
+	       			})
+	       		}).on("mouseleave",function(){
+	       			layer.closeAll("tips");
+	       		})
+	       	})
+       	
+       })
+    </script>
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+
+<body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+       <div class="content">
+        <div class="wrap cc">
+			#parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+           <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+            	<div class="path">
+                	<p><a href="/sales/index.html" class="color">销售中心</a>&gt; 交易管理 &gt; <a href="/sales/order/ddgl.html" class="color">销售订单</a>&gt; 订单详情</p>
+                </div>
+                
+                #parse("/orderStatusInfo.vm")
+                
+                <div class="order_pass">
+                   <div class="order_detail order_font">
+                    <div class="table">
+                    <div class="cc mt5">
+                     #if($!backUrl=="")
+                    	#*<a href="javascript:window.history.back()" class="btn-return">返回</a>*#
+                    #end
+                     #if($!backUrl!="")
+                    	<a href="$!{backUrl}?$!{returnPageParam}" class="btn-return">返回</a>
+                    #end
+                    	
+                    </div>
+                        <table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th></th>
+                                    <th width="150">商品名称</th>
+                                    <th width="80">商品编码</th>
+                                    #if($!suIsErp==1)
+                                    <th width="80">ERP内码</th>
+                                    #end
+                                    <th width="150">生产厂家</th>
+                                    <th>批准文号</th>
+                                    <th>规格</th>
+<!--                                     <th>单位</th> -->
+                                    <th>单价(元)</th>
+                                    <th>购买数量</th>
+                                    <th>小计(元)</th>
+                                    <th>发货数量</th>
+                                    <th>收货数量</th>
+                                    <th>发货小计</th>
+                                    <th>批次号</th>
+                                    <th>效期</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+							#if(!$null.isNull($order.orderDetailList) && $order.orderDetailList.size()!=0)
+                                     #foreach($item in $order.orderDetailList)
+                               <tr>
+                                    <td class="td-none">$!velocityCount</td>
+                                    <td style="text-align:left;">
+                                    	<dl>
+	                                   	    #if($!item.pri && $!item.pri.pactType != 0)
+	          	   	   						<dt style="cursor:pointer;" onmouseenter="showPromotion(this,'$!item.pri.isValid','$!item.pri.pactTitle','$!item.pri.rules','http://$!{suDomainPrefix}.mypharma.com/promotion/$!{item.odActivityId}.html');" onmouseleave="removePromotion(this)">
+			                                    #if($!item.pri.pactType == 1)
+			                                    <i class="ico-bg">满减 </i>
+			                                    #elseif($!item.pri.pactType == 2)
+			                                    <i class="ico-bg">买赠 </i>
+			                                    #elseif($!item.pri.pactType == 3)
+			                                    <i class="ico-bg">换购</i>
+			                                    #elseif($!item.pri.pactType == 4)
+			                                    <i class="ico-bg">特价</i>
+			                                    #elseif($!item.pri.pactType == 5)
+			                                    <i class="ico-bg">秒杀</i>
+			                                    #end
+		                                    </dt>
+		                                    #else
+		                                    #if($!item.gType==1 || $!item.gType==2)
+							           	    <dt>
+							           	    <i class="ico-bg">新品</i>
+							           	    </dt>
+							           	    #end
+							           	    #if($!item.gType == 3 || $!item.gType == 5)
+							           	    <dt>
+							           	    <i class="ico-bg">专销</i>
+							           	    </dt>
+							           	    #end
+							           	    
+		                                    #end
+		                                    <dd>
+			                                    <a class="a-link" href="http://$!{wwwHostAndPort}/item/$!{item.odGId}.html" target="_blank">
+			                                    $!item.odName
+			                                    </a>
+		                                    </dd>
+                                    	</dl>
+                                    </td>
+                                    <td>$!item.odSn</td>
+                                    #if($!suIsErp==1)
+                                    <td>$!item.odInSn</td>
+                                    #end
+                                    <td>$!item.odManufacture</td>
+                                    <td>$!item.odLicenseNumber</td>
+                                    <td>$!item.odSpecifications</td>
+<!--                                     <td>$!item.odUnit</td> -->
+                                    <td> 
+										#if($!item.odPrice != $!item.odPrePrice)
+                                    		#if($!order.orderType == 1)  
+							            		#if($!order.oStatus==0)  
+			                                    	未确定
+			                                    #end 
+			                                    #if($!order.oStatus>0)  
+			                                    	<span style="text-decoration:line-through;">$!utils.priceFormart($!{item.odPrePrice})</span><br/>
+								            		<p style="font-size:12px; color:#ef0c4a;">$!utils.priceFormart($!{item.odPrice})</p>
+			                                    #end 
+			                                    #if(0>$!order.oStatus)  
+			                                    	#if(-10==$!order.oStatus)
+			                                           <span style="text-decoration:line-through;">$!utils.priceFormart($!{item.odPrePrice})</span><br/>
+								            		   <p style="font-size:12px; color:#ef0c4a;">$!utils.priceFormart($!{item.odPrice})</p>
+			                                        #else
+			                                        		--
+			                                    	#end
+			                                    #end      
+		                                    #else 
+		                                  		<span style="text-decoration:line-through;">$!utils.priceFormart($!{item.odPrePrice})</span><br/>
+							            		<p style="font-size:12px; color:#ef0c4a;">$!utils.priceFormart($!{item.odPrice})</p>
+						            		#end
+						            #else      
+						            	$!utils.priceFormart($!{item.odPrice})
+						            #end
+                                    </td>
+                                    <td>$!item.odNumber</td>
+                                    <td>
+                                    #if($!order.orderType == 1)  
+                                    			#if($!order.oStatus==0)  
+			                                    	未确定
+			                                    #end 
+			                                    #if($!order.oStatus>0)  
+			                                    	  <strong>$!utils.priceFormart($!{item.odPreSubtotal})</strong>
+											          #set($cheap = $!{item.odPreSubtotal} - $!item.odSubtotal)
+											          #if($!cheap != 0)
+											          <p style="font-size:12px; color:#ef0c4a;">
+											                   减：$!utils.priceFormart($!{cheap})
+											          <p>
+											          #end
+			                                    #end 
+			                                    #if(0>$!order.oStatus)  
+			                                    	#if(-10==$!order.oStatus)
+			                                        	  <strong>$!utils.priceFormart($!{item.odPreSubtotal})</strong>
+												          #set($cheap = $!{item.odPreSubtotal} - $!item.odSubtotal)
+												          #if($!cheap != 0)
+												          <p style="font-size:12px; color:#ef0c4a;">
+												                   减：$!utils.priceFormart($!{cheap})
+												          <p>
+												          #end
+			                                        #else
+			                                        		--
+			                                    	#end
+			                                    #end 
+							          #else
+							          		<strong>$!utils.priceFormart($!{item.odPreSubtotal})</strong>
+							          #set($cheap = $!{item.odPreSubtotal} - $!item.odSubtotal)
+							          #if($!cheap != 0)
+							          <p style="font-size:12px; color:#ef0c4a;">
+							                   减：$!utils.priceFormart($!{cheap})
+							          <p>
+							          #end
+							          #end
+							        </td>
+                                    <td>
+                                    #if($!order.oStatus >= 90 || $!order.oStatus==-10)
+                                    #if($!item.odSendNumber == 0)
+                                                                                                            已驳回
+                                    #else
+                                    $!{item.odSendNumber}
+                                    #end
+                                    #else
+                                                                                                            未发货
+                                    #end
+                                    </td>
+                                    <td>
+                                    #if($!order.oStatus >= 90 || $!order.oStatus==-10)
+                                    #if($!item.odSendNumber == 0)
+                                    --
+                                    #else
+                                    #if($!{item.odAcceptNumber}==0 && $!{backStatus}==0)
+                                    <p class="ps">退货中</p>
+                                    #elseif($!{item.odAcceptNumber}==0 && $!{backStatus}==1)
+                                                                                                            已退货
+                                    #else
+                                    $!{item.odAcceptNumber}
+                                    #end
+                                    #end
+                                    #else
+                                                                                                            未收货
+                                    #end
+                                    </td>
+                                    <td>$!{item.sendSubtotal}</td>
+                                    <td>$!{item.osiBatch}</td>
+                                    <td>$!{item.osiVali}</td>
+                                </tr>
+                                <!-- 促销信息开始 -->
+						       #if($!item.odActivity==3 && $!item.odActivityId!=0)
+						       #if($!item.pri.policy && $!item.pri.policy!='' && $!item.pri.pactType!=2)
+						       <tr style="font-size:12px;">
+						       <td colspan="14" style="text-align:left;background:white;color:#ef0c4a;">
+						          <span style="padding-right:22px;padding-left:98px;color:#ef0c4a;">$!{item.pri.policy}</span>
+						       </td>
+						       </tr>
+						       #end
+						       #end
+						       <!-- 促销信息结束 -->
+						       
+                                #end
+                            #end
+                            
+                               #* 促销买赠信息开始 *#
+						       #if($!utils.notEmpty($!giftList))
+						       <tr style="font-size:12px;">
+						       <td colspan="14" style="text-align:left;background:white;color:#ef0c4a;">
+						          #foreach($item in $!giftList) 
+						          <span style="padding-right:22px;padding-left:57px;color:#ef0c4a;">$!{item.policy}</span>
+						          #set($giftWrapper = $!item.giftWrapper)
+						          #if($!utils.notEmpty($!giftWrapper.gift_img_list))
+						       	 	 赠品：
+						       	      #foreach($giftimg in $!giftWrapper.gift_img_list)
+						       	      <img data-src-ignore="$!utils.getNewImgDomain($!{giftimg})" class="img-tips-rc" 
+						       	      style="cursor:pointer;vertical-align: middle;" 
+						       	      src="$!utils.getNewImgDomain($!{giftimg})?imageView2/2/w/40" title="$!giftWrapper.gift_name$!{velocityCount}" />
+						       	      #end
+						       	      <br>
+						  	      #end
+						  	      #end
+						       </td>
+						       </tr>
+						       #end
+						       #* 促销买赠信息结束 *#
+						       
+						   </tbody>
+                        </table>
+                        #if("$!orderSend.osBill" != "")
+                        <div class="order_ms_l fl">发票号：<span class="total_p">$!orderSend.osBill</span></div>
+                        #end
+                        #if("$!order.oNote" != "")
+                        <div class="order_ms_l fl">备注：<span class="total_p">$!order.oNote</span></div>
+                        #end
+                        #if("$!order.deliveryNote" != "")
+                        <div class="order_ms_l fl">出库留言：<span class="total_p">$!order.deliveryNote</span></div>
+                        #end
+                        #if($!order.orderType == 1&& 0>=$!order.oStatus&&$!order.oStatus!=-10)  
+                        	#if($!order.oStatus>=0)  
+		                       	<div class="order_ms fr mr80">商品总额：<span class="total_r">未确定</span></div>
+		                        <div class="order_ms fr mr80">已节省：<span class="total_r">未确定</span></div>
+		                        <div class="order_ms fr mr80">
+		                                                                        订单总价：<span class="total_p">未确定</span>
+		                        </div>
+		                        <div class="order_ms fr mr80">
+			                        #if($!order.payStatus==50)
+			                                                                       已支付金额：
+			                        <span class="total_p">¥$!utils.priceFormart($!{order.payPrice})</span>
+			                        #else
+			                                                                        应支付金额：
+			                        <span class="total_p">
+									未确定
+									</span>
+									#end
+		                        </div>
+		                        #else 
+	                        #end
+                        #else     
+                         
+	            		<div class="order_ms fr mr80">商品总额：<span class="total_r">¥$!utils.priceFormart($!{order.oPrePrice})</span></div>
+                        
+                        <div class="order_ms fr mr80">已节省：<span class="total_r">-¥$!utils.priceFormart($!{cheapPrice})</span></div>
+                        
+                        <div class="order_ms fr mr80">优惠券：<span class="total_r ">-¥$!utils.priceFormart($!{order.vouchersPrice})</span>
+                        </div>
+                        
+                        #if($!order.randomPrice!=0)
+                        <div class="order_ms fr mr80">支付立减：<span class="total_r">-¥$!utils.priceFormart($!{order.randomPrice})</span>
+                        </div>
+                        #end
+                        
+                        <div class="order_ms fr mr80">
+                                                                        订单金额：<span class="total_r">¥$!utils.priceFormart($!{order.oTotalPrice})</span>
+                        </div>
+                        
+                        #if($!order.rebutPrice && ($!order.oStatus>=90 || $!order.oStatus==-10))
+                        <div class="order_ms fr mr80">驳回金额：<span class="total_r">-¥$!utils.priceFormart($!{rebutTotal})</span></div>
+##                         <div class="order_ms fr">优惠金额：<span class="total_r text-l">-¥$!utils.priceFormart($!{rebutDiscount})</span></div>
+                        <div class="order_ms fr">优惠券：<span class="total_r text-l">-¥$!utils.priceFormart($!{rebutVouchers})</span></div>
+                        <div class="order_ms fr">随机立减：<span class="total_r text-l">-¥$!utils.priceFormart($!{rebutRandom})</span></div>
+                        <div class="order_ms fr">商品金额：<span class="total_r text-l">-¥$!utils.priceFormart($!{order.rebutPrice})</span></div>
+                        #end
+                        
+                        #if($!backStatus)
+                        #if($!backStatus==0)
+                        <div class="order_ms fr mr80">退款金额：<span class="total_r">待卖家确认</span></div>
+                        #elseif($!backStatus==1)
+                        
+                        #if($!order.backPrice && $!order.oStatus>=100)
+                        <div class="order_ms fr mr80">退款金额：<span class="total_r">-¥$!utils.priceFormart($!{backTotal})</span></div>
+##                        <div class="order_ms fr">优惠金额：<span class="total_r text-l">-¥$!utils.priceFormart($!{backDiscount})</span></div>
+                        <div class="order_ms fr">优惠券：<span class="total_r text-l">-¥$!utils.priceFormart($!{backVouchers})</span></div>
+                        <div class="order_ms fr">随机立减：<span class="total_r text-l">-¥$!utils.priceFormart($!{backRandom})</span></div>
+                        <div class="order_ms fr">商品金额：<span class="total_r text-l">-¥$!utils.priceFormart($!{order.backPrice})</span></div>
+                        #end
+                        
+                        #end
+                        #else
+                        
+                        #if($!order.backPrice && $!order.oStatus>=100)
+                        <div class="order_ms fr mr80">退款金额：<span class="total_r">-¥$!utils.priceFormart($!{backTotal})</span></div>
+##                        <div class="order_ms fr">优惠金额：<span class="total_r text-l">-¥$!utils.priceFormart($!{backDiscount})</span></div>
+                        <div class="order_ms fr">优惠券：<span class="total_r text-l">-¥$!utils.priceFormart($!{backVouchers})</span></div>
+                        <div class="order_ms fr">随机立减：<span class="total_r text-l">-¥$!utils.priceFormart($!{backRandom})</span></div>
+                        <div class="order_ms fr">商品金额：<span class="total_r text-l">-¥$!utils.priceFormart($!{order.backPrice})</span></div>
+                        #end
+                        #end
+                        
+                        <div class="order_ms fr mr80">
+                        #if($!order.payStatus==50)
+                                                                        已支付金额：<span class="total_r total_p">¥$!utils.priceFormart($!{order.payPrice})</span>
+                        #else
+                                                                        应付金额：<span class="total_r total_p">
+                        #if($!order.oStatus >= 0 && $!payPrice > 0)
+                        ¥$!utils.priceFormart($!{payPrice})
+                        #else
+                        ¥0.00
+                        #end
+                        </span>
+                        #end
+                        </div>
+                        
+                        #if($!balance!=0)
+                        <div class="order_ms fr mr80">已结算金额：<span class="total_r total_p">¥$!utils.priceFormart($!{balance})</span></div>
+                        #end  
+                        
+	            		#end  
+	            		#if(!$null.isNull($orderRebutInfos) && $orderRebutInfos.size()!=0)
+	            		<font size="4"><b>未出库记录</b></font>
+	            		<table cellpadding="0" cellspacing="0">
+                            <thead class="head">
+                                <tr class="line">
+                                    <th></th>
+                                    <th width="150">商品名称</th>
+                                    <th>商品编码</th>
+                                      #if($!suIsErp==1)
+                                   	 <th width="80">ERP内码</th>
+                               	     #end
+                                    <th width="150">生产厂家</th>
+                                    <th>批准文号</th>
+                                    <th>规格</th>
+                                    <th>单位</th>
+                                    <th>单价(元)</th>
+                                    <th>数量</th>
+                                    <th>小计(元)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                       	#foreach($item in $orderRebutInfos)
+                       		 	<tr>
+                                    <td>$!velocityCount</td>
+                                    <td>$!{item.oriName}</td>
+                                      <td>$!{item.oriSn}</td>
+                                      #if($!suIsErp==1)
+                                    <td>$!{item.oriInSn}</td> 
+                                    #end
+                                    <td>$!{item.oriManufacture}</td>
+                                    <td>$!{item.oriLicenseNumber}</td>
+                                    <td>$!{item.oriSpecifications}</td>
+                                    <td>$!{item.oriUnit}</td>
+                                    <td>$!utils.priceFormart($!{item.oriPrice})</td>
+                                    <td>$!{item.oriNumber}</td>
+                                    <td>$!utils.priceFormart($!{item.subtotal})</td>
+                                </tr>
+                       	 #end  
+						</tbody>
+                        </table>
+                           	<div class="order_ms fr mr80">未出库合计：<span class="total_r">¥$!utils.priceFormart($!{order.rebutPrice})</span></div>
+	            		#end  
+                    </div>
+                </div>
+                </div>
+            </div>
+         <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    #parse("/common/footer.vm")
+</body>
+</html>

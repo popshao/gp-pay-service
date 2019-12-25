@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mph.coreapi.gp.pay.dao.read.AccountCardReadDao">
+    <resultMap id="accountCardResult" type="com.mph.coreapi.gp.pay.entity.AccountCard" >
+        <id column="ac_id" property="acId" />
+        <result column="su_id" property="suId" />
+        <result column="e_id" property="eId" />
+        <result column="pay_bank_id" property="payBankId" />
+        <result column="bank_name" property="bankName" />
+        <result column="branch_name" property="branchName" />
+        <result column="card_no" property="cardNo" />
+        <result column="cp_no" property="cpNo" />
+        <result column="account_name" property="accountName" />
+        <result column="card_type" property="cardType" />
+        <result column="id_no" property="idNo" />
+        <result column="apply_status" property="applyStatus" />
+        <result column="refuse_reason" property="refuseReason" />
+        <result column="mobile" property="mobile" />
+        <result column="is_default" property="isDefault" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="province" property="province" />
+        <result column="town" property="town" />
+        <result column="bank_detail_name" property="bankDetailName" />
+        <result column="ep_pic" property="epPic" />
+        <result column="pay_bank_id1" property="payBankId1" />
+        <result column="pay_bank_id2" property="payBankId2" />
+        <result column="yibao_city_id" property="yibaoCityId" />
+        <result column="yibao_province_id" property="yibaoProvinceId" />
+        <result column="bucket_key" property="bucket_key" />
+        <result column="is_pay_onlie_com" property="isPayOnlieCom" />
+        <result column="is_pay_onlie_self" property="isPayOnlieSelf" />
+        <result column="cash_type" property="cashType" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        ac_id, su_id, e_id, pay_bank_id, bank_name, branch_name, card_no, cp_no, account_name,
+        card_type, id_no, apply_status, refuse_reason, mobile, is_default, create_time, update_time,
+        province, town, bank_detail_name, ep_pic, pay_bank_id1, pay_bank_id2, yibao_city_id,
+        yibao_province_id, bucket_key, is_pay_onlie_com, is_pay_onlie_self, cash_type
+    </sql>
+
+    <select id="findAccountCardByPrimaryKey" resultMap="accountCardResult">
+        select
+        <include refid="Base_Column_List" />
+        from mph_account_card
+        where ac_id = #{acId}
+    </select>
+
+    <select id="findAccountCardByEid" resultMap="accountCardResult">
+        select
+        <include refid="Base_Column_List" />
+        from mph_account_card
+        where e_id = #{eId}
+    </select>
+
+    <select id="listAccoutCard" resultMap="accountCardResult">
+        select
+        <include refid="Base_Column_List" />
+        from mph_account_card
+        <where>
+            <if test="suId != null" >
+                and su_id = #{suId}
+            </if>
+            <if test="eId != null" >
+                and e_id = #{eId}
+            </if>
+            <if test="payBankId != null" >
+                and pay_bank_id = #{payBankId}
+            </if>
+            <if test="bankName != null" >
+                and bank_name = #{bankName}
+            </if>
+            <if test="branchName != null" >
+                and branch_name = #{branchName}
+            </if>
+            <if test="cardNo != null" >
+                and card_no = #{cardNo}
+            </if>
+            <if test="cpNo != null" >
+                and cp_no = #{cpNo}
+            </if>
+            <if test="accountName != null" >
+                and account_name = #{accountName}
+            </if>
+            <if test="cardType != null" >
+                and card_type = #{cardType}
+            </if>
+            <if test="idNo != null" >
+                and id_no = #{idNo}
+            </if>
+            <if test="applyStatus != null" >
+                and apply_status = #{applyStatus}
+            </if>
+            <if test="refuseReason != null" >
+                and refuse_reason = #{refuseReason}
+            </if>
+            <if test="mobile != null" >
+                and mobile = #{mobile}
+            </if>
+            <if test="isDefault != null" >
+                and is_default = #{isDefault}
+            </if>
+            <if test="createTime != null" >
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null" >
+                and update_time = #{updateTime}
+            </if>
+            <if test="province != null" >
+                and province = #{province}
+            </if>
+            <if test="town != null" >
+                and town = #{town}
+            </if>
+            <if test="bankDetailName != null" >
+                and bank_detail_name = #{bankDetailName}
+            </if>
+            <if test="epPic != null" >
+                and ep_pic = #{epPic}
+            </if>
+            <if test="payBankId1 != null" >
+                and pay_bank_id1 = #{payBankId1}
+            </if>
+            <if test="payBankId2 != null" >
+                and pay_bank_id2 = #{payBankId2}
+            </if>
+            <if test="yibaoCityId != null" >
+                and yibao_city_id = #{yibaoCityId}
+            </if>
+            <if test="yibaoProvinceId != null" >
+                and yibao_province_id = #{yibaoProvinceId}
+            </if>
+            <if test="bucket_key != null" >
+                and bucket_key = #{bucket_key}
+            </if>
+            <if test="isPayOnlieCom != null" >
+                and is_pay_onlie_com = #{isPayOnlieCom}
+            </if>
+            <if test="isPayOnlieSelf != null" >
+                and is_pay_onlie_self = #{isPayOnlieSelf}
+            </if>
+            <if test="cashType != null" >
+                and cash_type = #{cashType}
+            </if>
+        </where>
+    </select>
+
+    <select id="isOpenCashBySuId" resultType="java.lang.Integer">
+        SELECT count(1) FROM mph_account_card WHERE cash_type = 1 AND is_default =1 AND su_id = #{suId}
+    </select>
+</mapper>

@@ -1,0 +1,377 @@
+#macro(pagerInfo $pager $pagerTotal $url)
+<div class="page">
+    <span class="pageno">
+     #set($FRONT_LEN = 3)
+     #set($BEHIND_LEN = 3)
+     #set($PAGER_LEN = 10)
+     #set($PAGER_CENTER = $!{pagerTotal} - $!{BEHIND_LEN})
+	 #set($PAGER_FRONT_LEN = $!{PAGER_LEN} - $!{FRONT_LEN})
+	 
+     #if($!{pagerTotal} <= $!{PAGER_LEN})
+			#if($!{pager.pageIndex} == 1)
+				<a class="page_prev disabled" title="上一页">&lt;上一页 </a>
+			#else
+				<a href="javascript:pagerPre($!{pager.pageIndex},$!{pagerTotal});" title="上一页">&lt;上一页 </a>
+			#end
+           #foreach($p in [1..$!{pagerTotal}])
+                #if($!{pager.pageIndex} == $!{p})
+                  <a href="javascript:pager($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+        	    #else
+				  <a href="javascript:pager($!{p},$!{pagerTotal});">$!{p}</a>
+			    #end
+		   #end
+		    #if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:pagerNext($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+     #elseif($!{pagerTotal} > $!{PAGER_LEN})
+	    #if($!{pager.pageIndex} == 1)
+			<a class="page_prev disabled" title="上一页">&lt;上一页 </a>
+		#else
+			<a href="javascript:pagerPre($!{pager.pageIndex},$!{pagerTotal});" title="上一页">&lt;上一页 </a>
+		#end
+       #if($!{pager.pageIndex} <= $!{PAGER_FRONT_LEN})
+           #foreach($p in [1..$!{PAGER_LEN}])
+                #if($!{pager.pageIndex} == $!{p})
+                   <a href="javascript:pager($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+        		#else
+				   <a href="javascript:pager($!{p},$!{pagerTotal});">$!{p}</a>
+			    #end
+		   #end
+		   &nbsp;...&nbsp;
+		    #if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:pagerNext($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+	   #else
+			#foreach($p in [1..$FRONT_LEN])
+				<a href="javascript:pager($!{p},$!{pagerTotal});">$!{p}</a>
+		    #end
+		    &nbsp;...&nbsp;
+			#if($!{pager.pageIndex} < $!{PAGER_CENTER})
+               #set($header = $!{pager.pageIndex} - $!{FRONT_LEN})
+               #set($ender = $!{pager.pageIndex} + $!{BEHIND_LEN})
+               #foreach($p in [$!{header}..$!{ender}])
+                    #if($!{pager.pageIndex} == $!{p})
+                       <a href="javascript:pager($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+            		#else
+					   <a href="javascript:pager($!{p},$!{pagerTotal});">$!{p}</a>
+				    #end
+			   #end
+			   &nbsp;...&nbsp;
+           #else
+               #set($begin = $!{pagerTotal} - $!{FRONT_LEN} - $!{BEHIND_LEN})
+               #foreach($p in [$!{begin}..$!{pagerTotal}])
+                    #if($!{pager.pageIndex} == $!{p})
+                     <a href="javascript:pager($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+            		 #else
+					<a href="javascript:pager($!{p},$!{pagerTotal});">$!{p}</a>
+				   #end
+               #end
+			#end
+			#if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:pagerNext($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+	   #end
+     #end
+    <span>
+	#if($!{pager.pageIndex} < 1)
+		#set($jumpPageNum = 1)
+	#elseif($!{pager.pageIndex} > $!{pagerTotal})
+		#set($jumpPageNum = $!{pagerTotal})
+	#else
+		#set($jumpPageNum = $!{pager.pageIndex})
+	#end
+    <span>共 $!{pagerTotal}页/$!{pager.rowsCount}条记录 &nbsp; 到第<input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" name="pi" id="pi" type="text" value="$!{jumpPageNum}">页</span>
+     <a href="javascript:pagerTo($!{pagerTotal});" id="redirect"> 确定</a>
+    </span>
+</div>
+#end
+
+#macro(dialogPagerInfo $pager $pagerTotal $url)
+<div class="page">
+    <span class="pageno">
+     #set($FRONT_LEN = 3)
+     #set($BEHIND_LEN = 3)
+     #set($PAGER_LEN = 10)
+     #set($PAGER_CENTER = $!{pagerTotal} - $!{BEHIND_LEN})
+	 #set($PAGER_FRONT_LEN = $!{PAGER_LEN} - $!{FRONT_LEN})
+	 
+     #if($!{pagerTotal} <= $!{PAGER_LEN})
+			#if($!{pager.pageIndex} == 1)
+				<a class="page_prev disabled" title="上一页">&lt;上一页 </a>
+			#else
+				<a href="javascript:top.app.frameWindow.pagerDialogPre($!{pager.pageIndex},$!{pagerTotal});" title="上一页">&lt;上一页 </a>
+			#end
+           #foreach($p in [1..$!{pagerTotal}])
+                #if($!{pager.pageIndex} == $!{p})
+                  <a href="javascript:top.app.frameWindow.pagerDialog($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+        	    #else
+				  <a href="javascript:top.app.frameWindow.pagerDialog($!{p},$!{pagerTotal});">$!{p}</a>
+			    #end
+		   #end
+		    #if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:top.app.frameWindow.pagerDialogNext($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+     #elseif($!{pagerTotal} > $!{PAGER_LEN})
+	    #if($!{pager.pageIndex} == 1)
+			<a class="page_prev disabled" title="上一页">&lt;上一页 </a>
+		#else
+			<a href="javascript:top.app.frameWindow.pagerDialogPre($!{pager.pageIndex},$!{pagerTotal});" title="上一页">&lt;上一页 </a>
+		#end
+       #if($!{pager.pageIndex} <= $!{PAGER_FRONT_LEN})
+           #foreach($p in [1..$!{PAGER_LEN}])
+                #if($!{pager.pageIndex} == $!{p})
+                   <a href="javascript:top.app.frameWindow.pagerDialog($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+        		#else
+				   <a href="javascript:top.app.frameWindow.pagerDialog($!{p},$!{pagerTotal});">$!{p}</a>
+			    #end
+		   #end
+		   &nbsp;...&nbsp;
+		    #if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:top.app.frameWindow.pagerDialogNext($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+	   #else
+			#foreach($p in [1..$FRONT_LEN])
+				<a href="javascript:top.app.frameWindow.pagerDialog($!{p},$!{pagerTotal});">$!{p}</a>
+		    #end
+		    &nbsp;...&nbsp;
+			#if($!{pager.pageIndex} < $!{PAGER_CENTER})
+               #set($header = $!{pager.pageIndex} - $!{FRONT_LEN})
+               #set($ender = $!{pager.pageIndex} + $!{BEHIND_LEN})
+               #foreach($p in [$!{header}..$!{ender}])
+                    #if($!{pager.pageIndex} == $!{p})
+                       <a href="javascript:top.app.frameWindow.pagerDialog($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+            		#else
+					   <a href="javascript:top.app.frameWindow.pagerDialog($!{p},$!{pagerTotal});">$!{p}</a>
+				    #end
+			   #end
+			   &nbsp;...&nbsp;
+           #else
+               #set($begin = $!{pagerTotal} - $!{FRONT_LEN} - $!{BEHIND_LEN})
+               #foreach($p in [$!{begin}..$!{pagerTotal}])
+                    #if($!{pager.pageIndex} == $!{p})
+                     <a href="javascript:top.app.frameWindow.pagerDialog($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+            		 #else
+					<a href="javascript:top.app.frameWindow.pagerDialog($!{p},$!{pagerTotal});">$!{p}</a>
+				   #end
+               #end
+			#end
+			#if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:top.app.frameWindow.pagerDialogNext($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+	   #end
+     #end
+    <span>
+	#if($!{pager.pageIndex} < 1)
+		#set($jumpPageNum = 1)
+	#elseif($!{pager.pageIndex} > $!{pagerTotal})
+		#set($jumpPageNum = $!{pagerTotal})
+	#else
+		#set($jumpPageNum = $!{pager.pageIndex})
+	#end
+    <span>共 $!{pagerTotal}页/$!{pager.rowsCount}条记录 &nbsp; 到第<input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" name="pi" id="pi" type="text" value="$!{jumpPageNum}">页</span>
+     <a href="javascript:top.app.frameWindow.pagerDialogTo($!{pagerTotal});" id="redirect"> 确定</a>
+    </span>
+</div>
+#end
+
+#macro(dialogPagerInfoA $pager $pagerTotal $url)
+<div class="page">
+    <span class="pageno">
+     #set($FRONT_LEN = 3)
+     #set($BEHIND_LEN = 3)
+     #set($PAGER_LEN = 10)
+     #set($PAGER_CENTER = $!{pagerTotal} - $!{BEHIND_LEN})
+	 #set($PAGER_FRONT_LEN = $!{PAGER_LEN} - $!{FRONT_LEN})
+	 
+     #if($!{pagerTotal} <= $!{PAGER_LEN})
+			#if($!{pager.pageIndex} == 1)
+				<a class="page_prev disabled" title="上一页">&lt;上一页 </a>
+			#else
+				<a href="javascript:top.app.frameWindow.pagerDialogPreA($!{pager.pageIndex},$!{pagerTotal});" title="上一页">&lt;上一页 </a>
+			#end
+           #foreach($p in [1..$!{pagerTotal}])
+                #if($!{pager.pageIndex} == $!{p})
+                  <a href="javascript:top.app.frameWindow.pagerDialogA($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+        	    #else
+				  <a href="javascript:top.app.frameWindow.pagerDialogA($!{p},$!{pagerTotal});">$!{p}</a>
+			    #end
+		   #end
+		    #if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:top.app.frameWindow.pagerDialogNextA($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+     #elseif($!{pagerTotal} > $!{PAGER_LEN})
+	    #if($!{pager.pageIndex} == 1)
+			<a class="page_prev disabled" title="上一页">&lt;上一页 </a>
+		#else
+			<a href="javascript:top.app.frameWindow.pagerDialogPreA($!{pager.pageIndex},$!{pagerTotal});" title="上一页">&lt;上一页 </a>
+		#end
+       #if($!{pager.pageIndex} <= $!{PAGER_FRONT_LEN})
+           #foreach($p in [1..$!{PAGER_LEN}])
+                #if($!{pager.pageIndex} == $!{p})
+                   <a href="javascript:top.app.frameWindow.pagerDialogA($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+        		#else
+				   <a href="javascript:top.app.frameWindow.pagerDialogA($!{p},$!{pagerTotal});">$!{p}</a>
+			    #end
+		   #end
+		   &nbsp;...&nbsp;
+		    #if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:top.app.frameWindow.pagerDialogNextA($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+	   #else
+			#foreach($p in [1..$FRONT_LEN])
+				<a href="javascript:top.app.frameWindow.pagerDialogA($!{p},$!{pagerTotal});">$!{p}</a>
+		    #end
+		    &nbsp;...&nbsp;
+			#if($!{pager.pageIndex} < $!{PAGER_CENTER})
+               #set($header = $!{pager.pageIndex} - $!{FRONT_LEN})
+               #set($ender = $!{pager.pageIndex} + $!{BEHIND_LEN})
+               #foreach($p in [$!{header}..$!{ender}])
+                    #if($!{pager.pageIndex} == $!{p})
+                       <a href="javascript:top.app.frameWindow.pagerDialogA($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+            		#else
+					   <a href="javascript:top.app.frameWindow.pagerDialogA($!{p},$!{pagerTotal});">$!{p}</a>
+				    #end
+			   #end
+			   &nbsp;...&nbsp;
+           #else
+               #set($begin = $!{pagerTotal} - $!{FRONT_LEN} - $!{BEHIND_LEN})
+               #foreach($p in [$!{begin}..$!{pagerTotal}])
+                    #if($!{pager.pageIndex} == $!{p})
+                     <a href="javascript:top.app.frameWindow.pagerDialogA($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+            		 #else
+					<a href="javascript:top.app.frameWindow.pagerDialogA($!{p},$!{pagerTotal});">$!{p}</a>
+				   #end
+               #end
+			#end
+			#if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:top.app.frameWindow.pagerDialogNextA($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+	   #end
+     #end
+    <span>
+	#if($!{pager.pageIndex} < 1)
+		#set($jumpPageNum = 1)
+	#elseif($!{pager.pageIndex} > $!{pagerTotal})
+		#set($jumpPageNum = $!{pagerTotal})
+	#else
+		#set($jumpPageNum = $!{pager.pageIndex})
+	#end
+    <span>共 $!{pagerTotal}页/$!{pager.rowsCount}条记录 &nbsp; 到第<input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" name="pi" id="pi" type="text" value="$!{jumpPageNum}">页</span>
+     <a href="javascript:top.app.frameWindow.pagerDialogToA($!{pagerTotal});" id="redirect"> 确定</a>
+    </span>
+</div>
+#end
+
+
+
+#macro(dialogPagerInfoC $pager $pagerTotal $url)
+<div class="page">
+    <span class="pageno">
+     #set($FRONT_LEN = 3)
+     #set($BEHIND_LEN = 3)
+     #set($PAGER_LEN = 10)
+     #set($PAGER_CENTER = $!{pagerTotal} - $!{BEHIND_LEN})
+	 #set($PAGER_FRONT_LEN = $!{PAGER_LEN} - $!{FRONT_LEN})
+	 
+     #if($!{pagerTotal} <= $!{PAGER_LEN})
+			#if($!{pager.pageIndex} == 1)
+				<a class="page_prev disabled" title="上一页">&lt;上一页 </a>
+			#else
+				<a href="javascript:top.app.frameWindow.pagerDialogPreC($!{pager.pageIndex},$!{pagerTotal});" title="上一页">&lt;上一页 </a>
+			#end
+           #foreach($p in [1..$!{pagerTotal}])
+                #if($!{pager.pageIndex} == $!{p})
+                  <a href="javascript:top.app.frameWindow.pagerDialogC($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+        	    #else
+				  <a href="javascript:top.app.frameWindow.pagerDialogC($!{p},$!{pagerTotal});">$!{p}</a>
+			    #end
+		   #end
+		    #if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:top.app.frameWindow.pagerDialogNextC($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+     #elseif($!{pagerTotal} > $!{PAGER_LEN})
+	    #if($!{pager.pageIndex} == 1)
+			<a class="page_prev disabled" title="上一页">&lt;上一页 </a>
+		#else
+			<a href="javascript:top.app.frameWindow.pagerDialogPreC($!{pager.pageIndex},$!{pagerTotal});" title="上一页">&lt;上一页 </a>
+		#end
+       #if($!{pager.pageIndex} <= $!{PAGER_FRONT_LEN})
+           #foreach($p in [1..$!{PAGER_LEN}])
+                #if($!{pager.pageIndex} == $!{p})
+                   <a href="javascript:top.app.frameWindow.pagerDialogC($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+        		#else
+				   <a href="javascript:top.app.frameWindow.pagerDialogC($!{p},$!{pagerTotal});">$!{p}</a>
+			    #end
+		   #end
+		   &nbsp;...&nbsp;
+		    #if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:top.app.frameWindow.pagerDialogNextC($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+	   #else
+			#foreach($p in [1..$FRONT_LEN])
+				<a href="javascript:top.app.frameWindow.pagerDialogC($!{p},$!{pagerTotal});">$!{p}</a>
+		    #end
+		    &nbsp;...&nbsp;
+			#if($!{pager.pageIndex} < $!{PAGER_CENTER})
+               #set($header = $!{pager.pageIndex} - $!{FRONT_LEN})
+               #set($ender = $!{pager.pageIndex} + $!{BEHIND_LEN})
+               #foreach($p in [$!{header}..$!{ender}])
+                    #if($!{pager.pageIndex} == $!{p})
+                       <a href="javascript:top.app.frameWindow.pagerDialogC($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+            		#else
+					   <a href="javascript:top.app.frameWindow.pagerDialogC($!{p},$!{pagerTotal});">$!{p}</a>
+				    #end
+			   #end
+			   &nbsp;...&nbsp;
+           #else
+               #set($begin = $!{pagerTotal} - $!{FRONT_LEN} - $!{BEHIND_LEN})
+               #foreach($p in [$!{begin}..$!{pagerTotal}])
+                    #if($!{pager.pageIndex} == $!{p})
+                     <a href="javascript:top.app.frameWindow.pagerDialogC($!{p},$!{pagerTotal});" class="on">$!{p}</a>
+            		 #else
+					<a href="javascript:top.app.frameWindow.pagerDialogC($!{p},$!{pagerTotal});">$!{p}</a>
+				   #end
+               #end
+			#end
+			#if($!{pager.pageIndex} == $!{pagerTotal})
+				<a class="page_next disabled" title="下一页">下一页&gt;</a>
+			#else
+    		   <a href="javascript:top.app.frameWindow.pagerDialogNextC($!{pager.pageIndex},$!{pagerTotal});" title="下一页">下一页&gt; </a>
+			#end
+	   #end
+     #end
+    <span>
+	#if($!{pager.pageIndex} < 1)
+		#set($jumpPageNum = 1)
+	#elseif($!{pager.pageIndex} > $!{pagerTotal})
+		#set($jumpPageNum = $!{pagerTotal})
+	#else
+		#set($jumpPageNum = $!{pager.pageIndex})
+	#end
+    <span>共 $!{pagerTotal}页/$!{pager.rowsCount}条记录 &nbsp; 到第<input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" name="pi" id="pi" type="text" value="$!{jumpPageNum}">页</span>
+     <a href="javascript:top.app.frameWindow.pagerDialogToC($!{pagerTotal});" id="redirect"> 确定</a>
+    </span>
+</div>
+#end

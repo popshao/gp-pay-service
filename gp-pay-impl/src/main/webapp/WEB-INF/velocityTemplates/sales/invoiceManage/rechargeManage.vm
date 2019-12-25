@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>销价管理 - 余额管理</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    #parse("common/header_css_new.vm")
+
+</head>
+<body>
+
+<!--页面主体 -->
+    <div class="c-box">
+
+        <div class="user-fp-ye-box cc" id="yeData">
+
+        </div>
+        <script type="text/html" id="yeDataTpl">
+            <div class="ufyb-ctn ufyb-line-r">
+                <img class="fl" src="/front/imgs/invoice/img_fp_01.png">
+                <div class="c-text">
+                    <p class="t-top">剩余可开票数：</p>
+                    <p class="t-number"><i class="num">{{d.leftNum}}</i>张</p>
+                </div>
+                <a href="javascript:void(0);" onclick="top.utils.openNewTabWithFourLevel(top.utils.getRandom(),'/sales/invoice/rechargeCfm.html','余额充值',location.href)" class="user-btn-n" >充值</a>
+            </div>
+            <div class="ufyb-ctn"><img class="fl" src="/front/imgs/invoice/img_fp_02.png">
+                <div class="c-text">
+                    <p class="t-top">已开票数：</p>
+                    <p class="t-number"><i class="num num-b">{{d.useNum}}</i>张</p>
+                </div>
+                <a href="javascript:void(0)" class="user-btn-b" onclick="top.utils.open('/invoice/expInvoiceBalanceRecord','_self')">导出对账单</a>
+            </div>
+        </script>
+
+        <div class="user-form user-sheet-box invoice-table mt10">
+            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>流水单</th>
+                    <th>
+                        交易时间
+                        <span class='user-sort-unit'>
+                            <em class='up'></em>
+                            <em class='down'></em>
+                        </span>
+                    </th>
+                    <th>交易类型</th>
+                    <th>余额变化</th>
+                    <th>变化后余额</th>
+                    <th width="180">操作</th>
+                </tr>
+                </thead>
+                <tbody id="yueListBox">
+                </tbody>
+            </table>
+        </div>
+        <script type="text/html" id="yueListTpl">
+            {{# if(d && !d.error && d.datas && d.datas.length){ }}
+            {{# $.each(d.datas,function(index,item){ var item = item; var $index = index }}
+            <tr {{# if(index%2 != 0){ }}class="t-even"{{# } }}>
+                <td>{{top.utils.notNull(item.serialNumber,'--')}}</td>
+                <td>{{top.utils.dateFmt(item.insertTime)}}</td>
+                <td>{{d.win.getYueFrom(item.tradeType)}}</td>
+                <td>
+                    {{# if(item.tradeType == 2){ }}
+                        <em class='fc-red' >
+                            {{# if(item.optNumber){ }}-{{# } }}
+                            {{top.utils.notNull(item.optNumber,'--')}}
+                        </em>
+                    {{# }else{ }}
+                        <em style="color: green;">
+                            {{# if(item.optNumber){ }}+{{# } }}
+                            {{top.utils.notNull(item.optNumber,'--')}}
+                        </em>
+                    {{# } }}
+                    
+
+                </td>
+                <td>{{top.utils.notNull(item.optAfterNumber,'--')}}</td>
+                <td>
+                    {{# if(item.tradeType == 2){ }}
+                        {{# if(item.able){ }}
+                        <a href="javascript:void(0)" class="user-link" onclick="top.utils.openWithTab('invoice-history','发票详情','/sales/invoice/invoiceDetails.html?invoiceId={{item.tradeId}}',{fstBread:'发票'})">查看发票</a>
+                        {{# }else{ }}
+                        <span style="color: #888">发票已废弃</span>
+                        {{# } }}
+                    {{# }else{ }}
+                    {{# } }}
+                    <a href="javascript:void(0)" class="user-link" onclick='showView(this)' data-model='{{JSON.stringify(item)}}'>查看流水单</a>
+                </td>
+            </tr>
+            {{# }); }}
+
+            {{# }else{ }}
+            <tr><td colspan="6">暂无数据</td></tr>
+            {{# } }}
+        </script>
+
+        <div class="page tar rocky-page">
+        </div>
+
+    </div>
+
+
+    #parse("common/header_js_new.vm")
+<script src="/front/js/spjg/spjgCtrl.js?v=$!{jscss_version}"></script>
+<script src="/front/js/invoice/invoiceCtrl.js?v=$!{jscss_version}"></script>
+
+<script type="text/html" id="showViewTpl">
+    <div class="user-form-table user-kp-share-box">
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="tar" width="100">流水单号</td>
+                <td width="auto">{{top.utils.notNull(d.serialNumber,'--')}}</td>
+            </tr>
+            <tr>
+                <td class="tar" width="100">变动时间</td>
+                <td>{{top.utils.dateFmt(d.insertTime,'yyyy年MM月dd日 hh:mm:ss')}}</td>
+            </tr>
+            <tr>
+                <td class="tar" width="100">变动类型</td>
+                <td>{{getYueFrom(d.tradeType)}}</td>
+            </tr>
+            <tr>
+                <td class="tar" width="100">变动前余额</td>
+                <td>{{top.utils.notNull(d.optBeforeNum,'--')}}</td>
+            </tr>
+            <tr>
+                <td class="tar" width="100">变动数量</td>
+                <td>
+                    {{# if(d.tradeType == 2){ }}
+                    <em class='fc-red' style="color: #FF4C4C;" >
+                        {{# if(d.optNumber){ }}-{{# } }}{{top.utils.notNull(d.optNumber,'--')}}
+                    </em>
+                    {{# }else{ }}
+                    <em style="color: green;">
+                        {{# if(d.optNumber){ }}+{{# } }}{{top.utils.notNull(d.optNumber,'--')}}
+                    </em>
+                    {{# } }}
+                 </td>
+            </tr>
+            <tr>
+                <td class="tar" width="100">变动后余额</td>
+                <td>{{top.utils.notNull(d.optAfterNumber,'--')}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script>
+
+    var layer,laypage,laytpl,cb;
+    layui.config({
+        base:'/js/layui/extend/'
+    }).use(['layApp','layer','laypage'],function () {
+        layer = layui.layer, laypage = layui.laypage , laytpl = layui.laytpl;
+        getYeData();
+        
+        setTimeout(function () {
+            getData();
+        },300);
+        /*筛选 排序*/
+        sortInit(function() {
+            getData(sortType);
+        });
+
+    })
+
+    function getYueFrom(id) {
+
+        var text = '';
+        if(id || id == 0){
+            switch (id){
+                case 0:
+                  text= '平台赠送';
+                  break;
+                case 1:
+                    text= '账户充值';
+                    break;
+                case 2:
+                    text= '开票扣减';
+                    break;
+                case 3:
+                    text= '开票失败退还';
+                default:
+                    break;
+            }
+        }
+        return text;
+    }
+
+    function getData(sortType) {
+        top.utils.pageList({
+            first:true,
+            url:'/invoice/ticketRecordPage',
+            dom:$('#yueListBox'),
+            tpl:$("#yueListTpl"),
+            isAdd:true,
+            data:{orderColumn:1,orderDirect:sortType},
+            doc:document.body,
+            laypage:laypage,
+            type: 'post',
+            isGjh:true,
+            win: window
+        })
+    }
+
+    /**
+     * 流水单详情
+     * @param invoice
+     */
+    function showView(obj) {
+        var _html = laytpl($('#showViewTpl').html()).render($(obj).data("model"));
+        top.rui.dynamic({
+            title: "查看流水单",
+            area: ['500px'],
+            content: _html,
+            btn:['关闭'],
+            skin: "dialog-old dialog-old-no-title",
+            yes: function (idx, lay) {
+                top.ue.close(idx);
+            }
+        })
+    }
+
+    function getYeData() {
+        $.ajax({
+            url: '/invoice/searchInvoiceRelateNum',
+            type:'get',
+            success:function (res) {
+                if(res && res.code == 0 && res.data){
+                    $("#yeData").html(laytpl($('#yeDataTpl').html()).render(res.data));
+                }
+            }
+        })
+    }
+
+
+    function sortInit(cb) {
+         /*筛选 排序*/
+         var key_sort = 0;   
+         $('.user-sort-unit').parent('th').css('cursor', 'pointer');
+         $('.user-sort-unit').parent('th').unbind('click').on('click',function(){
+             key_sort ++;
+             if(key_sort%2!=0) {
+                $(this).find('.down').addClass('on').siblings('.up').removeClass('on');
+                sortType = 1;
+             }
+             if(key_sort%2 ==0) {
+                 $(this).find('.up').addClass('on').siblings('.down').removeClass('on');
+                 sortType = 0;
+             }
+             if(cb)  cb(sortType);
+         });
+
+     }
+
+</script>
+
+</body>
+</html>

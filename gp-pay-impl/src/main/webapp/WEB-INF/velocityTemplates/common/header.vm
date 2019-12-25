@@ -1,0 +1,52 @@
+#if($!user && $!{user.appId} == 10)
+	##此页面是医药网 万家 通用尾
+	#parse("common/common_wanjia_header.vm")
+#elseif($!utils.isRequestFromSaas($!request))
+    <!-- Saas请求访问页面，不显示通栏顶栏 -->
+#else
+ <!--头部-->
+ <div class="header">
+    <div class="wrap">
+      <div class="logo fl">
+        <a href="http://$!{wwwHostAndPort}"></a>
+      </div>
+    	#if($!userType == 1)
+    		<a class="function fl" href="/sales/index.html">采购中心</a>
+    		#if($!isWeiDian == 'yes')
+			<a class="subtitle fl" href="$!{user.kkUrl}/merchant/loginForB2B.do?uid=$!{kkuid}&username=$!{kkusername}&ticket=$!{ticket}" target="_blank">我的康康</a>
+			#else
+			<a class="subtitle fl" href="http://act.mypharma.com/kkmyIn.html" target="_blank">轻松开网店</a>
+			#end
+			<div class="search fr">
+				<form action="" method="get" name="header_search_form" id="header_search_form">
+					<input name="type" type="hidden" value="1" id="search_type"/>
+					<input name="s_mode" type="hidden" value="1" id="search_s_mode"/>
+					<input name="s_key" type="text" id="searchTxt" value="药品名称/药品通用名/药品助记码/厂家名称/厂家助记码/供应商名称" onkeypress="fireFoxHandler(event,'http://$!{wwwHostAndPort}/goods/search');" autocomplete="off" class="">
+					<a class="btn" href="javascript:searchAllGoods('http://$!{wwwHostAndPort}/goods/search');" id="searchTxtTo">搜索药品</a>
+				</form>
+            </div>
+    	#elseif($!userType == 2)
+			#if($!mod == "sales")
+    			<!--商业销售中心-->
+    			<a class="subtitle fl" href="/purchase/index.html" id="btn1">采购中心</a>
+    			<a class="function fl" href="/sales/index.html">销售中心</a>
+			#elseif($!mod == "purchase")
+				<!--商业采购中心-->
+				<a class="function fl" href="/purchase/index.html">采购中心</a>
+    			<a class="subtitle fl" href="/sales/index.html">销售中心</a>
+    			<div class="search fr">
+					<form action="" method="get" name="header_search_form" id="header_search_form">
+						<input name="type" type="hidden" value="1" id="search_type"/>
+						<input name="s_mode" type="hidden" value="1" id="search_s_mode"/>
+                        <input type="text" name="s_key" id="searchTxt" value="药品名称/药品通用名/药品助记码/厂家名称/厂家助记码/供应商名称" onkeypress="fireFoxHandler(event,'http://$!{wwwHostAndPort}/goods/search');" autocomplete="off" class="">
+                        <a class="btn" href="javascript:searchAllGoods('http://$!{wwwHostAndPort}/goods/search');" id="searchTxtTo">搜索药品</a>
+					</form>
+                </div>
+			#end
+    	#elseif($!userType == 3)
+			<!--工业中心-->
+    		<a class="function fl" href="/sales/index.html">销售中心</a>
+    	#end
+    </div>
+</div>
+#end

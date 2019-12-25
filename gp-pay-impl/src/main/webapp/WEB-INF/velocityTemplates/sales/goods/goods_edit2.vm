@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>商品信息修改  - 我的医药网</title>
+
+    <!-- 公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    <style type="text/css">
+    .info_sheet li {
+    float: left;
+    margin: 5px 0;
+    width: 515px;
+    height: 50px;
+    line-height: 30px;
+     }
+    .info_box3 li label{
+     width: 306px;
+     }
+   .info_sheet li label.help-tips {
+    color: red;
+    font-size: 9px;
+    text-align: left;
+    margin-left: 175px;
+    }
+       .info_sheet li .sltitem li{
+       height:22px;
+       line-height:22px;
+       }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+        	#parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+         #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                	<p><a href="/sales/index.html" class="color">销售中心 </a>&gt; 商品管理 &gt; 商品信息修改</p>
+                </div>
+                <h3 class="info_title">商品信息</h3>
+                <div class="info_sheet cc">
+                	<form action="" method="post" id="">
+                    <input type="hidden" id="taxrateMin" name="taxrateMin" value="$!{taxrateMin}" />
+                    <input type="hidden" id="taxrateMax" name="taxrateMax" value="$!{taxrateMax}" />
+                	<input type="hidden" id="gId" name="gId"  value="$!{goods.gId}"/>
+                        <ul>
+                            <li>
+                                <label>通用名（化学名）<font color="red">*</font>：</label>
+
+                                <input class="input" name="gName" type="text" value="$!{goods.gName}" id="gName" onblur="getFisrtSpell(this,'通用名必填.',$('#gName_info'),'gNameCode',this.value,$('#gNameCode_info'));">
+
+                                <label class="help-tips" id="gName_info"></label>
+                            </li>
+                            <li>
+                                <label>商品助记码<font color="red">*</font>：</label>
+                                <input class="input" name="gNameCode" type="text" value="$!{goods.gNameCode}" id="gNameCode" onblur="isEmptyContent(this,'商品助记码必填.',$('#gNameCode_info'));">
+                                <label class="help-tips" id="gNameCode_info"></label>
+                            </li>
+                            <li>
+                                <label>商品名：</label>
+                                <input class="input" name="gCommonName" type="text" value="$!{goods.gCommonName}" id="gCommonName"  >
+                            </li>
+                            <li>
+                                <label>别名：</label>
+                                <input class="input" name="gAlias" type="text" value="$!{goods.gAlias}" id="gAlias">
+                            </li>
+                            <li>
+                                <label>商品编码：</label>
+                                <input class="input" name="gSn" type="text" value="$!{goods.gSn}" id="gSn" maxlength="60">
+                            </li>
+                            <li>
+                                <label>批准文号<font color="red">*</font>：</label>
+                                <input class="input" name="gLicenseNo" type="text" value="$!{goods.gLicenseNo}" id="gLicenseNo" onblur="isEmptyContent(this,'批准文号必填.',$('#gLicenseNo_info'));">
+                                <label class="help-tips" id="gLicenseNo_info"></label>
+                            </li>
+                            <li>
+                                <label>生产厂家<font color="red">*</font>：</label>
+                                <input class="input" name="gManufacture" type="text" value="$!{goods.gManufacture}" id="gManufacture"  onblur="getFisrtSpell(this,'生产厂家必填.',$('#gManufacture_info'),'gManufactureCode',this.value,$('#gManufactureCode_info'));">
+                                <label class="help-tips" id="gManufacture_info"></label>
+                            </li>
+                            <li>
+                                <label>生产厂家助记码：</label>
+                                <input class="input" name="gManufactureCode" type="text" value="$!{goods.gManufactureCode}" id="gManufactureCode" >
+                                <label class="help-tips" id="gManufactureCode_info"></label>
+                            </li>
+                            <li>
+                                <label>商品规格<font color="red">*</font>：</label>
+                                <input class="input" name="gSpecifications" type="text" value="$!{goods.gSpecifications}" id="gSpecifications" onblur="isEmptyContent(this,'商品规格必填.',$('#gSpecifications_info'));">
+                                <label class="help-tips" id="gSpecifications_info"></label>
+                            </li>
+                            <li>
+                                <label>基本单位<font color="red">*</font>：</label>
+                                <input class="input" name="gUnit" type="text" value="$!{goods.gUnit}" id="gUnit" onblur="isEmptyContent(this,'基本单位必填.',$('#gUnit_info'));">
+                                <label class="help-tips" id="gUnit_info"></label>
+                            </li>
+
+                            <li>
+                                <label>是否拆零销售<font color="red">*</font>：</label>
+                                <input class="radio" type="radio" name="gCanSplit" id="radio_01" value="1" #if($goods.gCanSplit==1) checked="checked" #end onclick="gMiddlePackageSHCon(this.value);"/>
+                            	<label class="text" for="radio_01">是</label>
+                            	<input class="radio" type="radio" name="gCanSplit" id="radio_02"  value="0" #if($goods.gCanSplit==0) checked="checked" #end onclick="gMiddlePackageSHCon(this.value);"/>
+                            	<label class="text" for="radio_02">否</label>
+                            </li>
+                            <li style="display:block;" id="gMiddlePackageLi1">
+                                <label>中包装数量<font color="red">*</font>：</label>
+                                <input class="input" name="gMiddlePackage" type="text" value="$!{goods.gMiddlePackage}" id="gMiddlePackage1"  min="0" max="99999" maxlength="11" onblur="isPInt(this,'中包装数量必填且为整数.',$('#gMiddlePackage_info1'));">
+                                <label class="help-tips" id="gMiddlePackage_info1"></label>
+                            </li>
+                            <li style="display:none;" id="gMiddlePackageLi2">
+                                <label>中包装数量：</label>
+                                <input class="input" name="gMiddlePackage" type="text" value="$!{goods.gMiddlePackage}" id="gMiddlePackage2"  min="0" max="99999" maxlength="11" onblur="isPIntEmpty(this,'中包装数量为整数.',$('#gMiddlePackage_info2'));">
+                                <label class="help-tips" id="gMiddlePackage_info2"></label>
+                            </li>
+                            <li>
+                                <label>大包装数量：</label>
+                                <input class="input" name="gBigPackage" type="text" value="$!{goods.gBigPackage}" id="gBigPackage" maxlength="11" onblur="isPIntEmpty(this,'大包装数量为整数.',$('#gBigPackage_info'));">
+                                <label class="help-tips" id="gBigPackage_info"></label>
+                            </li>
+
+                            <li>
+                                <label>商品状态<font color="red">*</font>：</label>
+                                <input class="radio" type="radio" name="gStatus" id="radio_03" #if($goods.gStatus==0) checked="checked" #end value="0"/>
+                            	<label class="text" for="radio_03">下架</label>
+                            	<input class="radio" type="radio" name="gStatus" id="radio_04" #if($goods.gStatus==1) checked="checked" #end  value="1"/>
+                            	<label class="text" for="radio_04">上架</label>
+                            	<i class="i-tips-l">
+                               	#if($goods.gdowntype==0) &nbsp; #else
+		                           	质检不通过下架,
+		                           	#if($goods.gdowntype==1) 无批准文号 #end
+		                           	#if($goods.gdowntype==2) 批准文号过期、注销、错误 #end
+		                           	#if($goods.gdowntype==3) 无规格或规格不明确 #end
+		                           	#if($goods.gdowntype==4) 根据批文查询，名称错误 #end
+		                           	#if($goods.gdowntype==5) 根据批文查询，规格错误 #end
+		                           	#if($goods.gdowntype==6) 根据批文查询，厂家错误 #end
+		                           	#if($goods.gdowntype==7) 其它 #end
+                               	#end
+                               	</i>
+                           </li>
+                            <li>
+                                <label>商品条形码：</label>
+                                <input class="input" name="gBarCode" type="text" value="$!{goods.gBarCode}" id="gBarCode">
+                            </li>
+
+                            <li>
+                                <label>商品内码(供应商)：</label>
+                                <input class="input" name="gInSn" type="text" value="$!{goods.gInSn}" id="gInSn" #if($isErp==1) disabled="disabled" #end>
+                            </li>
+
+                            #if($!utils.notEmpty($!taxrateList))
+                                <li>
+                                    <label>商品税率：</label>
+                                    <select id="gTaxRate" name="gTaxRate" style="width: 60px;">
+                                            #foreach($taxrate in $!taxrateList)
+                                                #if($taxrate == $!{goods.gTaxRate})
+                                                    <option selected value=$!taxrate>$!taxrate</option>
+                                                #end
+
+                                                #if($taxrate != $!{goods.gTaxRate})
+                                                    <option value=$!taxrate>$!taxrate</option>
+                                                #end
+                                            #end
+                                    </select>
+                                </li>
+
+                                <li>
+                                    <label>商品税务码：</label>
+                                    <input class="input" id="gTaxRateCode" name="gTaxRatecode" type="text" value="$!{goods.gTaxRateCode}"  maxlength="20" onkeyup="num(this);">
+                                </li>
+                            #end
+
+
+
+                            #if($user.userType==2)
+                            <li>
+                                <label>商品销售控制：<font color="red">*</font>：</label>
+                                <input class="radio" type="radio" name="gControl" id="radio_05" #if($goods.gControl==0) checked="checked" #end value="0"/>
+                            	<label class="text" for="radio_05">普通药品</label>
+                            	<input class="radio" type="radio" name="gControl" id="radio_06" #if($goods.gControl==1) checked="checked" #end value="1"/>
+                            	<label class="text" for="radio_06">医院专供</label>
+                           </li>
+                           #end
+                           #if($user.userType==3)
+                           <li style="width: 900px;">
+                               <label>商品库存<font color="red">*</font>：</label>
+                               <input class="input_price" id="gcn" name="gcn" type="text" value="$!{goods.gcn}" onblur="isPIntEmpty(this,'库存数量为整数.',$('#label_gcn'));">
+                               <input type="checkbox" name="oversale" id="oversale" #if($goods.oversale==1) checked #end value="1" onclick="showOversaleInfo()" style="float: left;>
+                                <span style="vertical-align: middle;float: left;">允许超卖</span>
+                               <span class="i-tips" id="label_oversale" style="margin-left: 12px;">#if($goods.oversale==1) 当商品库存售罄，用户还可以无限够买. #end</span>
+                               <label class="help-tips" id="label_gcn" ></label>
+                           </li>
+                           <li>
+                                <label>零售价<font color="red">*</font>：</label>
+                                <input class="input_price" name="gPrice" type="text" value="$!{goods.gPrice}" id="gPrice" onblur="isPrice(this,'零售价必填且为整数或小数,小数位最多为四位.',$('#gPrice_info'));" maxlength="20">
+                                <label class="help-tips" id="gPrice_info" ></label>
+                            </li>
+                           #end
+                        </ul>
+               		</form>
+                </div>
+                #if($user.userType==3)
+                <h3 class="info_title">产品一级经销商</h3>
+                <div class="info_sheet cc">
+                    <div class="order_detail">
+                        <div class="toogle-wrap" id="promotion_member">
+                            <div class="tab-box">
+                                <div class="tab-con">
+                                    <ul id="customerList">
+                                        <!--                                     <li> -->
+                                        <!--                                         <div class="customer-item"><b></b>山东天元大药房</div> -->
+                                        <!--                                     </li> -->
+                                        <li><a href="javascript:;" class="add_pro" id="sel-a" onclick="addCusteomer()">+ 添加客户</a></li>
+                                        #foreach($item in $goodsAgencyList)
+                                        <li name='eIds' id='eIds_$item.agencyEId' value='$item.agencyEId' suId='$item.agencySuId'>
+                                        	<div class='customer-item item-selected'><b onclick='delli($item.agencyEId)'></b>$item.agencyEName</div>
+                                        </li>
+                                        #end
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                #end
+                <h3 class="info_title">商品分类信息</h3>
+                <div class="info_sheet cc">
+                	<form action="" method="post" id="">
+                        <ul>
+                            <li class="li_sort">
+                                <label>商品分类<font color="red">*</font>：</label>
+                                <div class="sltitem sltitem_top">
+                                    <span class=""></span>
+                                    <ul>
+                                        <li data-value=""><a href="javascript:;"></a></li>
+                                    </ul>
+                                    <input type="hidden" name="sgcId1" id="sgcId1" value="$!{goods.sgcId1}">
+                                </div>
+                                <div class="sltitem sltitem_top">
+                                    <span class=""></span>
+                                    <ul>
+                                        <li data-value=""><a href="javascript:;"></a></li>
+                                    </ul>
+                                   <input type="hidden" name="sgcId2" id="sgcId2" value="$!{goods.sgcId2}">
+                                </div>
+                                <label class="help-tips" id="sgcId1_info"></label>
+                            </li>
+                            <li>
+                            #if($user.userType==2)
+                                <label>商品类型：</label>
+                                #if($goods.gType==3)
+                                    <input class="radio" type="radio" name="gType" id="gType_04" value="3" disabled="true" checked="checked" />
+                                #else
+
+                                    <label class="text" for="gType_02" title="新品上架的商品统一会在旗舰商城“找新品”页面集中显示 去看看>>">
+                                        <input class="check" type="checkbox" name="gType" id="gType_02" #if($!{goods.gType}==2)checked="checked"#end value="2" style="vertical-align: middle"/>
+                                        新品上架
+                                    </label>
+
+                                    <label class="text" for="gType_03" title="诊所专区推荐的商品统一会在旗舰商城“诊所专区”频道中显示。去看看>>">
+                                        <input class="check" type="checkbox" name="clinicSupplyFlag" id="gType_03" #if($!{goods.clinicSupplyFlag}==1)checked="checked"#end value="1" style="vertical-align: middle"/>
+                                        诊所专区推荐
+                                    </label>
+                                #end
+                            #end
+                            </li>
+                       #*    #if($user.userType==2)
+                             <li>
+                            	<label>备注：</label>
+                                <input class="input_price" name="gRemark" type="text" value="$!{goods.gRemark}" id="gRemark"   maxlength="250"  >
+                             </li>
+                            #end*#
+                            #if($user.userType==2)
+                            <li class="li_sort">
+                                <label>药品剂型分类：</label>
+                                <div class="sltitem">
+                                    <span class="" ></span>
+                                    <ul>
+                                    #if(!$null.isNull($!{goodsDosageFormsList}) && ($!goodsDosageFormsList.size()>0))
+                                    #foreach($item in $goodsDosageFormsList)
+                                        <li data-value="$!{item.gdfId}" ><a href="javascript:;">$item.gdfName</a></li>
+                                    #end
+                                    #end
+                                    </ul>
+                                    <input type="hidden" name="gdfId" id="gdfId">
+                                </div>
+                            </li>
+                            #end
+                            #if($user.userType==3)
+                            <li class="area_box">
+                             <label class="w132">配置销售区域<font color="red">*</font>：</label>
+                               <div class="site_box">
+                                #if(!$null.isNull($!{siteFactoryList}) && ($!siteFactoryList.size()!=0))
+                                    <span><input type="checkbox" class="checkbox"  name="selectAllSite"  id="selectAllSite" onclick="selectAllSiteBox()"/>
+                                     <label class="text" for="selectAllSite">全选</label></span>
+
+                                    #foreach($item in $siteFactoryList)
+                                        <span><input type="checkbox" class="checkbox" value="$!{item.siteId}"  name="siteId"  id="$item.siteId" #foreach($site in $siteGoodsList) #if($site.siteId==$item.siteId)checked="checked"#end#end />
+                                        <label class="text" for="$!{item.siteId}">$item.siteName</label></span>
+                                    #end
+                                #end
+                              </div>
+                            </li>
+                            #end
+                        </ul>
+               		</form>
+                </div>
+                #if($user.userType==2)
+                <h3 class="info_title">价格和库存</h3>
+                <div class="info_sheet cc info_box3 ">
+                	<form action="" method="post" id="">
+                        <ul>
+                            <li>
+                                <label>成本价</label>
+                                <input class="input_price" name="gCost" type="text" value="$!{goods.gCost}" id="gCost" onblur="isPriceNotEmpty(this,'成本价为整数或小数,小数位最多为四位.',$('#gCost_info'));" maxlength="20">
+                                <label class="help-tips" id="gCost_info" ></label>
+                            </li>
+                            <li>
+                                <label>零售价<font color="red">*</font>：</label>
+                                <input class="input_price" name="gPrice" type="text" value="$!{goods.gPrice}" id="gPrice" onblur="isPrice(this,'零售价必填且为整数或小数,小数位最多为四位.',$('#gPrice_info1'));" maxlength="20">
+                                <label class="help-tips" id="gPrice_info1" ></label>
+                            </li>
+                            <li>
+                                <label>商品基价<font color="red">*</font>：</label>
+                                <input class="input_price" name="gBasePrice" type="text" value="$!{goods.gBasePrice}" id="gBasePrice" onblur="isPrice(this,'商品基价必填且为整数或小数,小数位最多为四位.',$('#gBasePrice_info'));" maxlength="20">
+                                <label class="help-tips" id="gBasePrice_info" ></label>
+                            </li>
+                            <li style="width: 900px;">
+                                <label>商品库存<font color="red">*</font>：</label>
+                                <input class="input_price" id="gcn" name="gcn" type="text" value="$!{goods.gcn}" onblur="isPIntEmpty(this,'库存数量为整数.',$('#label_gcn'));">
+                                <input type="checkbox" name="oversale" id="oversale" value="1" #if($goods.oversale==1) checked #end onclick="showOversaleInfo()" style="vertical-align: middle;float: left;">
+                                <span>允许超卖</span>
+                                <span class="i-tips" id="label_oversale" style="margin-left: 12px;">#if($goods.oversale==1) 当商品库存售罄，用户还可以无限够买. #end</span>
+                                <label class="help-tips" id="label_gcn" ></label>
+                            </li>
+
+##                            #if(!$null.isNull($!{shopCustomerTypeList}) && ($!shopCustomerTypeList.size()>0))
+##                            #foreach($item in $shopCustomerTypeList)
+##                            <li>
+##                                <label>$!{item.sctName}的库存数量<font color="red">*</font>：</label>
+##                                <input class="input_price" id="$!{item.sctNumberField}" name="$!{item.sctNumberField}" type="text" value="$!goodsCustomNumber.get($!{item.sctNumberField})" onblur="isPIntEmpty(this,'库存数量为整数.',$('#label_$!{item.sctNumberField}'));">
+##                                <label class="help-tips" id="label_$!{item.sctNumberField}" ></label>
+##                            </li>
+##                            #end
+##                            #end
+                        	<li class="li_one">
+                            	<label>是否允许ERP同步覆盖：</label>
+                                <input class="radio" type="radio" name="erpOverride" id="erpOverride_1" value="1"  #if($!{goods.erpOverride.equals(1)})checked="checked"#end/>
+                            	<label class="text" for="erpOverride_1">允许</label>
+                            	<input class="radio" type="radio" name="erpOverride" id="erpOverride_2" #if($!{goods.erpOverride.equals(0)})checked="checked"#end value="0" />
+                            	<label class="text" for="erpOverride_2">不允许</label>
+                            	<i class="i-tips">注：更新内容包括商品信息、商品上下架状态、商品库存、商品基价（不影响商品定价体系）</i>
+                            </li>
+                        </ul>
+               		</form>
+                </div>
+                #end
+                #if($user.userType==2)
+                <h3 class="info_title">关键权限</h3>
+                <div class="info_sheet cc">
+                	<form action="" method="post" id="">
+                        <ul>
+                           <li>
+                                <label>内外销<font color="red">*</font><i class="order-tips" data-tips="true" data-tips-title="
+								商品内外销设置：<br>
+								内销：经营区域为“区域内”的客户可购买此商品<br>
+								外销：经营区域为“区域外”的客户可购买此商品<br>
+								不限：所有有权限采购客户可购买此商品
+								"></i>：</label>
+                            	<input class="radio" type="radio" name="gArea" id="gArea_01" value="1" #if($!{goods.gArea}==1)checked="checked"#end />
+                            	<label class="text" for="gArea_01">内销</label>
+                            	<input class="radio" type="radio" name="gArea" id="gArea_02" value="2" #if($!{goods.gArea}==2)checked="checked"#end />
+                            	<label class="text" for="gArea_02">外销</label>
+                            	<input class="radio" type="radio" name="gArea" id="gArea_03"  value="0" #if($!{goods.gArea}==0)checked="checked"#end/>
+                            	<label class="text" for="gArea_03">不限 </label>
+                            </li>
+                            <li>
+
+                            </li>
+                            <li>
+                                <label>分单仓储地点<i class="order-tips" data-tips="true" data-tips-title="设置商品所属仓储地点，用于采购客户下单时，不同仓储地点的商品，系统自动拆单"></i>：</label>
+                                #if(!$null.isNull($!{shopOrderCateList}) && ($!shopOrderCateList.size()>0))
+		                        #foreach($item in $shopOrderCateList)
+		                        <div class="fl">
+		                        	<input type="radio"  name="gOrderCate" class="radio" value="$!{item.socId}" #if($!goods.gOrderCate==$!{item.socId})checked="true"#end id="$!{item.socId}"/>
+		                        	<label class="text" for="$!{item.socId}">$!{item.socName} </label>
+		                        </div>
+		                        #end
+		                        #else
+		            	         <label>没有登记可选的仓储地点！</label>
+		                        #end
+
+                            </li>
+                            <li class="li_one">
+                                <label>采购权限<i class="order-tips" data-tips="true" data-tips-title="设置商品所属权限分类，用于采购客户建立采购关系时进行分配可采购的商品权限"></i>：</label>
+                                <div class="right_box">
+                                #if(!$null.isNull($!{shopPurviewMap}) && ($!shopPurviewMap.size()>0))
+                                   #foreach($key in $!shopPurviewMap.keySet())
+                                   <p class="title">
+                                   $!{key}
+                                   </p>
+                                   <p class="ctn">
+                                       #if(!$null.isNull($!shopPurviewMap.get($key)) && $!shopPurviewMap.get($key).size()>0)
+                                            #foreach($tempShopPurview in $shopPurviewMap.get($key))
+                                            <div class="fl">
+                                                <input type="radio"  name="gPurview" class="radio" id="$!{tempShopPurview.spId}" value="$!{tempShopPurview.spId}" #if($!goods.gPurview==$!{tempShopPurview.spId})checked="true"#end/>
+                                                <label class="text" for="$!{tempShopPurview.spId}">$!{tempShopPurview.spName} </label>
+                                           </div>
+                                            #end
+				                   </p>
+                                       #end
+                                   #end
+                                #else
+                                   <label>没有登记可选的采购权限！</label>
+                                #end
+                                </div>
+                            </li>
+                        </ul>
+               		</form>
+                </div>
+                #end
+                <div class="info_btn tac">
+                	<a href="javascript:add();" class="btn">保存</a>
+                	<a href="/sales/goods/goods_index.html" onclick="top.utils.frameBackDel();" class="btn btn-close">取消</a>
+                </div>
+            </div>
+            <!-- 用户中心_主体内容_E -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 添加页面 -->
+    <div class="mask" id="popUpMaskCustomer"></div>
+    <div class="dialog w460" id="popUpDIVCustomer" style="width:900px;height:500px;">
+        <div class="head"><span class="dialog-title">选择客户</span><a href="javascript:closePopUpDIV('popUpMaskCustomer','popUpDIVCustomer');" class="btn-close"></a></div>
+        <div class="con" id="contentEnterprise">
+        </div>
+    </div>
+    #parse("/common/footer.vm")
+
+    <!-- 脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}"></script>
+    <script src="/h5/res/layer2/layer.js?v=$!{jscss_version}"></script>
+    <script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/goodsAgency.js?v=$!{jscss_version}"></script>
+    #parse("common/common_script.vm")
+   <script>
+       /*设置框架返回按钮*/
+       top.utils.frameBack({
+           handler:function (btn) {
+               location.href = document.referrer;
+           }
+       })
+ 	$(function(){
+##        $.each($!{taxrateList}, function(index, item){
+##            $("#gTaxRate").append("<option  value="+item+">"+item+"%</option>");
+##        });
+
+
+ 	    $.sltitem.select("gdfId", "$!{goods.gdfId}");
+ 	    var gManufactureCodePY = $("#gManufactureCode").val();
+ 	    $("#gManufactureCode").val(stripscript(ToCDB(gManufactureCodePY)));
+	    //装载一级商品类别，二级商品类别
+		loadShopGoodsGate('$!goods.sgcId1','$!goods.sgcId2','','/sales/store/shop_goodscate_getShopGoodsCateByPid');
+		$("#sgcId1").change(function(){
+			var provinceId = $(this).val();
+			var townId = findShopGoodsGate($("#sgcId2"),"",provinceId,'/sales/store/shop_goodscate_getShopGoodsCateByPid');
+			loadSltitem();
+		});
+	     gMiddlePackageSHCon($goods.gCanSplit);
+	     var initGTypeValue = $("input[name='gType']:checked").val();
+		 if(initGTypeValue==1 || initGTypeValue==3)
+	     {
+	         $("#gRemark").attr("disabled",false);
+	     }
+	});
+
+    // 销售区域全选
+    function selectAllSiteBox() {
+        var chk=$("#selectAllSite").is(":checked");
+        $("[name = siteId]:checkbox").each(function(){
+            if(chk){
+                $(this).attr("checked", true).prop("checked", true);
+            }else{
+                $(this).removeAttr("checked").prop("checked", false);
+            }
+        });
+    }
+
+	//省市区加载
+	function loadShopGoodsGate(provinceId,townId,areaId,url){
+		if(provinceId){
+			findShopGoodsGate($("#sgcId1"),provinceId,0,url);
+			findShopGoodsGate($("#sgcId2"),townId,provinceId,url);
+		}else{
+			var _provinceId = findShopGoodsGate($("#sgcId1"),"",0,url);
+			var _townId = findShopGoodsGate($("#sgcId2"),"",_provinceId,url);
+		}
+		loadSltitem();
+	}
+
+//object:加载对象    value:默认值  lpId:上级id , url 请求地址
+	function findShopGoodsGate(object,value,lpId,url){
+		var id = 0;
+		$.ajax({
+            url: url,
+            data: {"pId": lpId},
+            type:"post",
+            async:false,
+            success: function(data) {
+				var location = data.data;
+				if(location!=''){
+                    var jObject = $(object).siblings("ul");
+                    jObject.prev().text("");
+                    jObject.empty();//清除select中的 option
+                    $.each(location,function(index,item){
+                    	if(index ==0 ){
+                    		id = item.sgcId;
+                    		if(!value){
+                    			jObject.prev().text(item.sgcName).removeClass("on");
+                       			jObject.next().val(item.sgcId).change();
+                    		}
+                    	}
+                    	if(value == item.sgcId){
+                    		jObject.prev().text(item.sgcName).removeClass("on");
+                    		jObject.next().val(item.sgcId);
+                    	}
+                        var opt ='<li data-value="'+item.sgcId+'"><a href="javascript:;">'+item.sgcName+'</a></li>';
+                        jObject.append(opt);
+                    });
+                }else{
+                	var jObject = $(object).siblings("ul");
+                	$(object).val("");
+                    jObject.prev().text("");
+                    jObject.empty();//清除select中的 option
+                }
+            }
+        });
+		return id;
+	}
+		//下拉框点击事件
+	function loadSltitem(){
+		$(".sltitem").unbind("click");
+	    //自定义下拉框
+		$(".sltitem").click(function(e){
+			e.stopPropagation();
+			var len = $(this).find('li').length;
+			$(this).find("span").addClass("on");
+			if(len > 6){
+				$(this).find("ul").css('height','120px').show();
+			}else{
+				$(this).find("ul").show();
+			}
+		});
+
+		$(".sltitem li").unbind("click");
+		$(".sltitem li").click(function(e){
+			e.stopPropagation();
+			var text = $(this).text();
+			var value = $(this).data("value");
+			$(this).closest("ul").prev().text(text).removeClass("on");
+			$(this).closest("ul").next().val(value).change();
+			$(this).closest("ul").hide();
+		});
+	}
+	//助记码
+	function getFisrtSpell(object,info,obj2,objId,val,objInfo) {
+	   	var objectCode = $.trim($(object).val());
+    	if(""==objectCode)
+    	{
+    		showMsg($(obj2), info);
+    		return;
+    	}else{
+    	    showMsg($(obj2));
+    	}
+
+       if(val.length>0){
+         $.ajax({
+         url: '/sales/goods/goods_getFisrtSpell',
+         data: {"keyword":objectCode},
+         type: 'POST',
+         dataType: 'json',
+         success: function(result) {
+                $("#"+objId).val(stripscript(ToCDB(result.data)));
+                showMsg($(objInfo));
+             }
+         });
+         }
+    }
+
+       //过滤部分符号
+    function stripscript(s) {
+        var pattern = new RegExp("[`~!@#$^&*=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？]");
+        var rs = "";
+        for (var i = 0; i < s.length; i++) {
+        	rs = rs+s.substr(i, 1).replace(pattern, '').replace(' ', '');
+        }
+        	return rs;
+    }
+ 	//全角转换为半角函数
+	function ToCDB(str) {
+		var tmp = "";
+		for(var i=0;i<str.length;i++) {
+			if(str.charCodeAt(i)>65248&&str.charCodeAt(i)<65375) {
+				tmp += String.fromCharCode(str.charCodeAt(i)-65248);
+			} else {
+					tmp += String.fromCharCode(str.charCodeAt(i));
+			}
+		}
+			return tmp;
+	}
+	//拆单对中，大包装的控制
+	function gMiddlePackageSHCon(value){
+	    if(0==value)
+	    {
+	        $("#gMiddlePackageLi1").show();
+	        $("#gMiddlePackageLi2").hide();
+	    }
+	    if(1==value)
+	    {
+	        $("#gMiddlePackageLi2").show();
+	        $("#gMiddlePackageLi1").hide();
+	    }
+
+	}
+
+	function showOversaleInfo() {
+        if($("#oversale").prop("checked")){
+            $('#label_oversale').html("当商品库存售罄，用户还可以无限够买.");
+        }else{
+            $('#label_oversale').html("");
+        }
+    }
+//添加保存
+     function add() {
+
+	     var validatyFlag = false;
+         var goodsObj = {};
+		 goodsObj.gName = $.trim($("#gName").val());
+     	 if(""==goodsObj.gName)
+     	 {
+     		showMsg($('#gName_info'), '通用名必填.');
+     		validatyFlag = true;
+     	 }
+     	goodsObj.gNameCode = $("#gNameCode").val();
+     	if(""==goodsObj.gNameCode)
+    	 {
+     		showMsg($('#gNameCode_info'), '商品助记码必填.');
+     		validatyFlag = true;
+    	 }
+
+         goodsObj.gTaxRate = $("#gTaxRate option:selected").val();
+         goodsObj.gTaxRateCode = $("#gTaxRateCode").val();
+
+    	 goodsObj.gCommonName=$("#gCommonName").val();
+     	goodsObj.gAlias = $("#gAlias").val();
+     	goodsObj.gSn = $("#gSn").val();
+        goodsObj.gInSn = $("#gInSn").val();
+     	goodsObj.gLicenseNo = $("#gLicenseNo").val();
+     	if(""==goodsObj.gLicenseNo)
+   	    {
+     		showMsg($('#gLicenseNo_info'), '批准文号必填.');
+     		validatyFlag = true;
+   	    }
+     	goodsObj.gManufacture = $("#gManufacture").val();
+     	if(""==goodsObj.gManufacture)
+   	    {
+     		showMsg($('#gManufacture_info'), '生产厂家必填.');
+     		validatyFlag = true;
+   	    }
+     	goodsObj.gManufactureCode = $("#gManufactureCode").val();
+     	/*if(""==goodsObj.gManufactureCode)
+   	    {
+     		showMsg($('#gManufactureCode_info'), '生产厂家助记码必填.');
+     		validatyFlag = true;
+   	    }
+   	    */
+     	goodsObj.gSpecifications = $("#gSpecifications").val();
+     	if(""==goodsObj.gSpecifications)
+   	    {
+     		showMsg($('#gSpecifications_info'), '商品规格必填.');
+     		validatyFlag = true;
+   	    }
+     	goodsObj.gUnit = $("#gUnit").val();
+     	if(""==goodsObj.gUnit)
+   	    {
+     		showMsg($('#gUnit_info'), '基本单位必填.');
+     		validatyFlag = true;
+   	    }
+   	    goodsObj.gCanSplit = $("input[name='gCanSplit']:checked").val();
+
+        var g = /^[1-9]*[1-9][0-9]*$/;
+        if(0==goodsObj.gCanSplit)
+        {
+            goodsObj.gMiddlePackage = $("#gMiddlePackage1").val();
+            if(''==goodsObj.gMiddlePackage || !(g.test(goodsObj.gMiddlePackage)))
+    	    {
+        	    showMsg($('#gMiddlePackage_info1'), '中包装数量必填且为整数.');
+        	    validatyFlag = true;
+    	    }
+        }else{
+            goodsObj.gMiddlePackage = $("#gMiddlePackage2").val();
+            if($.trim(goodsObj.gBigPackage).length>0 && !(g.test(goodsObj.gMiddlePackage)))
+    	    {
+        	    showMsg($('#gMiddlePackage_info2'), '中包装数量为整数.');
+        	    validatyFlag = true;
+    	    }
+        }
+     	goodsObj.gBigPackage = $("#gBigPackage").val();
+
+     	if($.trim(goodsObj.gBigPackage).length>0 && !(g.test(goodsObj.gBigPackage)))
+    	{
+        	showMsg($('#gBigPackage_info'), '大包装数量为整数.');
+        	validatyFlag = true;
+    	}
+         var intg = /^([1-9]\d*|[0]{1,1})$/;
+    	#if($user.userType==3)
+   	    goodsObj.gNumber = $("#gcn").val();
+           if(!(intg.test(goodsObj.gNumber)))
+   	       {
+   		          showMsg($('#label_gcn'), '库存数量必填且为整数.');
+   		          validatyFlag = true;
+   	       }
+   	    #end
+     	goodsObj.gPrice = $("#gPrice").val();
+     	var g = /^([1-9]\d{0,13}|0)(\.\d{1,4})?$/;
+        if(!(g.test(goodsObj.gPrice)))
+   	    {
+   		   showMsg($('#gPrice_info1'), '零售价必填且为整数或小数,小数位最多为四位.');
+   		   validatyFlag = true;
+   	    }
+
+   	    var goodsCustomNumber = {};
+        #if($user.userType==2)
+        	goodsObj.gNumber = $("#gcn").val();
+            if(!(intg.test(goodsObj.gNumber)))
+            {
+                showMsg($('#label_gcn'), '库存数量必填且为整数.');
+                validatyFlag = true;
+            }
+   	       goodsObj.gCost = $("#gCost").val();
+           if($.trim(goodsObj.gCost).length>0 && !(g.test(goodsObj.gCost)))
+   	       {
+   		      showMsg($('#gCost_info'), '成本价为整数或小数,小数位最多为四位.');
+   		      validatyFlag = true;
+   	       }
+   	       goodsObj.gBasePrice = $("#gBasePrice").val();
+           if(!(g.test(goodsObj.gBasePrice)))
+   	       {
+   		      showMsg($('#gBasePrice_info'), '商品基价必填且为整数或小数,小数位最多为四位.');
+   		      validatyFlag = true;
+   	       }
+        goodsObj.gOrderCate = $("input[name='gOrderCate']:checked").val();
+   	    goodsObj.gPurview = $("input[name='gPurview']:checked").val();
+   	    if(!goodsObj.gPurview)
+   	    {
+
+   	    }
+
+//   	 	var gregexp = /^([1-9]\d*|[0]{1,1})$/;
+//
+//   	 gcn_1 = $.trim($("#gcn_1").val());
+//   	 if(gcn_1 =='' || !(gregexp.test(gcn_1))){
+//	          showMsg($('#label_gcn_1'), '库存数量必填且为整数.');
+//	          validatyFlag = true;
+//	    }
+//   	if($("#gcn_2")[0] != undefined){
+//   		gcn_2 = $.trim($("#gcn_2").val());
+//  	 	if(gcn_2 =='' || !(gregexp.test(gcn_2))){
+//         showMsg($('#label_gcn_2'), '库存数量必填且为整数.');
+//	         validatyFlag = true;
+//	   }
+//   	}
+//  	if($("#gcn_3")[0] != undefined){
+//  		gcn_3 = $.trim($("#gcn_3").val());
+// 	 	if(gcn_3 =='' || !(gregexp.test(gcn_3))){
+//	        showMsg($('#label_gcn_3'), '库存数量必填且为整数.');
+//	        validatyFlag = true;
+//	  	}
+//  	}
+// 	if($("#gcn_4")[0] != undefined){
+// 		gcn_4 = $.trim($("#gcn_4").val());
+//	 	if(gcn_4 =='' || !(gregexp.test(gcn_4))){
+//	        showMsg($('#label_gcn_4'), '库存数量必填且为整数.');
+//	        validatyFlag = true;
+//	  	}
+// 	}
+//	 if($("#gcn_5")[0] != undefined){
+//	 	gcn_5 = $.trim($("#gcn_5").val());
+// 		 if(gcn_5 =='' || !(gregexp.test(gcn_5))){
+//	        showMsg($('#label_gcn_5'), '库存数量必填且为整数.');
+//	        validatyFlag = true;
+//	 	 }
+//	 }
+// 	if($("#gcn_6")[0] != undefined){
+// 		gcn_6 = $.trim($("#gcn_6").val());
+//	 	if(gcn_6 =='' || !(gregexp.test(gcn_6))){
+//	        showMsg($('#label_gcn_6'), '库存数量必填且为整数.');
+//	        validatyFlag = true;
+//	  	}
+// 	}
+//	 if($("#gcn_7")[0] != undefined){
+//	 	gcn_7 = $.trim($("#gcn_7").val());
+// 	 	if(gcn_7 =='' || !(gregexp.test(gcn_7))){
+//	        showMsg($('#label_gcn_7'), '库存数量必填且为整数.');
+//	        validatyFlag = true;
+//	  	}
+//	 }
+// 	if($("#gcn_8")[0] != undefined){
+// 		gcn_8 = $.trim($("#gcn_8").val());
+//		if(gcn_8 =='' || !(gregexp.test(gcn_8))){
+//	        showMsg($('#label_gcn_8'), '库存数量必填且为整数.');
+//	        validatyFlag = true;
+//		}
+//	}
+//   	    goodsCustomNumber.gcn1 = $("#gcn_1").val();
+//   	    goodsCustomNumber.gcn2 = $("#gcn_2").val();
+//   	    goodsCustomNumber.gcn3 = $("#gcn_3").val();
+//   	    goodsCustomNumber.gcn4 = $("#gcn_4").val();
+//   	    goodsCustomNumber.gcn5 = $("#gcn_5").val();
+//   	    goodsCustomNumber.gcn6 = $("#gcn_6").val();
+//   	    goodsCustomNumber.gcn7 = $("#gcn_7").val();
+//   	    goodsCustomNumber.gcn8 = $("#gcn_8").val();
+//   	    goodsCustomNumber.gcn9 = $("#gcn_9").val();
+//   	    goodsCustomNumber.gcn10 = $("#gcn_10").val();
+   	    #else
+   	    goodsObj.gBasePrice = 0;
+        #end
+         var sgcId1 = $.trim($("#sgcId1").val());
+         if (sgcId1 == '') {
+             showMsg($('#sgcId1_info'), '请选择商品分类.');
+             validatyFlag = true;
+         } else {
+             showMsg($('#sgcId1_info'));
+         }
+        if(validatyFlag)
+        {
+        	return;
+        }
+ 	    var goodsCustomNumberParm = $.toJSON(goodsCustomNumber);
+     	goodsObj.gStatus = $("input[name='gStatus']:checked").val();	    
+     	goodsObj.gBarCode = $("#gBarCode").val();
+	    goodsObj.gControl = $("input[name='gControl']:checked").val();
+         if($("#gType_02").prop("checked")){
+             goodsObj.gType = $("#gType_02").val();
+         }else{
+             goodsObj.gType = 0;
+         }
+         goodsObj.gTag = 0;
+         if($("#gType_03").prop("checked")){
+             goodsObj.clinicSupplyFlag = 1;
+         }else{
+             goodsObj.clinicSupplyFlag = 0;
+         }
+
+// 		if(goodsObj.gType && goodsObj.gType==3)
+// 		{
+// 		     goodsObj.gTag = 1;
+// 		}else{
+// 		     goodsObj.gTag = 0;
+// 		}
+		goodsObj.gRemark = $("#gRemark").val();
+		goodsObj.sgcId1 = $("#sgcId1").val();
+		goodsObj.sgcId2 = $("#sgcId2").val();
+		goodsObj.erpOverride = $("input[name='erpOverride']:checked").val();
+		goodsObj.gdfId = $("#gdfId").val();
+		if(!goodsObj.gdfId)
+		{
+		    goodsObj.gdfId = 24;//默认其他
+		}
+	    goodsObj.gArea = $("input[name='gArea']:checked").val();
+	    goodsObj.gId = $("#gId").val();
+	    if($("#oversale").prop("checked")){
+            goodsObj.oversale = $("#oversale").val();
+        }else{
+            goodsObj.oversale = 0;  //不允许超卖
+        }
+	    var jsonParam = $.toJSON(goodsObj);
+
+
+	    var objarray = $("input[name='siteId']:checked");
+         var siteIds = "";
+
+        //增加一级经销商的数据读取和保存
+        var eIds = "";
+      	var suIds = "";
+      	$("#customerList li").not(":first").each(function(){
+      		eIds +=$(this).attr("value")+",";
+      		suIds +=$(this).attr("suId")+",";
+      	});
+      	eIds = eIds.substring(0,eIds.length-1);
+      	suIds = suIds.substring(0,suIds.length-1);
+
+        #if($supplier.suType==2)
+         if(objarray&&objarray.length>0){
+             for (i=0;i<objarray.length;i++){
+                 siteIds+=","+objarray[i].value;
+             }
+         }else{
+             top.ue.msg( "请配置该商品的销售区域");
+             return;
+         }
+         #end
+
+         $.ajax({
+             url: '/sales/goods/goods_edit2.html',
+             data: {"jsonParam":jsonParam,"siteIds":siteIds,"goodsCustomNumberParm":goodsCustomNumberParm,"eIds":eIds,"suIds":suIds},
+             type: 'POST',
+             dataType: 'json',
+             success: function(result) {
+                 if (result.data > 0) {
+                    top.ue.alert({
+                       title: '提示信息',
+                       content: "修改商品成功",
+                       end: function() {
+                           var _url = "/sales/goods/goods_index.html?pi=$!{pi}&gIds=$!{gIds}&isAllChoice=$!{isAllChoice}&gName=$!{gName}&gSn=$!{gSn}&gManufacture=$!{gManufacture}&gLicenseNo=$!{gLicenseNo}&gSpecifications=$!{gSpecifications}&gType=$!{gType}&sgcId1=$!{sgcId1}&sgcId2=$!{sgcId2}";
+                           var _order = getUrlParam("order");
+                           var _word = getUrlParam("word");
+                           if(_order){
+                               _url+="&order="+_order;
+                           }
+                           if(_word){
+                               _url+="&word="+_word;
+                           }
+                           top.utils.frameBackDel();
+                           window.location.href = _url;
+                       }
+                   })
+                 } else {
+                     top.ue.msg("修改商品失败");
+               }
+             }
+         });
+     }
+
+     function getUrlParam(name) {
+         try{
+             //var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+             var pr = ""
+             var url=window.location.href;
+             pr=window.location.search.substr(1).match(reg);
+             if(pr!=null) {
+                 return decodeURI(pr[2]);
+             }
+             return null;
+         }catch (e){
+             return null;
+         }
+     }
+
+   //必填
+   function isEmptyContent(object,info,obj2){
+	   	var objectCode = $.trim($(object).val());
+    	if(""==objectCode)
+    	{
+    		showMsg($(obj2), info);
+    		return;
+    	}else{
+    	    showMsg($(obj2));
+    		return;
+    	}
+   }
+ //判空判正整数
+  function isPInt(object,info,obj2) {
+	  var objectCode = $.trim($(object).val());
+       var g = /^[1-9]*[1-9][0-9]*$/;
+       var flag =  g.test(objectCode);
+       if(!flag)
+   	   {
+   		  showMsg($(obj2), info);
+   		  return;
+   	   }else{
+   	      showMsg($(obj2));
+    	  return;
+   	   }
+   }
+   //必填时判断整数
+   function isPIntEmpty(object,info,obj2) {
+	  var objectCode = $.trim($(object).val());
+	  if(objectCode == ''){
+		  	showMsg($(obj2), info);
+ 		    return;
+	  }
+	  if(objectCode.length>0){
+	      var g = /^([1-9]\d*|[0]{1,1})$/;
+          var flag =  g.test(objectCode);
+          if(!flag)
+   	      {
+   		      showMsg($(obj2), info);
+   		      return;
+   	      }else{
+   	          showMsg($(obj2));
+    		  return;
+   	      }
+	  }else{
+		  showMsg($(obj2));
+   		    return;
+        }
+   }
+   //价格判断
+  function isPrice(object,info,obj2) {
+	  var objectCode = $.trim($(object).val());
+       var g = /^([1-9]\d{0,13}|0)(\.\d{1,4})?$/;
+       var flag =  g.test(objectCode);
+       if(!flag)
+   	   {
+   		  showMsg($(obj2), info);
+   		  return;
+   	   }else{
+   	      showMsg($(obj2));
+    	  return;
+   	   }
+   }
+    //价格非空时才判断
+   function isPriceNotEmpty(object,info,obj2){
+       var objectCode = $.trim($(object).val());
+       if(objectCode.length>0){
+           var g = /^([1-9]\d{0,13}|0)(\.\d{1,4})?$/;
+           var flag =  g.test(objectCode);
+           if(!flag)
+   	       {
+   		      showMsg($(obj2), info);
+   		      return;
+   	       }else{
+   	          showMsg($(obj2));
+   		      return;
+   	       }
+        }else{
+            showMsg($(obj2));
+   		    return;
+        }
+   }
+   // 错误提示
+   var showMsg = function (obj, msg, flag) {
+       if (flag) {
+           obj.attr("style", "color:green;font-weigh:700;").html("&#8730;");
+       } else if (!msg) {
+           obj.html('');
+       }  else {
+           msg.length > 0 && obj.attr("style", "color:red;font-weigh:100;").html("*" + msg);
+       }
+   };
+
+   function typeCheck(o){
+
+	  if(o=="1"){
+	      var gId = $("#gId").val();
+	        $.ajax({
+              url: '/sales/goods/goods_isExsitSaleControl',
+              data:{"gId":gId},
+              type: 'POST',
+              dataType: 'json',
+              success: function(result) {
+                 if (result.data == true) {
+                   top.ue.confirm({
+                       title: '提示信息',
+                       content: '该专供商品已有"专供定价政策",</br>确认修改状态吗?确认后已有"专供定价政策"失效',
+                       ok: function(idx,lay) {
+                           $("#gRemark").val("");
+                           top.ue.close(idx);
+                       },
+ 	                   btn2: function(idx,lay) {
+ 	                      $("input[type='radio'][name='gType']").attr("checked",false);
+ 	                      $("input[type='radio'][name='gType']").get(3).checked = true;
+ 	                      $("#gRemark").val("$!{goods.gRemark}");
+                           top.ue.close(idx);
+ 	               	      return;
+ 	                   }
+                   })
+             }else{
+                 $("#gRemark").val("");
+             }
+         }
+     });
+
+		  $("#gRemark").attr("disabled",false);
+	  }
+	  if(o=="2"){
+	      var typeFlag = true;
+	      var gId = $("#gId").val();
+	        $.ajax({
+              url: '/sales/goods/goods_isExsitSaleControl',
+              data:{"gId":gId},
+              type: 'POST',
+              dataType: 'json',
+              success: function(result) {
+                 if (result.data == true) {
+                   top.ue.confirm({
+                       title: '提示信息',
+                       content: '该专供商品已有"专供定价政策",</br>确认修改状态吗?确认后已有"专供定价政策"失效',
+                       ok: function(idx,lay) {
+                           $("#gRemark").val("");
+                           top.ue.close(idx);
+                       },
+ 	                   btn2: function(idx,lay) {
+ 	                      $("input[type='radio'][name='gType']").attr("checked",false);
+ 	                      $("input[type='radio'][name='gType']").get(3).checked = true;
+ 	                      $("#gRemark").val("$!{goods.gRemark}");
+ 	                      typeFlag = false;
+ 	                      $("#gRemark").attr("disabled",false);
+ 	                      top.ue.close(idx);
+ 	               	      return;
+ 	                   }
+                   })
+             }
+         }
+     });
+	      if(typeFlag)
+	      {
+	          $("#gRemark").val("");
+	          $("#gRemark").attr("disabled",true);
+	      }
+
+	  }
+	  if(o=="3"){
+	      var gId = $("#gId").val();
+	      $.ajax({
+              url: '/sales/goods/goods_isExsitPromotion',
+              data:{"gId":gId},
+              type: 'POST',
+              dataType: 'json',
+              success: function(result) {
+                 if (result.data == true) {
+                       top.ue.msg("该商品已经设置了以下促销活动，不可设为专供品种，如需要请在活动中删除该商品即可，或者活动结束后设置为专供品种！</br></br>"+result.message);
+                       $("input[type='radio'][name='gType']").attr("checked",false);
+                       if($!{goods.gType})
+                       {
+                            $("input[type='radio'][name='gType']").get($!{goods.gType}).checked = true;
+                       }else{
+                            $("input[type='radio'][name='gType']").get(0).checked = true;
+                       }
+                       return;
+                 }else{
+                       $("#gRemark").val("$!{goods.gRemark}");
+	                   $("#gRemark").attr("disabled",false);
+                 }
+              }
+          });
+
+	  }
+  }
+       function num(obj){
+           obj.value = obj.value.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
+           obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+           obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
+           obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+           obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数
+       }
+ </script>
+
+  </body>
+</html>

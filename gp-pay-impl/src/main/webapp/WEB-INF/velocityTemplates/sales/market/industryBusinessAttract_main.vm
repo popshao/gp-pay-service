@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>我的医药网 - 发布招商信息</title>
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+    <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}"/>
+    <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}"/>
+       
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+
+  <body>
+    <div class="container">
+       #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+		  #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            <div class="indmain">
+                <div class="path">
+                    <p><a class="color" href="/sales/index.html">销售中心</a> &gt; 市场管理 &gt; 招商管理</p>
+                </div>
+                
+                <div class="fl user_cx_tips mt20">功能说明：可发布商品的招商信息，发布成功后可在工业馆首页查看招商商品，并且可在销售中心查看招商商品客户申请代理的信息。</div>
+                
+                <div class="order_query order cc">
+                	 <form action="" method="post" id="searchForm" name="searchForm">
+	                    <input type="hidden" name="pi" value="$!pi">
+                    	<input type="hidden" name="ps" value="10"/> 
+	                    <table class="order_table" border="0" cellpadding="0" cellspacing="0">
+	                      <tr>
+	                        <td>
+	                            <input class="input input_l sltitem" type="text" name="gname" value="$!gname" placeholder="请输入药品名称" />
+	                            <a href="javascript:searchPager('/sales/market/businessAttract/main.html',false);" class="btn-jxsp">查询</a>
+	                            <a href="javascript:searchPager('/sales/market/businessAttract/main.html',true);" class="btn-jxsp">清空查询条件</a>
+	                        </td>
+	                      </tr>
+	                   </table>
+                   </form>
+                   
+                   <div class="btn cc">
+                        <a href="/sales/market/businessAttract/add.html" class="btn">发布招商信息</a>
+                        <a href="javascript:deleteListBusiness();" class="btn-n">批量删除</a>
+                        <a href="javascript:void(0);" onclick="openWithTab('dlsq','代理申请','/sales/market/businessAttract/dlsq_main.html')" class="fr btn-l">#if($!count > 0)代理申请（$!{count}）#else 代理申请#end</a>
+                    </div>
+                   
+                </div>
+                
+                <div class="order_detail mt10">
+
+                    <div class="table table-top table-cx">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th class="b-l"><input type="checkbox" class="check" id="checkAll"/></th>
+                                <th>药品名称</th>
+                                <th>规格</th>
+                                <th>生产企业</th>
+                                <th>最后编辑时间</th>
+                                <th>招商区域</th>
+                                <th class="b-r" width="100">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            #if($!{baList} && $!baList.size()>0)
+                            	#foreach($item in $!{baList})
+	                            <tr>
+	                                <td><input goods="1" type="checkbox" class="check" baid="$!{item.baId}"/></td>
+	                                <td><a href="http://$!{wwwHostAndPort}/attract_detail_$!{item.baId}.html?suId=$!{suId}" target="_blank">$!{item.gname}</a></td>
+	                                <td>$!{item.glicenseNo}</td>
+	                                <td>$!{item.ename}</td>
+	                                <td>
+	                                	#if($!item.editTime && $!item.editTime != "")
+	                                		$utils.formatDate($!item.editTime,"yyyy-MM-dd")
+	                                	#else
+	                                		$utils.formatDate($!item.createTime,"yyyy-MM-dd")
+	                                	#end
+	                                </td>
+	                                <td>
+	                                	#if($!{item.licationList})
+	                                		#foreach($loc in $!{item.licationList})
+	                                			#if($!{velocityCount} != 1)
+													,	                                			
+	                                			#end
+	                                			$!{loc.lName}
+	                                		#end
+	                                	#end
+	                                </td>
+	                                <td><a href="/sales/market/businessAttract/edit.html?baId=$!{item.baId}&pi=$!{pi}" class="btn">修改</a>
+	                                <a href="javascript:deleteBusiness($!{item.baId});" class="btn-delete">删除</a></td>
+	                            </tr>
+	                            #end
+                            #end
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="page">
+                                <!--分页开始 -->
+								#if($!{pagerInfo}) #if($!{pagerTotal} > 1)
+								#pagerInfo($!pagerInfo,$!{pagerTotal},"/sales/market/businessAttract/main.html")
+								#end #end
+                    </div>
+                    
+                </div>
+                
+            <!-- 用户中心_主体内容_E -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+    </div>
+	#parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}"></script>
+    <script src="/js/dragDrop.js?v=$!{jscss_version}"></script>
+    <script src="/js/dialog/dialog.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script>
+        $(function(){
+    	   	$.sltitem.select("gname", "$!gname");
+
+    	   	   
+    	   	   
+            $(".jsje-tips-show").mouseenter(function(){
+                $(this).find(".jsje-tips").show();
+            });
+
+            $(".jsje-tips-show").mouseleave(function(){
+                $(this).find(".jsje-tips").hide();
+            });
+            
+            $("#checkAll").click(function(){
+            	var c_type =$("#checkAll")[0].checked; 
+            	$("body").find("input[type=checkbox]").not("#checkAll").each(function(){
+            		$(this)[0].checked = c_type;
+            	});
+            });
+
+            $("body").find("input[type=checkbox]").not("#checkAll").click(function(){
+            	var check_type = true;
+            	$("body").find("input[type=checkbox]").not("#checkAll").each(function(){
+					if($(this)[0].checked == false){
+						 check_type = false;
+						 return false;
+					}            		
+            	});
+            	$("#checkAll")[0].checked = check_type;
+            });
+            
+        })
+
+        function openWithTab(id,text,url,opts){
+            top.utils.openWithTab(id, text, url, {
+                fstBread: top.app.index.firstBread,
+                scdBread:{
+                    text:top.app.index.secondBread,
+                    url:location.href,
+                    prevBread: top.app.index.firstBread
+                },
+                thirdBread:text
+            })
+            return false;
+        }
+
+	//删除导航
+    function deleteBusiness(value){
+        top.ue.confirm({
+		    title: "提示信息",
+		    content: "你确定要删除该条记录吗？",
+		    width: 300,
+		    ok: function(idx,lay) {
+		        top.ue.close(idx);
+		    	$.ajax({
+		           url: '/sales/market/businessAttract/delete_conAct.html',
+		           data: {"baId":value},
+		           type: 'POST',
+		           dataType: 'json',
+		           success: function(result) {
+		               if (result.data == true) {
+		                 top.ue.alert({
+			                title: '提示信息',
+			                content: "删除招商信息成功！",
+			                end: function() {
+			                	//window.location.reload();
+			                	$("#searchForm").submit();
+			                }
+			            })
+		               } else {
+		                  top.ue.msg("删除招商信息失败,请联系管理员！");
+		             }
+		           }
+		       });
+		    }
+		}); 
+    
+    }
+        
+  	function deleteListBusiness(){
+	  		var baidList = [];
+	    	$(".table-top").find("input[type=checkbox][goods=1]:checked").each(function(i, item){
+	    		 var baid = $(item).attr("baid");
+	    		 baidList.push(baid);
+	    	});
+        	if(baidList==undefined || baidList=="" || baidList==null){
+        		top.ue.msg("请选择招商信息!");
+                return;
+        	}
+        	top.ue.confirm({
+	              title: '删除药品',
+	              content: "确认要删除这些招商信息吗？",
+	              ok: function(idx,lay) {
+	                  top.ue.closse(idx);
+			           $.ajax({
+			                url: "/sales/market/businessAttract/deleteList_conAct.html",
+			                type: "POST",
+			                data: {"baIdList": $.toJSON(baidList)},
+			                cache: false,
+			                dataType: "json",
+			                success: function (result) {
+			                	if (result.data == true) {
+					                  top.ue.alert({
+						                title: '提示信息',
+						                content: "删除招商信息成功！",
+						                end: function() {
+						                	$("#searchForm").submit();
+						                }
+						            })
+					               } else {
+					                   top.ue.msg("删除招商信息失败,请联系管理员！");
+					             }
+			                }
+			            });
+	               }
+	         })
+        }
+    </script>
+  </body>
+</html>

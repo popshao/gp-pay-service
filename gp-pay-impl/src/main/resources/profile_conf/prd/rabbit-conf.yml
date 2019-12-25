@@ -1,0 +1,8 @@
+addresses: node1.rabbitmq.prd.mph.rgec.local:5673,node2.rabbitmq.prd.mph.rgec.local:5673,node3.rabbitmq.prd.mph.rgec.local:5673
+conf:
+  -
+    module: default
+    username: mph-general
+    password: 8Q1VLdYfhNfxYR45oiBB
+    vhost: /
+    confirms: true

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>我的医药网 - 首页热销管理</title>
+    
+    <!-- mypharma_公共资源 -->
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://special.mypharma.com/favicon.ico">
+    
+    <!-- mypharma_样式 -->
+      <link rel="stylesheet" type="text/css" href="/css/global.css?v=$!{jscss_version}"/>
+      <link rel="stylesheet" type="text/css" href="/css/index.css?v=$!{jscss_version}">
+      <link rel="stylesheet" type="text/css" href="/css/order.css?v=$!{jscss_version}">
+      <link rel="stylesheet" type="text/css" href="/css/promotion.css?v=$!{jscss_version}">
+
+      <link rel="stylesheet" type="text/css" href="/css/new_order.css?v=$!{jscss_version}">
+      <link rel="stylesheet" type="text/css" href="/css/new_dialog.css?v=$!{jscss_version}">
+      <link rel="stylesheet" type="text/css" href="/js/layui/css/layui.css?v=$!{jscss_version}">
+       
+    <script type="text/javascript">
+        var wwwUrl = '$!{wwwHostAndPort}';
+        var userUrl = '$!{userHostAndPort}';
+    </script>
+    
+    <!--PNG格式图片兼容IE6解决方案 -->
+    <!--[if IE 6]>
+      <script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js?v=$!{jscss_version}"></script>
+      <script type="text/javascript">
+	    DD_belatedPNG.fix('*');
+      </script>
+    <![endif]-->
+    
+  </head>
+ 
+  <body>
+    <div class="container">
+      #parse("common/header_top.vm")
+       #parse("common/header.vm")
+      <div class="content">
+        <div class="wrap cc">
+          #parse("common/left_menu_sales.vm")
+          <div class="user_right fl">
+            <!-- 用户中心_主体内容_S -->
+            
+            <div class="indmain c-box">
+
+                <div class="user-path">销售中心 &gt; 销价管理 &gt; <a href="/sales/promotion/list.html">促销管理</a> &gt; <i class="up-h">$!{pactName}</i></div>
+
+                <div class="user-cxgl-title">$!{pactName}促销</div>
+
+                <div class="user-tips mt10">单笔订单购买活动商品总量/总金额满足条件，则该客户可获得对应的赠品。</div>
+
+                <div class="user-cxgl-table">
+
+                    <table class="order_table mt10" border="0" cellpadding="0" cellspacing="0">
+                        <input type="hidden" id="pactType" name="pactType" value="$!{pactType}"/>
+                        <tr>
+                            <td class="tar" width="102"><span class="red">*</span><b>促销标题：</b></td>
+                            <td width="auto">单品合计满减促销</td>
+                        </tr>
+                        <tr>
+                            <td class="tar" valign="top"><span class="red">*</span><b>促销描述：</b></td>
+                            <td>单品合计满减促销</td>
+                        </tr>
+                        <tr>
+                            <td class="tar"><span class="red">*</span><b>有&nbsp;&nbsp;效&nbsp;&nbsp;期：</b></td>
+                            <td>
+                                <span class="fl">2017-08-22 13:28:18</span>
+                                <i class="to">至</i>
+                                <span class="fl">2017-08-24 13:28:20</span>
+                                <div class="fl ml10" id="timeDhm">
+                                    活动时长：
+                                    <span id="time_d"></span>天
+                                    <span id="time_h"></span>时
+                                    <span id="time_m"></span>分
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tar"><span class="red">*</span><b>优惠类型：</b></td>
+                            <td>购买数量</td>
+                        </tr>
+                        <tr>
+                            <td class="tar"></td>
+                            <td>
+                                <div class="user-cxgl-ctn cc">
+                                    <div class="promotions_ctn promotions_ctn_view cc">
+                                        <span class="span">本活动的商品总数量满</span>
+                                        <span class="span">100</span>
+                                        <span class="span">，</span>
+                                        <span class="span">赠送</span>
+                                        <span class="span">100</span>
+                                        <div class="gift_img" name="gift_img" id="gift_img_template"></div>
+                                    </div>
+                                    <div class="promotions_ctn promotions_ctn_view cc">
+                                        <span class="span">本活动的商品总数量满</span>
+                                        <span class="span">100</span>
+                                        <span class="span">，</span>
+                                        <span class="span">赠送</span>
+                                        <span class="span">100</span>
+                                        <div class="gift_img" name="gift_img"></div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tar" valign="top"><span class="red">*</span><b>选择客户：</b></td>
+                            <td>全部客户参与活动</td>
+                        </tr>
+                        <tr>
+                            <td class="tar" valign="top"><span class="red">*</span><b>选择客户：</b></td>
+                            <td>
+								<div class="t-view">部分客户参与活动<span class="count">共选择2家客户</span></div>
+                                <div class="user-cxgl-detail mt10">
+
+                                    <div class="order_detail">
+
+                                        <div class="user-form">
+                                            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                                <thead>
+                                                <tr>
+                                                    <th width="130">企业ID</th>
+                                                    <th width="130">企业编码</th>
+                                                    <th width="130">企业名称</th>
+                                                    <th>企业地址</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>3900280</td>
+                                                    <td>941950</td>
+                                                    <td>华尔纳医药发展有限公司</td>
+                                                    <td>朝阳区麦子店街3号楼1门1号</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3900280</td>
+                                                    <td>941950</td>
+                                                    <td>华尔纳医药发展有限公司</td>
+                                                    <td>朝阳区麦子店街3号楼1门1号</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+							</td>
+                        </tr>
+                        <tr>
+                            <td class="tar" valign="top"><span class="red">*</span><b>选择客户：</b></td>
+                            <td>
+                                <div class="t-view">部分客户参与活动<span class="count">您已选中2个业务分组共包含客户753家</span></div>
+                                <div class="user-cxgl-detail">
+
+                                    <div class="order_detail">
+
+                                        <div class="toogle-wrap">
+                                            <div class="tab-box">
+                                                <div class="tab-con">
+
+                                                    <div class="type-box cc">
+                                                        <dl>
+                                                            <dt class="type-t">业务类型</dt>
+                                                            <dd><div class="customer-item"><b></b>普通客户（20）</div></dd>
+                                                            <dd><div class="customer-item"><b></b>普通客户（20）</div></dd>
+                                                            <dd><div class="customer-item"><b></b>普通客户（20）</div></dd>
+                                                            <dd><div class="customer-item"><b></b>普通客户（20）</div></dd>
+                                                        </dl>
+                                                    </div>
+                                                    <div class="type-box cc">
+                                                        <dl>
+                                                            <dt class="type-t">销售区域</dt>
+                                                            <dd><div class="customer-item"><b></b>华南区（20）</div></dd>
+                                                            <dd><div class="customer-item"><b></b>华南区（20）</div></dd>
+                                                            <dd><div class="customer-item"><b></b>华南区（20）</div></dd>
+                                                            <dd><div class="customer-item"><b></b>华南区（20）</div></dd>
+                                                            <dd><div class="customer-item"><b></b>华南区（20）</div></dd>
+                                                        </dl>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tar" valign="top"><span class="red">*</span><b>选择商品：</b></td>
+                            <td>
+                                <div class="t-view"><span class="count">共选择2件商品</span></div>
+                                <div class="user-cxgl-detail mt10">
+
+                                    <div class="order_detail">
+
+                                        <div class="user-form">
+                                            <table class="uf-table" border="0" cellpadding="0" cellspacing="0">
+                                                <thead>
+                                                <tr>
+                                                    <th width="130">商品ID</th>
+                                                    <th width="130">商品名称</th>
+                                                    <th width="130">商品规格</th>
+                                                    <th width="130">生产厂家</th>
+                                                    <th>是否拆零</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>123456789</td>
+                                                    <td>小儿清口服液</td>
+                                                    <td>11*23s</td>
+                                                    <td>广西制药</td>
+                                                    <td>否</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>123456789</td>
+                                                    <td>小儿清口服液</td>
+                                                    <td>11*23s</td>
+                                                    <td>广西制药</td>
+                                                    <td>否</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+
+          <!-- 用户中心_主体内容_E -->
+        </div>
+      </div>
+    </div>
+    #parse("common/footer.vm")
+  
+    <!-- mypharma_脚本 -->
+    <script src="/js/jquery-1.9.1.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/publish.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pop_div.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/pager.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/messages_zh.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/extend.datetime.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/ajaxupload.3.6.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/dialog/dialog_show.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/jquery.json-2.2.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/public/My97DatePicker/WdatePicker.js?v=$!{jscss_version}" type="text/javascript"></script>
+    <script src="/js/load.js?v=$!{jscss_version}" type="text/javascript"></script>
+	<script src="/js/search.js?v=$!{jscss_version}" type="text/javascript"></script>
+    #parse("common/common_script.vm")
+    <script>
+    	var operateMode = "$!operateMode";
+    	var pStartTime = $("#pactStartTime").val();
+    	var pEndTime = $("#pactEndTime").val();
+    	
+		$(function(){
+			if(operateMode == "copy"){
+				$("#pactStartTime").val("");
+				$("#pactEndTime").val("");
+			}else if("$!{pact.pactStep}"=="3"){
+				var pact_start_time = $("#pactStartTime").val();
+				var pact_end_time = $("#pactEndTime").val();
+				$("input[name=pactType]").attr("disabled","disabled");
+				if("$!{readOnlyType}"=="true"){
+					$("#pactStartTime").attr("disabled","disabled");
+				}
+			}
+			
+			$("body tbody tr").unbind("mouseover");
+			$.sltitem.select("pactTemplateId", "$!{pact.pactTemplateId}");
+			//验证表单
+			checkForm();
+			//图片上传
+			var uploadPic = $("#uploadPic");
+	        new AjaxUpload(uploadPic,{
+	            action: "/cdn/imageInfo_upload.html",
+	            name: 'file_path',
+	            responseType:"json",
+	            onSubmit : function(file, ext){
+	            	if (ext && /^(jpg|gif|png|jpeg)$/.test(ext)) {
+	                    ext_str = ext;
+	                } else {
+	                	dialog({
+		                       title: "提示信息",
+		                       content: "非图片文件格式,请重传！",
+		                       width: 300
+		                   });
+	                    return false;
+	                }
+	                $.showLoad();
+	            },
+	            onComplete: function(file, result){
+	            	if (result.success == false) {
+	            		if(result.message == "outofsize"){
+	            			dialog({
+	 	                       title: "提示信息",
+	 	                       content: "文件过大，无法上传！",
+	 	                       width: 300
+	 	                    });
+	            		}else if(result.message == "error"){
+	            			dialog({
+	 	                       title: "提示信息",
+	 	                       content: "文件过大，无法上传！",
+	 	                       width: 300
+	 	                    });
+	            		}
+	            		return false;
+	            		
+	            	}else{
+	            		$("#pactLogo").val(result.data.id);//response返回的是mogoDB记录id
+	                	$('#showPic').attr("src",result.data.picUrl);
+	                	$("#bucketKey").val(result.data.id);
+	                	$("#imageInfo").val($.toJSON(result.data.imageInfo));
+	            	}
+	            	
+	                $.hideLoad();
+	            }
+	        });
+	        
+			var pact_start_time = $("#pactStartTime").val();
+			var pact_end_time = $("#pactEndTime").val();
+			
+			$("#promotion_ul>li").eq(1).click(function(){ 
+				window.location.href = "/sales/promotion/step2.html?pactId="+"$!{pact.pactId}";
+				window.event.returnValue = false; 
+			});
+			
+			if("$!{pact.pactStep}"=="3"){
+				$("#promotion_ul>li").last().click(function(){ 
+					window.location.href = "/sales/promotion/Publish_edit.html?id="+"$!{pact.pactId}";
+					window.event.returnValue = false; 
+				});
+			}
+			
+		   	$("input[name=pactType]").change(function(){
+		   		var slt = $("input[name=pactType]:checked").val()
+		   		if("$!{pact.pactType}" != slt && operateMode == "copy"){
+		   			top.ue.confirm({
+		                title: "提示信息",
+		                content: "由于每个活动规则不同，确认修改后活动规则内容将会被清空！",
+		                ok: function() {
+		                }
+		                btn2: function(idx,lay) {
+		                    top.ue.close(idx);
+		                	$("input[name=pactType][value=$!{pact.pactType}]")[0].checked = true;
+		                }
+		            });
+		   		}
+		   	});
+		   	
+		   	showTime();
+		})
+		
+		
+		//查看效果图
+		function showImage() {
+			var id = $("#pactTemplateId").val();
+			if(isEmpty(id)){
+				dialog({
+                    title: "提示信息",
+                    content: "请选择模板！",
+                    width: 300
+                });
+				
+				return false;
+			}
+			var chType = 0;
+			if($("input[name='pactType']:checked").val()!="" && $("input[name='pactType']:checked").val() != undefined){
+				chType = $("input[name='pactType']:checked").val();
+			}
+			$.ajax({
+		           url: "/sales/promotion/showImage.html",
+		           data: {"id":id,"type" : chType},
+		           type: 'POST',
+		           dataType: 'json',
+		           success: function(result) {
+	                    if (result.success == false) {
+	                    	dialog({
+			                       title: "提示信息",
+			                       content: result.message,
+			                       width: 300
+			                   });
+	                    }else{
+	                    	var key = result.data.tplFullImg;
+	                    	var content = "<img src='$!utils.getNewImgDomain('"+key+"')' width='300px;'/>";
+	        				dialog({
+	        					title: "查看图片",
+	        					content: content,
+	        					ok: false,
+	        					cancel: false
+	        				});
+	                    }
+			       }
+	            });
+		}
+		
+		function showTime(){
+			if($("#pactStartTime").val()=="" || $("#pactEndTime").val()==""){
+				$("#timeDhm").hide();
+				return ;
+			}else{
+				$("#timeDhm").show();
+			}
+			var nowTime = new Date($("#pactStartTime").val().replace(/-/g,"/")).getTime();
+			var endTime = new Date($("#pactEndTime").val().replace(/-/g,"/")).getTime();
+			var time_distance  = endTime - nowTime;
+			
+			if(time_distance > 0){ 
+				// 天时分秒换算 
+				var int_day = Math.floor(time_distance/86400000) 
+				time_distance -= int_day * 86400000; 
+				// 时分秒为单数时、前面加零 
+				if(int_day < 10){ 
+					int_day = "0" + int_day; 
+				} 
+				$("#time_d").html(int_day); 
+
+				var int_hour = Math.floor(time_distance/3600000) 
+				time_distance -= int_hour * 3600000; 
+				if(int_hour < 10){ 
+					int_hour = "0" + int_hour; 
+					} 
+				$("#time_h").html(int_hour); 
+
+				var int_minute = Math.floor(time_distance/60000) 
+				time_distance -= int_minute * 60000; 
+				if(int_minute < 10){ 
+					int_minute = "0" + int_minute; 
+					} 
+				$("#time_m").html(int_minute); 
+
+				var int_second = Math.floor(time_distance/1000) 
+				if(int_second < 10){ 
+				int_second = "0" + int_second; 
+				} 
+				$("#time_s").html(int_second); 
+
+				setTimeout("showTime("+nowTime+","+endTime+")",1000); 
+
+				}else{ 
+					$("#time_d").html('00'); 
+					$("#time_h").html('00'); 
+					$("#time_m").html('00'); 
+					$("#time_s").html('00'); 
+				} 
+		}
+		
+		function saveItem(){
+			$.showLoad();
+			var obj = checkGoodsStep1();
+		   	if(obj){
+		      $("#pactStartTime").val(pStartTime);
+		      $("#pactEndTime").val(pEndTime);
+		   	  var str = "<div class='tal'>您对促销有效期的修改未生效，商品同时只能参与一个促销，调整后促销时段与现有促销活动时段重叠，您可将商品从本次活动中移除或调整活动时段后再次修改有效期</span>";
+			  $.each(obj,function(i,o){
+				  str+="<div class='mt20 tal'>"+
+				  		"<a style=\"color: #3b73af; text-decoration: underline;\" target=\"_blank\" href=\"http://"+wwwUrl+"/item/"+o.gid+".html\">"+o.gName+"</a>"+
+				  		"已参与";
+					  str+="<a style=\"color: #3b73af; text-decoration: underline;\" target=\"_blank\" href=\""+userUrl+"/sales/promotion/editUI.html?id="+o.pactId+"\">"
+				  		+o.pactTitle+"<a>";
+				  str+="</div>";
+			  });
+			  var dl = dialog({
+		          title: "提示信息",
+		          content: str,
+		          width: 600,
+		          ok: function() {
+		        	  dl.close();
+		          },
+		          okVal:"确定"
+		      });
+			  $.hideLoad();
+			  return true;
+		   	}
+		   	$.hideLoad();
+					   	
+			var pactObj = {};
+			pactObj.pactId = $("#pactId").val();
+			pactObj.pactType = $("input[name='pactType']:checked").val();
+			pactObj.pactTitle = $("#pactTitle").val();
+			pactObj.pactContent = $("#pactContent").val();
+			pactObj.pactLogo = $("#pactLogo").val();
+			pactObj.bucketKey = $("#bucketKey").val();
+			pactObj.imageInfo = $("#imageInfo").val();
+			pactObj.pactTemplateId = $("#pactTemplateId").val();
+			pactObj.pactStartTime = $("#pactStartTime").val();
+			pactObj.pactEndTime = $("#pactEndTime").val();
+		    var jsonParam = $.toJSON(pactObj);
+			
+			$.ajax({
+	           url: "/sales/promotion/edit.html",
+	           data: {"jsonParam":jsonParam,"operateMode":operateMode},
+	           type: 'POST',
+	           dataType: 'json',
+	           success: function(result) {
+                    if (result.success == false) {
+                    	dialog({
+		                       title: "提示信息",
+		                       content: result.message,
+		                       width: 300
+		                   });
+                    }else{
+                    	if(operateMode == "copy"){
+                		    if("$!{pact.pactType}"!=pactObj.pactType){
+                		    	window.location.href = "/sales/promotion/step2.html?pactId="+result.data;
+                		    	window.event.returnValue = false; 
+                		    }else{
+                		    	window.location.href = "/sales/promotion/step2.html?pactId="+pactObj.pactId+"&oldpactId="+result.data+"&operateMode=copy";
+                		    	window.event.returnValue = false; 
+                		    }
+                    	}else{
+                    		window.location.href = "/sales/promotion/step2.html?pactId="+pactObj.pactId;
+                    		window.event.returnValue = false; 
+                    	}
+                    }
+		       }
+            });
+		}
+		
+		function addSave(){
+	    	$('#submitForm').submit();
+	    }
+	    
+	    function checkForm() {
+	        $("#submitForm").validate({
+	            submitHandler: saveItem, //如果验证通过的回调函数
+	            rules: {
+	            	pactTitle: {
+						required: true
+	                },
+	                pactContent: {
+						required: true
+	                },
+	                pactStartTime: {
+						required: true
+	                },
+	                pactEndTime: {
+						required: true
+	                },
+	                pactTemplateId: {
+						required: true
+	                }
+	                
+	            },
+	            messages: { 
+	            	pactTitle: {
+	                	required: "请输入活动标题！"
+	                },
+	                pactContent: {
+						required: "请输入活动 描述！"
+	                },
+	                pactStartTime: {
+						required: "请输入活动开始时间！"
+	                },
+	                pactEndTime: {
+						required: "请输入活动结束时间！"
+	                },
+	                pactTemplateId: {
+						required: "请选择活动模板！"
+	                }
+	            }
+	           
+	        });
+	    }
+
+	    function checkGoodsStep1(){
+   	    	var pactId = "$!{pact.pactId}";
+   	    	if(operateMode == "copy"){
+   	    		return false;
+   	    	}
+   	    	
+   			var pactStartTime = $("#pactStartTime").val();
+   			var pactEndTime = $("#pactEndTime").val();
+   	          $.ajax({
+   	              url: "/sales/promotion/checkGIdStep1.html",
+   	              type: "POST",
+   	              data: {pactId:pactId,pactStartTime:pactStartTime,pactEndTime:pactEndTime},
+   	              cache: false,
+   	              async: false,
+   	              success: function (result) {
+   	            	  if(result.success){
+   	            		  var resylt_data = result.data;
+   	            		  if(resylt_data!=null){
+   	            			  repeatGoods =  resylt_data ;
+   	            		  }else{
+   	            			  repeatGoods =  false;
+   	            		  }
+   	            	  }
+   	              }
+   	          });
+   	          return repeatGoods;
+   	    }
+		
+    </script>
+    
+  </body>
+</html>
