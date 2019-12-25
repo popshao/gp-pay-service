@@ -42,7 +42,7 @@
 
         <mph-rabbitmq-version>1.1.1</mph-rabbitmq-version>
         <spring.rabbit.version>1.3.9.RELEASE</spring.rabbit.version>
-        <amqp.client.version>4.2.0</amqp.client.version>
+        <amqp.client.version>4.8.0</amqp.client.version>
         <rabbit.mq.version>1.0.1</rabbit.mq.version>
         <mph-common-version>2.0.7</mph-common-version>
     </properties>
